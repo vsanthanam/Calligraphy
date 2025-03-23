@@ -1,5 +1,5 @@
 // Calligraphy
-// CalligraphyTests.swift
+// Lines.swift
 //
 // MIT License
 //
@@ -23,9 +23,39 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@testable import Calligraphy
-import Testing
+/// Multiple lines of text
+@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+public struct Lines<T>: Stroke where T: Stroke {
 
-@Test func example() async throws {
-    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+    // MARK: - Initializers
+
+    /// Create `Lines`
+    /// - Parameters:
+    ///   - spacing: How many new line characters to place between strokes
+    ///   - strokes: The strokes to join into lines
+    public init(
+        spacing: Int = 1,
+        @Calligraphy strokes: () -> T
+    ) {
+        self.spacing = spacing
+        self.strokes = strokes()
+    }
+
+    // MARK: - Stroke
+
+    public var body: some Stroke {
+        strokes
+            .separatedBy(
+                String(
+                    repeating: "\n",
+                    count: spacing
+                )
+            )
+    }
+
+    // MARK: - Private
+
+    private let spacing: Int
+    private let strokes: T
+
 }

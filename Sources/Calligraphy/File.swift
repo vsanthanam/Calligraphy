@@ -1,5 +1,5 @@
 // Calligraphy
-// CalligraphyTests.swift
+// File.swift
 //
 // MIT License
 //
@@ -23,9 +23,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@testable import Calligraphy
-import Testing
+/// A type representing a file
+///
+/// You can implement `File` either declaratively, by implemeting the ``body`` property, or declaratively, by implementing the ``content`` property.
+/// Do not implement both. If you do, the `content` property will be respected and the `body` property would be ignored.
+@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+public protocol File: DirectoryContent {
 
-@Test func example() async throws {
-    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+    /// The type of the declarative content of the file
+    associatedtype Body: Stroke = Never
+
+    /// The content of the file
+    var content: String { get }
+
+    /// The name of the file
+    var name: String { get }
+
+    /// The declarative content of the file
+    @Calligraphy
+    var body: Body { get }
+
+}
+
+@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+public extension File {
+
+    var body: Body {
+        fatalError()
+    }
+
+    var content: String {
+        String(stroke: body)
+    }
+
+    func _serialize() -> [SerializedDirectoryContent] {
+        [.file(name, content)]
+    }
+
 }

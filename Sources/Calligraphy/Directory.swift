@@ -1,5 +1,5 @@
 // Calligraphy
-// CalligraphyTests.swift
+// Directory.swift
 //
 // MIT License
 //
@@ -23,9 +23,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@testable import Calligraphy
-import Testing
+/// A directory
+@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+public protocol Directory: DirectoryContent {
 
-@Test func example() async throws {
-    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+    /// The type of the directory's contents, if implemented declaratively
+    associatedtype Body: DirectoryContent = Never
+
+    /// The name of the directory
+    var name: String { get }
+
+    /// The contents of the directory, if implemented declaratively
+    @DirectoryContentBuilder
+    var body: Body { get }
+
+    /// The serialized contents of the directory
+    var contents: [SerializedDirectoryContent] { get }
+
+}
+
+@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+extension Never: DirectoryContent {
+
+    public func _serialize() -> [SerializedDirectoryContent] { [] }
+
+}
+
+@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+public extension Directory {
+
+    var contents: [SerializedDirectoryContent] {
+        body._serialize()
+    }
+
+    func _serialize() -> [SerializedDirectoryContent] {
+        [.directory(name, contents)]
+    }
+
 }

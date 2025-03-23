@@ -1,5 +1,5 @@
 // Calligraphy
-// CalligraphyTests.swift
+// Map.swift
 //
 // MIT License
 //
@@ -23,9 +23,39 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@testable import Calligraphy
-import Testing
+@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+public extension Stroke {
 
-@Test func example() async throws {
-    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+    /// Map the return value of a stroke into some other value
+    /// - Parameter fn: The function used to map the value
+    /// - Returns: The new, mapped stroke
+    func map(
+        fn: @Sendable @escaping (String?) -> String?
+    ) -> some Stroke {
+        Map(
+            self,
+            fn
+        )
+    }
+
+}
+
+@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+struct Map<T>: Stroke where T: Stroke {
+
+    // MARK: - Initializers
+
+    init(
+        _ strokes: T,
+        _ fn: @Sendable @escaping (String?) -> String?
+    ) {
+        self.strokes = strokes
+        self.fn = fn
+    }
+
+    // MARK: - Private
+
+    private let strokes: T
+    private let fn: @Sendable (String?) -> String?
+
 }

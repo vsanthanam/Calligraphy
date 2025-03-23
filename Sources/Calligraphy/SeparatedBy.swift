@@ -1,5 +1,5 @@
 // Calligraphy
-// CalligraphyTests.swift
+// SeparatedBy.swift
 //
 // MIT License
 //
@@ -23,9 +23,50 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@testable import Calligraphy
-import Testing
+@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+public extension Stroke {
 
-@Test func example() async throws {
-    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+    func separatedBy(
+        _ separator: String
+    ) -> some Stroke {
+        SeparatedBy(
+            self,
+            separator
+        )
+    }
+
+    func separatedBy(
+        @Calligraphy _ separator: () -> some Stroke
+    ) -> some Stroke {
+        separatedBy(String(calligraphy: separator))
+    }
+
+}
+
+@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+struct SeparatedBy<T>: Stroke where T: Stroke {
+
+    // MARK: - Initializers
+
+    init(
+        _ strokes: T,
+        _ separator: String
+    ) {
+        self.strokes = strokes
+        self.separator = separator
+    }
+
+    // MARK: - Stroke
+
+    var content: String? {
+        Calligraphy.$separator.withValue(separator) {
+            strokes.content
+        }
+    }
+
+    // MARK: - Private
+
+    private let strokes: T
+    private let separator: String
+
 }

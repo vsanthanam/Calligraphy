@@ -1,5 +1,5 @@
 // Calligraphy
-// CalligraphyTests.swift
+// TextFile.swift
 //
 // MIT License
 //
@@ -23,9 +23,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@testable import Calligraphy
-import Testing
+/// A generic, composable text file
+@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+public struct TextFile<T>: File where T: Stroke {
 
-@Test func example() async throws {
-    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+    // MARK: - Initializers
+
+    /// Create a text file with an extension
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - extension: The file's extension
+    ///   - content: The file's content
+    public init(
+        _ name: String,
+        extension: String,
+        @Calligraphy content: () -> T
+    ) {
+        self.init(name + "." + `extension`, content: content)
+    }
+
+    /// Create a text file
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - content: The file's content
+    public init(
+        _ name: String,
+        @Calligraphy content: () -> T
+    ) {
+        self.name = name
+        body = content()
+    }
+
+    // MARK: - File
+
+    public let name: String
+
+    public let body: T
+
 }

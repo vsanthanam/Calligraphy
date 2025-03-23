@@ -1,5 +1,5 @@
 // Calligraphy
-// CalligraphyTests.swift
+// Folder.swift
 //
 // MIT License
 //
@@ -23,9 +23,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@testable import Calligraphy
-import Testing
+/// A generic, composable ``Directory``.
+@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+public struct Folder<Body>: Directory where Body: DirectoryContent {
 
-@Test func example() async throws {
-    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+    // MARK: - Initializers
+
+    /// Create a folder
+    /// - Parameters:
+    ///   - name: The name of the folder
+    ///   - contents: The contents of the folder
+    public init(
+        _ name: String,
+        @DirectoryContentBuilder contents: () -> Body
+    ) {
+        self.name = name
+        body = contents()
+    }
+
+    // MARK: - Directory
+
+    public let name: String
+
+    public let body: Body
+
 }

@@ -1,5 +1,5 @@
 // Calligraphy
-// CalligraphyTests.swift
+// AnyStroke.swift
 //
 // MIT License
 //
@@ -23,9 +23,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@testable import Calligraphy
-import Testing
+/// A type-erased stroke
+@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+public struct AnyStroke: Stroke {
 
-@Test func example() async throws {
-    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+    /// Create a type-erased stroke
+    /// - Parameter stroke: The stroke to type-erase
+    public init(
+        _ stroke: some Stroke
+    ) {
+        _content = { stroke.content }
+    }
+
+    // MARK: - Stroke
+
+    public var content: String? {
+        _content()
+    }
+
+    // MARK: - Private
+
+    private let _content: @Sendable () -> String?
+
 }

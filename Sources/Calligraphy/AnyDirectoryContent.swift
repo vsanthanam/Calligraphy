@@ -1,5 +1,5 @@
 // Calligraphy
-// CalligraphyTests.swift
+// AnyDirectoryContent.swift
 //
 // MIT License
 //
@@ -23,9 +23,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@testable import Calligraphy
-import Testing
+/// Type-erased directory content
+@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+public struct AnyDirectoryContent: DirectoryContent {
 
-@Test func example() async throws {
-    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+    // MARK: - Initializers
+
+    /// Create a type-erased directory content
+    /// - Parameter directoryContent: The directory content to type erase
+    public init(
+        _ directoryContent: some DirectoryContent
+    ) {
+        __serialize = directoryContent._serialize
+    }
+
+    // MARK: - DirectoryContent
+
+    public func _serialize() -> [SerializedDirectoryContent] {
+        __serialize()
+    }
+
+    // MARK: - Private
+
+    private let __serialize: @Sendable () -> [SerializedDirectoryContent]
+
 }

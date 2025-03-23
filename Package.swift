@@ -5,20 +5,31 @@ import PackageDescription
 
 let package = Package(
     name: "Calligraphy",
+    platforms: [
+        .macOS(.v15),
+        .macCatalyst(.v18),
+        .iOS(.v18),
+        .watchOS(.v11),
+        .tvOS(.v18),
+        .visionOS(.v2)
+    ],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "Calligraphy",
-            targets: ["Calligraphy"]),
+            targets: [
+                "Calligraphy"
+            ]
+        )
     ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "Calligraphy"),
+            name: "Calligraphy"
+        ),
         .testTarget(
             name: "CalligraphyTests",
-            dependencies: ["Calligraphy"]
-        ),
+            dependencies: [
+                "Calligraphy"
+            ]
+        )
     ]
 )

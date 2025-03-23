@@ -1,5 +1,5 @@
 // Calligraphy
-// CalligraphyTests.swift
+// Strokes.swift
 //
 // MIT License
 //
@@ -23,9 +23,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@testable import Calligraphy
-import Testing
+@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+public struct Strokes<T>: Stroke where T: Stroke {
 
-@Test func example() async throws {
-    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+    // MARK: - Initializers
+
+    public init(
+        @Calligraphy stroke: () -> T
+    ) {
+        self.stroke = stroke()
+    }
+
+    // MARK: - Stroke
+
+    public var body: some Stroke {
+        stroke
+    }
+
+    // MARK: - Private
+
+    private let stroke: T
+
 }

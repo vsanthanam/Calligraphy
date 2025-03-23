@@ -1,5 +1,5 @@
 // Calligraphy
-// CalligraphyTests.swift
+// StringStroke.swift
 //
 // MIT License
 //
@@ -23,9 +23,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@testable import Calligraphy
-import Testing
+@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+public struct StringStroke: Stroke {
 
-@Test func example() async throws {
-    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+    public init(
+        _ content: some StringProtocol
+    ) {
+        self.content = String(content)
+    }
+
+    public let content: String?
+
 }

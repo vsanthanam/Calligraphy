@@ -1,5 +1,5 @@
 // Calligraphy
-// CalligraphyTests.swift
+// DirectoryError.swift
 //
 // MIT License
 //
@@ -23,9 +23,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@testable import Calligraphy
-import Testing
+@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+struct DirectoryError: Error, Sendable, CustomStringConvertible {
 
-@Test func example() async throws {
-    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+    init(
+        _ message: String
+    ) {
+        self.message = message
+    }
+
+    let message: String
+
+    var description: String { message }
+
 }
