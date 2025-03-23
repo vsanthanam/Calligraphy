@@ -42,8 +42,8 @@ public extension Stroke {
         body.content
     }
 
-    var body: Body {
-        fatalError()
+    var body: Never {
+        fatalError("Stroke \(Self.self) is not implemented, nor is its content property.")
     }
 
 }

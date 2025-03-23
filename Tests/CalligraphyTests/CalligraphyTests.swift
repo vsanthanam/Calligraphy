@@ -27,6 +27,49 @@
 import Testing
 
 @Test
-func example() async throws {
-    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+func example() {
+
+    let test = String(calligraphy: {
+        "foo"
+        Line {
+            Tab()
+            "bar"
+        }
+        "baz"
+        Line {
+            "foo"
+            "bar"
+            Space()
+            "baz"
+        }
+        Lines(spacing: 2) {
+            for i in 0 ..< 4 {
+                "\(i)"
+            }
+        }
+        .tabbed()
+        Strokes {
+            "foo"
+            "bar"
+            "baz"
+            "qux"
+        }
+        .separatedBy(", ")
+    })
+
+    let expected = """
+    foo
+        bar
+    baz
+    foobar baz
+        0
+        
+        1
+        
+        2
+        
+        3
+    foo, bar, baz, qux
+    """
+    #expect(test == expected)
 }

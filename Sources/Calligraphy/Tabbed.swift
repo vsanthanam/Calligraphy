@@ -43,6 +43,7 @@ public struct Tabbed<T>: Stroke where T: Stroke {
         _ count: Int,
         @Calligraphy strokes: () -> T
     ) {
+        precondition(count >= 0, "Tab count must be non-negative.")
         self.count = count
         self.strokes = strokes()
     }
@@ -50,33 +51,14 @@ public struct Tabbed<T>: Stroke where T: Stroke {
     // MARK: - Stroke
 
     public var body: some Stroke {
-        let tabs = String(
-            repeating: String(
-                calligraphy: {
-                    Tab()
-                }
-            ),
-            count: count
-        )
+        let tabs = String(repeating: "    ", count: count)
         strokes
             .map { content in
                 guard let content else { return nil }
                 return content
-                    .components(
-                        separatedBy: String(
-                            calligraphy: {
-                                NewLine()
-                            }
-                        )
-                    )
+                    .components(separatedBy: "\n")
                     .map { tabs + $0 }
-                    .joined(
-                        separator: String(
-                            calligraphy: {
-                                NewLine()
-                            }
-                        )
-                    )
+                    .joined(separator: "\n")
             }
     }
 

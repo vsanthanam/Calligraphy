@@ -39,14 +39,8 @@ public enum Calligraphy {
     }
 
     public static func buildExpression(
-        expression: Never
-    ) -> some Stroke {
-        Fatal()
-    }
-
-    public static func buildExpression(
         _ expression: String
-    ) -> some Stroke {
+    ) -> StringStroke {
         StringStroke(expression)
     }
 
@@ -110,7 +104,7 @@ public enum Calligraphy {
         }
     }
 
-    public static func buildArray<T>(
+    public static func buildArray(
         _ components: [some Stroke]
     ) -> some Stroke {
         List(components)
@@ -203,8 +197,6 @@ public enum Calligraphy {
         let content: String? = nil
 
     }
-
-    struct Fatal: Stroke {}
 
     @TaskLocal
     static var separator: String = "\n"

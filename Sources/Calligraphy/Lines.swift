@@ -37,6 +37,7 @@ public struct Lines<T>: Stroke where T: Stroke {
         spacing: Int = 1,
         @Calligraphy strokes: () -> T
     ) {
+        precondition(spacing >= 1, "Spacing must be at least 1")
         self.spacing = spacing
         self.strokes = strokes()
     }
@@ -44,13 +45,9 @@ public struct Lines<T>: Stroke where T: Stroke {
     // MARK: - Stroke
 
     public var body: some Stroke {
+        let separator = String(repeating: "\n", count: spacing)
         strokes
-            .separatedBy(
-                String(
-                    repeating: "\n",
-                    count: spacing
-                )
-            )
+            .separatedBy(separator)
     }
 
     // MARK: - Private

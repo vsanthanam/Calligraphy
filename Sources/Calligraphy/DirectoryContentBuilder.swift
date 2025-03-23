@@ -96,9 +96,6 @@ public enum DirectoryContentBuilder {
             self.next = next
         }
 
-        private let accumulated: (repeat (each Accumulated))
-        private let next: Next
-
         func _serialize() -> [SerializedDirectoryContent] {
             var rv = [SerializedDirectoryContent]()
             for content in repeat each accumulated {
@@ -107,6 +104,9 @@ public enum DirectoryContentBuilder {
             rv += next._serialize()
             return rv
         }
+        
+        private let accumulated: (repeat (each Accumulated))
+        private let next: Next
 
     }
 
@@ -141,11 +141,11 @@ public enum DirectoryContentBuilder {
             self.list = list
         }
 
-        private let list: [Element]
-
         func _serialize() -> [SerializedDirectoryContent] {
             list.flatMap { $0._serialize() }
         }
+
+        private let list: [Element]
 
     }
 

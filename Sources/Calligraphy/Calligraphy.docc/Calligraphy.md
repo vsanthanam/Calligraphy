@@ -24,11 +24,11 @@ overview here
 
 ### Directory Composition
 
-- ``AnyDirectoryContent``
-- ``Directory``
 - ``DirectoryContent``
-- ``DirectoryContentBuilder``
 - ``File``
+- ``Directory``
+- ``DirectoryContentBuilder``
 - ``Folder``
-- ``SerializedDirectoryContent``
 - ``TextFile``
+- ``SerializedDirectoryContent``
+- ``AnyDirectoryContent``

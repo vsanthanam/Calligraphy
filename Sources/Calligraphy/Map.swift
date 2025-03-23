@@ -53,6 +53,12 @@ struct Map<T>: Stroke where T: Stroke {
         self.fn = fn
     }
 
+    // MARK: - Stroke
+
+    var content: String? {
+        fn(strokes.content)
+    }
+
     // MARK: - Private
 
     private let strokes: T
