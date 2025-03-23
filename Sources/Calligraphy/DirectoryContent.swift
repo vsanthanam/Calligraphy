@@ -27,6 +27,9 @@ import Foundation
 
 /// Generic directory content
 ///
+/// A `DirectoryContent` represents an entry inside a directory, either a file or a folder.
+/// You will rarely need to interact with this protocol outside of using it as an opaque return type for a ``DirectoryContentBuilder`` result builder.
+///
 /// - Important: You shouldn't implement this protocol directly. Instead, implement either ``Directory`` or ``File``
 @available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
 public protocol DirectoryContent: Sendable {

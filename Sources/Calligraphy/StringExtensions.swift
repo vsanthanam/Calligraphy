@@ -35,7 +35,7 @@ public extension String {
     }
 
     /// Create a string by composing strokes together
-    /// - Parameter strokes: The strokes to compose
+    /// - Parameter calligraphy: The strokes to compose
     init(
         @Calligraphy calligraphy: () -> some Stroke
     ) {
