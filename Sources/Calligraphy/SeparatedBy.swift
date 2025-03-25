@@ -36,9 +36,9 @@ public extension Stroke {
     }
 
     func separatedBy(
-        @Calligraphy _ separator: () -> some Stroke
+        @Calligraphy calligraphy: () -> some Stroke
     ) -> some Stroke {
-        separatedBy(String(calligraphy: separator))
+        separatedBy(String(calligraphy: calligraphy))
     }
 
 }

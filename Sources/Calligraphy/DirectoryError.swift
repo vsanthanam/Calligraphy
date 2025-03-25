@@ -26,13 +26,19 @@
 @available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
 struct DirectoryError: Error, Sendable, CustomStringConvertible {
 
+    // MARK: - Initializers
+
     init(
         _ message: String
     ) {
         self.message = message
     }
 
+    // MARK: - API
+
     let message: String
+
+    // MARK: - CustomStringConvertible
 
     var description: String { message }
 

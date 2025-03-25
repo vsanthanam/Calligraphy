@@ -29,7 +29,7 @@ public struct TextFile<T>: File where T: Stroke {
 
     // MARK: - Initializers
 
-    /// Create a text file with an extension
+    /// Create a text file with an extension, declaratively
     /// - Parameters:
     ///   - name: The name of the file
     ///   - extension: The file's extension
@@ -42,7 +42,7 @@ public struct TextFile<T>: File where T: Stroke {
         self.init(name + "." + `extension`, content: content)
     }
 
-    /// Create a text file
+    /// Create a text file, declaratively
     /// - Parameters:
     ///   - name: The name of the file
     ///   - content: The file's content
@@ -52,6 +52,30 @@ public struct TextFile<T>: File where T: Stroke {
     ) {
         self.name = name
         body = content()
+    }
+
+    /// Create a text file
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - content: The file's content
+    public init(
+        _ name: String,
+        content: String
+    ) where T == StringStroke {
+        self.init(name) { content }
+    }
+
+    /// Create a text file with an extension
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - extension: The file's extension
+    ///   - content: The file's content
+    public init(
+        _ name: String,
+        extension: String,
+        content: String
+    ) where T == StringStroke {
+        self.init(name, extension: `extension`) { content }
     }
 
     // MARK: - File

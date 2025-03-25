@@ -1,5 +1,5 @@
 // Calligraphy
-// Directory.swift
+// PrefixLines.swift
 //
 // MIT License
 //
@@ -23,44 +23,52 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// A type representing a directory
-///
-/// You can implement `Directory` either declaratively, by implemeting the ``body`` property, or declaratively, by implementing the ``contents`` property.
-/// Do not implement both. If you do, the `content` property will be respected and the `body` property would be ignored.
 @available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
-public protocol Directory: DirectoryContent {
+public extension Stroke {
 
-    /// The type of the directory's contents, if implemented declaratively
-    associatedtype Body: DirectoryContent = Never
+    func prefixLines(
+        with prefix: String
+    ) -> some Stroke {
+        PrefixLines(
+            self,
+            prefix
+        )
+    }
 
-    /// The name of the directory
-    var name: String { get }
-
-    /// The contents of the directory, if implemented declaratively
-    @DirectoryContentBuilder
-    var body: Body { get }
-
-    /// The serialized contents of the directory
-    var contents: [SerializedDirectoryContent] { get }
+    func prefixLines(
+        @Calligraphy with calligraphy: () -> some Stroke
+    ) -> some Stroke {
+        let prefix = String(calligraphy: calligraphy)
+        return prefixLines(with: prefix)
+    }
 
 }
 
 @available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
-extension Never: DirectoryContent {
+struct PrefixLines<Strokes>: Stroke where Strokes: Stroke {
 
-    public func _serialize() -> [SerializedDirectoryContent] { [] }
+    // MARK: - Initializers
 
-}
-
-@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
-public extension Directory {
-
-    var contents: [SerializedDirectoryContent] {
-        body._serialize()
+    init(
+        _ strokes: Strokes,
+        _ prefix: String
+    ) {
+        self.strokes = strokes
+        self.prefix = prefix
     }
 
-    func _serialize() -> [SerializedDirectoryContent] {
-        [.directory(.init(name: name, contents: contents))]
+    // MARK: - Stroke
+
+    var body: some Stroke {
+        strokes
+            .mapLines { line in
+                prefix + line
+            }
     }
+
+    // MARK: - Private
+
+    private let strokes: Strokes
+    private let prefix: String
 
 }

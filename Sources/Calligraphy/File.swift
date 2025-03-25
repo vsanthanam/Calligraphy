@@ -57,7 +57,7 @@ public extension File {
     }
 
     func _serialize() -> [SerializedDirectoryContent] {
-        [.file(name, content)]
+        [.file(.init(name: name, content: content))]
     }
 
 }

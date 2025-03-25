@@ -30,9 +30,41 @@ public enum SerializedDirectoryContent: Equatable, Hashable, Sendable {
     // MARK: - Cases
 
     /// A file
-    case file(String, String)
+    case file(File)
 
     /// A directory
-    case directory(String, [SerializedDirectoryContent])
+    case directory(Directory)
+
+    // MARK: - API
+
+    public struct File: Equatable, Hashable, Sendable {
+
+        public init(
+            name: String,
+            content: String
+        ) {
+            self.name = name
+            self.content = content
+        }
+
+        public let name: String
+        public let content: String
+
+    }
+
+    public struct Directory: Equatable, Hashable, Sendable {
+
+        public init(
+            name: String,
+            contents: [SerializedDirectoryContent]
+        ) {
+            self.name = name
+            self.contents = contents
+        }
+
+        public let name: String
+        public let contents: [SerializedDirectoryContent]
+
+    }
 
 }

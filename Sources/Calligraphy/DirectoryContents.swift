@@ -1,5 +1,5 @@
 // Calligraphy
-// Lines.swift
+// DirectoryContents.swift
 //
 // MIT License
 //
@@ -23,41 +23,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// Multiple lines of text
-@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
-public struct Lines<Strokes>: Stroke where Strokes: Stroke {
+/// An entry point for the ``DirectoryContentBuilder`` result builder
+public struct DirectoryContents<T>: DirectoryContent where T: DirectoryContent {
 
     // MARK: - Initializers
 
-    /// Create `Lines`
-    /// - Parameters:
-    ///   - spacing: How many new line characters to place between strokes
-    ///   - strokes: The strokes to join into lines
     public init(
-        spacing: Int = 1,
-        @Calligraphy strokes: () -> Strokes
+        @DirectoryContentBuilder contents: () -> T
     ) {
-        precondition(spacing >= 1, "Spacing must be at least 1")
-        self.spacing = spacing
-        self.strokes = strokes()
+        self.contents = contents()
     }
 
-    // MARK: - Stroke
+    // MARK: - DirectoryContent
 
-    public var body: some Stroke {
-        strokes
-            .separatedBy {
-                Line {
-                    for _ in 0 ..< spacing {
-                        NewLine()
-                    }
-                }
-            }
+    public func _serialize() -> [SerializedDirectoryContent] {
+        contents._serialize()
     }
 
     // MARK: - Private
 
-    private let spacing: Int
-    private let strokes: Strokes
+    private let contents: T
 
 }

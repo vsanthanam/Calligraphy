@@ -23,48 +23,88 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
-public extension Stroke {
-
-    func tabbed(
-        _ count: Int = 1
-    ) -> some Stroke {
-        Tabbed(count) { self }
-    }
-
-}
-
+/// A stroke which applies a tab to each line of its children
+///
+/// You can use a tabbed stroke to add tabs as line prefixes to multline children, for example:
+///
+/// ```swift
+/// let example = Lines {
+///     "{"
+///     Tabbed {
+///         Strokes {
+///             "apple"
+///             "pear"
+///             "banana"
+///         }
+///         .separatedBy {
+///             Line {
+///                 NewLine()
+///                 ","
+///             }
+///         }
+///     }
+///     "}"
+/// }
+/// ```
+///
+/// This example would yield the following mult-iline string:
+///
+/// ```
+/// {
+///     apple,
+///     pear,
+///     banana
+/// }
+/// ```
 @available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
 public struct Tabbed<T>: Stroke where T: Stroke {
 
     // MARK: - Initializers
 
+    /// Create a tabbed stroke
+    /// - Parameters:
+    ///   - numberOfTabs: The number of tabs to add to each line
+    ///   - strokes: The strokes to add tabs to
+    /// - Warning: You must provide a positive value to `numberOfTabs`. If you provide a negetive value, a runtime failure will occur.
     public init(
-        _ count: Int,
+        _ numberOfTabs: Int = 1,
         @Calligraphy strokes: () -> T
     ) {
-        precondition(count >= 0, "Tab count must be non-negative.")
-        self.count = count
+        precondition(numberOfTabs >= 0, "Tab count must be non-negative.")
+        self.numberOfTabs = numberOfTabs
         self.strokes = strokes()
     }
 
     // MARK: - Stroke
 
     public var body: some Stroke {
-        let tabs = String(repeating: "    ", count: count)
         strokes
-            .map { content in
-                guard let content else { return nil }
-                return content
-                    .components(separatedBy: "\n")
-                    .map { tabs + $0 }
-                    .joined(separator: "\n")
+            .prefixLines {
+                Line {
+                    for _ in 0 ..< numberOfTabs {
+                        Tab()
+                    }
+                }
             }
     }
 
     // MARK: - Private
 
-    private let count: Int
+    private let numberOfTabs: Int
     private let strokes: T
+
+}
+
+@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+public extension Stroke {
+
+    /// Add a tab to each line of the upstream
+    /// - Parameter count: The number of tabs to add
+    /// - Returns: The tabbed stroke
+    func tabbed(
+        _ count: Int = 1
+    ) -> some Stroke {
+        Tabbed(count) { self }
+    }
 
 }
