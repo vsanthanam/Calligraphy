@@ -1,0 +1,7 @@
+version: 1
+builder:
+  configs:
+  - platform: macOS
+    scheme: Calligraphy
+  - documentation_targets: [Calligraphy]
+    custom_documentation_parameters: [--include-extended-types]
