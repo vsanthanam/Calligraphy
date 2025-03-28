@@ -16,7 +16,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  docc:
+  build-docc:
     runs-on: macos-15
     outputs:
       artifact-name: docs
@@ -24,7 +24,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Build Documentation
-        run: ./build-docs
+        run: ./.scripts/build-docs
       - name: Compress Documentation
         run: zip -r docs.zip docs
       - name: Upload Documentation
@@ -33,7 +33,7 @@ jobs:
           name: docs
           path: docs.zip
   build:
-    needs: docc
+    needs: build-docc
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -46,7 +46,7 @@ jobs:
       - name: Decompress Documentation
         run: unzip docs.zip
       - name: Fix README
-        run: tail -n +2 README.md > README-2.md && rm README.md && mv README-2.md README.md
+        run: ./.scripts/clean-readme
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Build with Jekyll
@@ -56,8 +56,6 @@ jobs:
           destination: ./_site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
-
-  # Deployment job
   deploy:
     environment:
       name: github-pages
