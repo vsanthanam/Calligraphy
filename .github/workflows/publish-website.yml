@@ -45,6 +45,8 @@ jobs:
           path: .
       - name: Decompress Documentation
         run: unzip docs.zip
+      - name: Fix README
+        run: tail -n +2 README.md > README-2.md && rm README.md && mv README-2.md README.md
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Build with Jekyll
