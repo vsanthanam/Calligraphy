@@ -27,7 +27,7 @@
 @available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
 public enum SerializedDirectoryContent: Equatable, Hashable, Sendable {
 
-    // MARK: - Cases
+    // MARK: - API
 
     /// A file
     case file(File)
@@ -35,9 +35,9 @@ public enum SerializedDirectoryContent: Equatable, Hashable, Sendable {
     /// A directory
     case directory(Directory)
 
-    // MARK: - API
-
     public struct File: Equatable, Hashable, Sendable {
+
+        // MARK: - Initializers
 
         public init(
             name: String,
@@ -47,12 +47,16 @@ public enum SerializedDirectoryContent: Equatable, Hashable, Sendable {
             self.content = content
         }
 
+        // MARK: - API
+
         public let name: String
         public let content: String
 
     }
 
     public struct Directory: Equatable, Hashable, Sendable {
+
+        // MARK: - Initializers
 
         public init(
             name: String,
@@ -61,6 +65,8 @@ public enum SerializedDirectoryContent: Equatable, Hashable, Sendable {
             self.name = name
             self.contents = contents
         }
+
+        // MARK: - API
 
         public let name: String
         public let contents: [SerializedDirectoryContent]
