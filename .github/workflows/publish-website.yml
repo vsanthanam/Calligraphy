@@ -21,22 +21,21 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
-preprocess:
-  runs-on: macos-15
-  outputs:
-    artifact-name: docs
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Build Documentation
-      run: ./build-docs
-    - name: Upload Documentation
-      uses: actions/upload-artifact@v4
-      with:
-        name: docs
-        path: ./docs
-
 jobs:
+  preprocess:
+    runs-on: macos-15
+    outputs:
+      artifact-name: docs
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build Documentation
+        run: ./build-docs
+      - name: Upload Documentation
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs
+          path: ./docs
   # Build job
   build:
     needs: docs
