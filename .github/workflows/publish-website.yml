@@ -16,7 +16,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-documentation:
+  docc:
     runs-on: macos-15
     outputs:
       artifact-name: docs
@@ -32,8 +32,8 @@ jobs:
         with:
           name: docs
           path: docs.zip
-  build-website:
-    needs: build-documentation
+  build:
+    needs: docc
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
