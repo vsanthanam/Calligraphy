@@ -148,9 +148,10 @@ public enum DirectoryContentBuilder {
 
     public enum _Either<First, Second>: DirectoryContent where First: DirectoryContent, Second: DirectoryContent {
 
-        // MARK: - Cases
+        // MARK: - API
 
         case first(First)
+
         case second(Second)
 
         // MARK: - DirectoryContent
