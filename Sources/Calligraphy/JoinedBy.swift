@@ -26,39 +26,55 @@
 @available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
 public extension Stroke {
 
-    func separatedBy(
+    func joinedBy(
         _ separator: String
     ) -> some Stroke {
-        SeparatedBy(
-            self,
-            separator
-        )
+        JoinedBy(separator) { self }
     }
 
-    func separatedBy(
+    func joinedBy(
         @Calligraphy calligraphy: () -> some Stroke
     ) -> some Stroke {
-        separatedBy(String(calligraphy: calligraphy))
+        JoinedBy(
+            strokes: { self },
+            separator: calligraphy
+        )
     }
 
 }
 
+/// Join the child strokes together into a single stroke using a provided separator
 @available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
-struct SeparatedBy<T>: Stroke where T: Stroke {
+public struct JoinedBy<T>: Stroke where T: Stroke {
 
     // MARK: - Initializers
 
-    init(
-        _ strokes: T,
-        _ separator: String
+    /// Create a `JoinedBy` stroke with a `String` separator
+    /// - Parameters:
+    ///   - separator: The separator used to join the children
+    ///   - strokes: The children to join
+    public init(
+        _ separator: String,
+        @Calligraphy strokes: () -> T
     ) {
-        self.strokes = strokes
         self.separator = separator
+        self.strokes = strokes()
+    }
+
+    /// Create a `JoinedBy` stroke using a ``Stroke`` separator
+    /// - Parameters:
+    ///   - strokes: The children to join
+    ///   - separator: The separator used to join the children
+    public init(
+        @Calligraphy strokes: () -> T,
+        @Calligraphy separator: () -> some Stroke
+    ) {
+        self.init(.init(calligraphy: separator), strokes: strokes)
     }
 
     // MARK: - Stroke
 
-    var content: String? {
+    public var content: String? {
         Calligraphy.$separator.withValue(separator) {
             strokes.content
         }

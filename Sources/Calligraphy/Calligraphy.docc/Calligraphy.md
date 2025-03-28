@@ -14,6 +14,7 @@ overview here
 - ``Stroke``
 - ``Line``
 - ``Lines``
+- ``JoinedBy``
 - ``NewLine``
 - ``Tab``
 - ``Space``
