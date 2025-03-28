@@ -38,7 +38,7 @@ jobs:
           path: ./docs
   # Build job
   build:
-    needs: docs
+    needs: preprocess
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
