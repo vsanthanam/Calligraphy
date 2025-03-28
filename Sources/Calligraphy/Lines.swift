@@ -45,14 +45,15 @@ public struct Lines<Strokes>: Stroke where Strokes: Stroke {
     // MARK: - Stroke
 
     public var body: some Stroke {
-        strokes
-            .joinedBy {
-                Line {
-                    for _ in 0 ..< spacing {
-                        NewLine()
-                    }
+        Joined {
+            strokes
+        } separator: {
+            Line {
+                for _ in 0 ..< spacing {
+                    NewLine()
                 }
             }
+        }
     }
 
     // MARK: - Private

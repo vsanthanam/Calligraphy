@@ -28,6 +28,8 @@
 @resultBuilder
 public enum DirectoryContentBuilder {
 
+    // MARK: - Result Builder
+
     public static func buildExpression<T>(
         _ expression: T
     ) -> T where T: DirectoryContent {
@@ -116,7 +118,32 @@ public enum DirectoryContentBuilder {
         AnyDirectoryContent(component)
     }
 
-    struct Accumulate<each Accumulated, Next>: DirectoryContent where repeat each Accumulated: DirectoryContent, Next: DirectoryContent {
+    // MARK: - API
+
+    public enum _Either<First, Second>: DirectoryContent where First: DirectoryContent, Second: DirectoryContent {
+
+        // MARK: - API
+
+        case first(First)
+
+        case second(Second)
+
+        // MARK: - DirectoryContent
+
+        public func _serialize() -> [SerializedDirectoryContent] {
+            switch self {
+            case let .first(content):
+                content._serialize()
+            case let .second(content):
+                content._serialize()
+            }
+        }
+
+    }
+
+    // MARK: - Private
+
+    fileprivate struct Accumulate<each Accumulated, Next>: DirectoryContent where repeat each Accumulated: DirectoryContent, Next: DirectoryContent {
 
         // MARK: - Initializers
 
@@ -146,27 +173,7 @@ public enum DirectoryContentBuilder {
 
     }
 
-    public enum _Either<First, Second>: DirectoryContent where First: DirectoryContent, Second: DirectoryContent {
-
-        // MARK: - API
-
-        case first(First)
-
-        case second(Second)
-
-        // MARK: - DirectoryContent
-
-        public func _serialize() -> [SerializedDirectoryContent] {
-            switch self {
-            case let .first(content):
-                content._serialize()
-            case let .second(content):
-                content._serialize()
-            }
-        }
-    }
-
-    struct Skip: DirectoryContent {
+    fileprivate struct Skip: DirectoryContent {
 
         // MARK: - Initializers
 
@@ -180,7 +187,7 @@ public enum DirectoryContentBuilder {
 
     }
 
-    struct List<Element>: DirectoryContent where Element: DirectoryContent {
+    fileprivate struct List<Element>: DirectoryContent where Element: DirectoryContent {
 
         // MARK: - Initializers
 
@@ -200,7 +207,7 @@ public enum DirectoryContentBuilder {
 
     }
 
-    struct Raw: DirectoryContent {
+    fileprivate struct Raw: DirectoryContent {
 
         // MARK: - Initializers
 

@@ -10,8 +10,8 @@
 
 ### Operators
 
-- ``joinedBy(_:)``
-- ``joinedBy(calligraphy:)``
+- ``joined(separator:)``
+- ``joined(with:)``
 - ``map(fn:)``
 - ``map(with:)``
 - ``mapLines(fn:)``

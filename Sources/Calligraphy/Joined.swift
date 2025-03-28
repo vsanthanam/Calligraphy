@@ -1,5 +1,5 @@
 // Calligraphy
-// SeparatedBy.swift
+// Joined.swift
 //
 // MIT License
 //
@@ -26,16 +26,22 @@
 @available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
 public extension Stroke {
 
-    func joinedBy(
-        _ separator: String
+    /// Join strokes together with a separator
+    /// - Parameter separator: The separator
+    /// - Returns: The joined stroke
+    func joined(
+        separator: String
     ) -> some Stroke {
-        JoinedBy(separator) { self }
+        Joined(separator: separator) { self }
     }
 
-    func joinedBy(
-        @Calligraphy calligraphy: () -> some Stroke
+    /// Join strokes together with a separator, declaratively
+    /// - Parameter calligraphy: The separator
+    /// - Returns: The joined stroke
+    func joined(
+        @Calligraphy with calligraphy: () -> some Stroke
     ) -> some Stroke {
-        JoinedBy(
+        Joined(
             strokes: { self },
             separator: calligraphy
         )
@@ -45,23 +51,23 @@ public extension Stroke {
 
 /// Join the child strokes together into a single stroke using a provided separator
 @available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
-public struct JoinedBy<T>: Stroke where T: Stroke {
+public struct Joined<T>: Stroke where T: Stroke {
 
     // MARK: - Initializers
 
-    /// Create a `JoinedBy` stroke with a `String` separator
+    /// Create a `Joined` stroke with a `String` separator
     /// - Parameters:
     ///   - separator: The separator used to join the children
     ///   - strokes: The children to join
     public init(
-        _ separator: String,
+        separator: String,
         @Calligraphy strokes: () -> T
     ) {
         self.separator = separator
         self.strokes = strokes()
     }
 
-    /// Create a `JoinedBy` stroke using a ``Stroke`` separator
+    /// Create a `Joined` stroke using a ``Stroke`` separator
     /// - Parameters:
     ///   - strokes: The children to join
     ///   - separator: The separator used to join the children
@@ -69,7 +75,10 @@ public struct JoinedBy<T>: Stroke where T: Stroke {
         @Calligraphy strokes: () -> T,
         @Calligraphy separator: () -> some Stroke
     ) {
-        self.init(.init(calligraphy: separator), strokes: strokes)
+        self.init(
+            separator: .init(calligraphy: separator),
+            strokes: strokes
+        )
     }
 
     // MARK: - Stroke

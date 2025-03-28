@@ -40,8 +40,9 @@ public struct Line<Strokes>: Stroke where Strokes: Stroke {
     // MARK: - Stroke
 
     public var body: some Stroke {
-        strokes
-            .joinedBy { "" }
+        Joined(separator: "") {
+            strokes
+        }
     }
 
     // MARK: - Private
