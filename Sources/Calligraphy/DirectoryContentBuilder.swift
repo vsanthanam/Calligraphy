@@ -219,4 +219,5 @@ public enum DirectoryContentBuilder {
         private let contents: [SerializedDirectoryContent]
 
     }
+
 }
