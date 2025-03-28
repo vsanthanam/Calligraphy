@@ -23,6 +23,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/// A result build for directory content
 @available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
 @resultBuilder
 public enum DirectoryContentBuilder {
@@ -35,6 +36,33 @@ public enum DirectoryContentBuilder {
 
     public static func buildExpression<T>() -> some DirectoryContent {
         Skip()
+    }
+
+    public static func buildExpression(
+        _ expression: [SerializedDirectoryContent]
+    ) -> some DirectoryContent {
+        Raw(expression)
+    }
+
+    @DirectoryContentBuilder
+    public static func buildExpression(
+        _ expression: SerializedDirectoryContent
+    ) -> some DirectoryContent {
+        [expression]
+    }
+
+    @DirectoryContentBuilder
+    public static func buildExpression(
+        _ expression: SerializedDirectoryContent.File
+    ) -> some DirectoryContent {
+        .file(expression)
+    }
+
+    @DirectoryContentBuilder
+    public static func buildExpression(
+        _ expression: SerializedDirectoryContent.Directory
+    ) -> some DirectoryContent {
+        .directory(expression)
     }
 
     public static func buildPartialBlock<T>(
@@ -66,7 +94,9 @@ public enum DirectoryContentBuilder {
     }
 
     @DirectoryContentBuilder
-    public static func buildOptional<T>(component: T?) -> some DirectoryContent where T: DirectoryContent {
+    public static func buildOptional<T>(
+        component: T?
+    ) -> some DirectoryContent where T: DirectoryContent {
         if let component {
             component
         } else {
@@ -88,6 +118,8 @@ public enum DirectoryContentBuilder {
 
     struct Accumulate<each Accumulated, Next>: DirectoryContent where repeat each Accumulated: DirectoryContent, Next: DirectoryContent {
 
+        // MARK: - Initializers
+
         init(
             accumulated: repeat each Accumulated,
             next: Next
@@ -95,6 +127,8 @@ public enum DirectoryContentBuilder {
             self.accumulated = (repeat (each accumulated))
             self.next = next
         }
+
+        // MARK: - DirectoryContent
 
         func _serialize() -> [SerializedDirectoryContent] {
             var rv = [SerializedDirectoryContent]()
@@ -104,7 +138,9 @@ public enum DirectoryContentBuilder {
             rv += next._serialize()
             return rv
         }
-        
+
+        // MARK: - Private
+
         private let accumulated: (repeat (each Accumulated))
         private let next: Next
 
@@ -112,8 +148,12 @@ public enum DirectoryContentBuilder {
 
     public enum _Either<First, Second>: DirectoryContent where First: DirectoryContent, Second: DirectoryContent {
 
+        // MARK: - Cases
+
         case first(First)
         case second(Second)
+
+        // MARK: - DirectoryContent
 
         public func _serialize() -> [SerializedDirectoryContent] {
             switch self {
@@ -127,7 +167,11 @@ public enum DirectoryContentBuilder {
 
     struct Skip: DirectoryContent {
 
+        // MARK: - Initializers
+
         init() {}
+
+        // MARK: - DirectoryContent
 
         func _serialize() -> [SerializedDirectoryContent] {
             []
@@ -137,16 +181,41 @@ public enum DirectoryContentBuilder {
 
     struct List<Element>: DirectoryContent where Element: DirectoryContent {
 
+        // MARK: - Initializers
+
         init(_ list: [Element]) {
             self.list = list
         }
+
+        // MARK: - DirectoryContent
 
         func _serialize() -> [SerializedDirectoryContent] {
             list.flatMap { $0._serialize() }
         }
 
+        // MARK: - Private
+
         private let list: [Element]
 
     }
 
+    struct Raw: DirectoryContent {
+
+        // MARK: - Initializers
+
+        init(_ contents: [SerializedDirectoryContent]) {
+            self.contents = contents
+        }
+
+        // MARK: - DirectoryContent
+
+        func _serialize() -> [SerializedDirectoryContent] {
+            contents
+        }
+
+        // MARK: - Private
+
+        private let contents: [SerializedDirectoryContent]
+
+    }
 }

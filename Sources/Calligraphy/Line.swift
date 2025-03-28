@@ -25,12 +25,14 @@
 
 /// A line of text
 @available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
-public struct Line<T>: Stroke where T: Stroke {
+public struct Line<Strokes>: Stroke where Strokes: Stroke {
 
     // MARK: - Initializers
 
+    /// Create a `Line`
+    /// - Parameter strokes: The strokes to join together to form a line
     public init(
-        @Calligraphy strokes: () -> T
+        @Calligraphy strokes: () -> Strokes
     ) {
         self.strokes = strokes()
     }
@@ -44,6 +46,6 @@ public struct Line<T>: Stroke where T: Stroke {
 
     // MARK: - Private
 
-    private let strokes: T
+    private let strokes: Strokes
 
 }

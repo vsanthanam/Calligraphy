@@ -24,38 +24,43 @@
 // SOFTWARE.
 
 @testable import Calligraphy
+import Foundation
 import Testing
 
 @Test
-func example() {
+func example() async throws {
 
-    let test = String(calligraphy: {
-        "foo"
-        Line {
-            Tab()
-            "bar"
-        }
-        "baz"
-        Line {
+    let test = String(
+        calligraphy: {
             "foo"
-            "bar"
-            Space()
-            "baz"
-        }
-        Lines(spacing: 2) {
-            for i in 0 ..< 4 {
-                "\(i)"
+            Line {
+                Tab()
+                "bar"
             }
-        }
-        .tabbed()
-        Strokes {
-            "foo"
-            "bar"
             "baz"
-            "qux"
+            Line {
+                "foo"
+                "bar"
+                Space()
+                "baz"
+            }
+            Tabbed {
+                Lines(spacing: 2) {
+                    for i in 0 ..< 4 {
+                        "\(i)"
+                    }
+                }
+            }
+            Strokes {
+                "foo"
+                "bar"
+                "baz"
+                "qux"
+            }
+            .separatedBy(", ")
+            .tabbed(3)
         }
-        .separatedBy(", ")
-    })
+    )
 
     let expected = """
     foo
@@ -63,13 +68,41 @@ func example() {
     baz
     foobar baz
         0
-        
+
         1
-        
+
         2
-        
+
         3
-    foo, bar, baz, qux
+                foo, bar, baz, qux
     """
     #expect(test == expected)
+
+    let folder = Folder("foo") {
+        TextFile("README", extension: "md") {
+            "sup"
+        }
+        Folder("bar") {
+            TextFile("tweet", content: expected)
+        }
+    }
+
+    let temp = FileManager.default.temporaryDirectory
+    try await folder.write(toDirectory: temp, shouldOverwrite: true)
+    let rootDir = temp.appending(path: "foo", directoryHint: .isDirectory)
+    guard FileManager.default.fileExists(atPath: rootDir.path()) else {
+        Issue.record("fuck")
+        return
+    }
+    let readmePath = rootDir.appending(path: "README.md", directoryHint: .notDirectory)
+    let readmeFile = try String(contentsOf: readmePath, encoding: .utf8)
+    #expect(readmeFile == "sup")
+    let barUrl = rootDir.appending(path: "bar", directoryHint: .isDirectory)
+    guard FileManager.default.fileExists(atPath: barUrl.path()) else {
+        Issue.record("fuck")
+        return
+    }
+    let tweetUrl = barUrl.appending(path: "tweet", directoryHint: .notDirectory)
+    let tweetFile = try String(contentsOf: tweetUrl, encoding: .utf8)
+    #expect(tweetFile == expected)
 }

@@ -1,6 +1,6 @@
 # ``Calligraphy``
 
-A declarative library for composing strings, text, files, and folder in Swift
+A declarative library for composing strings, text, files, and folders in Swift
 
 ## Overview
 
@@ -30,5 +30,6 @@ overview here
 - ``DirectoryContentBuilder``
 - ``Folder``
 - ``TextFile``
+- ``DirectoryContents``
 - ``SerializedDirectoryContent``
 - ``AnyDirectoryContent``

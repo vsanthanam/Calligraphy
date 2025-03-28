@@ -28,22 +28,32 @@
 @resultBuilder
 public enum Calligraphy {
 
+    // MARK: - Result Builder
+
+    /// Support for ``Stroke`` expressions in a `Calligraphy` result builder.
+    /// - Important: You are not supposed to invoke this method directly. It is an implementation of the result builder.
     public static func buildExpression<T>(
         _ expression: T
     ) -> T where T: Stroke {
         expression
     }
 
+    /// Support for `Void` expressions in a `Calligraphy` result builder.
+    /// - Important: You are not supposed to invoke this method directly. It is an implementation of the result builder.
     public static func buildExpression() -> some Stroke {
         Skip()
     }
 
+    /// Support for `String` expressions in a `Calligraphy` result builder.
+    /// - Important: You are not supposed to invoke this method directly. It is an implementation of the result builder.
     public static func buildExpression(
         _ expression: String
     ) -> StringStroke {
         StringStroke(expression)
     }
 
+    /// Support for `StringProtocol` expressions in a `Calligraphy` result builder.
+    /// - Important: You are not supposed to invoke this method directly. It is an implementation of the result builder.
     @Calligraphy
     public static func buildExpression(
         _ expression: some StringProtocol
@@ -51,6 +61,8 @@ public enum Calligraphy {
         String(expression)
     }
 
+    /// Support for `CustomStringConvertible` expressions in a `Calligraphy` result builder.
+    /// - Important: You are not supposed to invoke this method directly. It is an implementation of the result builder.
     @Calligraphy
     public static func buildExpression(
         _ expression: some CustomStringConvertible
@@ -58,6 +70,8 @@ public enum Calligraphy {
         expression.description
     }
 
+    /// Support for `RawRepresentable` expressions in a `Calligraphy` result builder.
+    /// - Important: You are not supposed to invoke this method directly. It is an implementation of the result builder.
     @Calligraphy
     public static func buildExpression<T>(
         _ expression: T
@@ -65,12 +79,16 @@ public enum Calligraphy {
         expression.rawValue
     }
 
+    /// Support for aggregating strokes together in a `Calligraphy` result builder.
+    /// - Important: You are not supposed to invoke this method directly. It is an implementation of the result builder.
     public static func buildPartialBlock<T>(
         first: T
     ) -> T where T: Stroke {
         first
     }
 
+    /// Support for aggregating strokes together in a `Calligraphy` result builder.
+    /// - Important: You are not supposed to invoke this method directly. It is an implementation of the result builder.
     public static func buildPartialBlock<each Accumulated>(
         accumulated: repeat each Accumulated,
         next: some Stroke
@@ -81,18 +99,24 @@ public enum Calligraphy {
         )
     }
 
+    /// Support for if-else control flow and switch statements in a `Calligraphy` result builder.
+    /// - Important: You are not supposed to invoke this method directly. It is an implementation of the result builder.
     public static func buildEither<First, Second>(
         first component: First
     ) -> _Either<First, Second> where First: Stroke, Second: Stroke {
         .first(component)
     }
 
+    /// Support for if-else control flow and switch statements in a `Calligraphy` result builder.
+    /// - Important: You are not supposed to invoke this method directly. It is an implementation of the result builder.
     public static func buildEither<First, Second>(
         second component: Second
     ) -> _Either<First, Second> where First: Stroke, Second: Stroke {
         .second(component)
     }
 
+    /// Support for if statement control flow in a `Calligraphy` result builder.
+    /// - Important: You are not supposed to invoke this method directly. It is an implementation of the result builder.
     @Calligraphy
     public static func buildOptional<T>(
         _ component: T?
@@ -104,17 +128,23 @@ public enum Calligraphy {
         }
     }
 
+    /// Support for a for-in loops in a `Calligraphy` result builder.
+    /// - Important: You are not supposed to invoke this method directly. It is an implementation of the result builder.
     public static func buildArray(
         _ components: [some Stroke]
     ) -> some Stroke {
         List(components)
     }
 
+    /// Support for availability checks in a `Calligraphy` result builder.
+    /// - Important: You are not supposed to invoke this method directly. It is an implementation of the result builder.
     public static func buildLimitedAvailability(
         _ component: some Stroke
     ) -> AnyStroke {
         AnyStroke(component)
     }
+
+    // MARK: - API
 
     public enum _Either<First, Second>: Stroke where First: Stroke, Second: Stroke {
 

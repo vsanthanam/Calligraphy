@@ -1,5 +1,5 @@
 // Calligraphy
-// Map.swift
+// MapLines.swift
 //
 // MIT License
 //
@@ -23,56 +23,58 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import Foundation
+
 @available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
 public extension Stroke {
 
-    /// Map the return value of a stroke into some other value
-    /// - Parameter fn: The function used to map the value
-    /// - Returns: The new, mapped stroke
-    func map(
-        fn: @Sendable @escaping (String?) -> String?
+    /// Map every line of a multi-line stroke
+    /// - Parameter fn: The function used to map each line into another string.
+    /// If the provdided function returns `nil`, the line will be omitted
+    /// - Returns: The line mapped stoke
+    func mapLines(
+        fn: @Sendable @escaping (String) -> String?
     ) -> some Stroke {
-        Map(
+        MapLines(
             self,
             fn
         )
     }
 
-    /// Map the return value of a stroke into some other value, declaratively
-    /// - Parameter calligraphy: The function used to map the value
-    /// - Returns: The new, mapped stroke
-    func map(
-        @Calligraphy with calligraphy: @Sendable @escaping (String?) -> some Stroke
+    /// Map every line of a multi-line stroke, declaratively
+    /// - Parameter calligraphy: The function used to map each line into another string.
+    /// If the provdided function returns `nil`, the line will be omitted
+    /// - Returns: The line mapped stoke
+    func mapLines(
+        @Calligraphy with calligraphy: @Sendable @escaping (String) -> some Stroke
     ) -> some Stroke {
-        map(fn: { content in
-            String(stroke: calligraphy(content))
+        mapLines(fn: { line in
+            String(stroke: calligraphy(line))
         })
     }
-
 }
 
 @available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
-struct Map<T>: Stroke where T: Stroke {
-
-    // MARK: - Initializers
+struct MapLines<Strokes>: Stroke where Strokes: Stroke {
 
     init(
-        _ strokes: T,
-        _ fn: @Sendable @escaping (String?) -> String?
+        _ strokes: Strokes,
+        _ fn: @Sendable @escaping (String) -> String?
     ) {
         self.strokes = strokes
         self.fn = fn
     }
 
-    // MARK: - Stroke
-
-    var content: String? {
-        fn(strokes.content)
+    var body: some Stroke {
+        strokes
+            .map { content in
+                content?
+                    .components(separatedBy: "\n")
+                    .compactMap(fn)
+                    .joined(separator: "\n")
+            }
     }
 
-    // MARK: - Private
-
-    private let strokes: T
-    private let fn: @Sendable (String?) -> String?
-
+    private let strokes: Strokes
+    private let fn: @Sendable (String) -> String?
 }

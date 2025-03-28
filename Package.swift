@@ -23,12 +23,18 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "Calligraphy"
+            name: "Calligraphy",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency=complete")
+            ]
         ),
         .testTarget(
             name: "CalligraphyTests",
             dependencies: [
                 "Calligraphy"
+            ],
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency=complete")
             ]
         )
     ]
