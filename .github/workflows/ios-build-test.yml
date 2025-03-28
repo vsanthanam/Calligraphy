@@ -1,0 +1,19 @@
+name: ios-build-test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: macos-15
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Xcode Version
+      run: sudo xcode-select --switch /Applications/Xcode_16.2.app
+    - name: Run Tests
+      run: xcodebuild test -scheme Calligraphy -sdk iphonesimulator -destination "OS=18.2,name=iPhone 16"
