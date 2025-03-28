@@ -2,7 +2,7 @@
 
 [![MIT License](https://img.shields.io/github/license/vsanthanam/Calligraphy)](https://github.com/vsanthanam/Calligraphy/blob/main/LICENSE)
 [![Release](https://img.shields.io/github/v/release/vsanthanam/Calligraphy)](https://github.com/vsanthanam/Calligraphy/releases)
-[![Build Status](https://img.shields.io/github/checks-status/vsanthanam/Calligraphy/main)](https://github.com/vsanthanam/Calligraphy/actions)
+[![Build Status](https://img.shields.io/github/check-runs/vsanthanam/Calligraphy/main)](https://github.com/vsanthanam/Calligraphy/actions)
 [![Swift Version](https://img.shields.io/badge/swift-6.0-critical)](https://swift.org)
 
 A declarative library for composing strings, text, files, and folder in Swift
