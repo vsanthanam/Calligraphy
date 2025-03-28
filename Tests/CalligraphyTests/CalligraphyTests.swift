@@ -57,7 +57,7 @@ func example() async throws {
                 "baz"
                 "qux"
             }
-            .separatedBy(", ")
+            .joinedBy(", ")
             .tabbed(3)
         }
     )

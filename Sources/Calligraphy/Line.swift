@@ -41,7 +41,7 @@ public struct Line<Strokes>: Stroke where Strokes: Stroke {
 
     public var body: some Stroke {
         strokes
-            .separatedBy("")
+            .joinedBy { "" }
     }
 
     // MARK: - Private

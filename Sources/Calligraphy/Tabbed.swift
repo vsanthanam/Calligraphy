@@ -36,7 +36,7 @@
 ///             "pear"
 ///             "banana"
 ///         }
-///         .separatedBy {
+///         .joinedBy {
 ///             Line {
 ///                 NewLine()
 ///                 ","
@@ -47,7 +47,7 @@
 /// }
 /// ```
 ///
-/// This example would yield the following mult-iline string:
+/// This example would yield the following multi-line string:
 ///
 /// ```
 /// {

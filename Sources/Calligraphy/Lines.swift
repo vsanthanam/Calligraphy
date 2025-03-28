@@ -46,7 +46,7 @@ public struct Lines<Strokes>: Stroke where Strokes: Stroke {
 
     public var body: some Stroke {
         strokes
-            .separatedBy {
+            .joinedBy {
                 Line {
                     for _ in 0 ..< spacing {
                         NewLine()
