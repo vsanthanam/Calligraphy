@@ -44,9 +44,7 @@ jobs:
           name: docs
           path: .
       - name: Decompress Documentation
-        run: unzip docs.zip -d docs
-      - name: Move docs into site
-        run: mv docs ./docs
+        run: unzip docs.zip
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Build with Jekyll
