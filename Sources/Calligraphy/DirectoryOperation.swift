@@ -161,10 +161,6 @@ private struct DirectoryOperation: Equatable, Sendable {
             self.currentURL = currentURL
         }
 
-        private let operation: DirectoryOperation
-
-        private let currentURL: URL
-
         func fileURL(
             for path: String
         ) -> URL {
@@ -188,6 +184,11 @@ private struct DirectoryOperation: Equatable, Sendable {
         ) -> T {
             operation[keyPath: keyPath]
         }
+
+        private let operation: DirectoryOperation
+
+        private let currentURL: URL
+
     }
 
     let encoding: String.Encoding

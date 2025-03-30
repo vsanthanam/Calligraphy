@@ -24,6 +24,7 @@
 // SOFTWARE.
 
 /// An entry point for the ``DirectoryContentBuilder`` result builder
+@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
 public struct DirectoryContents<T>: DirectoryContent where T: DirectoryContent {
 
     // MARK: - Initializers

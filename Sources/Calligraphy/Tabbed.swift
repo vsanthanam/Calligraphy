@@ -23,39 +23,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// A stroke which applies a tab to each line of its children
-///
-/// You can use a tabbed stroke to add tabs as line prefixes to multline children, for example:
-///
-/// ```swift
-/// let example = Lines {
-///     "{"
-///     Tabbed {
-///         Strokes {
-///             "apple"
-///             "pear"
-///             "banana"
-///         }
-///         .joinedBy {
-///             Line {
-///                 NewLine()
-///                 ","
-///             }
-///         }
-///     }
-///     "}"
-/// }
-/// ```
-///
-/// This example would yield the following multi-line string:
-///
-/// ```
-/// {
-///     apple,
-///     pear,
-///     banana
-/// }
-/// ```
+/// A stroke which applies tabs to the start of each line of its children
 @available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
 public struct Tabbed<T>: Stroke where T: Stroke {
 
