@@ -27,7 +27,7 @@
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public protocol Stroke: Sendable {
 
-    associatedtype Body = Never
+    associatedtype Body: Stroke = Never
 
     var content: String? { get }
 
@@ -37,10 +37,27 @@ public protocol Stroke: Sendable {
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+extension Never: Stroke {
+
+    public var content: String? { nil }
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public extension Stroke where Body: Stroke {
 
     var content: String? {
         body.content
+    }
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public extension Stroke where Body == Never {
+
+    @available(*, unavailable)
+    var content: String? {
+        fatalError()
     }
 
 }
