@@ -1,5 +1,5 @@
 // Calligraphy
-// DirectoryOperation.swift
+// DiskOperation.swift
 //
 // MIT License
 //
@@ -25,10 +25,10 @@
 
 import Foundation
 
-@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public extension DirectoryContent {
 
-    /// Write the contents to a directory, in asynchronously and in parallel
+    /// Write the contents to a directory, concurrently
     /// - Parameters:
     ///   - directoryURL: The directory to write the contents to
     ///   - encoding: The string encoding to use for files
@@ -41,7 +41,7 @@ public extension DirectoryContent {
         encoding: String.Encoding = .utf8,
         shouldOverwrite: Bool = false
     ) async throws -> [URL] {
-        try await DirectoryOperation.start(
+        try await DiskOperation.start(
             on: directoryURL,
             encoding: encoding,
             shouldOverwrite: shouldOverwrite
@@ -63,7 +63,7 @@ public extension DirectoryContent {
         encoding: String.Encoding = .utf8,
         shouldOverwrite: Bool = false
     ) throws -> [URL] {
-        try DirectoryOperation.start(
+        try DiskOperation.start(
             on: directoryURL,
             encoding: encoding,
             shouldOverwrite: shouldOverwrite
@@ -74,8 +74,8 @@ public extension DirectoryContent {
 
 }
 
-@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
-private struct DirectoryOperation: Equatable, Sendable {
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+private struct DiskOperation: Equatable, Sendable {
 
     static func start<R>(
         on rootDirectoryURL: URL,
@@ -83,7 +83,7 @@ private struct DirectoryOperation: Equatable, Sendable {
         shouldOverwrite: Bool,
         fn: @Sendable () async throws -> R
     ) async throws -> R {
-        let operation = try DirectoryOperation(
+        let operation = try DiskOperation(
             rootDirectoryURL: rootDirectoryURL,
             encoding: encoding,
             shouldOverwrite: shouldOverwrite
@@ -100,7 +100,7 @@ private struct DirectoryOperation: Equatable, Sendable {
         shouldOverwrite: Bool,
         fn: @Sendable () throws -> R
     ) throws -> R {
-        let operation = try DirectoryOperation(
+        let operation = try DiskOperation(
             rootDirectoryURL: rootDirectoryURL,
             encoding: encoding,
             shouldOverwrite: shouldOverwrite
@@ -134,7 +134,7 @@ private struct DirectoryOperation: Equatable, Sendable {
     static var currentOperationState: State {
         get throws {
             guard let active else {
-                throw DirectoryError("No operation in progress")
+                throw DiskError("No operation in progress")
             }
             var currentURL = active.rootDirectoryURL
             for path in path {
@@ -154,7 +154,7 @@ private struct DirectoryOperation: Equatable, Sendable {
     struct State: Equatable, Sendable {
 
         init(
-            _ operation: DirectoryOperation,
+            _ operation: DiskOperation,
             _ currentURL: URL
         ) {
             self.operation = operation
@@ -180,12 +180,12 @@ private struct DirectoryOperation: Equatable, Sendable {
         }
 
         subscript<T>(
-            dynamicMember keyPath: KeyPath<DirectoryOperation, T>
+            dynamicMember keyPath: KeyPath<DiskOperation, T>
         ) -> T {
             operation[keyPath: keyPath]
         }
 
-        private let operation: DirectoryOperation
+        private let operation: DiskOperation
 
         private let currentURL: URL
 
@@ -201,15 +201,15 @@ private struct DirectoryOperation: Equatable, Sendable {
         shouldOverwrite: Bool
     ) throws {
         guard rootDirectoryURL.isFileURL else {
-            throw DirectoryError("Provided URL must be a file URL")
+            throw DiskError("Provided URL must be a file URL")
         }
         guard FileManager.default.fileExists(atPath: rootDirectoryURL.path()) else {
-            throw DirectoryError("Provided URL does not exist")
+            throw DiskError("Provided URL does not exist")
         }
         let resourceValues = try rootDirectoryURL.resourceValues(forKeys: [.isDirectoryKey])
         guard let isDirectory = resourceValues.isDirectory,
               isDirectory else {
-            throw DirectoryError("Provided file URL must point to a directory")
+            throw DiskError("Provided file URL must point to a directory")
         }
         self.rootDirectoryURL = rootDirectoryURL
         self.encoding = encoding
@@ -219,14 +219,14 @@ private struct DirectoryOperation: Equatable, Sendable {
     private let rootDirectoryURL: URL
 
     @TaskLocal
-    private static var active: DirectoryOperation?
+    private static var active: DiskOperation?
 
     @TaskLocal
     private static var path = [String]()
 
 }
 
-@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 private extension [SerializedDirectoryContent] {
 
     func performWriteOperationsAsync() async throws -> [URL] {
@@ -255,11 +255,11 @@ private extension [SerializedDirectoryContent] {
 
 }
 
-@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 private extension SerializedDirectoryContent {
 
     func performWriteOperationAsync() async throws -> [URL] {
-        let state = try DirectoryOperation.currentOperationState
+        let state = try DiskOperation.currentOperationState
         func deleteIfNeeded(
             _ url: URL
         ) async throws {
@@ -287,7 +287,7 @@ private extension SerializedDirectoryContent {
                 at: directoryURL,
                 withIntermediateDirectories: false
             )
-            let childURLs = try await DirectoryOperation.push(directory.name) {
+            let childURLs = try await DiskOperation.push(directory.name) {
                 try await directory.contents.performWriteOperationsAsync()
             }
             urls = [directoryURL] + childURLs
@@ -297,7 +297,7 @@ private extension SerializedDirectoryContent {
     }
 
     func performWriteOperationSync() throws -> [URL] {
-        let state = try DirectoryOperation.currentOperationState
+        let state = try DiskOperation.currentOperationState
         func deleteIfNeeded(
             _ url: URL
         ) throws {
@@ -324,12 +324,33 @@ private extension SerializedDirectoryContent {
                 at: directoryURL,
                 withIntermediateDirectories: false
             )
-            let childURLs = try DirectoryOperation.push(directory.name) {
+            let childURLs = try DiskOperation.push(directory.name) {
                 try directory.contents.performWriteOperationsSync()
             }
             urls = [directoryURL] + childURLs
         }
         return urls
     }
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+private struct DiskError: Error, Sendable, CustomStringConvertible {
+
+    // MARK: - Initializers
+
+    init(
+        _ message: String
+    ) {
+        self.message = message
+    }
+
+    // MARK: - API
+
+    let message: String
+
+    // MARK: - CustomStringConvertible
+
+    var description: String { message }
 
 }

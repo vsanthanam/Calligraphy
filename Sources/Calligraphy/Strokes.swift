@@ -24,7 +24,7 @@
 // SOFTWARE.
 
 /// An entry point for the ``Calligraphy`` result builder.
-@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct Strokes<T>: Stroke where T: Stroke {
 
     // MARK: - Initializers

@@ -25,7 +25,7 @@
 
 import Foundation
 
-@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public extension Stroke {
 
     /// Map every line of a multi-line stroke
@@ -54,7 +54,7 @@ public extension Stroke {
     }
 }
 
-@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 struct MapLines<Strokes>: Stroke where Strokes: Stroke {
 
     init(
