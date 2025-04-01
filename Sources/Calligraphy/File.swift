@@ -27,7 +27,7 @@
 ///
 /// You can implement `File` either declaratively, by implemeting the ``body`` property, or declaratively, by implementing the ``content`` property.
 /// Do not implement both. If you do, the `content` property will be respected and the `body` property would be ignored.
-@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public protocol File: DirectoryContent {
 
     /// The type of the declarative content of the file
@@ -45,7 +45,7 @@ public protocol File: DirectoryContent {
 
 }
 
-@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public extension File {
 
     var body: Body {

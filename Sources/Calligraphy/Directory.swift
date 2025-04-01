@@ -27,7 +27,7 @@
 ///
 /// You can implement `Directory` either declaratively, by implemeting the ``body`` property, or declaratively, by implementing the ``contents`` property.
 /// Do not implement both. If you do, the `content` property will be respected and the `body` property would be ignored.
-@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public protocol Directory: DirectoryContent {
 
     /// The type of the directory's contents, if implemented declaratively
@@ -45,14 +45,14 @@ public protocol Directory: DirectoryContent {
 
 }
 
-@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension Never: DirectoryContent {
 
     public func _serialize() -> [SerializedDirectoryContent] { [] }
 
 }
 
-@available(macOS 15.0, macCatalyst 18.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0, *)
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public extension Directory {
 
     var contents: [SerializedDirectoryContent] {
