@@ -24,6 +24,9 @@
 // SOFTWARE.
 
 /// A type-erased directory content
+///
+/// This type is used primarily to support availability checks inside a ``DirectoryContentBuilder`` result builder.
+/// However, you can also use it to erase the type of any ``DirectoryContent`` without using an existential.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct AnyDirectoryContent: DirectoryContent {
 

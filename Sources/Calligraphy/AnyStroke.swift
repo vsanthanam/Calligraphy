@@ -24,6 +24,9 @@
 // SOFTWARE.
 
 /// A type-erased stroke
+///
+/// This type is used primarily to support availability checks inside a ``Calligraphy`` result builder
+/// However, you can also use it to erase the type of any ``Stroke`` without using an existential.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct AnyStroke: Stroke {
 
