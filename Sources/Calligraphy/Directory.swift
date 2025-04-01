@@ -31,7 +31,7 @@
 public protocol Directory: DirectoryContent {
 
     /// The type of the directory's contents, if implemented declaratively
-    associatedtype Body = Never
+    associatedtype Body: DirectoryContent = Never
 
     /// The name of the directory
     var name: String { get }
@@ -45,10 +45,27 @@ public protocol Directory: DirectoryContent {
 
 }
 
+extension Never: DirectoryContent {
+
+    public func _serialize() -> [SerializedDirectoryContent] {
+        fatalError()
+    }
+
+}
+
 public extension Directory where Body: DirectoryContent {
 
     var contents: [SerializedDirectoryContent] {
         body._serialize()
+    }
+
+}
+
+public extension Directory where Body == Never {
+
+    @available(*, unavailable)
+    var contents: [SerializedDirectoryContent] {
+        []
     }
 
 }
