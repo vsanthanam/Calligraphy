@@ -65,7 +65,7 @@ public extension Directory where Body == Never {
 
     @available(*, unavailable)
     var contents: [SerializedDirectoryContent] {
-        []
+        fatalError()
     }
 
 }
