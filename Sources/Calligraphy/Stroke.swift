@@ -27,7 +27,7 @@
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public protocol Stroke: Sendable {
 
-    associatedtype Body: Stroke = Never
+    associatedtype Body = Never
 
     var content: String? { get }
 
@@ -37,25 +37,19 @@ public protocol Stroke: Sendable {
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension Stroke {
+public extension Stroke where Body: Stroke {
 
     var content: String? {
         body.content
     }
 
-    var body: Never {
-        fatalError("Stroke \(Self.self) is not implemented, nor is its content property.")
-    }
-
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-extension Never: Stroke {
+public extension Stroke where Body == Never {
 
-    public var body: Never {
-        fatalError()
+    var body: Never {
+        fatalError("Stroke \(Self.self) does not have a body. Do not invoke this property directly.")
     }
-
-    public var content: String? { nil }
 
 }
