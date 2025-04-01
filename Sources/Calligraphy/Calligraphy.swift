@@ -169,7 +169,7 @@ public enum Calligraphy {
 
     // MARK: - Private
 
-    fileprivate struct Accumulate<each Accumulated, Next>: Stroke where repeat each Accumulated: Stroke, Next: Stroke {
+    private struct Accumulate<each Accumulated, Next>: Stroke where repeat each Accumulated: Stroke, Next: Stroke {
 
         // MARK: - Initializers
 
@@ -210,7 +210,7 @@ public enum Calligraphy {
 
     }
 
-    fileprivate struct List<Element>: Stroke where Element: Stroke {
+    private struct List<Element>: Stroke where Element: Stroke {
 
         // MARK: - Initializers
 
@@ -238,7 +238,7 @@ public enum Calligraphy {
         private let list: [Element]
     }
 
-    fileprivate struct Skip: Stroke {
+    private struct Skip: Stroke {
 
         // MARK: - Initializers
 

@@ -147,7 +147,7 @@ public enum DirectoryContentBuilder {
 
     // MARK: - Private
 
-    fileprivate struct Accumulate<each Accumulated, Next>: DirectoryContent where repeat each Accumulated: DirectoryContent, Next: DirectoryContent {
+    private struct Accumulate<each Accumulated, Next>: DirectoryContent where repeat each Accumulated: DirectoryContent, Next: DirectoryContent {
 
         // MARK: - Initializers
 
@@ -177,7 +177,7 @@ public enum DirectoryContentBuilder {
 
     }
 
-    fileprivate struct Skip: DirectoryContent {
+    private struct Skip: DirectoryContent {
 
         // MARK: - Initializers
 
@@ -191,7 +191,7 @@ public enum DirectoryContentBuilder {
 
     }
 
-    fileprivate struct List<Element>: DirectoryContent where Element: DirectoryContent {
+    private struct List<Element>: DirectoryContent where Element: DirectoryContent {
 
         // MARK: - Initializers
 
@@ -211,7 +211,7 @@ public enum DirectoryContentBuilder {
 
     }
 
-    fileprivate struct Raw: DirectoryContent {
+    private struct Raw: DirectoryContent {
 
         // MARK: - Initializers
 
