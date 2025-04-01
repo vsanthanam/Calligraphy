@@ -1,5 +1,5 @@
 // Calligraphy
-// File.swift
+// DataFile.swift
 //
 // MIT License
 //
@@ -25,41 +25,19 @@
 
 import Foundation
 
-/// A type representing a file
-///
-/// You can implement `File` either declaratively, by implemeting the ``body`` property, or declaratively, by implementing the ``content`` property.
-/// Do not implement both. If you do, the `content` property will be respected and the `body` property would be ignored.
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public protocol File: DirectoryContent {
+/// A composable file containing `Data`
+public struct DataFile: File {
 
-    /// The type of the declarative content of the file
-    associatedtype Body: Stroke = Never
-
-    /// The content of the file
-    var content: Data { get }
-
-    /// The name of the file
-    var name: String { get }
-
-    /// The declarative content of the file
-    @Calligraphy
-    var body: Body { get }
-
-}
-
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension File {
-
-    var body: Body {
-        fatalError()
+    public init(
+        _ name: String,
+        content: Data
+    ) {
+        self.name = name
+        self.content = content
     }
 
-    var content: Data {
-        String(stroke: body).data(using: .utf8) ?? Data()
-    }
+    public let name: String
 
-    func _serialize() -> [SerializedDirectoryContent] {
-        [.file(.init(name, content: content))]
-    }
+    public let content: Data
 
 }

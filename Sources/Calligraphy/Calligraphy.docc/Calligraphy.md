@@ -31,6 +31,7 @@ overview here
 - ``DirectoryContentBuilder``
 - ``Folder``
 - ``TextFile``
+- ``DataFile``
 - ``DirectoryContents``
 - ``SerializedDirectoryContent``
 - ``AnyDirectoryContent``
