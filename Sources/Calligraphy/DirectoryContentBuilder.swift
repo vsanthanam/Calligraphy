@@ -67,6 +67,10 @@ public enum DirectoryContentBuilder {
         .directory(expression)
     }
 
+    public static func buildBlock() -> some DirectoryContent {
+        Skip()
+    }
+
     public static func buildPartialBlock<T>(
         first: T
     ) -> T where T: DirectoryContent {

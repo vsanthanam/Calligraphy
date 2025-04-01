@@ -38,12 +38,6 @@ public enum Calligraphy {
         expression
     }
 
-    /// Support for `Void` expressions in a `Calligraphy` result builder.
-    /// - Important: You are not supposed to invoke this method directly. It is an implementation detail of the result builder.
-    public static func buildExpression() -> some Stroke {
-        Skip()
-    }
-
     /// Support for `String` expressions in a `Calligraphy` result builder.
     /// - Important: You are not supposed to invoke this method directly. It is an implementation detail of the result builder.
     public static func buildExpression(
@@ -77,6 +71,12 @@ public enum Calligraphy {
         _ expression: T
     ) -> some Stroke where T: RawRepresentable, T.RawValue: StringProtocol {
         expression.rawValue
+    }
+
+    /// Support for `Void` expressions in a `Calligraphy` result builder.
+    /// - Important: You are not supposed to invoke this method directly. It is an implementation detail of the result builder.
+    public static func buildBlock() -> some Stroke {
+        Skip()
     }
 
     /// Support for aggregating strokes together in a `Calligraphy` result builder.
