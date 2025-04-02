@@ -39,9 +39,15 @@ overview here
 - ``TextFile``
 - ``Directory``
 - ``DirectoryContentBuilder``
+- ``DataComponentFile``
 - ``File``
 - ``Folder``
 - ``DirectoryContents``
 - ``SerializedDirectoryContent``
 - ``AnyDirectoryContent``
 - ``EmptyDirectoryContent``
+
+### Data Composition
+
+- ``DataComponent``
+- ``DataComponentBuilder``

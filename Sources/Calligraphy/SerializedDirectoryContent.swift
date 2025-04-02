@@ -27,67 +27,33 @@ import Foundation
 
 /// Serialized representaion of directory content
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public enum SerializedDirectoryContent: Equatable, Hashable, Sendable {
+public enum SerializedDirectoryContent: Sendable {
 
-    // MARK: - API
-
-    /// A file
+    case directory(Directory)
     case file(File)
 
-    /// A directory
-    case directory(Directory)
-    
-    /// A serialized file
-    public struct File: Equatable, Hashable, Sendable {
+    public struct Directory: Sendable {
 
-        // MARK: - Initializers
-        
-        /// Create a serialized file
-        /// - Parameters:
-        ///   - name: The name of the file
-        ///   - content: The file's content
-        public init(
-            _ name: String,
-            content: Data
-        ) {
-            self.name = name
-            self.content = content
-        }
-
-        // MARK: - API
-
-        /// The name of the file
-        public let name: String
-        
-        /// The file's content
-        public let content: Data
-
-    }
-    
-    /// A serialized directory
-    public struct Directory: Equatable, Hashable, Sendable {
-
-        // MARK: - Initializers
-        
-        /// Create a serialized directory
-        /// - Parameters:
-        ///   - name: The name of the directory
-        ///   - contents: The directory's content
-        public init(
-            _ name: String,
-            contents: [SerializedDirectoryContent]
-        ) {
+        public init(_ name: String, contents: [SerializedDirectoryContent]) {
             self.name = name
             self.contents = contents
         }
 
-        // MARK: - API
-
-        /// The name of the directory
         public let name: String
-        
-        /// The directory's content
         public let contents: [SerializedDirectoryContent]
+
+    }
+
+    public struct File: Sendable {
+
+        public let name: String
+
+        public let content: Content
+
+        public enum Content: Sendable {
+            case text(String, String.Encoding)
+            case data(Data)
+        }
 
     }
 

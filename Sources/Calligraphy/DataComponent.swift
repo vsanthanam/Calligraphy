@@ -1,5 +1,5 @@
 // Calligraphy
-// StringStroke.swift
+// DataComponent.swift
 //
 // MIT License
 //
@@ -23,20 +23,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// A stroke containing single string
+import Foundation
+
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct StringStroke: Stroke {
+public protocol DataComponent: Sendable {
 
-    /// Create a string stroke from a string
-    /// - Parameter content: The string
-    public init(
-        _ content: some StringProtocol
-    ) {
-        self.content = String(content)
+    associatedtype Components: DataComponent = Never
+
+    var data: Data { get }
+
+    @DataComponentBuilder
+    var components: Components { get }
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public extension DataComponent where Components: DataComponent {
+
+    var data: Data { components.data }
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+extension Never: DataComponent {
+
+    public var data: Data { fatalError() }
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public extension DataComponent where Components == Never {
+
+    @available(*, unavailable)
+    var data: Data { fatalError() }
+
+    var components: Never {
+        fatalError()
     }
-
-    // MARK: - Stroke
-
-    public let content: String?
-
 }

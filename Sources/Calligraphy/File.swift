@@ -27,116 +27,68 @@ import Foundation
 
 /// A generic, composable file
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct File: DataFile {
+public struct File<T>: TextFile where T: Stroke {
 
     // MARK: - Initializers
-    
-    /// Create a file
-    /// - Parameters:
-    ///   - name: The name of the file
-    ///   - data: The file's data
+
     public init(
         _ name: String,
-        data: Data
+        encoding: String.Encoding = .utf8,
+        @Calligraphy content: () -> T
     ) {
         self.name = name
-        self.data = data
-    }
-    
-    /// Create a file with an extension
-    /// - Parameters:
-    ///   - name: The name of the file
-    ///   - extension: The file extension
-    ///   - data: The file's data
-    public init(
-        _ name: String,
-        extension: String,
-        data: Data
-    ) {
-        self.init(
-            name + "." + `extension`,
-            data: data
-        )
-    }
-    
-    /// Create a text file, declaratively
-    /// - Parameters:
-    ///   - name: The name of the file
-    ///   - encoding: The string encoding to use
-    ///   - content: The file's text content
-    public init(
-        _ name: String,
-        encoding: String.Encoding = .utf8,
-        @Calligraphy content: () -> some Stroke
-    ) {
-        self.init(
-            name,
-            data: String(calligraphy: content).data(using: encoding)!
-        )
-    }
-    
-    /// Create a text file with an extension, declaratively
-    /// - Parameters:
-    ///   - name: The name of the file
-    ///   - extension: The file's extension
-    ///   - encoding: The string encoding to use
-    ///   - content: The file's text content
-    public init(
-        _ name: String,
-        extension: String,
-        encoding: String.Encoding = .utf8,
-        @Calligraphy content: () -> some Stroke
-    ) {
-        self.init(
-            name,
-            extension: `extension`,
-            data: String(calligraphy: content).data(using: encoding)!
-        )
-    }
-    
-    /// Create a text file
-    /// - Parameters:
-    ///   - name: The name pf the file
-    ///   - encoding: The string encoding to use
-    ///   - content: The file's text content
-    public init(
-        _ name: String,
-        encoding: String.Encoding = .utf8,
-        content: String
-    ) {
-        self.init(
-            name,
-            encoding: encoding
-        ) {
-            content
-        }
-    }
-    
-    /// Create a text file with an extension
-    /// - Parameters:
-    ///   - name: The name of the file
-    ///   - extension: The file's extension
-    ///   - encoding: The string encoding to use
-    ///   - content: The file's text content
-    public init(
-        _ name: String,
-        extension: String,
-        encoding: String.Encoding = .utf8,
-        content: String
-    ) {
-        self.init(
-            name,
-            extension: `extension`,
-            encoding: encoding
-        ) {
-            content
-        }
+        self.encoding = encoding
+        self.content = content()
     }
 
-    // MARK: - DataFile
+    public init(
+        _ name: String,
+        extension: String,
+        encoding: String.Encoding = .utf8,
+        @Calligraphy content: () -> T
+    ) {
+        let name = name + "." + `extension`
+        self.init(name, content: content)
+    }
+
+    public init(
+        _ name: String,
+        encoding: String.Encoding = .utf8,
+        content: String
+    ) where T == StringStroke {
+        self.init(
+            name,
+            encoding: encoding
+        ) { content }
+    }
+
+    public init(
+        _ name: String,
+        extension: String,
+        encoding: String.Encoding = .utf8,
+        content: String
+    ) where T == StringStroke {
+        self.init(
+            name,
+            extension: `extension`,
+            encoding: encoding
+        ) { content }
+    }
+
+    // MARK: - TextFile
 
     public let name: String
 
-    public let data: Data
+    public let encoding: String.Encoding
+
+    // MARK: - Stroke
+
+    public var body: some Stroke {
+        content
+    }
+
+    // MARK: - Private
+
+    private let content: T
 
 }

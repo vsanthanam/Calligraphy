@@ -83,7 +83,9 @@ func example() async throws {
             "sup"
         }
         Folder("bar") {
-            File("tweet", content: expected)
+            File("tweet") {
+                expected
+            }
         }
     }
 

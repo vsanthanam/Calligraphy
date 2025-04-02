@@ -260,7 +260,19 @@ private extension SerializedDirectoryContent {
         case let .file(file):
             let fileURL = state.fileURL(for: file.name)
             try await deleteIfNeeded(fileURL)
-            try file.content.write(to: fileURL, options: .withoutOverwriting)
+            switch file.content {
+            case let .text(content, encoding):
+                try content.write(
+                    to: fileURL,
+                    atomically: false,
+                    encoding: encoding
+                )
+            case let .data(content):
+                try content.write(
+                    to: fileURL,
+                    options: [.withoutOverwriting]
+                )
+            }
             urls = [fileURL]
         case let .directory(directory):
             let directoryURL = state.directoryURL(for: directory.name)
@@ -293,7 +305,19 @@ private extension SerializedDirectoryContent {
         case let .file(file):
             let fileURL = state.fileURL(for: file.name)
             try deleteIfNeeded(fileURL)
-            try file.content.write(to: fileURL, options: .withoutOverwriting)
+            switch file.content {
+            case let .text(content, encoding):
+                try content.write(
+                    to: fileURL,
+                    atomically: false,
+                    encoding: encoding
+                )
+            case let .data(content):
+                try content.write(
+                    to: fileURL,
+                    options: [.withoutOverwriting]
+                )
+            }
             urls = [fileURL]
         case let .directory(directory):
             let directoryURL = state.directoryURL(for: directory.name)

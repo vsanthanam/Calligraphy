@@ -1,5 +1,5 @@
 // Calligraphy
-// StringStroke.swift
+// DataComponentFile.swift
 //
 // MIT License
 //
@@ -23,20 +23,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// A stroke containing single string
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct StringStroke: Stroke {
+import Foundation
 
-    /// Create a string stroke from a string
-    /// - Parameter content: The string
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public struct DataComponentFile<T>: DataFile where T: DataComponent {
+
     public init(
-        _ content: some StringProtocol
+        _ name: String,
+        @DataComponentBuilder content: () -> T
     ) {
-        self.content = String(content)
+        self.name = name
+        self.content = content()
     }
 
-    // MARK: - Stroke
+    public init(
+        _ name: String,
+        content: Data
+    ) where T == DataComponentBuilder._Raw {
+        self.init(name) { content }
+    }
 
-    public let content: String?
+    public var components: some DataComponent {
+        content
+    }
+
+    public let name: String
+
+    private let content: T
 
 }
