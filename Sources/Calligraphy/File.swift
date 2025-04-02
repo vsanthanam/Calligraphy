@@ -30,7 +30,7 @@ import Foundation
 /// You can implement `File` either declaratively, by implemeting the ``body`` property, or declaratively, by implementing the ``content`` property.
 /// Do not implement both. If you do, the `content` property will be respected and the `body` property would be ignored.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public protocol File: DataFile {
+public protocol TextFile: DataFile {
 
     /// The type of the declarative content of the file
     associatedtype Body: Stroke = Never
@@ -47,7 +47,7 @@ public protocol File: DataFile {
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension File {
+public extension TextFile {
 
     var body: Body {
         fatalError()
@@ -59,7 +59,7 @@ public extension File {
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension File where Body: Stroke {
+public extension TextFile where Body: Stroke {
 
     var content: String {
         String(stroke: body)
@@ -68,7 +68,7 @@ public extension File where Body: Stroke {
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension File where Body == Never {
+public extension TextFile where Body == Never {
 
     @available(*, unavailable)
     var content: String {

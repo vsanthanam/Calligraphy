@@ -26,13 +26,12 @@ overview here
 ### Directory Composition
 
 - ``DirectoryContent``
-- ``File``
 - ``DataFile``
+- ``TextFile``
 - ``Directory``
 - ``DirectoryContentBuilder``
+- ``File``
 - ``Folder``
-- ``TextFile``
-- ``Blob``
 - ``DirectoryContents``
 - ``SerializedDirectoryContent``
 - ``AnyDirectoryContent``
