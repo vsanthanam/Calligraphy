@@ -11,12 +11,7 @@ let example = Lines {
             "pear"
             "banana"
         }
-        .joined {
-            Line {
-                NewLine()
-                ","
-            }
-        }
+        .joined(separator: ",\n")
     }
     "}"
 }
