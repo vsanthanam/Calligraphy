@@ -23,8 +23,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
-
 /// A type representing a file
 ///
 /// You can implement `File` either declaratively, by implemeting the ``body`` property, or declaratively, by implementing the ``content`` property.
@@ -36,7 +34,7 @@ public protocol File: DirectoryContent {
     associatedtype Body: Stroke = Never
 
     /// The content of the file
-    var content: Data { get }
+    var content: String { get }
 
     /// The name of the file
     var name: String { get }
@@ -54,12 +52,12 @@ public extension File {
         fatalError()
     }
 
-    var content: Data {
-        String(stroke: body).data(using: .utf8) ?? Data()
+    var content: String {
+        String(stroke: body)
     }
 
     func _serialize() -> [SerializedDirectoryContent] {
-        [.file(.init(name, content: content))]
+        [.file(.init(name: name, content: content))]
     }
 
 }
