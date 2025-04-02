@@ -51,7 +51,7 @@ public enum Calligraphy {
     @Calligraphy
     public static func buildExpression(
         _ expression: some StringProtocol
-    ) -> some Stroke {
+    ) -> StringStroke {
         String(expression)
     }
 
@@ -60,7 +60,7 @@ public enum Calligraphy {
     @Calligraphy
     public static func buildExpression(
         _ expression: some CustomStringConvertible
-    ) -> some Stroke {
+    ) -> StringStroke {
         expression.description
     }
 
@@ -69,7 +69,7 @@ public enum Calligraphy {
     @Calligraphy
     public static func buildExpression<T>(
         _ expression: T
-    ) -> some Stroke where T: RawRepresentable, T.RawValue: StringProtocol {
+    ) -> StringStroke where T: RawRepresentable, T.RawValue: StringProtocol {
         expression.rawValue
     }
 
@@ -89,14 +89,11 @@ public enum Calligraphy {
 
     /// Support for aggregating strokes together in a `Calligraphy` result builder.
     /// - Important: You are not supposed to invoke this method directly. It is an implementation detail of the result builder.
-    public static func buildPartialBlock<each Accumulated>(
+    public static func buildPartialBlock<each Accumulated, Next>(
         accumulated: repeat each Accumulated,
-        next: some Stroke
-    ) -> some Stroke where repeat each Accumulated: Stroke {
-        Accumulate(
-            accumulated: repeat each accumulated,
-            next: next
-        )
+        next: Next
+    ) -> _Accumulate<repeat each Accumulated, Next> where repeat each Accumulated: Stroke, Next: Stroke {
+        _Accumulate(accumulated: repeat each accumulated, next: next)
     }
 
     /// Support for if-else control flow and switch statements in a `Calligraphy` result builder.
@@ -120,7 +117,7 @@ public enum Calligraphy {
     @Calligraphy
     public static func buildOptional<T>(
         _ component: T?
-    ) -> some Stroke where T: Stroke {
+    ) -> _Either<T, EmptyStroke> where T: Stroke {
         if let component {
             component
         } else {
@@ -130,10 +127,10 @@ public enum Calligraphy {
 
     /// Support for a for-in loops in a `Calligraphy` result builder.
     /// - Important: You are not supposed to invoke this method directly. It is an implementation detail of the result builder.
-    public static func buildArray(
-        _ components: [some Stroke]
-    ) -> some Stroke {
-        List(components)
+    public static func buildArray<T>(
+        _ components: [T]
+    ) -> _List<T> where T: Stroke {
+        _List(components)
     }
 
     /// Support for availability checks in a `Calligraphy` result builder.
@@ -167,9 +164,7 @@ public enum Calligraphy {
 
     }
 
-    // MARK: - Private
-
-    private struct Accumulate<each Accumulated, Next>: Stroke where repeat each Accumulated: Stroke, Next: Stroke {
+    public struct _Accumulate<each Accumulated, Next>: Stroke where repeat each Accumulated: Stroke, Next: Stroke {
 
         // MARK: - Initializers
 
@@ -183,7 +178,7 @@ public enum Calligraphy {
 
         // MARK: - Stroke
 
-        var content: String? {
+        public var content: String? {
             var result: String? = nil
             func append(_ content: String) {
                 if let r = result {
@@ -210,7 +205,7 @@ public enum Calligraphy {
 
     }
 
-    private struct List<Element>: Stroke where Element: Stroke {
+    public struct _List<Element>: Stroke where Element: Stroke {
 
         // MARK: - Initializers
 
@@ -220,7 +215,7 @@ public enum Calligraphy {
 
         // MARK: - Stroke
 
-        var content: String? {
+        public var content: String? {
             var result: String? = nil
             func append(_ content: String) {
                 if let r = result {

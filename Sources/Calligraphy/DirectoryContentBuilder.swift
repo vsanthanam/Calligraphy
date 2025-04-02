@@ -38,28 +38,28 @@ public enum DirectoryContentBuilder {
 
     public static func buildExpression(
         _ expression: [SerializedDirectoryContent]
-    ) -> some DirectoryContent {
-        AlreadySerialized(expression)
+    ) -> _AlreadySerialized {
+        _AlreadySerialized(expression)
     }
 
     @DirectoryContentBuilder
     public static func buildExpression(
         _ expression: SerializedDirectoryContent
-    ) -> some DirectoryContent {
+    ) -> _AlreadySerialized {
         [expression]
     }
 
     @DirectoryContentBuilder
     public static func buildExpression(
         _ expression: SerializedDirectoryContent.File
-    ) -> some DirectoryContent {
+    ) -> _AlreadySerialized {
         .file(expression)
     }
 
     @DirectoryContentBuilder
     public static func buildExpression(
         _ expression: SerializedDirectoryContent.Directory
-    ) -> some DirectoryContent {
+    ) -> _AlreadySerialized {
         .directory(expression)
     }
 
@@ -73,11 +73,11 @@ public enum DirectoryContentBuilder {
         first
     }
 
-    public static func buildPartialBlock<each Accumulated>(
+    public static func buildPartialBlock<each Accumulated, Next>(
         accumulated: repeat each Accumulated,
-        next: some DirectoryContent
-    ) -> some DirectoryContent where repeat each Accumulated: DirectoryContent {
-        Accumulate(
+        next: Next
+    ) -> _Accumulate<repeat each Accumulated, Next> where repeat each Accumulated: DirectoryContent, Next: DirectoryContent {
+        _Accumulate(
             accumulated: repeat each accumulated,
             next: next
         )
@@ -98,7 +98,7 @@ public enum DirectoryContentBuilder {
     @DirectoryContentBuilder
     public static func buildOptional<T>(
         component: T?
-    ) -> some DirectoryContent where T: DirectoryContent {
+    ) -> _Either<T, EmptyDirectoryContent> where T: DirectoryContent {
         if let component {
             component
         } else {
@@ -106,10 +106,10 @@ public enum DirectoryContentBuilder {
         }
     }
 
-    public static func buildArray(
-        _ components: [some DirectoryContent]
-    ) -> some DirectoryContent {
-        List(components)
+    public static func buildArray<T>(
+        _ components: [T]
+    ) -> _List<T> where T: DirectoryContent {
+        _List(components)
     }
 
     public static func buildLimitedAvailability(
@@ -143,7 +143,7 @@ public enum DirectoryContentBuilder {
 
     // MARK: - Private
 
-    private struct Accumulate<each Accumulated, Next>: DirectoryContent where repeat each Accumulated: DirectoryContent, Next: DirectoryContent {
+    public struct _Accumulate<each Accumulated, Next>: DirectoryContent where repeat each Accumulated: DirectoryContent, Next: DirectoryContent {
 
         // MARK: - Initializers
 
@@ -157,7 +157,7 @@ public enum DirectoryContentBuilder {
 
         // MARK: - DirectoryContent
 
-        func _serialize() -> [SerializedDirectoryContent] {
+        public func _serialize() -> [SerializedDirectoryContent] {
             var rv = [SerializedDirectoryContent]()
             for content in repeat each accumulated {
                 rv += content._serialize()
@@ -173,7 +173,7 @@ public enum DirectoryContentBuilder {
 
     }
 
-    private struct List<Element>: DirectoryContent where Element: DirectoryContent {
+    public struct _List<Element>: DirectoryContent where Element: DirectoryContent {
 
         // MARK: - Initializers
 
@@ -183,7 +183,7 @@ public enum DirectoryContentBuilder {
 
         // MARK: - DirectoryContent
 
-        func _serialize() -> [SerializedDirectoryContent] {
+        public func _serialize() -> [SerializedDirectoryContent] {
             list.flatMap { $0._serialize() }
         }
 
@@ -193,7 +193,7 @@ public enum DirectoryContentBuilder {
 
     }
 
-    private struct AlreadySerialized: DirectoryContent {
+    public struct _AlreadySerialized: DirectoryContent {
 
         // MARK: - Initializers
 
@@ -203,7 +203,7 @@ public enum DirectoryContentBuilder {
 
         // MARK: - DirectoryContent
 
-        func _serialize() -> [SerializedDirectoryContent] {
+        public func _serialize() -> [SerializedDirectoryContent] {
             contents
         }
 
