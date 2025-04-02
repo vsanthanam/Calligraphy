@@ -31,16 +31,19 @@ public extension DirectoryContent {
     /// Write the contents to a directory, concurrently
     /// - Parameters:
     ///   - directoryURL: The directory to write the contents to
+    ///   - encoding: The string encoding to use for files
     ///   - shouldOverwrite: Whether or not existing files and folder should be overwritten
     /// - Returns: The URLs of the files and folders that were created
     /// - Throws: An error, if the operation fails or was cancelled
     @discardableResult
     func write(
         toDirectory directoryURL: URL,
+        encoding: String.Encoding = .utf8,
         shouldOverwrite: Bool = false
     ) async throws -> [URL] {
         try await DiskOperation.start(
             on: directoryURL,
+            encoding: encoding,
             shouldOverwrite: shouldOverwrite
         ) {
             try await _serialize().performWriteOperationsAsync()
@@ -50,16 +53,19 @@ public extension DirectoryContent {
     /// Write the contents to a directory,
     /// - Parameters:
     ///   - directoryURL: The directory to write the contents to
+    ///   - encoding: The string encoding to use for files
     ///   - shouldOverwrite: Whether or not existing files and folder should be overwritten
     /// - Returns: The URLs of the files and folders that were created
     /// - Throws: An error, if the operation fails
     @discardableResult
     func write(
         toDirectory directoryURL: URL,
+        encoding: String.Encoding = .utf8,
         shouldOverwrite: Bool = false
     ) throws -> [URL] {
         try DiskOperation.start(
             on: directoryURL,
+            encoding: encoding,
             shouldOverwrite: shouldOverwrite
         ) {
             try _serialize().performWriteOperationsSync()
@@ -73,11 +79,13 @@ private struct DiskOperation: Equatable, Sendable {
 
     static func start<R>(
         on rootDirectoryURL: URL,
+        encoding: String.Encoding,
         shouldOverwrite: Bool,
         fn: @Sendable () async throws -> R
     ) async throws -> R {
         let operation = try DiskOperation(
             rootDirectoryURL: rootDirectoryURL,
+            encoding: encoding,
             shouldOverwrite: shouldOverwrite
         )
         return try await $active.withValue(
@@ -88,11 +96,13 @@ private struct DiskOperation: Equatable, Sendable {
 
     static func start<R>(
         on rootDirectoryURL: URL,
+        encoding: String.Encoding,
         shouldOverwrite: Bool,
         fn: @Sendable () throws -> R
     ) throws -> R {
         let operation = try DiskOperation(
             rootDirectoryURL: rootDirectoryURL,
+            encoding: encoding,
             shouldOverwrite: shouldOverwrite
         )
         return try $active.withValue(
@@ -181,12 +191,13 @@ private struct DiskOperation: Equatable, Sendable {
 
     }
 
+    let encoding: String.Encoding
+
     let shouldOverwrite: Bool
-    
-    let rootDirectoryURL: URL
 
     private init(
         rootDirectoryURL: URL,
+        encoding: String.Encoding,
         shouldOverwrite: Bool
     ) throws {
         guard rootDirectoryURL.isFileURL else {
@@ -201,8 +212,11 @@ private struct DiskOperation: Equatable, Sendable {
             throw DiskError("Provided file URL must point to a directory")
         }
         self.rootDirectoryURL = rootDirectoryURL
+        self.encoding = encoding
         self.shouldOverwrite = shouldOverwrite
     }
+
+    private let rootDirectoryURL: URL
 
     @TaskLocal
     private static var active: DiskOperation?
@@ -260,7 +274,11 @@ private extension SerializedDirectoryContent {
         case let .file(file):
             let fileURL = state.fileURL(for: file.name)
             try await deleteIfNeeded(fileURL)
-            try file.content.write(to: fileURL, options: .withoutOverwriting)
+            try file.content.write(
+                to: fileURL,
+                atomically: true,
+                encoding: state.encoding
+            )
             urls = [fileURL]
         case let .directory(directory):
             let directoryURL = state.directoryURL(for: directory.name)
@@ -293,7 +311,11 @@ private extension SerializedDirectoryContent {
         case let .file(file):
             let fileURL = state.fileURL(for: file.name)
             try deleteIfNeeded(fileURL)
-            try file.content.write(to: fileURL, options: .withoutOverwriting)
+            try file.content.write(
+                to: fileURL,
+                atomically: true,
+                encoding: state.encoding
+            )
             urls = [fileURL]
         case let .directory(directory):
             let directoryURL = state.directoryURL(for: directory.name)
