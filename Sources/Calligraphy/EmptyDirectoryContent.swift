@@ -27,7 +27,8 @@
 public struct EmptyDirectoryContent: DirectoryContent {
 
     // MARK: - Initializers
-
+    
+    /// Create an empty directory content
     public init() {}
 
     // MARK: - DirectoryContent

@@ -26,6 +26,9 @@
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public extension Stroke {
 
+    /// Add a suffix to every line of a multi-line stroke
+    /// - Parameter suffix: The suffix to add
+    /// - Returns: A line-suffixed version of the upstream
     func suffixLines(
         with suffix: String
     ) -> some Stroke {
@@ -35,6 +38,9 @@ public extension Stroke {
         )
     }
 
+    /// Add a suffix to every line of a multi-line stroke
+    /// - Parameter calligraphy: The suffix to add
+    /// - Returns: A line-suffixed version of the upstream
     func suffixLines(
         @Calligraphy with calligraphy: () -> some Stroke
     ) -> some Stroke {

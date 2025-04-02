@@ -36,11 +36,16 @@ public enum SerializedDirectoryContent: Equatable, Hashable, Sendable {
 
     /// A directory
     case directory(Directory)
-
+    
+    /// A serialized file
     public struct File: Equatable, Hashable, Sendable {
 
         // MARK: - Initializers
-
+        
+        /// Create a serialized file
+        /// - Parameters:
+        ///   - name: The name of the file
+        ///   - content: The file's content
         public init(
             _ name: String,
             content: Data
@@ -51,15 +56,23 @@ public enum SerializedDirectoryContent: Equatable, Hashable, Sendable {
 
         // MARK: - API
 
+        /// The name of the file
         public let name: String
+        
+        /// The file's content
         public let content: Data
 
     }
-
+    
+    /// A serialized directory
     public struct Directory: Equatable, Hashable, Sendable {
 
         // MARK: - Initializers
-
+        
+        /// Create a serialized directory
+        /// - Parameters:
+        ///   - name: The name of the directory
+        ///   - contents: The directory's content
         public init(
             _ name: String,
             contents: [SerializedDirectoryContent]
@@ -70,7 +83,10 @@ public enum SerializedDirectoryContent: Equatable, Hashable, Sendable {
 
         // MARK: - API
 
+        /// The name of the directory
         public let name: String
+        
+        /// The directory's content
         public let contents: [SerializedDirectoryContent]
 
     }

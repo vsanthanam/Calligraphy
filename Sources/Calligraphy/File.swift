@@ -30,7 +30,11 @@ import Foundation
 public struct File: DataFile {
 
     // MARK: - Initializers
-
+    
+    /// Create a file
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - data: The file's data
     public init(
         _ name: String,
         data: Data
@@ -38,7 +42,12 @@ public struct File: DataFile {
         self.name = name
         self.data = data
     }
-
+    
+    /// Create a file with an extension
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - extension: The file extension
+    ///   - data: The file's data
     public init(
         _ name: String,
         extension: String,
@@ -49,7 +58,12 @@ public struct File: DataFile {
             data: data
         )
     }
-
+    
+    /// Create a text file, declaratively
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - encoding: The string encoding to use
+    ///   - content: The file's text content
     public init(
         _ name: String,
         encoding: String.Encoding = .utf8,
@@ -60,7 +74,13 @@ public struct File: DataFile {
             data: String(calligraphy: content).data(using: encoding)!
         )
     }
-
+    
+    /// Create a text file with an extension, declaratively
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - extension: The file's extension
+    ///   - encoding: The string encoding to use
+    ///   - content: The file's text content
     public init(
         _ name: String,
         extension: String,
@@ -73,7 +93,12 @@ public struct File: DataFile {
             data: String(calligraphy: content).data(using: encoding)!
         )
     }
-
+    
+    /// Create a text file
+    /// - Parameters:
+    ///   - name: The name pf the file
+    ///   - encoding: The string encoding to use
+    ///   - content: The file's text content
     public init(
         _ name: String,
         encoding: String.Encoding = .utf8,
@@ -86,7 +111,13 @@ public struct File: DataFile {
             content
         }
     }
-
+    
+    /// Create a text file with an extension
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - extension: The file's extension
+    ///   - encoding: The string encoding to use
+    ///   - content: The file's text content
     public init(
         _ name: String,
         extension: String,

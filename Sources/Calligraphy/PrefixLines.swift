@@ -25,7 +25,10 @@
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public extension Stroke {
-
+    
+    /// Add a prefix to every line of a multi-line stroke
+    /// - Parameter prefix: The prefix to add
+    /// - Returns: A line-prefixed version of the upstream
     func prefixLines(
         with prefix: String
     ) -> some Stroke {
@@ -34,7 +37,10 @@ public extension Stroke {
             prefix
         )
     }
-
+    
+    /// Add a prefix to every line of a multi-line stroke
+    /// - Parameter calligraphy: The prefix to add
+    /// - Returns: A line-prefixed version of the upstream
     func prefixLines(
         @Calligraphy with calligraphy: () -> some Stroke
     ) -> some Stroke {
