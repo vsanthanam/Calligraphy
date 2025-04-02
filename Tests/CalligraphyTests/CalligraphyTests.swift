@@ -79,11 +79,11 @@ func example() async throws {
     #expect(test == expected)
 
     let folder = Folder("foo") {
-        TextFile("README", extension: "md") {
+        File("README", extension: "md") {
             "sup"
         }
         Folder("bar") {
-            TextFile("tweet", content: expected)
+            File("tweet", content: expected)
         }
     }
 
