@@ -45,6 +45,7 @@ public protocol Directory: DirectoryContent {
 
 }
 
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension Never: DirectoryContent {
 
     public func _serialize() -> [SerializedDirectoryContent] {
@@ -53,6 +54,7 @@ extension Never: DirectoryContent {
 
 }
 
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public extension Directory where Body: DirectoryContent {
 
     var contents: [SerializedDirectoryContent] {
@@ -61,6 +63,7 @@ public extension Directory where Body: DirectoryContent {
 
 }
 
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public extension Directory where Body == Never {
 
     @available(*, unavailable)
@@ -70,6 +73,7 @@ public extension Directory where Body == Never {
 
 }
 
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public extension Directory where Body == Never {
 
     var body: Never {
@@ -82,7 +86,7 @@ public extension Directory where Body == Never {
 public extension Directory {
 
     func _serialize() -> [SerializedDirectoryContent] {
-        [.directory(.init(name: name, contents: contents))]
+        [.directory(.init(name, contents: contents))]
     }
 
 }
