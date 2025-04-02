@@ -75,8 +75,8 @@ public enum Calligraphy {
 
     /// Support for `Void` expressions in a `Calligraphy` result builder.
     /// - Important: You are not supposed to invoke this method directly. It is an implementation detail of the result builder.
-    public static func buildBlock() -> some Stroke {
-        Skip()
+    public static func buildBlock() -> EmptyStroke {
+        EmptyStroke()
     }
 
     /// Support for aggregating strokes together in a `Calligraphy` result builder.
@@ -124,7 +124,7 @@ public enum Calligraphy {
         if let component {
             component
         } else {
-            Skip()
+            EmptyStroke()
         }
     }
 
@@ -236,18 +236,6 @@ public enum Calligraphy {
         // MARK: - Private
 
         private let list: [Element]
-    }
-
-    private struct Skip: Stroke {
-
-        // MARK: - Initializers
-
-        init() {}
-
-        // MARK: - Stroke
-
-        let content: String? = nil
-
     }
 
     @TaskLocal

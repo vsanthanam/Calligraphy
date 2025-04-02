@@ -22,6 +22,7 @@ overview here
 - ``Strokes``
 - ``Tabbed``
 - ``AnyStroke``
+- ``EmptyStroke``
 
 ### Directory Composition
 
@@ -35,3 +36,4 @@ overview here
 - ``DirectoryContents``
 - ``SerializedDirectoryContent``
 - ``AnyDirectoryContent``
+- ``EmptyDirectoryContent``
