@@ -25,12 +25,14 @@
 
 import Foundation
 
+/// A protocol representing a file of any kind
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public protocol DataFile: DirectoryContent {
 
     /// The name of the file
     var name: String { get }
 
+    /// The file's data
     var data: Data { get }
 
 }

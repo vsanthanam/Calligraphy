@@ -1,5 +1,5 @@
 // Calligraphy
-// Quote.swift
+// BlockQuote.swift
 //
 // MIT License
 //
@@ -23,49 +23,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-public extension Stroke {
-
-    func quoted(
-        _ quoteType: Quote<Self>.QuoteType = .double
-    ) -> some Stroke {
-        Quote(quoteType) { self }
-    }
-
-}
-
-public struct Quote<T>: Stroke where T: Stroke {
+/// A block quotation mark (`"""`)
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public struct BlockQuote: Stroke {
 
     // MARK: - Initializers
 
-    public init(
-        _ quoteType: QuoteType = .double,
-        @Calligraphy content: () -> T
-    ) {
-        self.quoteType = quoteType
-        self.content = content()
-    }
-
-    // MARK: - API
-
-    public enum QuoteType: String, Equatable, Sendable {
-        case single = "'"
-        case double = "\""
-        case triple = "'''"
-    }
+    /// Create a block quotation mark
+    public init() {}
 
     // MARK: - Stroke
 
     public var body: some Stroke {
-        Delimited {
-            content
-        } delimiter: {
-            quoteType
-        }
+        QuotationMark(.block)
     }
-
-    // MARK: - Private
-
-    private let content: T
-    private let quoteType: QuoteType
 
 }

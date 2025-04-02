@@ -117,17 +117,16 @@ func zipped() {
 
 @Calligraphy
 func basicQuote() -> some Stroke {
-    Quote(.single) {
-        Strokes {
-            "foo"
-            Quote {
-                Line {
-                    "bar"
-                    "baz"
-                }
+    Strokes {
+        "foo"
+        Quoted {
+            Line {
+                "bar"
+                "baz"
             }
-            "qux"
         }
+        "qux"
     }
+    .quoted(.single)
     .joined(separator: "-")
 }

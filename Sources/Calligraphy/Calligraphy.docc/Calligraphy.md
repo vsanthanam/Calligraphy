@@ -18,11 +18,16 @@ overview here
 - ``NewLine``
 - ``Tab``
 - ``Space``
+- ``QuotationMark``
+- ``SingleQuote``
+- ``DoubleQuote``
+- ``TripleQuote``
+- ``BlockQuote``
 - ``StringStroke``
 - ``Strokes``
 - ``Tabbed``
 - ``Delimited``
-- ``Quote``
+- ``Quoted``
 - ``Zipped``
 - ``AnyStroke``
 - ``EmptyStroke``
