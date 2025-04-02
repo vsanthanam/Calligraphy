@@ -31,3 +31,12 @@ public protocol DirectoryContent: Sendable {
     func _serialize() -> [SerializedDirectoryContent]
 
 }
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+extension Never: DirectoryContent {
+
+    public func _serialize() -> [SerializedDirectoryContent] {
+        fatalError()
+    }
+
+}
