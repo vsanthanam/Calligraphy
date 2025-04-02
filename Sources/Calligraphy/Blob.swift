@@ -1,5 +1,5 @@
 // Calligraphy
-// SerializedDirectoryContent.swift
+// Blob.swift
 //
 // MIT License
 //
@@ -25,54 +25,21 @@
 
 import Foundation
 
-/// Serialized representaion of directory content
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public enum SerializedDirectoryContent: Equatable, Hashable, Sendable {
+public struct Blob: DataFile {
 
-    // MARK: - API
-
-    /// A file
-    case file(File)
-
-    /// A directory
-    case directory(Directory)
-
-    public struct File: Equatable, Hashable, Sendable {
-
-        // MARK: - Initializers
-
-        public init(
-            _ name: String,
-            content: Data
-        ) {
-            self.name = name
-            self.content = content
-        }
-
-        // MARK: - API
-
-        public let name: String
-        public let content: Data
-
+    public init(
+        _ name: String,
+        data: Data
+    ) {
+        self.name = name
+        self.data = data
     }
 
-    public struct Directory: Equatable, Hashable, Sendable {
+    // MARK: - DataFile
 
-        // MARK: - Initializers
+    public let name: String
 
-        public init(
-            _ name: String,
-            contents: [SerializedDirectoryContent]
-        ) {
-            self.name = name
-            self.contents = contents
-        }
-
-        // MARK: - API
-
-        public let name: String
-        public let contents: [SerializedDirectoryContent]
-
-    }
+    public let data: Data
 
 }

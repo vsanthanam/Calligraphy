@@ -27,10 +27,12 @@ overview here
 
 - ``DirectoryContent``
 - ``File``
+- ``DataFile``
 - ``Directory``
 - ``DirectoryContentBuilder``
 - ``Folder``
 - ``TextFile``
+- ``Blob``
 - ``DirectoryContents``
 - ``SerializedDirectoryContent``
 - ``AnyDirectoryContent``

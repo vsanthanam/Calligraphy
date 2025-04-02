@@ -1,5 +1,5 @@
 // Calligraphy
-// File.swift
+// DataFile.swift
 //
 // MIT License
 //
@@ -25,54 +25,21 @@
 
 import Foundation
 
-/// A type representing a file
-///
-/// You can implement `File` either declaratively, by implemeting the ``body`` property, or declaratively, by implementing the ``content`` property.
-/// Do not implement both. If you do, the `content` property will be respected and the `body` property would be ignored.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public protocol File: DataFile {
+public protocol DataFile: DirectoryContent {
 
-    /// The type of the declarative content of the file
-    associatedtype Body: Stroke = Never
+    /// The name of the file
+    var name: String { get }
 
-    /// The content of the file
-    var content: String { get }
-
-    /// The declarative content of the file
-    @Calligraphy
-    var body: Body { get }
-
-    /// The string encoding of the file
-    var encoding: String.Encoding { get }
-}
-
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension File {
-
-    var body: Body {
-        fatalError()
-    }
-
-    var encoding: String.Encoding { .utf8 }
-
-    var data: Data { content.data(using: encoding)! }
-}
-
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension File where Body: Stroke {
-
-    var content: String {
-        String(stroke: body)
-    }
+    var data: Data { get }
 
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension File where Body == Never {
+public extension DataFile {
 
-    @available(*, unavailable)
-    var content: String {
-        fatalError()
+    func _serialize() -> [SerializedDirectoryContent] {
+        [.file(.init(name, content: data))]
     }
 
 }
