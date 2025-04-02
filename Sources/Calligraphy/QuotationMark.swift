@@ -1,5 +1,5 @@
 // Calligraphy
-// Zipped.swift
+// QuotationMark.swift
 //
 // MIT License
 //
@@ -23,33 +23,47 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/// A quotation mark
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension Stroke {
-
-    /// Lock the upstream into an immutable stroke
-    /// - Returns: The zipped, immutable stroke
-    func zipped() -> some Stroke {
-        Zipped { self }
-    }
-
-}
-
-/// Lock the wrapped child strokes into a single, immutable stroke, preventing them from being modified by stroke modifiers
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Zipped: Stroke {
+public struct QuotationMark: Stroke {
 
     // MARK: - Initializers
 
-    /// Create a zipped stroke
-    /// - Parameter content: The stokes to zip
+    /// Create a quotation mark
+    /// - Parameter markType: The type of quotation mark to use
     public init(
-        @Calligraphy content: () -> some Stroke
+        _ markType: MarkType
     ) {
-        self.content = String(calligraphy: content)
+        self.markType = markType
+    }
+
+    // MARK: - API
+
+    /// The available kinds of quotation marks
+    public enum MarkType: String, Equatable, Sendable {
+
+        /// A single quotation mark (`'`)
+        case single = "'"
+
+        /// A double quotation mark (`"`)
+        case double = "\""
+
+        /// A triple quotation mark (`'''`)
+        case triple = "'''"
+
+        /// A block quotation mark (`"""`)
+        case block = "\"\"\""
+
     }
 
     // MARK: - Stroke
 
-    public let content: String?
+    public var body: some Stroke {
+        markType
+    }
+
+    // MARK: - Private
+
+    private let markType: MarkType
 
 }

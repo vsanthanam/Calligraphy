@@ -25,7 +25,7 @@
 
 import Foundation
 
-/// A type representing a file
+/// A type representing a text file
 ///
 /// You can implement `TextFile` either declaratively, by implemeting the ``body`` property, or declaratively, by implementing the ``content`` property.
 /// Do not implement both. If you do, the `content` property will be respected and the `body` property would be ignored.

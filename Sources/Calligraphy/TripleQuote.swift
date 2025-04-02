@@ -1,5 +1,5 @@
 // Calligraphy
-// Zipped.swift
+// TripleQuote.swift
 //
 // MIT License
 //
@@ -23,33 +23,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/// A triple quotaiton mark (`'''`)
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension Stroke {
-
-    /// Lock the upstream into an immutable stroke
-    /// - Returns: The zipped, immutable stroke
-    func zipped() -> some Stroke {
-        Zipped { self }
-    }
-
-}
-
-/// Lock the wrapped child strokes into a single, immutable stroke, preventing them from being modified by stroke modifiers
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Zipped: Stroke {
+public struct TripleQuote: Stroke {
 
     // MARK: - Initializers
 
-    /// Create a zipped stroke
-    /// - Parameter content: The stokes to zip
-    public init(
-        @Calligraphy content: () -> some Stroke
-    ) {
-        self.content = String(calligraphy: content)
-    }
+    /// Create a triple quotation mark
+    public init() {}
 
     // MARK: - Stroke
 
-    public let content: String?
+    public var body: some Stroke {
+        QuotationMark(.triple)
+    }
 
 }

@@ -1,5 +1,5 @@
 // Calligraphy
-// Delimited.swift
+// Quoted.swift
 //
 // MIT License
 //
@@ -26,74 +26,48 @@
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public extension Stroke {
 
-    /// Delimit the upstream with a `String`
-    /// - Parameter delimiter: The delimiter
-    /// - Returns: The delimited stroke
-    func delimited(
-        by delimiter: String
+    /// Add quotation marks to either side of the upstream
+    /// - Parameter delimiter: The type of quotation marks to apply to the upstream
+    /// - Returns: A quoted version of the upstream
+    func quoted(
+        _ delimiter: QuotationMark.MarkType = .double
     ) -> some Stroke {
-        Delimited(
-            by: delimiter
-        ) { self }
-    }
-
-    /// Delimit the upstream with a ``Stroke``
-    /// - Parameter delimiter: The delimiter
-    /// - Returns: The delimited stroke
-    func delimited(
-        @Calligraphy with delimiter: () -> some Stroke
-    ) -> some Stroke {
-        Delimited(
-            content: { self },
-            delimiter: delimiter
-        )
+        Quoted(delimiter) { self }
     }
 
 }
 
-/// A stroke delimited by another stroke on either side
+/// A stroke with quotation marks on either side of its children
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Delimited<Delimiter, Content>: Stroke where Delimiter: Stroke, Content: Stroke {
+public struct Quoted<T>: Stroke where T: Stroke {
 
     // MARK: - Initializers
 
-    /// Create a delimited stroke
+    /// Create a quoted stroke
     /// - Parameters:
-    ///   - delimiter: The delimiter
-    ///   - content: The strokes to delimit
+    ///   - delimiter: The type of quotation mark to apply to each side
+    ///   - content: The content to quote
     public init(
-        by delimiter: String,
-        @Calligraphy content: () -> Content
-    ) where Delimiter == StringStroke {
-        self.init(content: content) { delimiter }
-    }
-
-    /// Create a delimited stroke
-    /// - Parameters:
-    ///   - content: The strokes to delimit
-    ///   - delimiter: The delimiter
-    public init(
-        @Calligraphy content: () -> Content,
-        @Calligraphy delimiter: () -> Delimiter
+        _ delimiter: QuotationMark.MarkType = .double,
+        @Calligraphy content: () -> T
     ) {
+        self.delimiter = delimiter
         self.content = content()
-        self.delimiter = delimiter()
     }
 
     // MARK: - Stroke
 
     public var body: some Stroke {
-        Line {
-            delimiter
+        Delimited {
             content
-                .zipped()
+        } delimiter: {
             delimiter
         }
     }
 
     // MARK: - Private
 
-    private let delimiter: Delimiter
-    private let content: Content
+    private let content: T
+    private let delimiter: QuotationMark.MarkType
 
 }
