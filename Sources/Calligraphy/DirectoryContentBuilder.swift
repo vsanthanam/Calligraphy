@@ -36,14 +36,10 @@ public enum DirectoryContentBuilder {
         expression
     }
 
-    public static func buildExpression<T>() -> some DirectoryContent {
-        Skip()
-    }
-
     public static func buildExpression(
         _ expression: [SerializedDirectoryContent]
     ) -> some DirectoryContent {
-        Raw(expression)
+        AlreadySerialized(expression)
     }
 
     @DirectoryContentBuilder
@@ -67,8 +63,8 @@ public enum DirectoryContentBuilder {
         .directory(expression)
     }
 
-    public static func buildBlock() -> some DirectoryContent {
-        Skip()
+    public static func buildBlock() -> EmptyDirectoryContent {
+        EmptyDirectoryContent()
     }
 
     public static func buildPartialBlock<T>(
@@ -106,7 +102,7 @@ public enum DirectoryContentBuilder {
         if let component {
             component
         } else {
-            Skip()
+            EmptyDirectoryContent()
         }
     }
 
@@ -177,20 +173,6 @@ public enum DirectoryContentBuilder {
 
     }
 
-    private struct Skip: DirectoryContent {
-
-        // MARK: - Initializers
-
-        init() {}
-
-        // MARK: - DirectoryContent
-
-        func _serialize() -> [SerializedDirectoryContent] {
-            []
-        }
-
-    }
-
     private struct List<Element>: DirectoryContent where Element: DirectoryContent {
 
         // MARK: - Initializers
@@ -211,7 +193,7 @@ public enum DirectoryContentBuilder {
 
     }
 
-    private struct Raw: DirectoryContent {
+    private struct AlreadySerialized: DirectoryContent {
 
         // MARK: - Initializers
 
