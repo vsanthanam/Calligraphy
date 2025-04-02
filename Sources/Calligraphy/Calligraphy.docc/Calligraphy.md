@@ -21,6 +21,9 @@ overview here
 - ``StringStroke``
 - ``Strokes``
 - ``Tabbed``
+- ``Delimited``
+- ``Quote``
+- ``Zipped``
 - ``AnyStroke``
 - ``EmptyStroke``
 

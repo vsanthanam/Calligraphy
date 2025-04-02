@@ -91,7 +91,7 @@ func example() async throws {
     try await folder.write(toDirectory: temp, shouldOverwrite: true)
     let rootDir = temp.appending(path: "foo", directoryHint: .isDirectory)
     guard FileManager.default.fileExists(atPath: rootDir.path()) else {
-        Issue.record("fuck")
+        Issue.record("oh no")
         return
     }
     let readmePath = rootDir.appending(path: "README.md", directoryHint: .notDirectory)
@@ -99,10 +99,35 @@ func example() async throws {
     #expect(readmeFile == "sup")
     let barUrl = rootDir.appending(path: "bar", directoryHint: .isDirectory)
     guard FileManager.default.fileExists(atPath: barUrl.path()) else {
-        Issue.record("fuck")
+        Issue.record("well shit")
         return
     }
     let tweetUrl = barUrl.appending(path: "tweet", directoryHint: .notDirectory)
     let tweetFile = try String(contentsOf: tweetUrl, encoding: .utf8)
     #expect(tweetFile == expected)
+}
+
+@Test
+func zipped() {
+    let str = String(calligraphy: basicQuote)
+    #expect(str == #"""
+    'foo-"barbaz"-qux'
+    """#)
+}
+
+@Calligraphy
+func basicQuote() -> some Stroke {
+    Quote(.single) {
+        Strokes {
+            "foo"
+            Quote {
+                Line {
+                    "bar"
+                    "baz"
+                }
+            }
+            "qux"
+        }
+    }
+    .joined(separator: "-")
 }
