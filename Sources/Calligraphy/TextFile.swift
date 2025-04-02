@@ -25,86 +25,54 @@
 
 import Foundation
 
+/// A type representing a file
+///
+/// You can implement `TextFile` either declaratively, by implemeting the ``body`` property, or declaratively, by implementing the ``content`` property.
+/// Do not implement both. If you do, the `content` property will be respected and the `body` property would be ignored.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct File: DataFile {
+public protocol TextFile: DataFile {
 
-    // MARK: - Initializers
-    
-    public init(
-        _ name: String,
-        data: Data
-    ) {
-        self.name = name
-        self.data = data
+    /// The type of the declarative content of the file
+    associatedtype Body: Stroke = Never
+
+    /// The content of the file
+    var content: String { get }
+
+    /// The declarative content of the file
+    @Calligraphy
+    var body: Body { get }
+
+    /// The string encoding of the file
+    var encoding: String.Encoding { get }
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public extension TextFile {
+
+    var encoding: String.Encoding { .utf8 }
+
+    var data: Data { content.data(using: encoding)! }
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public extension TextFile where Body: Stroke {
+
+    var content: String {
+        String(stroke: body)
     }
-    
-    public init(
-        _ name: String,
-        extension: String,
-        data: Data
-    ) {
-        self.init(
-            name + "." + `extension`,
-            data: data
-        )
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public extension TextFile where Body == Never {
+
+    @available(*, unavailable)
+    var content: String {
+        fatalError()
     }
-    
-    public init(
-        _ name: String,
-        encoding: String.Encoding = .utf8,
-        @Calligraphy content: () -> some Stroke
-    ) {
-        self.init(
-            name,
-            data: String(calligraphy: content).data(using: encoding)!
-        )
+
+    var body: Never {
+        fatalError("TextFile \(Self.self) does not have a body. Do not invoke this property directly.")
     }
-    
-    public init(
-        _ name: String,
-        extension: String,
-        encoding: String.Encoding = .utf8,
-        @Calligraphy content: () -> some Stroke
-    ) {
-        self.init(
-            name,
-            extension: `extension`,
-            data: String(calligraphy: content).data(using: encoding)!
-        )
-    }
-    
-    public init(
-        _ name: String,
-        encoding: String.Encoding = .utf8,
-        content: String
-    ) {
-        self.init(
-            name,
-            encoding: encoding
-        ) {
-            content
-        }
-    }
-    
-    public init(
-        _ name: String,
-        extension: String,
-        encoding: String.Encoding = .utf8,
-        content: String
-    ) {
-        self.init(
-            name,
-            extension: `extension`,
-            encoding: encoding
-        ) {
-            content
-        }
-    }
-    
-    // MARK: - DataFile
-    
-    public let name: String
-    
-    public let data: Data
 
 }

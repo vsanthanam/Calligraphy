@@ -60,11 +60,6 @@ public extension Stroke where Body == Never {
         fatalError()
     }
 
-}
-
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension Stroke where Body == Never {
-
     var body: Never {
         fatalError("Stroke \(Self.self) does not have a body. Do not invoke this property directly.")
     }
