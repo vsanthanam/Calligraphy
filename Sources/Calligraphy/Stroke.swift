@@ -24,6 +24,9 @@
 // SOFTWARE.
 
 /// A protocol representing a component of a string
+///
+/// You can implement a stroke imperatively, by implementing the ``body`` property, or imperatively, by implementing the ``content`` property.
+/// - Important: If you implement both, the `content` property will be respected.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public protocol Stroke: Sendable {
 
@@ -32,6 +35,7 @@ public protocol Stroke: Sendable {
     /// The string representation of the stroke
     var content: String? { get }
 
+    /// The declarative composition of the stroke
     @Calligraphy
     var body: Body { get }
 
