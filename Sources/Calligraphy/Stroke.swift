@@ -28,7 +28,7 @@
 public protocol Stroke: Sendable {
 
     associatedtype Body: Stroke = Never
-    
+
     /// The string representation of the stroke
     var content: String? { get }
 

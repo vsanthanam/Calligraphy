@@ -26,7 +26,7 @@
 /// A stroke containing single string
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct StringStroke: Stroke {
-    
+
     /// Create a string stroke from a string
     /// - Parameter content: The string
     public init(
@@ -34,7 +34,7 @@ public struct StringStroke: Stroke {
     ) {
         self.content = String(content)
     }
-    
+
     // MARK: - Stroke
 
     public let content: String?

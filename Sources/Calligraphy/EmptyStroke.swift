@@ -28,7 +28,7 @@
 public struct EmptyStroke: Stroke {
 
     // MARK: - Initializers
-    
+
     /// Create an empty stroke
     public init() {}
 

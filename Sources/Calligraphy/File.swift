@@ -29,6 +29,8 @@ import Foundation
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct File<Body>: TextFile where Body: Stroke {
 
+    // MARK: - Initializers
+
     public init(
         _ name: String,
         encoding: String.Encoding = .utf8,
@@ -51,7 +53,7 @@ public struct File<Body>: TextFile where Body: Stroke {
             content: content
         )
     }
-    
+
     public init(
         _ name: String,
         encoding: String.Encoding = .utf8,
@@ -62,7 +64,7 @@ public struct File<Body>: TextFile where Body: Stroke {
             encoding: encoding
         ) { content }
     }
-    
+
     public init(
         _ name: String,
         extension: String,
@@ -75,11 +77,15 @@ public struct File<Body>: TextFile where Body: Stroke {
             encoding: encoding
         ) { content }
     }
-    
+
+    // MARK: - TextFile
+
     public let name: String
-    
+
     public let encoding: String.Encoding
-    
+
+    // MARK: - Stroke
+
     public let body: Body
 
 }
