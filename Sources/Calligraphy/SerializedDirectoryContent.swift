@@ -126,7 +126,7 @@ public enum SerializedDirectoryContent: Equatable, Sendable {
             .init(
                 name,
                 content: .text(
-                    name,
+                    content,
                     encoding
                 )
             )
