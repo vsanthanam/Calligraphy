@@ -26,53 +26,30 @@
 import Foundation
 
 /// A type representing a text file
-///
-/// You can implement `TextFile` either declaratively, by implemeting the ``body`` property, or declaratively, by implementing the ``content`` property.
-/// Do not implement both. If you do, the `content` property will be respected and the `body` property would be ignored.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public protocol TextFile: DataFile {
+public protocol TextFile: Stroke, DirectoryContent {
 
-    /// The type of the declarative content of the file
-    associatedtype Body: Stroke = Never
-
-    /// The content of the file
-    var content: String { get }
-
-    /// The declarative content of the file
-    @Calligraphy
-    var body: Body { get }
-
-    /// The string encoding of the file
+    var name: String { get }
+    
     var encoding: String.Encoding { get }
+    
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public extension TextFile {
 
-    var encoding: String.Encoding { .utf8 }
-
-    var data: Data { content.data(using: encoding)! }
-}
-
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension TextFile where Body: Stroke {
-
-    var content: String {
-        String(stroke: body)
+    func _serialize() -> [SerializedDirectoryContent] {
+        [
+            .file(
+                .init(
+                    name,
+                    content: .text(
+                        String(stroke: self),
+                        encoding
+                    )
+                )
+            )
+        ]
     }
-
-}
-
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension TextFile where Body == Never {
-
-    @available(*, unavailable)
-    var content: String {
-        fatalError()
-    }
-
-    var body: Never {
-        fatalError("TextFile \(Self.self) does not have a body. Do not invoke this property directly.")
-    }
-
+    
 }

@@ -27,116 +27,59 @@ import Foundation
 
 /// A generic, composable file
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct File: DataFile {
+public struct File<Body>: TextFile where Body: Stroke {
 
-    // MARK: - Initializers
-    
-    /// Create a file
-    /// - Parameters:
-    ///   - name: The name of the file
-    ///   - data: The file's data
     public init(
         _ name: String,
-        data: Data
+        encoding: String.Encoding = .utf8,
+        @Calligraphy content: () -> Body
     ) {
         self.name = name
-        self.data = data
+        self.encoding = encoding
+        body = content()
     }
-    
-    /// Create a file with an extension
-    /// - Parameters:
-    ///   - name: The name of the file
-    ///   - extension: The file extension
-    ///   - data: The file's data
+
     public init(
         _ name: String,
         extension: String,
-        data: Data
+        encoding: String.Encoding = .utf8,
+        @Calligraphy content: () -> Body
     ) {
         self.init(
             name + "." + `extension`,
-            data: data
+            encoding: encoding,
+            content: content
         )
     }
     
-    /// Create a text file, declaratively
-    /// - Parameters:
-    ///   - name: The name of the file
-    ///   - encoding: The string encoding to use
-    ///   - content: The file's text content
-    public init(
-        _ name: String,
-        encoding: String.Encoding = .utf8,
-        @Calligraphy content: () -> some Stroke
-    ) {
-        self.init(
-            name,
-            data: String(calligraphy: content).data(using: encoding)!
-        )
-    }
-    
-    /// Create a text file with an extension, declaratively
-    /// - Parameters:
-    ///   - name: The name of the file
-    ///   - extension: The file's extension
-    ///   - encoding: The string encoding to use
-    ///   - content: The file's text content
-    public init(
-        _ name: String,
-        extension: String,
-        encoding: String.Encoding = .utf8,
-        @Calligraphy content: () -> some Stroke
-    ) {
-        self.init(
-            name,
-            extension: `extension`,
-            data: String(calligraphy: content).data(using: encoding)!
-        )
-    }
-    
-    /// Create a text file
-    /// - Parameters:
-    ///   - name: The name pf the file
-    ///   - encoding: The string encoding to use
-    ///   - content: The file's text content
     public init(
         _ name: String,
         encoding: String.Encoding = .utf8,
         content: String
-    ) {
+    ) where Body == StringStroke {
         self.init(
             name,
             encoding: encoding
-        ) {
-            content
-        }
+        ) { content }
     }
     
-    /// Create a text file with an extension
-    /// - Parameters:
-    ///   - name: The name of the file
-    ///   - extension: The file's extension
-    ///   - encoding: The string encoding to use
-    ///   - content: The file's text content
     public init(
         _ name: String,
         extension: String,
         encoding: String.Encoding = .utf8,
         content: String
-    ) {
+    ) where Body == StringStroke {
         self.init(
             name,
             extension: `extension`,
             encoding: encoding
-        ) {
-            content
-        }
+        ) { content }
     }
-
-    // MARK: - DataFile
-
+    
     public let name: String
-
-    public let data: Data
+    
+    public let encoding: String.Encoding
+    
+    public let body: Body
 
 }

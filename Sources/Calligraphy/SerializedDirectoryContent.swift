@@ -27,45 +27,40 @@ import Foundation
 
 /// Serialized representaion of directory content
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public enum SerializedDirectoryContent: Equatable, Hashable, Sendable {
+public enum SerializedDirectoryContent: Equatable, Sendable {
 
     // MARK: - API
-
-    /// A file
-    case file(File)
 
     /// A directory
     case directory(Directory)
     
-    /// A serialized file
-    public struct File: Equatable, Hashable, Sendable {
-
-        // MARK: - Initializers
+    case file(File)
+    
+    public struct File: Equatable, Sendable {
         
-        /// Create a serialized file
-        /// - Parameters:
-        ///   - name: The name of the file
-        ///   - content: The file's content
         public init(
             _ name: String,
-            content: Data
+            content: Content
         ) {
             self.name = name
             self.content = content
         }
-
-        // MARK: - API
-
-        /// The name of the file
+        
         public let name: String
         
-        /// The file's content
-        public let content: Data
-
+        public let content: Content
+        
+        public enum Content: Equatable, Sendable {
+            
+            case text(String, String.Encoding)
+            case binary(Data)
+            
+        }
+        
     }
-    
+
     /// A serialized directory
-    public struct Directory: Equatable, Hashable, Sendable {
+    public struct Directory: Equatable, Sendable {
 
         // MARK: - Initializers
         

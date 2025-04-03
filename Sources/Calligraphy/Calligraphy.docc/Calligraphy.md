@@ -40,6 +40,7 @@ overview here
 - ``Directory``
 - ``DirectoryContentBuilder``
 - ``File``
+- ``BinaryFile``
 - ``Folder``
 - ``DirectoryContents``
 - ``SerializedDirectoryContent``
