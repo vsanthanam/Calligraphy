@@ -41,7 +41,14 @@ public protocol DataFile: DirectoryContent {
 public extension DataFile {
 
     func _serialize() -> [SerializedDirectoryContent] {
-        [.file(.init(name, content: data))]
+        [
+            .file(
+                .init(
+                    name,
+                    content: .binary(data)
+                )
+            )
+        ]
     }
 
 }
