@@ -36,6 +36,7 @@ overview here
 
 - ``DirectoryContent``
 - ``DataFile``
+- ``DataBuilder``
 - ``TextFile``
 - ``Directory``
 - ``DirectoryContentBuilder``

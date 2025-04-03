@@ -81,7 +81,7 @@ public extension Directory where Body == Never {
 public extension Directory {
 
     func _serialize() -> [SerializedDirectoryContent] {
-        [.directory(.init(name, contents: contents))]
+        [.directory(name, contents: contents)]
     }
 
 }

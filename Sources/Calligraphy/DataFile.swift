@@ -33,6 +33,7 @@ public protocol DataFile: DirectoryContent {
     var name: String { get }
 
     /// The file's data
+    @DataBuilder
     var data: Data { get }
 
 }
@@ -41,14 +42,7 @@ public protocol DataFile: DirectoryContent {
 public extension DataFile {
 
     func _serialize() -> [SerializedDirectoryContent] {
-        [
-            .file(
-                .init(
-                    name,
-                    content: .binary(data)
-                )
-            )
-        ]
+        [.binary(name, contents: data)]
     }
 
 }

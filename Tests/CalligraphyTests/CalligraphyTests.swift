@@ -68,11 +68,11 @@ func example() async throws {
     baz
     foobar baz
         0
-        
+
         1
-        
+
         2
-        
+
         3
                 foo, bar, baz, qux
     """

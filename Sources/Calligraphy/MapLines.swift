@@ -57,6 +57,8 @@ public extension Stroke {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 struct MapLines<Strokes>: Stroke where Strokes: Stroke {
 
+    // MARK: - Initializers
+
     init(
         _ strokes: Strokes,
         _ fn: @Sendable @escaping (String) -> String?
@@ -64,6 +66,8 @@ struct MapLines<Strokes>: Stroke where Strokes: Stroke {
         self.strokes = strokes
         self.fn = fn
     }
+
+    // MARK: - Stroke
 
     var body: some Stroke {
         strokes
@@ -74,6 +78,8 @@ struct MapLines<Strokes>: Stroke where Strokes: Stroke {
                     .joined(separator: "\n")
             }
     }
+
+    // MARK: - Private
 
     private let strokes: Strokes
     private let fn: @Sendable (String) -> String?

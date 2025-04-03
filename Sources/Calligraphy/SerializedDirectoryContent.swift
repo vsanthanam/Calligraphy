@@ -31,13 +31,77 @@ public enum SerializedDirectoryContent: Equatable, Sendable {
 
     // MARK: - API
 
-    /// A directory
+    /// A serialized directory
     case directory(Directory)
-    
+
+    /// A serialized file
     case file(File)
-    
+
+    /// Create a serialized directory
+    /// - Parameters:
+    ///   - name: The name of the directory
+    ///   - contents: The directory's contents
+    /// - Returns: The directory content
+    public static func directory(
+        _ name: String,
+        contents: [SerializedDirectoryContent]
+    ) -> SerializedDirectoryContent {
+        .directory(
+            .init(
+                name,
+                contents: contents
+            )
+        )
+    }
+
+    /// Create a serialized text file
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - contents: The file's contents
+    ///   - encoding: The file's string encoding
+    /// - Returns: The directory content
+    public static func text(
+        _ name: String,
+        contents: String,
+        encoding: String.Encoding
+    ) -> SerializedDirectoryContent {
+        .file(
+            .text(
+                name,
+                content: contents,
+                encoding: encoding
+            )
+        )
+    }
+
+    /// Create a serialized binary file
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - contents: The file's contents
+    /// - Returns: The directory content
+    public static func binary(
+        _ name: String,
+        contents: Data
+    ) -> SerializedDirectoryContent {
+        .file(
+            .init(
+                name,
+                content: .binary(
+                    contents
+                )
+            )
+        )
+    }
+
+    /// A serialized file
     public struct File: Equatable, Sendable {
-        
+
+        // MARK: - Initializers
+
+        /// Create a serialized file
+        /// - Parameters:
+        ///   - name: The name of the file
+        ///   - content: The file's content
         public init(
             _ name: String,
             content: Content
@@ -45,25 +109,70 @@ public enum SerializedDirectoryContent: Equatable, Sendable {
             self.name = name
             self.content = content
         }
-        
-        public let name: String
-        
-        public let content: Content
-        
-        public enum Content: Equatable, Sendable {
-            
-            case text(String, String.Encoding)
-            case binary(Data)
-            
+
+        // MARK: - API
+
+        /// Create a serialized text file
+        /// - Parameters:
+        ///   - name: The name of the file
+        ///   - content: The file's content
+        ///   - encoding: The file's string encoding
+        /// - Returns: The serialized file
+        public static func text(
+            _ name: String,
+            content: String,
+            encoding: String.Encoding
+        ) -> File {
+            .init(
+                name,
+                content: .text(
+                    name,
+                    encoding
+                )
+            )
         }
-        
+
+        /// Create a serialized binary file
+        /// - Parameters:
+        ///   - name: The name of the file
+        ///   - content: The file's content
+        /// - Returns: The serialized file
+        public static func binary(
+            _ name: String,
+            content: Data
+        ) -> File {
+            .init(
+                name,
+                content: .binary(
+                    content
+                )
+            )
+        }
+
+        /// Serialized file content
+        public enum Content: Equatable, Sendable {
+
+            /// Text content
+            case text(String, String.Encoding)
+
+            /// Binary content
+            case binary(Data)
+
+        }
+
+        /// The name of the file
+        public let name: String
+
+        /// The file's content
+        public let content: Content
+
     }
 
     /// A serialized directory
     public struct Directory: Equatable, Sendable {
 
         // MARK: - Initializers
-        
+
         /// Create a serialized directory
         /// - Parameters:
         ///   - name: The name of the directory
@@ -80,7 +189,7 @@ public enum SerializedDirectoryContent: Equatable, Sendable {
 
         /// The name of the directory
         public let name: String
-        
+
         /// The directory's content
         public let contents: [SerializedDirectoryContent]
 

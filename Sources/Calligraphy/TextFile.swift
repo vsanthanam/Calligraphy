@@ -30,9 +30,9 @@ import Foundation
 public protocol TextFile: Stroke, DirectoryContent {
 
     var name: String { get }
-    
+
     var encoding: String.Encoding { get }
-    
+
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
@@ -40,16 +40,12 @@ public extension TextFile {
 
     func _serialize() -> [SerializedDirectoryContent] {
         [
-            .file(
-                .init(
-                    name,
-                    content: .text(
-                        String(stroke: self),
-                        encoding
-                    )
-                )
+            .text(
+                name,
+                contents: String(stroke: self),
+                encoding: encoding
             )
         ]
     }
-    
+
 }
