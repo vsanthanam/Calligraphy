@@ -12,7 +12,7 @@
     @Resources {
         Explore more resources for learning about sloths.
         
-        @SampleCode(destination: "https://vsanthanam.github.io/Calligraphy/Sources/Calligraphy/Calligraphy.docc/Resources/Tutorials/Projects/index.html") {
+        @SampleCode(destination: "https://vsanthanam.github.io/Calligraphy/Sources/Calligraphy/Calligraphy.docc/Resources/Downloads/index.html") {
             Download the sample code associated with these tutorials.
             - [Fully Completed](https://vsanthanam.github.io/Sources/Calligraphy/Calligraphy.docc/Resources/Tutorials/Projects/chap2-start.zio)
         }
