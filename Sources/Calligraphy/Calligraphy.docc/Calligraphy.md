@@ -11,6 +11,7 @@ Calligraphy is a declarative API for composing multi-line strings together using
 @Links(visualStyle: compactGrid) {
     - <doc:Installation>
     - <doc:BuildingStrings>
+    - <doc:ListMaker>
 }
 
 ## Topics
