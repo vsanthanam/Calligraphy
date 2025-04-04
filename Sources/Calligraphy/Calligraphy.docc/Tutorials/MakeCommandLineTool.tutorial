@@ -1,0 +1,29 @@
+@Tutorial(time: 5) {
+    @Intro(title: "Create a macOS Command Line Tool") {
+        Use the Swift Argument Parser to create a command line tool
+
+    }
+    @XcodeRequirement(title: "Xcode 16", destination: "https://https://developer.apple.com/xcode/resources/")
+    @Section(title: "Bootstrap a Swift Package") {
+        @ContentAndMedia {
+            Create a new Swift Package with the Command Line
+            
+            @Image(source: <#file#>, alt: "<#accessible description#>")
+        }
+        
+        @Steps {
+            @Step {
+                Open up your terminal application of choice, and navigate to your working directory.
+                
+                In this example, we'll use [iTerm2](https://iterm2.com/) as the application, and `~/Developer` as the working directory, but you can use any terminal application or working directory or your choosing
+                
+                @Image(source: "openterminal.png", alt: "A terminal dispaying a chance directory command to \"~/Directory\"")
+            }
+            @Step {
+                Create a new directory called WebListMaker with the `cd` command
+                
+                @Image(source: "openterminal.png", alt: "A terminal dispaying a chance directory command to \"~/Directory\"")
+            }
+        }
+    }
+}
