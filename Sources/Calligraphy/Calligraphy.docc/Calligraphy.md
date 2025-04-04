@@ -6,7 +6,18 @@ A declarative library for composing strings, text, files, and folders in Swift
 
 Calligraphy is a declarative API for composing multi-line strings together using readiable, clear syntax. It also contains declarative APIs to help you compose file and directories together, and to write those files and directories to disk. It can be useful for applications such as code generation.
 
+## Getting Started
+
+@Links(visualStyle: compactGrid) {
+    - <doc:Installation>
+    - <doc:BuildingStrings>
+}
+
 ## Topics
+
+### Tutorials
+
+- <tutorial:HTMLFormatter>
 
 ### String Composition
 

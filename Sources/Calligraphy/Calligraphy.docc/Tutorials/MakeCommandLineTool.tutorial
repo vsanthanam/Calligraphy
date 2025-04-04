@@ -1,0 +1,124 @@
+@Tutorial(time: 10) {
+    @Intro(title: "Create a macOS Command Line Tool") {
+        Use the Swift Argument Parser to create a command line tool
+    }
+    @XcodeRequirement(title: "Xcode 16", destination: "https://https://developer.apple.com/xcode/resources/")
+    @Section(title: "Bootstrap a Swift Package") {
+        @ContentAndMedia {
+            In this section, we will create a new Swift package using the command line.
+            
+<!--            @Image(source: <#file#>, alt: "<#accessible description#>")-->
+        }
+        
+        @Steps {
+            @Step {
+                Open up your terminal application of choice, and navigate to your working directory.
+                
+                In this example, we'll use [iTerm2](https://iterm2.com/) as the application, and `~/Developer` as the working directory, but you can use any terminal application or working directory or your choosing.
+                
+                @Image(source: "opendeveloper.png", alt: "A terminal dispaying a change directory command")
+            }
+            @Step {
+                Create a new directory called ListMaker with the `mkdir ` command
+                
+                This will create a new directory called `ListMaker` in your working directory. This directory will serve as the root directory for your new Swift package.
+                
+                @Image(source: "makedirectory.png", alt: "A terminal dispaying a make directory command")
+            }
+            @Step {
+                Open the newly created directory with the `cd` command.
+                
+                @Image(source: "openlistmaker.png", alt: "A terminal dispaying a make directory command")
+            }
+            @Step {
+                Create a new Swift package with `swift package init` command.
+                
+                The command should display a list of all the new files created by the `swift package` tool, including the package source files, a `.gitignore` file, and a `Package.swift` file.
+                
+                @Image(source: "newpackage.png", alt: "A terminal dispaying the commands necessary to create a new Swift package")
+            }
+            @Step {
+                Finally, open your new package in Xcode with `open` command.
+                
+                You can also double click your new `Package.swift` file in Finder.
+                
+                @Image(source: "openpackage.png", alt: "A terminal dispaying the commands necessary to open a Swift Package in Xcode")
+            }
+        }
+    }
+    @Section(title: "Configure Targets & Dependencies") {
+        @ContentAndMedia {
+            In this section, we will create and configure the necessary products and targets necessary for our command line utility.
+            
+            We'll also add the Swift Argument Parser as package dependencies.
+        }
+        @Steps {
+            @Step {
+                Once your package is open in Xcode, find the `Package.swift` file.
+                
+                @Code(name: "Package.swift", file: "TemplatePackage.swift")
+            }
+            @Step {
+                Add an additional executable build target called `ListMakerTool`.
+                
+                @Code(name: "Package.swift", file: "AddExecutableTarget.swift")
+            }
+            @Step {
+                Add the [Swift Argument Parser](https://github.com/apple/swift-argument-parser) as a package dependency.
+                
+                @Code(name: "Package.swift", file: "AddSwiftArgumentParserToPackage.swift")
+            }
+            @Step {
+                Add the `ArgumentParser` as a target dependency to `ListMakerTool`
+                
+                @Code(name: "Package.swift", file: "AddArgumentParserToTarget.swift")
+            }
+            @Step {
+                In the Xcode Sidebar, right click on the `Sources` folder and select `New Folder`.
+                
+                @Image(source: "newfolder.png", alt: "A screenshot of the Xcode Sidebar")
+            }
+            @Step {
+                Name the new folder `ListMakerTool`.
+                
+                @Image(source: "namednewfolder.png", alt: "A screenshot of the Xcode Sidebar")
+            }
+            @Step {
+                In the new folder, add a new file called `ListMakerTool.swift`. Add a `@main` annotated struct and a `static main` function.
+                
+                Before continuing, select the `ListMakerTool` scheme in the top bar and build the project for macOS to make sure everything is working as expected.
+                
+                @Code(name: "ListMakerTool.swift", file: "ListMakerTool.swift")
+            }
+        }
+    }
+    @Section(title: "Add Root Parser Command") {
+        @ContentAndMedia {
+            In this section, we'll integrate our executable target with the Swift Argument Parser, and we'll run our program to make sure everything is working.
+        }
+        @Steps {
+            @Step {
+                Import the `ArgumentParser` module in `ListMakerTool.swift`.
+                
+                @Code(name: "ListMakerTool.swift", file: "ImportArgumentParser.swift", previousFile: "ListMakerTool.swift")
+            }
+            @Step {
+                Rewrite the struct, and add conformance to `AsyncParsableCommand`.
+                
+                @Code(name: "ListMakerTool.swift", file: "RootCommand.swift")
+            }
+            @Step {
+                Go back to the terminal and navigate back to your Swift Package. Then, build the package with `swift build`.
+                
+                @Image(source: "buildlistmaker.png", alt: "A terminal dispaying the output of the swift build command")
+            }
+            @Step {
+                Run your tool, which should now live in the `.build/debug` folder
+                
+                The example assumes you are using a Mac with Apple Silicon. You may need to adjust the directory if you are using a Mac with an Intel chip.
+
+                @Image(source: "runlistmaker.png", alt: "A terminal dispaying the output of the swift build command")
+            }
+        }
+    }
+}

@@ -1,0 +1,30 @@
+@Tutorials(name: "Build an HTML Formatter") {
+    @Intro(title: "Build an HTML Formatter") {
+        Bar and Baz!
+
+    }
+    
+    @Chapter(name: "Project Setup") {
+        @TutorialReference(tutorial: "doc:MakeCommandLineTool")
+        @TutorialReference(tutorial: "doc:AddCalligraphy")
+    }
+    
+    @Resources {
+        Explore more resources for learning about sloths.
+        
+        @SampleCode(destination: "https://vsanthanam.github.io/Sources/Calligraphy/Calligraphy.docc/Resources/Tutorials/Projects/index.html") {
+            Download the sample code associated with these tutorials.
+            - [Chapter 2](https://vsanthanam.github.io/Sources/Calligraphy/Calligraphy.docc/Resources/Tutorials/Projects/chap2-start.zio)
+        }
+        @Documentation(destination: "https://vsanthanam.github.io/Calligraphy/docs/documentation/calligraphy/") {
+            See Apple's documentation for the Swift Argument Parser, a package dependency featured heavily in these tutorials.
+            - ``Calligraphy``
+        }
+        @Downloads(destination: "https://github.com/vsanthanam/Calligraphy/releases") {
+            Download the latest version of Calligraphy from GitHub.
+            - [Xcode](https://https://developer.apple.com/xcode/resources/)
+            - [Calligraphy (Latest)](https://github.com/vsanthanam/Calligraphy/releases/tag/0.0.5)
+        }
+
+    }
+}
