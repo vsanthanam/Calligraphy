@@ -26,13 +26,13 @@
 import Foundation
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension Stroke {
+extension Stroke {
 
     /// Map every line of a multi-line stroke
     /// - Parameter fn: The function used to map each line into another string.
     /// If the provdided function returns `nil`, the line will be omitted
     /// - Returns: The line mapped stoke
-    func mapLines(
+    public func mapLines(
         fn: @Sendable @escaping (String) -> String?
     ) -> some Stroke {
         MapLines(
@@ -45,7 +45,7 @@ public extension Stroke {
     /// - Parameter calligraphy: The function used to map each line into another string.
     /// If the provdided function returns `nil`, the line will be omitted
     /// - Returns: The line mapped stoke
-    func mapLines(
+    public func mapLines(
         @Calligraphy with calligraphy: @Sendable @escaping (String) -> some Stroke
     ) -> some Stroke {
         mapLines(fn: { line in

@@ -24,11 +24,11 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension Stroke {
+extension Stroke {
 
     /// Lock the upstream into an immutable stroke
     /// - Returns: The zipped, immutable stroke
-    func zipped() -> some Stroke {
+    public func zipped() -> some Stroke {
         Zipped { self }
     }
 

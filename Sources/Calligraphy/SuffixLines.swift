@@ -24,12 +24,12 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension Stroke {
+extension Stroke {
 
     /// Add a suffix to every line of a multi-line stroke
     /// - Parameter suffix: The suffix to add
     /// - Returns: A line-suffixed version of the upstream
-    func suffixLines(
+    public func suffixLines(
         with suffix: String
     ) -> some Stroke {
         SuffixLines(
@@ -41,7 +41,7 @@ public extension Stroke {
     /// Add a suffix to every line of a multi-line stroke
     /// - Parameter calligraphy: The suffix to add
     /// - Returns: A line-suffixed version of the upstream
-    func suffixLines(
+    public func suffixLines(
         @Calligraphy with calligraphy: () -> some Stroke
     ) -> some Stroke {
         let suffix = String(calligraphy: calligraphy)

@@ -24,12 +24,12 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension Stroke {
+extension Stroke {
 
     /// Add quotation marks to either side of the upstream
     /// - Parameter delimiter: The type of quotation marks to apply to the upstream
     /// - Returns: A quoted version of the upstream
-    func quoted(
+    public func quoted(
         _ delimiter: QuotationMark.MarkType = .double
     ) -> some Stroke {
         Quoted(delimiter) { self }

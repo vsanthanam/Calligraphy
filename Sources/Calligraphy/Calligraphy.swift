@@ -180,7 +180,10 @@ public enum Calligraphy {
 
         public var content: String? {
             var result: String? = nil
-            func append(_ content: String) {
+            func append(_ content: String?) {
+                guard let content else {
+                    return
+                }
                 if let r = result {
                     result = r + Calligraphy.separator + content
                 } else {
@@ -188,13 +191,9 @@ public enum Calligraphy {
                 }
             }
             for str in repeat each accumulated {
-                if let content = str.content {
-                    append(content)
-                }
+                append(str.content)
             }
-            if let content = next.content {
-                append(content)
-            }
+            append(next.content)
             return result
         }
 
@@ -216,16 +215,17 @@ public enum Calligraphy {
         // MARK: - Stroke
 
         public var content: String? {
-            var result: String? = nil
-            func append(_ content: String) {
-                if let r = result {
-                    result = r + Calligraphy.separator + content
-                } else {
-                    result = content
+            list
+                .reduce(nil) { prev, stroke in
+                    guard let content = stroke.content else {
+                        return prev
+                    }
+                    if let prev {
+                        return prev + Calligraphy.separator + content
+                    } else {
+                        return content
+                    }
                 }
-            }
-            list.compactMap(\.content).forEach(append)
-            return result
         }
 
         // MARK: - Private

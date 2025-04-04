@@ -24,11 +24,11 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension String {
+extension String {
 
     /// Create a string from a ``Stroke``
     /// - Parameter stroke: The stroke
-    init(
+    public init(
         stroke: some Stroke
     ) {
         self = stroke.content ?? ""
@@ -36,7 +36,7 @@ public extension String {
 
     /// Create a string by composing strokes together
     /// - Parameter calligraphy: The strokes to compose
-    init(
+    public init(
         @Calligraphy calligraphy: () -> some Stroke
     ) {
         self.init(stroke: calligraphy())

@@ -24,12 +24,12 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension Stroke {
+extension Stroke {
 
     /// Delimit the upstream with a `String`
     /// - Parameter delimiter: The delimiter
     /// - Returns: The delimited stroke
-    func delimited(
+    public func delimited(
         by delimiter: String
     ) -> some Stroke {
         Delimited(
@@ -40,7 +40,7 @@ public extension Stroke {
     /// Delimit the upstream with a ``Stroke``
     /// - Parameter delimiter: The delimiter
     /// - Returns: The delimited stroke
-    func delimited(
+    public func delimited(
         @Calligraphy with delimiter: () -> some Stroke
     ) -> some Stroke {
         Delimited(

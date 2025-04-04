@@ -26,7 +26,7 @@
 import Foundation
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension DirectoryContent {
+extension DirectoryContent {
 
     /// Write the contents to a directory, concurrently
     /// - Parameters:
@@ -35,7 +35,7 @@ public extension DirectoryContent {
     /// - Returns: The URLs of the files and folders that were created
     /// - Throws: An error, if the operation fails or was cancelled
     @discardableResult
-    func write(
+    public func write(
         toDirectory directoryURL: URL,
         shouldOverwrite: Bool = false
     ) async throws -> [URL] {
@@ -54,7 +54,7 @@ public extension DirectoryContent {
     /// - Returns: The URLs of the files and folders that were created
     /// - Throws: An error, if the operation fails
     @discardableResult
-    func write(
+    public func write(
         toDirectory directoryURL: URL,
         shouldOverwrite: Bool = false
     ) throws -> [URL] {

@@ -24,12 +24,12 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension Stroke {
+extension Stroke {
 
     /// Map the return value of a stroke into some other value
     /// - Parameter fn: The function used to map the value
     /// - Returns: The new, mapped stroke
-    func map(
+    public func map(
         fn: @Sendable @escaping (String?) -> String?
     ) -> some Stroke {
         Map(
@@ -41,7 +41,7 @@ public extension Stroke {
     /// Map the return value of a stroke into some other value, declaratively
     /// - Parameter calligraphy: The function used to map the value
     /// - Returns: The new, mapped stroke
-    func map(
+    public func map(
         @Calligraphy with calligraphy: @Sendable @escaping (String?) -> some Stroke
     ) -> some Stroke {
         map(fn: { content in

@@ -64,12 +64,12 @@ public struct Tabbed<T>: Stroke where T: Stroke {
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension Stroke {
+extension Stroke {
 
     /// Add a tab to each line of the upstream
     /// - Parameter count: The number of tabs to add
     /// - Returns: The tabbed stroke
-    func tabbed(
+    public func tabbed(
         _ count: Int = 1
     ) -> some Stroke {
         Tabbed(count) { self }

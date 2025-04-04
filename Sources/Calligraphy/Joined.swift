@@ -24,12 +24,12 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension Stroke {
+extension Stroke {
 
     /// Join strokes together with a separator
     /// - Parameter separator: The separator
     /// - Returns: The joined stroke
-    func joined(
+    public func joined(
         separator: String
     ) -> some Stroke {
         Joined(separator: separator) { self }
@@ -38,7 +38,7 @@ public extension Stroke {
     /// Join strokes together with a separator, declaratively
     /// - Parameter calligraphy: The separator
     /// - Returns: The joined stroke
-    func joined(
+    public func joined(
         @Calligraphy with calligraphy: () -> some Stroke
     ) -> some Stroke {
         Joined(

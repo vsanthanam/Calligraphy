@@ -58,9 +58,27 @@ public enum DirectoryContentBuilder {
 
     @DirectoryContentBuilder
     public static func buildExpression(
+        _ expression: [SerializedDirectoryContent.File]
+    ) -> _List<_AlreadySerialized> {
+        for file in expression {
+            file
+        }
+    }
+    
+    @DirectoryContentBuilder
+    public static func buildExpression(
         _ expression: SerializedDirectoryContent.Directory
     ) -> _AlreadySerialized {
         .directory(expression)
+    }
+    
+    @DirectoryContentBuilder
+    public static func buildExpression(
+        _ expression: [SerializedDirectoryContent.Directory]
+    ) -> _List<_AlreadySerialized> {
+        for directory in expression {
+            directory
+        }
     }
 
     public static func buildBlock() -> EmptyDirectoryContent {
