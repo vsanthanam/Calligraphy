@@ -216,7 +216,7 @@ private struct DiskOperation: Equatable, Sendable {
 private extension [SerializedDirectoryContent] {
 
     func performWriteOperationsAsync() async throws -> [URL] {
-        try await withThrowingTaskGroup(of: [URL].self) { group in
+        try await withThrowingTaskGroup { group in
             for content in self {
                 group.addTask {
                     try await content.performWriteOperationAsync()
