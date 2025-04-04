@@ -1,10 +1,11 @@
 @Tutorials(name: "Build an HTML Formatter") {
-    @Intro(title: "Learn how to foo") {
+    @Intro(title: "Build an HTML Formatter") {
         Bar and Baz!
 
     }
     
     @Chapter(name: "Project Setup") {
         @TutorialReference(tutorial: "doc:MakeCommandLineTool")
+        @TutorialReference(tutorial: "doc:AddCalligraphy")
     }
 }
