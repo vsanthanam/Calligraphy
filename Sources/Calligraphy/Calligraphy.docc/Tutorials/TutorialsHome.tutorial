@@ -1,14 +1,14 @@
-@Tutorials(name: "Build an HTML Formatter") {
-    @Intro(title: "Build an HTML Formatter") {
+@Tutorials(name: "Calligraphy Tutorials") {
+    @Intro(title: "Calligraphy Tutorials") {
         Bar and Baz!
-
     }
-    
     @Chapter(name: "Project Setup") {
+        @Image(source: "get-started.png", alt: "A blueprint icon.") {
+            Foo and Bar!
+        }
         @TutorialReference(tutorial: "doc:MakeCommandLineTool")
         @TutorialReference(tutorial: "doc:AddCalligraphy")
     }
-    
     @Resources {
         Explore more resources for learning about sloths.
         
