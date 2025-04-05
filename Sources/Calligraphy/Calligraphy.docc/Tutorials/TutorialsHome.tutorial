@@ -9,6 +9,21 @@
         @TutorialReference(tutorial: "doc:MakeCommandLineTool")
         @TutorialReference(tutorial: "doc:AddCalligraphy")
     }
+    @Chapter(name: "Composing Strings") {
+        @Image(source: "compose.png", alt: "An assembly icon.") {
+            Baz and Qux!
+        }
+        @TutorialReference(tutorial: "doc:ListModels")
+        @TutorialReference(tutorial: "doc:ComposingStrings")
+        @TutorialReference(tutorial: "doc:AdvancedComposition")
+    }
+    @Chapter(name: "Files & Folders") {
+        @Image(source: "disk.png", alt: "An assembly icon.") {
+            Baz and Qux!
+        }
+        @TutorialReference(tutorial: "doc:ComposingDirectories")
+        @TutorialReference(tutorial: "doc:WritingToDisk")
+    }
     @Resources {
         Explore more resources for learning about sloths.
         
@@ -26,6 +41,5 @@
             - [Xcode](https://https://developer.apple.com/xcode/resources/)
             - [Calligraphy (Latest)](https://github.com/vsanthanam/Calligraphy/releases/tag/0.0.5)
         }
-
     }
 }

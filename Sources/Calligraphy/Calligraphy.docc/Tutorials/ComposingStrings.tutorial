@@ -1,6 +1,6 @@
-@Tutorial(time: 5) {
-    @Intro(title: "Add Calligraphy to your Swift Package") {
-        Add calligraphy as a package dependency to your command line tool package
+@Tutorial(time: 30) {
+    @Intro(title: "Composing Strings") {
+        <#text#>
         
         @Image(source: <#file#>, alt: "<#accessible description#>")
     }
