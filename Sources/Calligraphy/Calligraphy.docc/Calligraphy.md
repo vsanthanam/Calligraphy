@@ -16,10 +16,6 @@ Calligraphy is a declarative API for composing multi-line strings together using
 
 ## Topics
 
-### Tutorials
-
-- <tutorial:HTMLFormatter>
-
 ### String Composition
 
 - ``Calligraphy``
