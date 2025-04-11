@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensions.swift
+// SerializedDirectoryContent.swift
 //
 // MIT License
 //
@@ -23,21 +23,65 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension String {
+import Foundation
 
-    // MARK: - Initializers
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public enum SerializedDirectoryContent: Equatable, Sendable {
+
+    // MARK: - API
     
-    init(
-        _ component: some StringComponent
-    ) {
-        self = component.content ?? ""
+    case directory(Directory)
+
+    case file(File)
+
+    public struct Directory: Equatable, Sendable {
+
+        // MARK: - Initializers
+        
+        public init(
+            _ name: String,
+            children: [SerializedDirectoryContent]
+        ) {
+            self.name = name
+            self.children = children
+        }
+
+        // MARK: - API
+        
+        public let name: String
+
+        public let children: [SerializedDirectoryContent]
+
     }
 
-    init(
-        @StringBuilder components: () -> some StringComponent
-    ) {
-        self.init(components())
+    public struct File: Equatable, Sendable {
+
+        // MARK: - Initializers
+        
+        public init(
+            _ name: String,
+            content: Content
+        ) {
+            self.name = name
+            self.content = content
+        }
+        
+        // MARK: - API
+
+        public let name: String
+
+        public let content: Content
+
+        public enum Content: Equatable, Sendable {
+            
+            // MARK: - API
+
+            case binary(Data)
+
+            case text(String, String.Encoding)
+
+        }
+
     }
 
 }

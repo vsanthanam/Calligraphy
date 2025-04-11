@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensions.swift
+// Tab.swift
 //
 // MIT License
 //
@@ -24,20 +24,20 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension String {
+public struct Tab: StringComponent {
 
     // MARK: - Initializers
     
-    init(
-        _ component: some StringComponent
-    ) {
-        self = component.content ?? ""
-    }
+    public init() {}
 
-    init(
-        @StringBuilder components: () -> some StringComponent
-    ) {
-        self.init(components())
+    // MARK: - StringComponent
+    
+    public var body: some StringComponent {
+        Line {
+            for _ in 0..<4 {
+                Space()
+            }
+        }
     }
 
 }

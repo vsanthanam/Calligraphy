@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensions.swift
+// MapLines.swift
 //
 // MIT License
 //
@@ -23,21 +23,53 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import Foundation
+
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension String {
+public extension StringComponent {
 
-    // MARK: - Initializers
+    func mapLines(
+        _ fn: @Sendable @escaping (String) -> String?
+    ) -> some StringComponent {
+        MapLines(self, fn)
+    }
+
+    func mapLines(
+        @StringBuilder with components: @Sendable @escaping (String) -> some StringComponent
+    ) -> some StringComponent {
+        MapLines(self) { line in
+            String(components(line))
+        }
+    }
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+struct MapLines<T>: StringComponent where T: StringComponent {
     
-    init(
-        _ component: some StringComponent
-    ) {
-        self = component.content ?? ""
-    }
+    // MARK: - StringComponent
 
-    init(
-        @StringBuilder components: () -> some StringComponent
-    ) {
-        self.init(components())
+    var body: some StringComponent {
+        lines
+            .map { content in
+                guard let content else { return nil }
+                return content
+                    .components(separatedBy: "\n")
+                    .compactMap(fn)
+                    .joined(separator: "\n")
+            }
     }
+    
+    // MARK: - Private
+
+    fileprivate init(
+        _ lines: T,
+        _ fn: @Sendable @escaping (String) -> String?
+    ) {
+        self.lines = lines
+        self.fn = fn
+    }
+    
+    private let fn: @Sendable (String) -> String?
+    private let lines: T
 
 }

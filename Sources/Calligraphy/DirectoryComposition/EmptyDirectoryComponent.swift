@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensions.swift
+// EmptyDirectoryComponent.swift
 //
 // MIT License
 //
@@ -24,20 +24,16 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension String {
+public struct EmptyDirectoryComponent: DirectoryComponent {
 
     // MARK: - Initializers
     
-    init(
-        _ component: some StringComponent
-    ) {
-        self = component.content ?? ""
-    }
+    public init() {}
+    
+    // MARK: - DirectoryComponent
 
-    init(
-        @StringBuilder components: () -> some StringComponent
-    ) {
-        self.init(components())
+    public func _serialize() -> [SerializedDirectoryContent] {
+        []
     }
 
 }

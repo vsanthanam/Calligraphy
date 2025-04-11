@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensions.swift
+// AnyDataComponent.swift
 //
 // MIT License
 //
@@ -23,21 +23,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import Foundation
+
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension String {
+public struct AnyDataComponent: DataComponent {
 
     // MARK: - Initializers
     
-    init(
-        _ component: some StringComponent
+    public init(
+        _ component: some DataComponent
     ) {
-        self = component.content ?? ""
+        _data = { component.data }
     }
 
-    init(
-        @StringBuilder components: () -> some StringComponent
-    ) {
-        self.init(components())
+    // MARK: - DataComponent
+    
+    public var data: Data? {
+        _data()
     }
+    
+    // MARK: - Private
+
+    private let _data: @Sendable () -> Data?
 
 }

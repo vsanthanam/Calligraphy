@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensions.swift
+// Delimited.swift
 //
 // MIT License
 //
@@ -24,20 +24,58 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension String {
+public extension StringComponent {
+
+    func delimited(
+        by delimiter: String
+    ) -> some StringComponent {
+        Delimited(
+            by: delimiter
+        ) {
+            self
+        }
+    }
+
+    func delimited(
+        @StringBuilder with components: () -> some StringComponent
+    ) -> some StringComponent {
+        Delimited(
+            components: { self },
+            delimiter: components
+        )
+    }
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public struct Delimited<T, Delimiter>: StringComponent where T: StringComponent, Delimiter: StringComponent {
 
     // MARK: - Initializers
     
-    init(
-        _ component: some StringComponent
-    ) {
-        self = component.content ?? ""
+    public init(
+        by delimiter: String,
+        @StringBuilder components: () -> T
+    ) where Delimiter == RawStringComponent {
+        self.init(components: components) { delimiter }
     }
 
-    init(
-        @StringBuilder components: () -> some StringComponent
+    public init(
+        @StringBuilder components: () -> T,
+        @StringBuilder delimiter: () -> Delimiter
     ) {
-        self.init(components())
+        self.components = components()
+        self.delimiter = delimiter()
     }
+
+    // MARK: - StringComponent
+    
+    public var body: some StringComponent {
+        delimiter + components + delimiter
+    }
+    
+    // MARK: - Private
+
+    private let components: T
+    private let delimiter: Delimiter
 
 }

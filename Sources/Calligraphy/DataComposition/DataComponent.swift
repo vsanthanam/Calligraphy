@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensions.swift
+// DataComponent.swift
 //
 // MIT License
 //
@@ -23,21 +23,48 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension String {
+import Foundation
 
-    // MARK: - Initializers
-    
-    init(
-        _ component: some StringComponent
-    ) {
-        self = component.content ?? ""
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public protocol DataComponent: Sendable {
+
+    associatedtype Body: DataComponent = Never
+
+    var data: Data? { get }
+
+    @DataBuilder
+    var body: Body { get }
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+extension Never: DataComponent {
+
+    public var data: Data? {
+        fatalError()
     }
 
-    init(
-        @StringBuilder components: () -> some StringComponent
-    ) {
-        self.init(components())
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public extension DataComponent where Body == Never {
+
+    @available(*, unavailable)
+    var data: Data? {
+        fatalError()
+    }
+
+    var body: Never {
+        fatalError("DataComponent \(Self.self) does not have a body. Do not invoke this property directly.")
+    }
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public extension DataComponent {
+
+    var data: Data? {
+        body.data
     }
 
 }

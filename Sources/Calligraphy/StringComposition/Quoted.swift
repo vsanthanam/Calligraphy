@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensions.swift
+// Quoted.swift
 //
 // MIT License
 //
@@ -24,20 +24,41 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension String {
+extension StringComponent {
+
+    func quoted(
+        _ markType: QuotationMark.`Type` = .double
+    ) -> some StringComponent {
+        Quoted(markType) { self }
+    }
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public struct Quoted<T>: StringComponent where T: StringComponent {
 
     // MARK: - Initializers
     
-    init(
-        _ component: some StringComponent
+    public init(
+        _ markType: QuotationMark.`Type` = .double,
+        @StringBuilder components: () -> T
     ) {
-        self = component.content ?? ""
+        self.markType = markType
+        self.components = components()
     }
 
-    init(
-        @StringBuilder components: () -> some StringComponent
-    ) {
-        self.init(components())
+    // MARK: - StringComponent
+    
+    public var body: some StringComponent {
+        components
+            .delimited {
+                QuotationMark(markType)
+            }
     }
+
+    // MARK: - Private
+    
+    private let components: T
+    private let markType: QuotationMark.`Type`
 
 }
