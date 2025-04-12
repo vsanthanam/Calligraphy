@@ -35,6 +35,7 @@ public protocol TextFile: StringComponent, DirectoryComponent {
     /// The encoding to use when the file is written to disk
     var encoding: String.Encoding { get }
 
+    var permissions: FilePermissions { get }
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
@@ -42,6 +43,8 @@ extension TextFile {
 
     public var encoding: String.Encoding { .utf8 }
 
+    public var permissions: FilePermissions { .default }
+    
     public func _serialize() -> [SerializedDirectoryContent] {
         [
             .file(
@@ -49,8 +52,9 @@ extension TextFile {
                     name,
                     content: .text(
                         String(self),
-                        encoding
-                    )
+                        encoding,
+                    ),
+                    permissions: permissions
                 )
             )
         ]

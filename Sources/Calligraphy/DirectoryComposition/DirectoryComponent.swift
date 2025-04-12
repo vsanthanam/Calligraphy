@@ -69,22 +69,27 @@ extension SerializedDirectoryContent.File {
     fileprivate func write(
         to fileURL: URL
     ) async throws {
-        switch content {
-        case let .data(data):
-            try data.write(
-                to: fileURL,
-                options: .withoutOverwriting
-            )
-        case let .text(text, encoding):
-            try text.write(
-                to: fileURL,
-                atomically: false,
-                encoding: encoding
-            )
-        }
+        let data = try await serialize()
+        try data.write(to: fileURL, options: .withoutOverwriting)
+        let attributes: [FileAttributeKey: Any] = [
+            .posixPermissions: permissions.rawValue
+        ]
+        try FileManager.default.setAttributes(attributes, ofItemAtPath: fileURL.path)
         try Task.checkCancellation()
     }
-
+    
+    private func serialize() async throws -> Data {
+        switch content {
+        case let .data(data):
+            return data
+        case let .text(text, encoding):
+            guard let data = text.data(using: encoding) else {
+                throw DiskOperationError("Invalid String Encoding")
+            }
+            try Task.checkCancellation()
+            return data
+        }
+    }
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)

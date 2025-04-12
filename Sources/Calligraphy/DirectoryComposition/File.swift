@@ -39,6 +39,7 @@ public struct File: DirectoryComponent {
     public init(
         _ name: String,
         encoding: String.Encoding = .utf8,
+        permissions: FilePermissions = .default,
         @StringBuilder text: () -> some StringComponent
     ) {
         self.init(
@@ -46,7 +47,8 @@ public struct File: DirectoryComponent {
             .text(
                 String(components: text),
                 encoding
-            )
+            ),
+            permissions
         )
     }
 
@@ -60,6 +62,7 @@ public struct File: DirectoryComponent {
         _ name: String,
         extension: String,
         encoding: String.Encoding = .utf8,
+        permissions: FilePermissions = .default,
         @StringBuilder text: () -> some StringComponent
     ) {
         self.init(
@@ -68,7 +71,8 @@ public struct File: DirectoryComponent {
             .text(
                 String(components: text),
                 encoding
-            )
+            ),
+            permissions
         )
     }
 
@@ -80,11 +84,13 @@ public struct File: DirectoryComponent {
     public init(
         _ name: String,
         encoding: String.Encoding = .utf8,
+        permissions: FilePermissions = .default,
         text: String
     ) {
         self.init(
             name,
-            encoding: encoding
+            encoding: encoding,
+            permissions: permissions
         ) {
             text
         }
@@ -100,12 +106,14 @@ public struct File: DirectoryComponent {
         _ name: String,
         extension: String,
         encoding: String.Encoding = .utf8,
+        permissions: FilePermissions = .default,
         text: String
     ) {
         self.init(
             name,
             extension: `extension`,
-            encoding: encoding
+            encoding: encoding,
+            permissions: permissions
         ) {
             text
         }
@@ -117,13 +125,15 @@ public struct File: DirectoryComponent {
     ///   - data: The data in the file
     public init(
         _ name: String,
+        permissions: FilePermissions = .default,
         @DataBuilder data: () -> some DataComponent
     ) {
         self.init(
             name,
             .data(
                 Data(components: data)
-            )
+            ),
+            permissions
         )
     }
 
@@ -135,6 +145,7 @@ public struct File: DirectoryComponent {
     public init(
         _ name: String,
         extension: String,
+        permissions: FilePermissions = .default,
         @DataBuilder data: () -> some DataComponent
     ) {
         self.init(
@@ -142,7 +153,8 @@ public struct File: DirectoryComponent {
             `extension`,
             .data(
                 Data(components: data)
-            )
+            ),
+            permissions
         )
     }
 
@@ -191,23 +203,27 @@ public struct File: DirectoryComponent {
 
     private init(
         _ name: String,
-        _ content: SerializedDirectoryContent.File.Content
+        _ content: SerializedDirectoryContent.File.Content,
+        _ permissions: FilePermissions
     ) {
         backing = .init(
             name,
-            content: content
+            content: content,
+            permissions: permissions
         )
     }
 
     private init(
         _ name: String,
         _ extension: String,
-        _ content: SerializedDirectoryContent.File.Content
+        _ content: SerializedDirectoryContent.File.Content,
+        _ permissions: FilePermissions
     ) {
         let name = name + "." + `extension`
         self.init(
             name,
-            content
+            content,
+            permissions
         )
     }
 

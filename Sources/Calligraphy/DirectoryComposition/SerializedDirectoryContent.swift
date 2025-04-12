@@ -84,10 +84,12 @@ public enum SerializedDirectoryContent: Equatable, Sendable {
         ///   - content: The contents of the file
         public init(
             _ name: String,
-            content: Content
+            content: Content,
+            permissions: FilePermissions
         ) {
             self.name = name
             self.content = content
+            self.permissions = permissions
         }
 
         // MARK: - API
@@ -97,7 +99,9 @@ public enum SerializedDirectoryContent: Equatable, Sendable {
 
         /// The contents of the file
         public let content: Content
-
+        
+        public let permissions: FilePermissions
+        
         /// A serialized file's contents
         public enum Content: Equatable, Sendable {
 

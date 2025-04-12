@@ -35,7 +35,6 @@ To imperatively implement a string component that represents a Swift string, imp
 - ``mapLines(with:)``
 - ``prefixLines(with:)-(String)``
 - ``prefixLines(with:)-(()->StringComponent)``
-- ``spaced()``
 - ``suffixLines(with:)-(String)``
 - ``suffixLines(with:)-(()->StringComponent)``
 - ``tabbed(_:)``

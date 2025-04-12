@@ -22,7 +22,6 @@ Foo and also Bar
 - ``Line``
 - ``Lines``
 - ``Quoted``
-- ``Spaced``
 - ``Tabbed``
 - ``StringComponents``
 - ``DoubleQuote``
