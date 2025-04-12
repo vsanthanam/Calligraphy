@@ -23,13 +23,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/// A component of a declaratively composed string
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public protocol StringComponent: Sendable {
 
+    /// The type of data component representing the body of this string component.
+    ///
+    /// Typically, you do not need to explicitly spell out this type.
+    /// Instead. implement ``body`` using an opaque `some StringComponent` type, and allow the compiler to expand the result builder and choose the correct type to satisfy the protocol
     associatedtype Body: StringComponent = Never
 
+    /// The string this component represents
+    ///
+    /// If you implement the ``body`` property, you do not need to implement this property.
     var content: String? { get }
 
+    /// The sub components used to build this string component.
+    ///
+    /// If you implement the ``content`` property, you do not need to implement this property.
     @StringBuilder
     var body: Body { get }
 
