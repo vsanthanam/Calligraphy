@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensions.swift
+// Folder.swift
 //
 // MIT License
 //
@@ -24,20 +24,28 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension String {
+public struct Folder<T>: Directory where T: DirectoryComponent {
 
     // MARK: - Initializers
     
-    init(
-        _ component: some StringComponent
+    public init(
+        _ name: String,
+        @DirectoryContentBuilder contents: () -> T
     ) {
-        self = component.content ?? ""
+        self.name = name
+        self.contents = contents()
     }
+    
+    // MARK: - Directory
 
-    init(
-        @StringBuilder components: () -> some StringComponent
-    ) {
-        self.init(components())
+    public let name: String
+    
+    public var body: some DirectoryComponent {
+        contents
     }
+    
+    // MARK: - Private
+
+    private let contents: T
 
 }

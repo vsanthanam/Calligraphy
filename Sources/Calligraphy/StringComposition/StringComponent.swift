@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensions.swift
+// StringComponent.swift
 //
 // MIT License
 //
@@ -24,20 +24,45 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension String {
+public protocol StringComponent: Sendable {
 
-    // MARK: - Initializers
-    
-    init(
-        _ component: some StringComponent
-    ) {
-        self = component.content ?? ""
+    associatedtype Body: StringComponent = Never
+
+    var content: String? { get }
+
+    @StringBuilder
+    var body: Body { get }
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+extension Never: StringComponent {
+
+    public var content: String? {
+        fatalError()
     }
 
-    init(
-        @StringBuilder components: () -> some StringComponent
-    ) {
-        self.init(components())
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public extension StringComponent where Body == Never {
+
+    @available(*, unavailable)
+    var content: String? {
+        fatalError()
+    }
+
+    var body: Never {
+        fatalError("StringComponent \(Self.self) does not have a body. Do not invoke this property directly.")
+    }
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public extension StringComponent {
+
+    var content: String? {
+        body.content
     }
 
 }

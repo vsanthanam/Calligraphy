@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensions.swift
+// AnyDirectoryComponent.swift
 //
 // MIT License
 //
@@ -24,20 +24,24 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension String {
+public struct AnyDirectoryComponent: DirectoryComponent {
 
     // MARK: - Initializers
     
-    init(
-        _ component: some StringComponent
+    public init(
+        _ directoryComponent: some DirectoryComponent
     ) {
-        self = component.content ?? ""
+        __serialize = directoryComponent._serialize
+    }
+    
+    // MARK: - DirectoryComponent
+
+    public func _serialize() -> [SerializedDirectoryContent] {
+        __serialize()
     }
 
-    init(
-        @StringBuilder components: () -> some StringComponent
-    ) {
-        self.init(components())
-    }
+    // MARK: - Private
+    
+    private let __serialize: @Sendable () -> [SerializedDirectoryContent]
 
 }

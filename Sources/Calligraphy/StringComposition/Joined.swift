@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensions.swift
+// Joined.swift
 //
 // MIT License
 //
@@ -24,20 +24,60 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension String {
+extension StringComponent {
+
+    func joined(
+        separator: String
+    ) -> some StringComponent {
+        Joined(
+            separator: separator
+        ) {
+            self
+        }
+    }
+
+    func joined(
+        @StringBuilder by components: () -> some StringComponent
+    ) -> some StringComponent {
+        Joined(
+            content: { self },
+            separator: components
+        )
+    }
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public struct Joined<T, Separator>: StringComponent where T: StringComponent, Separator: StringComponent {
 
     // MARK: - Initializers
     
-    init(
-        _ component: some StringComponent
+    public init(
+        @StringBuilder content: () -> T,
+        @StringBuilder separator: () -> Separator
     ) {
-        self = component.content ?? ""
+        components = content()
+        self.separator = separator()
     }
 
-    init(
-        @StringBuilder components: () -> some StringComponent
-    ) {
-        self.init(components())
+    public init(
+        separator: String,
+        @StringBuilder content: () -> T
+    ) where Separator == RawStringComponent {
+        self.init(content: content) { separator }
     }
+
+    // MARK: - StringComponent
+    
+    public var content: String? {
+        StringBuilder.$separator.withValue(String(separator)) {
+            components.content
+        }
+    }
+    
+    // MARK: - Private
+
+    private let components: T
+    private let separator: Separator
 
 }

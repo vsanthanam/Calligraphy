@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensions.swift
+// EmptyDataComponent.swift
 //
 // MIT License
 //
@@ -23,21 +23,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import Foundation
+
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension String {
+public struct EmptyDataComponent: DataComponent {
 
     // MARK: - Initializers
     
-    init(
-        _ component: some StringComponent
-    ) {
-        self = component.content ?? ""
-    }
+    public init() {}
+    
+    // MARK: - DataComponent
 
-    init(
-        @StringBuilder components: () -> some StringComponent
-    ) {
-        self.init(components())
-    }
+    public let data: Data? = nil
 
 }

@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensions.swift
+// SuffixLines.swift
 //
 // MIT License
 //
@@ -24,20 +24,50 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension String {
+public extension StringComponent {
+
+    func suffixLines(
+        with suffix: String
+    ) -> some StringComponent {
+        suffixLines { suffix }
+    }
+
+    func suffixLines(
+        @StringBuilder with components: () -> some StringComponent
+    ) -> some StringComponent {
+        SuffixLines(
+            self,
+            components()
+        )
+    }
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+struct SuffixLines<Lines, Suffix>: StringComponent where Lines: StringComponent, Suffix: StringComponent {
 
     // MARK: - Initializers
     
     init(
-        _ component: some StringComponent
+        _ lines: Lines,
+        _ suffix: Suffix
     ) {
-        self = component.content ?? ""
+        self.lines = lines
+        self.suffix = suffix
+    }
+    
+    // MARK: - StringComponent
+
+    var body: some StringComponent {
+        lines
+            .mapLines { line in
+                line + suffix
+            }
     }
 
-    init(
-        @StringBuilder components: () -> some StringComponent
-    ) {
-        self.init(components())
-    }
+    // MARK: - Private
+    
+    private let lines: Lines
+    private let suffix: Suffix
 
 }

@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensions.swift
+// Lines.swift
 //
 // MIT License
 //
@@ -24,20 +24,47 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension String {
+public extension StringComponent {
+
+    func spacing(
+        _ count: Int
+    ) -> some StringComponent {
+        Lines(spacing: count) {
+            self
+        }
+    }
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public struct Lines<T>: StringComponent where T: StringComponent {
 
     // MARK: - Initializers
     
-    init(
-        _ component: some StringComponent
+    public init(
+        spacing: Int = 1,
+        @StringBuilder components: () -> T
     ) {
-        self = component.content ?? ""
+        self.spacing = spacing
+        self.components = components()
     }
 
-    init(
-        @StringBuilder components: () -> some StringComponent
-    ) {
-        self.init(components())
+    // MARK: - StringComponent
+    
+    public var body: some StringComponent {
+        components
+            .joined {
+                Line {
+                    for _ in 0..<spacing {
+                        NewLine()
+                    }
+                }
+            }
     }
+    
+    // MARK: - Private
+
+    private let spacing: Int
+    private let components: T
 
 }

@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensions.swift
+// DataComponents.swift
 //
 // MIT License
 //
@@ -24,20 +24,24 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension String {
+public struct DataComponents<T>: DataComponent where T: DataComponent {
 
     // MARK: - Initializers
     
-    init(
-        _ component: some StringComponent
+    public init(
+        @DataBuilder components: () -> T
     ) {
-        self = component.content ?? ""
+        self.components = components()
+    }
+    
+    // MARK: - DataComponent
+
+    public var body: some DataComponent {
+        components
     }
 
-    init(
-        @StringBuilder components: () -> some StringComponent
-    ) {
-        self.init(components())
-    }
+    // MARK: - Private
+    
+    private let components: T
 
 }

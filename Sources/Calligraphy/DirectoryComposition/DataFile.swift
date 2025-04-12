@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensions.swift
+// DataFile.swift
 //
 // MIT License
 //
@@ -23,21 +23,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import Foundation
+
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension String {
+public protocol DataFile: DataComponent, DirectoryComponent {
 
-    // MARK: - Initializers
-    
-    init(
-        _ component: some StringComponent
-    ) {
-        self = component.content ?? ""
-    }
+    var name: String { get }
 
-    init(
-        @StringBuilder components: () -> some StringComponent
-    ) {
-        self.init(components())
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public extension DataFile {
+
+    func _serialize() -> [SerializedDirectoryContent] {
+        [
+            .file(
+                .init(
+                    name,
+                    content: .binary(Data(self))
+                )
+            )
+        ]
     }
 
 }

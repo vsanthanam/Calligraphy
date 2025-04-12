@@ -1,57 +1,55 @@
 # ``Calligraphy``
 
-A declarative library for composing strings, text, files, and folders in Swift
+A declarative API for composing multi-line strings, files, and folders in Swift
 
 ## Overview
 
-Calligraphy is a declarative API for composing multi-line strings together using readiable, clear syntax. It also contains declarative APIs to help you compose file and directories together, and to write those files and directories to disk. It can be useful for applications such as code generation.
-
-## Getting Started
-
-@Links(visualStyle: compactGrid) {
-    - <doc:Installation>
-    - <doc:BuildingStrings>
-    - <doc:TutorialsHome>
-}
+Foo and also Bar
 
 ## Topics
 
 ### String Composition
 
-- ``Calligraphy``
-- ``Stroke``
+- ``AnyStringComponent``
+- ``Delimited``
+- ``DoubleQuote``
+- ``EmptyStringComponent``
+- ``Frozen``
+- ``Joined``
 - ``Line``
 - ``Lines``
-- ``Joined``
-- ``NewLine``
-- ``Tab``
-- ``Space``
 - ``QuotationMark``
-- ``SingleQuote``
-- ``DoubleQuote``
-- ``TripleQuote``
-- ``BlockQuote``
-- ``StringStroke``
-- ``Strokes``
-- ``Tabbed``
-- ``Delimited``
 - ``Quoted``
-- ``Zipped``
-- ``AnyStroke``
-- ``EmptyStroke``
+- ``NewLine``
+- ``NewLines``
+- ``RawStringComponent``
+- ``SingleQuote``
+- ``Space``
+- ``StringBuilder``
+- ``StringComponent``
+- ``StringComponents``
+- ``Tab``
+- ``Tabbed``
+- ``TripleQuote``
 
 ### Directory Composition
 
-- ``DirectoryContent``
+- ``AnyDirectoryComponent``
 - ``DataFile``
-- ``DataBuilder``
-- ``TextFile``
 - ``Directory``
+- ``DirectoryComponent``
 - ``DirectoryContentBuilder``
+- ``EmptyDirectoryComponent``
 - ``File``
-- ``BinaryFile``
 - ``Folder``
-- ``DirectoryContents``
 - ``SerializedDirectoryContent``
-- ``AnyDirectoryContent``
-- ``EmptyDirectoryContent``
+- ``TextFile``
+
+### Data Composition
+
+- ``AnyDataComponent``
+- ``DataBuilder``
+- ``DataComponent``
+- ``DataComponents``
+- ``EmptyDataComponent``
+- ``RawDataComponent``

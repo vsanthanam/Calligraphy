@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensions.swift
+// PrefixLines.swift
 //
 // MIT License
 //
@@ -24,20 +24,47 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension String {
+public extension StringComponent {
 
-    // MARK: - Initializers
+    func prefixLines(
+        with prefix: String
+    ) -> some StringComponent {
+        prefixLines { prefix }
+    }
+
+    func prefixLines(
+        @StringBuilder with components: () -> some StringComponent
+    ) -> some StringComponent {
+        PrefixLines(
+            self,
+            components()
+        )
+    }
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+struct PrefixLines<Lines, Prefix>: StringComponent where Lines: StringComponent, Prefix: StringComponent {
     
-    init(
-        _ component: some StringComponent
-    ) {
-        self = component.content ?? ""
+    // MARK: - StringComponent
+
+    var body: some StringComponent {
+        lines
+            .mapLines { line in
+                prefix + line
+            }
     }
 
-    init(
-        @StringBuilder components: () -> some StringComponent
+    // MARK: - Private
+    
+    fileprivate init(
+        _ lines: Lines,
+        _ prefix: Prefix
     ) {
-        self.init(components())
+        self.lines = lines
+        self.prefix = prefix
     }
+    
+    private let lines: Lines
+    private let prefix: Prefix
 
 }

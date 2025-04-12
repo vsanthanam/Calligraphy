@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensions.swift
+// Tabbed.swift
 //
 // MIT License
 //
@@ -24,20 +24,45 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension String {
+public extension StringComponent {
+
+    func tabbed(
+        numberOfTabs: Int = 1
+    ) -> some StringComponent {
+        Tabbed(numberOfTabs) { self }
+    }
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public struct Tabbed<T>: StringComponent where T: StringComponent {
 
     // MARK: - Initializers
     
-    init(
-        _ component: some StringComponent
+    public init(
+        _ numberOfTabs: Int = 1,
+        @StringBuilder components: () -> T
     ) {
-        self = component.content ?? ""
+        self.numberOfTabs = numberOfTabs
+        self.components = components()
     }
 
-    init(
-        @StringBuilder components: () -> some StringComponent
-    ) {
-        self.init(components())
+    // MARK: - StringComponent
+    
+    public var body: some StringComponent {
+        components
+            .prefixLines {
+                Line {
+                    for _ in 0 ..< numberOfTabs {
+                        Tab()
+                    }
+                }
+            }
     }
+    
+    // MARK: - Private
+
+    private let numberOfTabs: Int
+    private let components: T
 
 }

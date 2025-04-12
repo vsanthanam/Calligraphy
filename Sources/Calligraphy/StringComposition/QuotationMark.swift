@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensions.swift
+// QuotationMark.swift
 //
 // MIT License
 //
@@ -24,20 +24,30 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension String {
+public struct QuotationMark: StringComponent {
 
     // MARK: - Initializers
     
-    init(
-        _ component: some StringComponent
-    ) {
-        self = component.content ?? ""
+    public init(_ type: Type) {
+        self.type = type
     }
+    
+    // MARK: - API
 
-    init(
-        @StringBuilder components: () -> some StringComponent
-    ) {
-        self.init(components())
+    public enum `Type`: String, Equatable, Sendable {
+        case single = "'"
+        case double = "\""
+        case triple = "'''"
     }
+    
+    // MARK: - StringComponent
+
+    public var body: some StringComponent {
+        type
+    }
+    
+    // MARK: - Private
+
+    private let type: `Type`
 
 }

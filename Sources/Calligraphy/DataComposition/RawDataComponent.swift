@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensions.swift
+// RawDataComponent.swift
 //
 // MIT License
 //
@@ -23,21 +23,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import Foundation
+
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension String {
+public struct RawDataComponent: DataComponent {
 
     // MARK: - Initializers
     
-    init(
-        _ component: some StringComponent
-    ) {
-        self = component.content ?? ""
+    public init(_ value: Data) {
+        self.value = value
     }
 
-    init(
-        @StringBuilder components: () -> some StringComponent
-    ) {
-        self.init(components())
+    // MARK: - API
+    
+    public let value: Data
+
+    // MARK: - DataComponent
+    
+    public var data: Data? {
+        value
     }
 
 }

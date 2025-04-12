@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensions.swift
+// Map.swift
 //
 // MIT License
 //
@@ -24,20 +24,45 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension String {
+extension StringComponent {
+
+    func map(
+        _ fn: @Sendable @escaping (String?) -> String?
+    ) -> some StringComponent {
+        Map(self, fn)
+    }
+
+    func map(
+        @StringBuilder with components: @Sendable @escaping (String?) -> some StringComponent
+    ) -> some StringComponent {
+        Map(self) { content in
+            String(components(content))
+        }
+    }
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+private struct Map<T>: StringComponent where T: StringComponent {
 
     // MARK: - Initializers
     
     init(
-        _ component: some StringComponent
+        _ upstream: T,
+        _ fn: @Sendable @escaping (String?) -> String?
     ) {
-        self = component.content ?? ""
+        self.upstream = upstream
+        self.fn = fn
     }
-
-    init(
-        @StringBuilder components: () -> some StringComponent
-    ) {
-        self.init(components())
+    
+    // MARK: - StringComponent
+    
+    var content: String? {
+        fn(upstream.content)
     }
+    
+    // MARK: - Private
 
+    private let upstream: T
+    private let fn: @Sendable (String?) -> String?
 }
