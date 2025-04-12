@@ -28,7 +28,7 @@
 public struct Folder<T>: Directory where T: DirectoryComponent {
 
     // MARK: - Initializers
-    
+
     /// Create a folder
     /// - Parameters:
     ///   - name: The name of the folder

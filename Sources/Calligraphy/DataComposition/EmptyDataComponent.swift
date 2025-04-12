@@ -30,7 +30,7 @@ import Foundation
 public struct EmptyDataComponent: DataComponent {
 
     // MARK: - Initializers
-    
+
     /// Create an empty data component
     public init() {}
 

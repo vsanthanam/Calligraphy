@@ -30,7 +30,7 @@ import Foundation
 public struct RawDataComponent: DataComponent {
 
     // MARK: - Initializers
-    
+
     /// Create a raw data component
     /// - Parameter value: The value
     public init(
@@ -40,7 +40,7 @@ public struct RawDataComponent: DataComponent {
     }
 
     // MARK: - API
-    
+
     /// The raw data in the component
     public let value: Data
 

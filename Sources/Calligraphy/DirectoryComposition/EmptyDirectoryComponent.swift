@@ -28,7 +28,7 @@
 public struct EmptyDirectoryComponent: DirectoryComponent {
 
     // MARK: - Initializers
-    
+
     /// Create an empty directory component
     public init() {}
 

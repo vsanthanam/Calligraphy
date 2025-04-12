@@ -28,7 +28,7 @@
 public struct AnyStringComponent: StringComponent {
 
     // MARK: - Initializers
-    
+
     /// Create a type-erased string component
     /// - Parameter component: The string component to type-erase
     public init(
@@ -38,7 +38,7 @@ public struct AnyStringComponent: StringComponent {
     }
 
     // MARK: - StringComponent
-    
+
     public var content: String? {
         _content()
     }

@@ -34,7 +34,7 @@ public protocol DataComponent: Sendable {
     /// Typically, you do not need to explicitly spell out this type.
     /// Instead. implement ``body`` using an opaque type, and allow the compiler to expand the result builder and choose the correct type to satisfy the protocol
     associatedtype Body: DataComponent = Never
-    
+
     /// The data contained in the coponent
     ///
     /// If you implement the ``body`` property, you do not need to implement this property.

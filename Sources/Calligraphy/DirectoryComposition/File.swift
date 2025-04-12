@@ -30,7 +30,7 @@ import Foundation
 public struct File: DirectoryComponent {
 
     // MARK: - Initializers
-    
+
     /// Create a text file, declaratively
     /// - Parameters:
     ///   - name: The name of the file
@@ -49,7 +49,7 @@ public struct File: DirectoryComponent {
             )
         )
     }
-    
+
     /// Create a text file with a file extension, declaratively
     /// - Parameters:
     ///   - name: The name of the file
@@ -126,7 +126,7 @@ public struct File: DirectoryComponent {
             )
         )
     }
-    
+
     /// Create a data file with a file extension, declaratively
     /// - Parameters:
     ///   - name: The name of the file

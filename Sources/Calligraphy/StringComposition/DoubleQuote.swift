@@ -28,7 +28,7 @@
 public struct DoubleQuote: StringComponent {
 
     // MARK: - Initializers
-    
+
     /// Create a double quote
     public init() {}
 

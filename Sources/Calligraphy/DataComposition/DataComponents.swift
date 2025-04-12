@@ -28,7 +28,7 @@
 public struct DataComponents<T>: DataComponent where T: DataComponent {
 
     // MARK: - Initializers
-    
+
     /// Assemble data components together, declaratively
     /// - Parameter components: The components to assemble
     public init(

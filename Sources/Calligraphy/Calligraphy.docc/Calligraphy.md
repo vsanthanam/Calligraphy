@@ -8,29 +8,33 @@ Foo and also Bar
 
 ## Topics
 
+### Getting Started
+
+- <doc:Installation>
+
 ### String Composition
 
-- ``AnyStringComponent``
+- ``StringComponent``
+- ``StringBuilder``
 - ``Delimited``
-- ``DoubleQuote``
-- ``EmptyStringComponent``
 - ``Frozen``
 - ``Joined``
 - ``Line``
 - ``Lines``
-- ``QuotationMark``
 - ``Quoted``
+- ``Spaced``
+- ``Tabbed``
+- ``StringComponents``
+- ``DoubleQuote``
+- ``QuotationMark``
 - ``NewLine``
 - ``RawStringComponent``
 - ``SingleQuote``
 - ``Space``
-- ``Spaced``
-- ``StringBuilder``
-- ``StringComponent``
-- ``StringComponents``
 - ``Tab``
-- ``Tabbed``
 - ``TripleQuote``
+- ``EmptyStringComponent``
+- ``AnyStringComponent``
 
 ### Directory Composition
 

@@ -28,7 +28,7 @@
 public struct AnyDirectoryComponent: DirectoryComponent {
 
     // MARK: - Initializers
-    
+
     /// Create a type-erased directory component
     /// - Parameter directoryComponent: The directory component to type-erase
     public init(

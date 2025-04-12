@@ -40,7 +40,7 @@ public struct Frozen: StringComponent {
     public init(
         @StringBuilder components: () -> some StringComponent
     ) {
-        self.content = components().content
+        content = components().content
     }
 
     public let content: String?
