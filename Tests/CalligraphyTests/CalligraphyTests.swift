@@ -37,12 +37,11 @@ func example() async throws {
             "baz"
         }
         .delimited(by: "|")
+        .joined(separator: "-")
     })
 
     let expected = """
-    |foo
-    bar
-    baz|
+    |foo-bar-baz|
     """
 
     #expect(str == expected)

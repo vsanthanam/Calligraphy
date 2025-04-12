@@ -198,17 +198,21 @@ public enum StringBuilder {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @StringBuilder
 public func + (_ lhs: some StringComponent, _ rhs: some StringComponent) -> some StringComponent {
-    Line {
-        lhs
-        rhs
+    if let lhs = lhs.content, let rhs = rhs.content {
+        lhs + rhs
+    } else if let lhs = lhs.content {
+        lhs + rhs
+    } else if let rhs = rhs.content {
+        lhs + rhs
     }
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @StringBuilder
 public func + (_ lhs: some StringComponent, _ rhs: some StringProtocol) -> some StringComponent {
-    Line {
-        lhs
+    if let lhs = lhs.content {
+        lhs + String(rhs)
+    } else {
         rhs
     }
 }
@@ -216,8 +220,9 @@ public func + (_ lhs: some StringComponent, _ rhs: some StringProtocol) -> some 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @StringBuilder
 public func + (_ lhs: some StringProtocol, _ rhs: some StringComponent) -> some StringComponent {
-    Line {
+    if let rhs = rhs.content {
+        String(lhs) + rhs
+    } else {
         lhs
-        rhs
     }
 }
