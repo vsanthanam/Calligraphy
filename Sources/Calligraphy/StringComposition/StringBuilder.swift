@@ -64,20 +64,16 @@ public enum StringBuilder {
         EmptyStringComponent()
     }
 
-    public static func buildPartialBlock<T>(
-        first: T
+    public static func buildBlock<T>(
+        _ component: T
     ) -> T where T: StringComponent {
-        first
+        component
     }
 
-    public static func buildPartialBlock<each Accumulated, Next>(
-        accumulated: repeat each Accumulated,
-        next: Next
-    ) -> _Accumulate<repeat each Accumulated, Next> where repeat each Accumulated: StringComponent, Next: StringComponent {
-        .init(
-            accumulated: repeat each accumulated,
-            next: next
-        )
+    public static func buildBlock<each Component>(
+        _ components: repeat each Component
+    ) -> _Block<repeat each Component> where repeat each Component: StringComponent {
+        .init(components: repeat each components)
     }
 
     public static func buildEither<First, Second>(
@@ -115,7 +111,7 @@ public enum StringBuilder {
         AnyStringComponent(component)
     }
 
-    public struct _Accumulate<each Accumulated, Next>: StringComponent where repeat each Accumulated: StringComponent, Next: StringComponent {
+    public struct _Block<each Component>: StringComponent where repeat each Component: StringComponent {
 
         // MARK: - StringComponent
 
@@ -131,25 +127,19 @@ public enum StringBuilder {
                     result = content
                 }
             }
-            for component in repeat each accumulated {
+            for component in repeat each components {
                 append(component)
             }
-            append(next)
             return result
         }
 
         // MARK: - Private
 
-        fileprivate init(
-            accumulated: repeat each Accumulated,
-            next: Next
-        ) {
-            self.accumulated = (repeat (each accumulated))
-            self.next = next
+        fileprivate init(components: repeat each Component) {
+            self.components = (repeat (each components))
         }
 
-        private let accumulated: (repeat (each Accumulated))
-        private let next: Next
+        private let components: (repeat (each Component))
 
     }
 

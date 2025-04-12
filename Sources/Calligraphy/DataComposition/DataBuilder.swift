@@ -74,20 +74,16 @@ public enum DataBuilder {
         EmptyDataComponent()
     }
 
-    public static func buildPartialBlock<T>(
-        first: T
+    public static func buildBlock<T>(
+        _ component: T
     ) -> T where T: DataComponent {
-        first
+        component
     }
 
-    public static func buildPartialBlock<each Accumulated, Next>(
-        accumulated: repeat each Accumulated,
-        next: Next
-    ) -> _Accumulate<repeat each Accumulated, Next> where repeat each Accumulated: DataComponent, Next: DataComponent {
-        .init(
-            accumulated: repeat each accumulated,
-            next: next
-        )
+    public static func buildBlock<each Component>(
+        _ components: repeat each Component
+    ) -> _Block<repeat each Component> where repeat each Component: DataComponent {
+        .init(components: repeat each components)
     }
 
     public static func buildEither<First, Second>(
@@ -125,7 +121,7 @@ public enum DataBuilder {
         AnyDataComponent(component)
     }
 
-    public struct _Accumulate<each Accumulated, Next>: DataComponent where repeat each Accumulated: DataComponent, Next: DataComponent {
+    public struct _Block<each Component>: DataComponent where repeat each Component: DataComponent {
 
         // MARK: - DataComponent
 
@@ -141,25 +137,19 @@ public enum DataBuilder {
                     result = data
                 }
             }
-            for component in repeat each accumulated {
+            for component in repeat each components {
                 append(component)
             }
-            append(next)
             return result
         }
 
         // MARK: - Private
 
-        fileprivate init(
-            accumulated: repeat each Accumulated,
-            next: Next
-        ) {
-            self.accumulated = (repeat (each accumulated))
-            self.next = next
+        fileprivate init(components: repeat each Component) {
+            self.components = (repeat (each components))
         }
 
-        private let accumulated: (repeat (each Accumulated))
-        private let next: Next
+        private let components: (repeat (each Component))
 
     }
 

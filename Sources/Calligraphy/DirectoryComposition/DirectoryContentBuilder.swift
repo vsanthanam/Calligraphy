@@ -81,20 +81,16 @@ public enum DirectoryContentBuilder {
         EmptyDirectoryComponent()
     }
 
-    public static func buildPartialBlock<T>(
-        first: T
+    public static func buildBlock<T>(
+        _ component: T
     ) -> T where T: DirectoryComponent {
-        first
+        component
     }
 
-    public static func buildPartialBlock<each Accumulated, Next>(
-        accumulated: repeat each Accumulated,
-        next: Next
-    ) -> _Accumulate<repeat each Accumulated, Next> where repeat each Accumulated: DirectoryComponent, Next: DirectoryComponent {
-        .init(
-            accumulated: repeat each accumulated,
-            next: next
-        )
+    public static func buildBlock<each Component>(
+        _ components: repeat each Component
+    ) -> _Block<repeat each Component> where repeat each Component: DirectoryComponent {
+        .init(components: repeat each components)
     }
 
     public static func buildEither<First, Second>(
@@ -146,31 +142,27 @@ public enum DirectoryContentBuilder {
 
     }
 
-    public struct _Accumulate<each Accumulated, Next>: DirectoryComponent where repeat each Accumulated: DirectoryComponent, Next: DirectoryComponent {
+    public struct _Block<each Component>: DirectoryComponent where repeat each Component: DirectoryComponent {
 
         // MARK: - DirectoryComponent
 
         public func _serialize() -> [SerializedDirectoryContent] {
             var result = [SerializedDirectoryContent]()
-            for component in repeat each accumulated {
+            for component in repeat each components {
                 result += component._serialize()
             }
-            result += next._serialize()
             return result
         }
 
         // MARK: - Private
 
         fileprivate init(
-            accumulated: repeat each Accumulated,
-            next: Next
+            components: repeat each Component
         ) {
-            self.accumulated = (repeat (each accumulated))
-            self.next = next
+            self.components = (repeat (each components))
         }
 
-        private let accumulated: (repeat (each Accumulated))
-        private let next: Next
+        private let components: (repeat (each Component))
 
     }
 
