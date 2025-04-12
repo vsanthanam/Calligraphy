@@ -25,7 +25,10 @@
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
-
+    
+    /// Add a delimiter to the start and end of the upstream
+    /// - Parameter delimiter: The delimiter used to frame both sides of the upstream
+    /// - Returns: The delimited upstream
     public func delimited(
         by delimiter: String
     ) -> some StringComponent {
@@ -36,6 +39,9 @@ extension StringComponent {
         }
     }
 
+    /// Add a declarative delimiter to the start and end of the upstream
+    /// - Parameter components: The delimiter used to frame both sides of the upstream
+    /// - Returns: The delimited upstream
     public func delimited(
         @StringBuilder with components: () -> some StringComponent
     ) -> some StringComponent {
@@ -47,18 +53,27 @@ extension StringComponent {
 
 }
 
+/// A delimited string component
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct Delimited<T, Delimiter>: StringComponent where T: StringComponent, Delimiter: StringComponent {
 
     // MARK: - Initializers
-
+    
+    /// Create a delimted string component
+    /// - Parameters:
+    ///   - delimiter: The delimiter to use on either side
+    ///   - components: The components to delimit
     public init(
         by delimiter: String,
         @StringBuilder components: () -> T
     ) where Delimiter == RawStringComponent {
         self.init(components: components) { delimiter }
     }
-
+    
+    /// Create a delimited string component
+    /// - Parameters:
+    ///   - components: The components to delimit
+    ///   - delimiter: The delimiter to use on either side
     public init(
         @StringBuilder components: () -> T,
         @StringBuilder delimiter: () -> Delimiter
