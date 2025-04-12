@@ -85,7 +85,13 @@ public struct Delimited<T, Delimiter>: StringComponent where T: StringComponent,
     // MARK: - StringComponent
 
     public var body: some StringComponent {
-        delimiter + components.frozen() + delimiter
+        if let delimiterText = delimiter.content {
+            if let componentsText = components.content {
+                delimiterText + componentsText + delimiterText
+            }
+        } else {
+            components
+        }
     }
 
     // MARK: - Private
