@@ -25,7 +25,7 @@
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
-    
+
     /// Join the upstreams together using a separator
     /// - Parameter separator: The separator used to join the components
     /// - Returns: The joined string components
@@ -38,7 +38,7 @@ extension StringComponent {
             self
         }
     }
-    
+
     /// Join the upstreams together using a declarative separator
     /// - Parameter components: The separator used to join the components
     /// - Returns: The joined string components
@@ -58,7 +58,7 @@ extension StringComponent {
 public struct Joined<T, Separator>: StringComponent where T: StringComponent, Separator: StringComponent {
 
     // MARK: - Initializers
-    
+
     /// Create a joined string component
     /// - Parameters:
     ///   - content: The string components to join
@@ -70,7 +70,7 @@ public struct Joined<T, Separator>: StringComponent where T: StringComponent, Se
         components = content()
         self.separator = separator()
     }
-    
+
     /// Create a joined string component
     /// - Parameters:
     ///   - separator: The separator used to join the components

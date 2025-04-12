@@ -36,12 +36,21 @@ public enum SerializedDirectoryContent: Equatable, Sendable {
 
     /// A file
     case file(File)
-    
+
+    public var name: String {
+        switch self {
+        case let .directory(directory):
+            directory.name
+        case let .file(file):
+            file.name
+        }
+    }
+
     /// A serialized directory
     public struct Directory: Equatable, Sendable {
 
         // MARK: - Initializers
-        
+
         /// Create a serialized directory
         /// - Parameters:
         ///   - name: The name of the directory
@@ -55,20 +64,20 @@ public enum SerializedDirectoryContent: Equatable, Sendable {
         }
 
         // MARK: - API
-        
+
         /// The name of the directory
         public let name: String
-        
+
         /// The directory's children
         public let children: [SerializedDirectoryContent]
 
     }
-    
+
     /// A serialized file
     public struct File: Equatable, Sendable {
 
         // MARK: - Initializers
-        
+
         /// Create a serialized file
         /// - Parameters:
         ///   - name: The name of the file
@@ -82,13 +91,13 @@ public enum SerializedDirectoryContent: Equatable, Sendable {
         }
 
         // MARK: - API
-        
+
         /// The name of the file
         public let name: String
-        
+
         /// The contents of the file
         public let content: Content
-        
+
         /// A serialized file's contents
         public enum Content: Equatable, Sendable {
 

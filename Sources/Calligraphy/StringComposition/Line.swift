@@ -28,7 +28,7 @@
 public struct Line<T>: StringComponent where T: StringComponent {
 
     // MARK: - Initializers
-    
+
     /// The components to join together in a single line
     /// - Parameter components: The components to join
     public init(

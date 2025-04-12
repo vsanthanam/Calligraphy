@@ -30,7 +30,7 @@ import Foundation
 public struct AnyDataComponent: DataComponent {
 
     // MARK: - Initializers
-    
+
     /// Create a type-erased data component
     /// - Parameter component: The data component to type-erase
     public init(

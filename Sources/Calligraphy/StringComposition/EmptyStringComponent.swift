@@ -28,7 +28,7 @@
 public struct EmptyStringComponent: StringComponent {
 
     // MARK: - Initializers
-    
+
     /// Create an empty string component
     public init() {}
 
