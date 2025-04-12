@@ -60,8 +60,8 @@ public enum StringBuilder {
         expression.rawValue
     }
 
-    public static func buildBlock() -> EmptyStringComponent {
-        EmptyStringComponent()
+    public static func buildBlock() -> _Skip {
+        .init()
     }
 
     public static func buildBlock<T>(
@@ -91,11 +91,11 @@ public enum StringBuilder {
     @StringBuilder
     public static func buildOptional<T>(
         _ component: T?
-    ) -> _Either<T, EmptyStringComponent> where T: StringComponent {
+    ) -> _Either<T, _Skip> where T: StringComponent {
         if let component {
             component
         } else {
-            EmptyStringComponent()
+            _Skip()
         }
     }
 
@@ -109,6 +109,14 @@ public enum StringBuilder {
         _ component: some StringComponent
     ) -> AnyStringComponent {
         AnyStringComponent(component)
+    }
+
+    public struct _Skip: StringComponent {
+
+        public let content: String? = nil
+
+        fileprivate init() {}
+
     }
 
     public struct _Block<each Component>: StringComponent where repeat each Component: StringComponent {

@@ -23,19 +23,21 @@ To imperatively implement a string component that represents a Swift string, imp
 - ``body``
 - ``content``
 
-### Operators
+### Modifiers
 
 - ``delimited(by:)``
 - ``delimited(with:)``
 - ``frozen()``
 - ``joined(separator:)``
 - ``joined(by:)``
-- ``lines(_:)``
+- ``lines(spacing:)``
+- ``map(_:)``
+- ``map(with:)``
 - ``mapLines(_:)``
 - ``mapLines(with:)``
 - ``prefixLines(with:)-(String)``
 - ``prefixLines(with:)-(()->StringComponent)``
-- ``spaced()``
+- ``quoted(_:)``
 - ``suffixLines(with:)-(String)``
 - ``suffixLines(with:)-(()->StringComponent)``
 - ``tabbed(_:)``

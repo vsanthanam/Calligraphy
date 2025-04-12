@@ -22,7 +22,6 @@ Foo and also Bar
 - ``Line``
 - ``Lines``
 - ``Quoted``
-- ``Spaced``
 - ``Tabbed``
 - ``StringComponents``
 - ``DoubleQuote``
@@ -33,7 +32,6 @@ Foo and also Bar
 - ``Space``
 - ``Tab``
 - ``TripleQuote``
-- ``EmptyStringComponent``
 - ``AnyStringComponent``
 
 ### Directory Composition

@@ -25,8 +25,8 @@
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
-    
-    /// Freeze the upstreams into a single component to prevent them from being modified by downstream operators
+
+    /// Freeze the upstreams into a single component to prevent them from being modified by downstream modifiers
     /// - Returns: The frozen upstream
     public func frozen() -> some StringComponent {
         Frozen { self }
@@ -39,7 +39,7 @@ extension StringComponent {
 public struct Frozen: StringComponent {
 
     // MARK: - Initializers
-    
+
     /// Create a frozen string compnent
     /// - Parameter components: The components to freeze
     public init(
@@ -47,7 +47,7 @@ public struct Frozen: StringComponent {
     ) {
         content = components().content
     }
-    
+
     // MARK: - StringComponent
 
     public let content: String?

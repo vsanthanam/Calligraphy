@@ -1,5 +1,5 @@
 // Calligraphy
-// Quoted.swift
+// QuotationMarkTests.swift
 //
 // MIT License
 //
@@ -23,42 +23,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-extension StringComponent {
+import Calligraphy
+import Testing
 
-    public func quoted(
-        _ markType: QuotationMark.`Type` = .double
-    ) -> some StringComponent {
-        Quoted(markType) { self }
+@Suite
+struct QuotationMarkTests {
+
+    @Test
+    func single() {
+        let mark = QuotationMark(.single)
+        #expect(mark.build() == "'")
     }
 
-}
-
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Quoted<T>: StringComponent where T: StringComponent {
-
-    // MARK: - Initializers
-
-    public init(
-        _ markType: QuotationMark.`Type` = .double,
-        @StringBuilder components: () -> T
-    ) {
-        self.markType = markType
-        self.components = components()
+    @Test
+    func double() {
+        let mark = QuotationMark(.double)
+        #expect(mark.build() == "\"")
     }
 
-    // MARK: - StringComponent
-
-    public var body: some StringComponent {
-        components
-            .delimited {
-                QuotationMark(markType)
-            }
+    @Test
+    func triple() {
+        let mark = QuotationMark(.triple)
+        #expect(mark.build() == "'''")
     }
-
-    // MARK: - Private
-
-    private let components: T
-    private let markType: QuotationMark.`Type`
 
 }

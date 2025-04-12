@@ -27,7 +27,7 @@
 extension StringComponent {
 
     public func lines(
-        _ spacing: Int
+        spacing: Int
     ) -> some StringComponent {
         Lines(spacing: spacing) {
             self
@@ -45,7 +45,8 @@ public struct Lines<T>: StringComponent where T: StringComponent {
         spacing: Int = 1,
         @StringBuilder components: () -> T
     ) {
-        self.spacing = spacing
+        assert(spacing > 0, "Spacing must be greater than zero")
+        self.spacing = spacing > 0 ? spacing : 1
         self.components = components()
     }
 
