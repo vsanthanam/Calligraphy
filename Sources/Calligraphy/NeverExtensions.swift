@@ -24,9 +24,9 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension Never {
+extension Never {
 
-    var body: Never {
+    public var body: Never {
         fatalError()
     }
 

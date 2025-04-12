@@ -35,11 +35,11 @@ public protocol TextFile: StringComponent, DirectoryComponent {
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension TextFile {
+extension TextFile {
 
-    var encoding: String.Encoding { .utf8 }
+    public var encoding: String.Encoding { .utf8 }
 
-    func _serialize() -> [SerializedDirectoryContent] {
+    public func _serialize() -> [SerializedDirectoryContent] {
         [
             .file(
                 .init(

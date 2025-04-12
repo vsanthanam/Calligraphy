@@ -27,13 +27,13 @@
 public struct AnyDirectoryComponent: DirectoryComponent {
 
     // MARK: - Initializers
-    
+
     public init(
         _ directoryComponent: some DirectoryComponent
     ) {
         __serialize = directoryComponent._serialize
     }
-    
+
     // MARK: - DirectoryComponent
 
     public func _serialize() -> [SerializedDirectoryContent] {
@@ -41,7 +41,7 @@ public struct AnyDirectoryComponent: DirectoryComponent {
     }
 
     // MARK: - Private
-    
+
     private let __serialize: @Sendable () -> [SerializedDirectoryContent]
 
 }

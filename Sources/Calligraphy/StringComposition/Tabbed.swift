@@ -24,9 +24,9 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension StringComponent {
+extension StringComponent {
 
-    func tabbed(
+    public func tabbed(
         numberOfTabs: Int = 1
     ) -> some StringComponent {
         Tabbed(numberOfTabs) { self }
@@ -38,7 +38,7 @@ public extension StringComponent {
 public struct Tabbed<T>: StringComponent where T: StringComponent {
 
     // MARK: - Initializers
-    
+
     public init(
         _ numberOfTabs: Int = 1,
         @StringBuilder components: () -> T
@@ -48,7 +48,7 @@ public struct Tabbed<T>: StringComponent where T: StringComponent {
     }
 
     // MARK: - StringComponent
-    
+
     public var body: some StringComponent {
         components
             .prefixLines {
@@ -59,7 +59,7 @@ public struct Tabbed<T>: StringComponent where T: StringComponent {
                 }
             }
     }
-    
+
     // MARK: - Private
 
     private let numberOfTabs: Int

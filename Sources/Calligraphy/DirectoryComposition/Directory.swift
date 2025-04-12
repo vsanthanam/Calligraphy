@@ -49,27 +49,27 @@ extension Never: DirectoryComponent {
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension Directory where Body == Never {
+extension Directory where Body == Never {
 
     @available(*, unavailable)
-    func _serialize() -> [SerializedDirectoryContent] {
+    public func _serialize() -> [SerializedDirectoryContent] {
         fatalError()
     }
 
-    var body: Never {
+    public var body: Never {
         fatalError("Directory \(Self.self) does not have a body. Do not invoke this property directly.")
     }
 
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension Directory {
+extension Directory {
 
-    var contents: [SerializedDirectoryContent] {
+    public var contents: [SerializedDirectoryContent] {
         body._serialize()
     }
 
-    func _serialize() -> [SerializedDirectoryContent] {
+    public func _serialize() -> [SerializedDirectoryContent] {
         [
             .directory(
                 .init(

@@ -69,7 +69,7 @@ public enum StringBuilder {
     ) -> T where T: StringComponent {
         first
     }
-    
+
     public static func buildPartialBlock<each Accumulated, Next>(
         accumulated: repeat each Accumulated,
         next: Next
@@ -79,7 +79,7 @@ public enum StringBuilder {
             next: next
         )
     }
-    
+
     public static func buildEither<First, Second>(
         first component: First
     ) -> _Either<First, Second> where First: StringComponent, Second: StringComponent {
@@ -137,9 +137,9 @@ public enum StringBuilder {
             append(next)
             return result
         }
-        
+
         // MARK: - Private
-        
+
         fileprivate init(
             accumulated: repeat each Accumulated,
             next: Next
@@ -156,12 +156,12 @@ public enum StringBuilder {
     public enum _Either<First, Second>: StringComponent where First: StringComponent, Second: StringComponent {
 
         // MARK: - API
-        
+
         case first(First)
         case second(Second)
 
         // MARK: - StringComponent
-        
+
         public var content: String? {
             switch self {
             case let .first(component):
@@ -189,13 +189,13 @@ public enum StringBuilder {
                     }
                 }
         }
-        
+
         // MARK: - Private
 
         fileprivate init(_ list: [Element]) {
             self.list = list
         }
-        
+
         private let list: [Element]
 
     }

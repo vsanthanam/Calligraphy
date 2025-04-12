@@ -27,9 +27,9 @@
 public struct EmptyDirectoryComponent: DirectoryComponent {
 
     // MARK: - Initializers
-    
+
     public init() {}
-    
+
     // MARK: - DirectoryComponent
 
     public func _serialize() -> [SerializedDirectoryContent] {

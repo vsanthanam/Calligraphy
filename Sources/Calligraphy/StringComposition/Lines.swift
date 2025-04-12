@@ -24,9 +24,9 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension StringComponent {
+extension StringComponent {
 
-    func spacing(
+    public func spacing(
         _ count: Int
     ) -> some StringComponent {
         Lines(spacing: count) {
@@ -40,7 +40,7 @@ public extension StringComponent {
 public struct Lines<T>: StringComponent where T: StringComponent {
 
     // MARK: - Initializers
-    
+
     public init(
         spacing: Int = 1,
         @StringBuilder components: () -> T
@@ -50,18 +50,18 @@ public struct Lines<T>: StringComponent where T: StringComponent {
     }
 
     // MARK: - StringComponent
-    
+
     public var body: some StringComponent {
         components
             .joined {
                 Line {
-                    for _ in 0..<spacing {
+                    for _ in 0 ..< spacing {
                         NewLine()
                     }
                 }
             }
     }
-    
+
     // MARK: - Private
 
     private let spacing: Int

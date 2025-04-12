@@ -38,7 +38,7 @@ extension StringComponent {
 public struct Quoted<T>: StringComponent where T: StringComponent {
 
     // MARK: - Initializers
-    
+
     public init(
         _ markType: QuotationMark.`Type` = .double,
         @StringBuilder components: () -> T
@@ -48,7 +48,7 @@ public struct Quoted<T>: StringComponent where T: StringComponent {
     }
 
     // MARK: - StringComponent
-    
+
     public var body: some StringComponent {
         components
             .delimited {
@@ -57,7 +57,7 @@ public struct Quoted<T>: StringComponent where T: StringComponent {
     }
 
     // MARK: - Private
-    
+
     private let components: T
     private let markType: QuotationMark.`Type`
 

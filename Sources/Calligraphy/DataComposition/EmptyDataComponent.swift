@@ -29,9 +29,9 @@ import Foundation
 public struct EmptyDataComponent: DataComponent {
 
     // MARK: - Initializers
-    
+
     public init() {}
-    
+
     // MARK: - DataComponent
 
     public let data: Data? = nil

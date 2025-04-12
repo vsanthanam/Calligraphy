@@ -24,15 +24,15 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension StringComponent {
+extension StringComponent {
 
-    func prefixLines(
+    public func prefixLines(
         with prefix: String
     ) -> some StringComponent {
         prefixLines { prefix }
     }
 
-    func prefixLines(
+    public func prefixLines(
         @StringBuilder with components: () -> some StringComponent
     ) -> some StringComponent {
         PrefixLines(
@@ -44,7 +44,7 @@ public extension StringComponent {
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 struct PrefixLines<Lines, Prefix>: StringComponent where Lines: StringComponent, Prefix: StringComponent {
-    
+
     // MARK: - StringComponent
 
     var body: some StringComponent {
@@ -55,7 +55,7 @@ struct PrefixLines<Lines, Prefix>: StringComponent where Lines: StringComponent,
     }
 
     // MARK: - Private
-    
+
     fileprivate init(
         _ lines: Lines,
         _ prefix: Prefix
@@ -63,7 +63,7 @@ struct PrefixLines<Lines, Prefix>: StringComponent where Lines: StringComponent,
         self.lines = lines
         self.prefix = prefix
     }
-    
+
     private let lines: Lines
     private let prefix: Prefix
 

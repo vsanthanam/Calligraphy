@@ -29,17 +29,17 @@ import Foundation
 public struct RawDataComponent: DataComponent {
 
     // MARK: - Initializers
-    
+
     public init(_ value: Data) {
         self.value = value
     }
 
     // MARK: - API
-    
+
     public let value: Data
 
     // MARK: - DataComponent
-    
+
     public var data: Data? {
         value
     }

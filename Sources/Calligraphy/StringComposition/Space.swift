@@ -27,9 +27,9 @@
 public struct Space: StringComponent {
 
     // MARK: - Initializers
-    
+
     public init() {}
-    
+
     // MARK: - StringComponent
 
     public var body: some StringComponent {

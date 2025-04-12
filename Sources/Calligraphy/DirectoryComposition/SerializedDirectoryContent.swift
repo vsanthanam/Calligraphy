@@ -29,7 +29,7 @@ import Foundation
 public enum SerializedDirectoryContent: Equatable, Sendable {
 
     // MARK: - API
-    
+
     case directory(Directory)
 
     case file(File)
@@ -37,7 +37,7 @@ public enum SerializedDirectoryContent: Equatable, Sendable {
     public struct Directory: Equatable, Sendable {
 
         // MARK: - Initializers
-        
+
         public init(
             _ name: String,
             children: [SerializedDirectoryContent]
@@ -47,7 +47,7 @@ public enum SerializedDirectoryContent: Equatable, Sendable {
         }
 
         // MARK: - API
-        
+
         public let name: String
 
         public let children: [SerializedDirectoryContent]
@@ -57,7 +57,7 @@ public enum SerializedDirectoryContent: Equatable, Sendable {
     public struct File: Equatable, Sendable {
 
         // MARK: - Initializers
-        
+
         public init(
             _ name: String,
             content: Content
@@ -65,7 +65,7 @@ public enum SerializedDirectoryContent: Equatable, Sendable {
             self.name = name
             self.content = content
         }
-        
+
         // MARK: - API
 
         public let name: String
@@ -73,7 +73,7 @@ public enum SerializedDirectoryContent: Equatable, Sendable {
         public let content: Content
 
         public enum Content: Equatable, Sendable {
-            
+
             // MARK: - API
 
             case binary(Data)

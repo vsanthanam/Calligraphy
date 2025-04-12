@@ -27,11 +27,11 @@
 public struct DoubleQuote: StringComponent {
 
     // MARK: - Initializers
-    
+
     public init() {}
 
     // MARK: - StringComponent
-    
+
     public var body: some StringComponent {
         QuotationMark(.double)
     }

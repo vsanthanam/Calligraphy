@@ -26,15 +26,15 @@
 import Foundation
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension StringComponent {
+extension StringComponent {
 
-    func mapLines(
+    public func mapLines(
         _ fn: @Sendable @escaping (String) -> String?
     ) -> some StringComponent {
         MapLines(self, fn)
     }
 
-    func mapLines(
+    public func mapLines(
         @StringBuilder with components: @Sendable @escaping (String) -> some StringComponent
     ) -> some StringComponent {
         MapLines(self) { line in
@@ -45,7 +45,7 @@ public extension StringComponent {
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 struct MapLines<T>: StringComponent where T: StringComponent {
-    
+
     // MARK: - StringComponent
 
     var body: some StringComponent {
@@ -58,7 +58,7 @@ struct MapLines<T>: StringComponent where T: StringComponent {
                     .joined(separator: "\n")
             }
     }
-    
+
     // MARK: - Private
 
     fileprivate init(
@@ -68,7 +68,7 @@ struct MapLines<T>: StringComponent where T: StringComponent {
         self.lines = lines
         self.fn = fn
     }
-    
+
     private let fn: @Sendable (String) -> String?
     private let lines: T
 

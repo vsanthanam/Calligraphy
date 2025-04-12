@@ -27,7 +27,7 @@
 public struct AnyStringComponent: StringComponent {
 
     // MARK: - Initializers
-    
+
     public init(_ component: some StringComponent) {
         _content = { component.content }
     }
@@ -37,7 +37,7 @@ public struct AnyStringComponent: StringComponent {
     }
 
     // MARK: - Private
-    
+
     private let _content: @Sendable () -> String?
 
 }

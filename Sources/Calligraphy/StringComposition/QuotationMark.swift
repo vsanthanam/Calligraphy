@@ -27,11 +27,11 @@
 public struct QuotationMark: StringComponent {
 
     // MARK: - Initializers
-    
+
     public init(_ type: Type) {
         self.type = type
     }
-    
+
     // MARK: - API
 
     public enum `Type`: String, Equatable, Sendable {
@@ -39,13 +39,13 @@ public struct QuotationMark: StringComponent {
         case double = "\""
         case triple = "'''"
     }
-    
+
     // MARK: - StringComponent
 
     public var body: some StringComponent {
         type
     }
-    
+
     // MARK: - Private
 
     private let type: `Type`

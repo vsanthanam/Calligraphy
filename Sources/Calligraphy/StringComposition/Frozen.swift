@@ -36,7 +36,7 @@ extension StringComponent {
 public struct Frozen<T>: StringComponent where T: StringComponent {
 
     // MARK: - Initializers
-    
+
     public init(
         @StringBuilder components: () -> T
     ) {
@@ -44,12 +44,12 @@ public struct Frozen<T>: StringComponent where T: StringComponent {
     }
 
     // MARK: - StringComponent
-    
+
     public var body: some StringComponent {
         components
             .map(\.self)
     }
-    
+
     // MARK: - Private
 
     private let components: T

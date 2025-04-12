@@ -127,7 +127,7 @@ public enum DataBuilder {
     public struct _Accumulate<each Accumulated, Next>: DataComponent where repeat each Accumulated: DataComponent, Next: DataComponent {
 
         // MARK: - DataComponent
-        
+
         public var data: Data? {
             var result: Data? = nil
             func append(_ component: some DataComponent) {
@@ -146,9 +146,9 @@ public enum DataBuilder {
             append(next)
             return result
         }
-        
+
         // MARK: - Private
-        
+
         fileprivate init(
             accumulated: repeat each Accumulated,
             next: Next
@@ -165,12 +165,12 @@ public enum DataBuilder {
     public enum _Either<First, Second>: DataComponent where First: DataComponent, Second: DataComponent {
 
         // MARK: - API
-        
+
         case first(First)
         case second(Second)
 
         // MARK: - DataComponent
-        
+
         public var data: Data? {
             switch self {
             case let .first(component):
@@ -185,7 +185,7 @@ public enum DataBuilder {
     public struct _List<Element>: DataComponent where Element: DataComponent {
 
         // MARK: - DataComponent
-        
+
         public var data: Data? {
             list
                 .reduce(nil) { prev, component in
@@ -201,11 +201,11 @@ public enum DataBuilder {
         }
 
         // MARK: - Private
-        
+
         fileprivate init(_ list: [Element]) {
             self.list = list
         }
-        
+
         private let list: [Element]
 
     }

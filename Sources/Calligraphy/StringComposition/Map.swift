@@ -46,7 +46,7 @@ extension StringComponent {
 private struct Map<T>: StringComponent where T: StringComponent {
 
     // MARK: - Initializers
-    
+
     init(
         _ upstream: T,
         _ fn: @Sendable @escaping (String?) -> String?
@@ -54,13 +54,13 @@ private struct Map<T>: StringComponent where T: StringComponent {
         self.upstream = upstream
         self.fn = fn
     }
-    
+
     // MARK: - StringComponent
-    
+
     var content: String? {
         fn(upstream.content)
     }
-    
+
     // MARK: - Private
 
     private let upstream: T

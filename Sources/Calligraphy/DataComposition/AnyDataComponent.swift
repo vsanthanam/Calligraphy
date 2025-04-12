@@ -29,7 +29,7 @@ import Foundation
 public struct AnyDataComponent: DataComponent {
 
     // MARK: - Initializers
-    
+
     public init(
         _ component: some DataComponent
     ) {
@@ -37,11 +37,11 @@ public struct AnyDataComponent: DataComponent {
     }
 
     // MARK: - DataComponent
-    
+
     public var data: Data? {
         _data()
     }
-    
+
     // MARK: - Private
 
     private let _data: @Sendable () -> Data?

@@ -26,17 +26,17 @@
 import Foundation
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public extension Data {
+extension Data {
 
     // MARK: - Initializers
-    
-    init(
+
+    public init(
         _ component: some DataComponent
     ) {
         self = component.data ?? .init()
     }
 
-    init(
+    public init(
         @DataBuilder components: () -> some DataComponent
     ) {
         self.init(components())

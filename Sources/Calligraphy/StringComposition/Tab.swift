@@ -27,14 +27,14 @@
 public struct Tab: StringComponent {
 
     // MARK: - Initializers
-    
+
     public init() {}
 
     // MARK: - StringComponent
-    
+
     public var body: some StringComponent {
         Line {
-            for _ in 0..<4 {
+            for _ in 0 ..< 4 {
                 Space()
             }
         }

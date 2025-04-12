@@ -27,13 +27,13 @@
 public struct DataComponents<T>: DataComponent where T: DataComponent {
 
     // MARK: - Initializers
-    
+
     public init(
         @DataBuilder components: () -> T
     ) {
         self.components = components()
     }
-    
+
     // MARK: - DataComponent
 
     public var body: some DataComponent {
@@ -41,7 +41,7 @@ public struct DataComponents<T>: DataComponent where T: DataComponent {
     }
 
     // MARK: - Private
-    
+
     private let components: T
 
 }

@@ -27,7 +27,7 @@
 public struct Folder<T>: Directory where T: DirectoryComponent {
 
     // MARK: - Initializers
-    
+
     public init(
         _ name: String,
         @DirectoryContentBuilder contents: () -> T
@@ -35,15 +35,15 @@ public struct Folder<T>: Directory where T: DirectoryComponent {
         self.name = name
         self.contents = contents()
     }
-    
+
     // MARK: - Directory
 
     public let name: String
-    
+
     public var body: some DirectoryComponent {
         contents
     }
-    
+
     // MARK: - Private
 
     private let contents: T

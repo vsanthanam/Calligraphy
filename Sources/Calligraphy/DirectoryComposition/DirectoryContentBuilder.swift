@@ -134,13 +134,13 @@ public enum DirectoryContentBuilder {
         }
 
         // MARK: - Private
-        
+
         fileprivate init(
             _ content: [SerializedDirectoryContent]
         ) {
             self.content = content
         }
-        
+
         private let content: [SerializedDirectoryContent]
 
     }
@@ -148,7 +148,7 @@ public enum DirectoryContentBuilder {
     public struct _Accumulate<each Accumulated, Next>: DirectoryComponent where repeat each Accumulated: DirectoryComponent, Next: DirectoryComponent {
 
         // MARK: - DirectoryComponent
-        
+
         public func _serialize() -> [SerializedDirectoryContent] {
             var result = [SerializedDirectoryContent]()
             for component in repeat each accumulated {
@@ -157,9 +157,9 @@ public enum DirectoryContentBuilder {
             result += next._serialize()
             return result
         }
-        
+
         // MARK: - Private
-        
+
         fileprivate init(
             accumulated: repeat each Accumulated,
             next: Next
@@ -176,13 +176,13 @@ public enum DirectoryContentBuilder {
     public enum _Either<First, Second>: DirectoryComponent where First: DirectoryComponent, Second: DirectoryComponent {
 
         // MARK: - API
-        
+
         case first(First)
 
         case second(Second)
 
         // MARK: - DirectoryComponent
-        
+
         public func _serialize() -> [SerializedDirectoryContent] {
             switch self {
             case let .first(component):
@@ -205,13 +205,13 @@ public enum DirectoryContentBuilder {
         }
 
         // MARK: - Private
-        
+
         fileprivate init(
             _ list: [Element]
         ) {
             self.list = list
         }
-        
+
         private let list: [Element]
 
     }

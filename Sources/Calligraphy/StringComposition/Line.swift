@@ -27,20 +27,20 @@
 public struct Line<T>: StringComponent where T: StringComponent {
 
     // MARK: - Initializers
-    
+
     public init(
         @StringBuilder components: () -> T
     ) {
         self.components = components()
     }
-    
+
     // MARK: - StringComponent
 
     public var body: some StringComponent {
         components
             .joined(separator: "")
     }
-    
+
     // MARK: - Private
 
     private let components: T

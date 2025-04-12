@@ -27,9 +27,9 @@
 public struct EmptyStringComponent: StringComponent {
 
     // MARK: - Initializers
-    
+
     public init() {}
-    
+
     // MARK: - StringComponent
 
     public let content: String? = nil

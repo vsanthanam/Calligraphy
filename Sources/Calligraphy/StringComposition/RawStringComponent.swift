@@ -27,17 +27,17 @@
 public struct RawStringComponent: StringComponent {
 
     // MARK: - Initializers
-    
+
     public init(_ value: String) {
         self.value = value
     }
-    
+
     // MARK: - API
 
     public let value: String
 
     // MARK: - StringComponent
-    
+
     public var content: String? {
         value
     }

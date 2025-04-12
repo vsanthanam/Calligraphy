@@ -51,7 +51,7 @@ extension StringComponent {
 public struct Joined<T, Separator>: StringComponent where T: StringComponent, Separator: StringComponent {
 
     // MARK: - Initializers
-    
+
     public init(
         @StringBuilder content: () -> T,
         @StringBuilder separator: () -> Separator
@@ -68,13 +68,13 @@ public struct Joined<T, Separator>: StringComponent where T: StringComponent, Se
     }
 
     // MARK: - StringComponent
-    
+
     public var content: String? {
         StringBuilder.$separator.withValue(String(separator)) {
             components.content
         }
     }
-    
+
     // MARK: - Private
 
     private let components: T
