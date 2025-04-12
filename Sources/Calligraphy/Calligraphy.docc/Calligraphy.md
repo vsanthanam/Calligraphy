@@ -21,10 +21,10 @@ Foo and also Bar
 - ``QuotationMark``
 - ``Quoted``
 - ``NewLine``
-- ``NewLines``
 - ``RawStringComponent``
 - ``SingleQuote``
 - ``Space``
+- ``Spaced``
 - ``StringBuilder``
 - ``StringComponent``
 - ``StringComponents``
@@ -34,22 +34,22 @@ Foo and also Bar
 
 ### Directory Composition
 
-- ``AnyDirectoryComponent``
-- ``DataFile``
-- ``Directory``
 - ``DirectoryComponent``
 - ``DirectoryContentBuilder``
-- ``EmptyDirectoryComponent``
+- ``Directory``
+- ``TextFile``
+- ``DataFile``
 - ``File``
 - ``Folder``
+- ``EmptyDirectoryComponent``
+- ``AnyDirectoryComponent``
 - ``SerializedDirectoryContent``
-- ``TextFile``
 
 ### Data Composition
 
-- ``AnyDataComponent``
-- ``DataBuilder``
 - ``DataComponent``
+- ``DataBuilder``
 - ``DataComponents``
-- ``EmptyDataComponent``
 - ``RawDataComponent``
+- ``EmptyDataComponent``
+- ``AnyDataComponent``

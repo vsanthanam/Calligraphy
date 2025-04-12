@@ -25,11 +25,13 @@
 
 import Foundation
 
+/// An empty data component
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct EmptyDataComponent: DataComponent {
 
     // MARK: - Initializers
-
+    
+    /// Create an empty data component
     public init() {}
 
     // MARK: - DataComponent

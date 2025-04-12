@@ -25,17 +25,23 @@
 
 import Foundation
 
+/// A data component created from a `Data` value.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct RawDataComponent: DataComponent {
 
     // MARK: - Initializers
-
-    public init(_ value: Data) {
+    
+    /// Create a raw data component
+    /// - Parameter value: The value
+    public init(
+        _ value: Data
+    ) {
         self.value = value
     }
 
     // MARK: - API
-
+    
+    /// The raw data in the component
     public let value: Data
 
     // MARK: - DataComponent

@@ -25,8 +25,11 @@
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
-
-    func joined(
+    
+    /// Join the upstreams together using a separator
+    /// - Parameter separator: The separator used to join the components
+    /// - Returns: The joined string components
+    public func joined(
         separator: String
     ) -> some StringComponent {
         Joined(
@@ -35,8 +38,11 @@ extension StringComponent {
             self
         }
     }
-
-    func joined(
+    
+    /// Join the upstreams together using a declarative separator
+    /// - Parameter components: The separator used to join the components
+    /// - Returns: The joined string components
+    public func joined(
         @StringBuilder by components: () -> some StringComponent
     ) -> some StringComponent {
         Joined(
@@ -47,11 +53,16 @@ extension StringComponent {
 
 }
 
+/// A joined string component
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct Joined<T, Separator>: StringComponent where T: StringComponent, Separator: StringComponent {
 
     // MARK: - Initializers
-
+    
+    /// Create a joined string component
+    /// - Parameters:
+    ///   - content: The string components to join
+    ///   - separator: The separator used to join the components
     public init(
         @StringBuilder content: () -> T,
         @StringBuilder separator: () -> Separator
@@ -59,7 +70,11 @@ public struct Joined<T, Separator>: StringComponent where T: StringComponent, Se
         components = content()
         self.separator = separator()
     }
-
+    
+    /// Create a joined string component
+    /// - Parameters:
+    ///   - separator: The separator used to join the components
+    ///   - content: The string components to join
     public init(
         separator: String,
         @StringBuilder content: () -> T

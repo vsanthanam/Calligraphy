@@ -27,7 +27,7 @@
 extension StringComponent {
 
     public func tabbed(
-        numberOfTabs: Int = 1
+        _ numberOfTabs: Int = 1
     ) -> some StringComponent {
         Tabbed(numberOfTabs) { self }
     }

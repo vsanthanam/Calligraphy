@@ -23,11 +23,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/// An empty string component
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct EmptyStringComponent: StringComponent {
 
     // MARK: - Initializers
-
+    
+    /// Create an empty string component
     public init() {}
 
     // MARK: - StringComponent

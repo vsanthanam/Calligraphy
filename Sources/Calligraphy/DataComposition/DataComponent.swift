@@ -25,13 +25,24 @@
 
 import Foundation
 
+/// A data component
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public protocol DataComponent: Sendable {
 
+    /// The type of data component representing the body of this data component.
+    ///
+    /// Typically, you do not need to explicitly spell out this type.
+    /// Instead. implement ``body`` using an opaque type, and allow the compiler to expand the result builder and choose the correct type to satisfy the protocol
     associatedtype Body: DataComponent = Never
-
+    
+    /// The data contained in the coponent
+    ///
+    /// If you implement the ``body`` property, you do not need to implement this property.
     var data: Data? { get }
 
+    /// The data contained in the component
+    ///
+    /// If you implement the ``data`` property, you do not need to implement this property.
     @DataBuilder
     var body: Body { get }
 

@@ -26,32 +26,23 @@
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
-    func frozen() -> some StringComponent {
+    public func frozen() -> some StringComponent {
         Frozen { self }
     }
 
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Frozen<T>: StringComponent where T: StringComponent {
+public struct Frozen: StringComponent {
 
     // MARK: - Initializers
 
     public init(
-        @StringBuilder components: () -> T
+        @StringBuilder components: () -> some StringComponent
     ) {
-        self.components = components()
+        self.content = components().content
     }
 
-    // MARK: - StringComponent
-
-    public var body: some StringComponent {
-        components
-            .map(\.self)
-    }
-
-    // MARK: - Private
-
-    private let components: T
+    public let content: String?
 
 }

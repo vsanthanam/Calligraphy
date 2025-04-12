@@ -28,4 +28,22 @@ import Foundation
 import Testing
 
 @Test
-func example() async throws {}
+func example() async throws {
+    
+    let str = String(components: {
+        StringComponents {
+            "foo"
+            "bar"
+            "baz"
+        }
+        .delimited(by: "|")
+    })
+    
+    let expected = """
+    |foo
+    bar
+    baz|
+    """
+    
+    #expect(str == expected)
+}

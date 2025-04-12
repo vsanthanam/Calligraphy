@@ -23,15 +23,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/// A type-erased string component
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct AnyStringComponent: StringComponent {
 
     // MARK: - Initializers
-
-    public init(_ component: some StringComponent) {
+    
+    /// Create a type-erased string component
+    /// - Parameter component: The string component to type-erase
+    public init(
+        _ component: some StringComponent
+    ) {
         _content = { component.content }
     }
 
+    // MARK: - StringComponent
+    
     public var content: String? {
         _content()
     }

@@ -25,9 +25,11 @@
 
 import Foundation
 
+/// A directory
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public protocol Directory: DirectoryComponent {
-
+    
+    /// The name of the directory
     var name: String { get }
 
     associatedtype Body: DirectoryComponent = Never

@@ -25,11 +25,14 @@
 
 import Foundation
 
+/// A file containing a `String`
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public protocol TextFile: StringComponent, DirectoryComponent {
-
+    
+    /// The name of the file
     var name: String { get }
-
+    
+    /// The encoding to use when the file is written to disk
     var encoding: String.Encoding { get }
 
 }

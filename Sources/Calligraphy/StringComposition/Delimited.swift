@@ -70,7 +70,7 @@ public struct Delimited<T, Delimiter>: StringComponent where T: StringComponent,
     // MARK: - StringComponent
 
     public var body: some StringComponent {
-        delimiter + components + delimiter
+        delimiter + components.frozen() + delimiter
     }
 
     // MARK: - Private

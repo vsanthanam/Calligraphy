@@ -25,11 +25,17 @@
 
 import Foundation
 
+/// A re-usable, composable file
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct File: DirectoryComponent {
 
     // MARK: - Initializers
-
+    
+    /// Create a text file, declaratively
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - encoding: The string encoding to use when the file is written to disk
+    ///   - text: The text in the file
     public init(
         _ name: String,
         encoding: String.Encoding = .utf8,
@@ -43,7 +49,13 @@ public struct File: DirectoryComponent {
             )
         )
     }
-
+    
+    /// Create a text file with a file extension, declaratively
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - extension: The file extension
+    ///   - encoding: The string encoding to use when the file is written to disk
+    ///   - text: The text in the file
     public init(
         _ name: String,
         extension: String,
@@ -60,6 +72,11 @@ public struct File: DirectoryComponent {
         )
     }
 
+    /// Create a text file
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - encoding: The string encoding to use when the file is written to disk
+    ///   - text: The text in the file
     public init(
         _ name: String,
         encoding: String.Encoding = .utf8,
@@ -73,6 +90,12 @@ public struct File: DirectoryComponent {
         }
     }
 
+    /// Create a text file with a file extension, declaratively
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - extension: The file extension
+    ///   - encoding: The string encoding to use when the file is written to disk
+    ///   - text: The text in the file
     public init(
         _ name: String,
         extension: String,
@@ -88,18 +111,27 @@ public struct File: DirectoryComponent {
         }
     }
 
+    /// Create a data file, declaratively
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - data: The data in the file
     public init(
         _ name: String,
         @DataBuilder data: () -> some DataComponent
     ) {
         self.init(
             name,
-            .binary(
+            .data(
                 Data(components: data)
             )
         )
     }
-
+    
+    /// Create a data file with a file extension, declaratively
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - extension: The file extension
+    ///   - data: The data in the file
     public init(
         _ name: String,
         extension: String,
@@ -108,12 +140,16 @@ public struct File: DirectoryComponent {
         self.init(
             name,
             `extension`,
-            .binary(
+            .data(
                 Data(components: data)
             )
         )
     }
 
+    /// Create a data file
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - data: The data in the file
     public init(
         _ name: String,
         data: Data
@@ -125,6 +161,11 @@ public struct File: DirectoryComponent {
         }
     }
 
+    /// Create a data file with a file extension
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - extension: The file extension
+    ///   - data: The data in the file
     public init(
         _ name: String,
         extension: String,

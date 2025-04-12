@@ -25,19 +25,27 @@
 
 import Foundation
 
+/// A serialized representation of the contents of a directory, which can be written to disk
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public enum SerializedDirectoryContent: Equatable, Sendable {
 
     // MARK: - API
 
+    /// A directory
     case directory(Directory)
 
+    /// A file
     case file(File)
-
+    
+    /// A serialized directory
     public struct Directory: Equatable, Sendable {
 
         // MARK: - Initializers
-
+        
+        /// Create a serialized directory
+        /// - Parameters:
+        ///   - name: The name of the directory
+        ///   - children: The directory's children
         public init(
             _ name: String,
             children: [SerializedDirectoryContent]
@@ -47,17 +55,24 @@ public enum SerializedDirectoryContent: Equatable, Sendable {
         }
 
         // MARK: - API
-
+        
+        /// The name of the directory
         public let name: String
-
+        
+        /// The directory's children
         public let children: [SerializedDirectoryContent]
 
     }
-
+    
+    /// A serialized file
     public struct File: Equatable, Sendable {
 
         // MARK: - Initializers
-
+        
+        /// Create a serialized file
+        /// - Parameters:
+        ///   - name: The name of the file
+        ///   - content: The contents of the file
         public init(
             _ name: String,
             content: Content
@@ -67,17 +82,22 @@ public enum SerializedDirectoryContent: Equatable, Sendable {
         }
 
         // MARK: - API
-
+        
+        /// The name of the file
         public let name: String
-
+        
+        /// The contents of the file
         public let content: Content
-
+        
+        /// A serialized file's contents
         public enum Content: Equatable, Sendable {
 
             // MARK: - API
 
-            case binary(Data)
+            /// Data file content
+            case data(Data)
 
+            /// Text file content
             case text(String, String.Encoding)
 
         }

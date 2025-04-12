@@ -23,11 +23,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/// A type-erased directory component
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct AnyDirectoryComponent: DirectoryComponent {
 
     // MARK: - Initializers
-
+    
+    /// Create a type-erased directory component
+    /// - Parameter directoryComponent: The directory component to type-erase
     public init(
         _ directoryComponent: some DirectoryComponent
     ) {

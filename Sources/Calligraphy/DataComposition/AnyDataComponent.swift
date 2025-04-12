@@ -25,11 +25,14 @@
 
 import Foundation
 
+/// A type-erased data component
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct AnyDataComponent: DataComponent {
 
     // MARK: - Initializers
-
+    
+    /// Create a type-erased data component
+    /// - Parameter component: The data component to type-erase
     public init(
         _ component: some DataComponent
     ) {

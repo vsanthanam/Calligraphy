@@ -26,10 +26,10 @@
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
-    public func spacing(
-        _ count: Int
+    public func lines(
+        _ spacing: Int
     ) -> some StringComponent {
-        Lines(spacing: count) {
+        Lines(spacing: spacing) {
             self
         }
     }
