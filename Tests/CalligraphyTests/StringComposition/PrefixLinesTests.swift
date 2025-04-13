@@ -28,7 +28,7 @@ import Testing
 
 @Suite
 struct PrefixLinesTests {
-    
+
     @Test
     func stringModifier() {
         let prefixLines = Lines {
@@ -37,16 +37,16 @@ struct PrefixLinesTests {
             "baz"
         }
         .prefixLines(with: "- ")
-        
+
         let expected = #"""
         - foo
         - bar
         - baz
         """#
-        
+
         #expect(prefixLines.build() == expected)
     }
-    
+
     @Test
     func stringBuilder() {
         let prefixLines = Lines {
@@ -60,14 +60,14 @@ struct PrefixLinesTests {
                 Space()
             }
         }
-        
+
         let expected = #"""
         - foo
         - bar
         - baz
         """#
-        
+
         #expect(prefixLines.build() == expected)
     }
-    
+
 }

@@ -1,5 +1,5 @@
 // Calligraphy
-// NewLineTests.swift
+// StringExtensionsTests.swift
 //
 // MIT License
 //
@@ -26,8 +26,22 @@
 import Calligraphy
 import Testing
 
-@Test
-func newLine() {
-    let newLine = NewLine()
-    #expect(newLine.build() == "\n")
+@Suite
+struct StringExtensionsTests {
+
+    @Test
+    func component() {
+        let str = String(RawStringComponent("Foo"))
+        #expect(str == "Foo")
+    }
+
+    @Test
+    func components() {
+        let str = String(components: {
+            RawStringComponent("Foo")
+            RawStringComponent("Bar")
+        })
+        #expect(str == "Foo\nBar")
+    }
+
 }

@@ -37,13 +37,13 @@ struct MapLinesTests {
             "baz"
         }
         .mapLines { line in
-            "- " + line
+            "- " + line.uppercased()
         }
 
         let expected = #"""
-        - foo
-        - bar
-        - baz
+        - FOO
+        - BAR
+        - BAZ
         """#
 
         #expect(mapLines.build() == expected)
@@ -71,6 +71,15 @@ struct MapLinesTests {
         """#
 
         #expect(mapLines.build() == expected)
+    }
+
+    @Test
+    func mapLinesEmpty() {
+        let mapLines = Lines {}
+            .mapLines { line in
+                "testing" + line
+            }
+        #expect(mapLines.build() == "")
     }
 
 }
