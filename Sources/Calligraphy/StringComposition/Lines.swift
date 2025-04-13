@@ -36,11 +36,16 @@ extension StringComponent {
 
 }
 
+/// Multiple lines of text
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct Lines<T>: StringComponent where T: StringComponent {
 
     // MARK: - Initializers
 
+    /// Create lines of text
+    /// - Parameters:
+    ///   - spacing: The spacing to use between each line
+    ///   - components: The contents of each line
     public init(
         spacing: Int = 1,
         @StringBuilder components: () -> T

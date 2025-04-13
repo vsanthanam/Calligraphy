@@ -26,12 +26,18 @@
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
+    /// Map the value of the upstream into another string
+    /// - Parameter fn: The mapper function
+    /// - Returns: The mapped upstream component
     public func map(
         _ fn: @Sendable @escaping (String?) -> String?
     ) -> some StringComponent {
         Map(self, fn)
     }
 
+    /// Map the value of the upstream into another string, declaratively
+    /// - Parameter components: The mapper function
+    /// - Returns: The mapped upstream component
     public func map(
         @StringBuilder with components: @Sendable @escaping (String?) -> some StringComponent
     ) -> some StringComponent {
