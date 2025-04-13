@@ -57,23 +57,6 @@ struct StringBuilderTests {
     }
 
     @Test
-    func customStringConvertible() {
-
-        struct Foo: CustomStringConvertible {
-            let description: String = "bar"
-        }
-
-        @StringBuilder
-        func builder() -> some StringComponent {
-            Foo()
-        }
-
-        let components = builder()
-        #expect(components is RawStringComponent)
-        #expect(components.build() == "bar")
-    }
-
-    @Test
     func rawRepresentable() {
 
         enum Foo: String {

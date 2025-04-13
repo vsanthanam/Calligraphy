@@ -43,6 +43,7 @@ Foo and also Bar
 - ``DataFile``
 - ``File``
 - ``Folder``
+- ``Files``
 - ``EmptyDirectoryComponent``
 - ``AnyDirectoryComponent``
 - ``SerializedDirectoryContent``

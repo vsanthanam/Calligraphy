@@ -48,13 +48,6 @@ public enum StringBuilder {
     }
 
     @StringBuilder
-    public static func buildExpression(
-        _ expression: some CustomStringConvertible
-    ) -> RawStringComponent {
-        expression.description
-    }
-
-    @StringBuilder
     public static func buildExpression<T>(
         _ expression: T
     ) -> RawStringComponent where T: RawRepresentable, T.RawValue: StringProtocol {
