@@ -1,5 +1,5 @@
 // Calligraphy
-// AnyDirectoryComponent.swift
+// AnyDirectoryContent.swift
 //
 // MIT License
 //
@@ -23,21 +23,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// A type-erased directory component
+/// A type-erased directory content
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct AnyDirectoryComponent: DirectoryComponent {
+public struct AnyDirectoryContent: DirectoryContent {
 
     // MARK: - Initializers
 
-    /// Create a type-erased directory component
-    /// - Parameter directoryComponent: The directory component to type-erase
+    /// Create a type-erased directory content
+    /// - Parameter directoryContent: The directory content to type-erase
     public init(
-        _ directoryComponent: some DirectoryComponent
+        _ directoryContent: some DirectoryContent
     ) {
-        __serialize = directoryComponent._serialize
+        __serialize = directoryContent._serialize
     }
 
-    // MARK: - DirectoryComponent
+    // MARK: - DirectoryContent
 
     public func _serialize() -> [SerializedDirectoryContent] {
         __serialize()

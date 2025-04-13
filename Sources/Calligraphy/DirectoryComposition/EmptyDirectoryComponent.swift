@@ -1,5 +1,5 @@
 // Calligraphy
-// EmptyDirectoryComponent.swift
+// EmptyDirectoryContent.swift
 //
 // MIT License
 //
@@ -23,16 +23,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// An empty directory component
+/// An empty directory content
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct EmptyDirectoryComponent: DirectoryComponent {
+public struct EmptyDirectoryContent: DirectoryContent {
 
     // MARK: - Initializers
 
-    /// Create an empty directory component
+    /// Create an empty directory content
     public init() {}
 
-    // MARK: - DirectoryComponent
+    // MARK: - DirectoryContent
 
     public func _serialize() -> [SerializedDirectoryContent] {
         []

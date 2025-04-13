@@ -12,7 +12,7 @@ struct FooDirectory: Directory {
     
     let name = "Foo"
     
-    var body: some DirectoryComponent {
+    var body: some DirectoryContent {
 
     }
     

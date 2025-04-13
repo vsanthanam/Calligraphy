@@ -30,7 +30,7 @@ public enum DirectoryContentBuilder {
 
     public static func buildExpression<T>(
         _ expression: T
-    ) -> T where T: DirectoryComponent {
+    ) -> T where T: DirectoryContent {
         expression
     }
 
@@ -77,54 +77,54 @@ public enum DirectoryContentBuilder {
             .map(SerializedDirectoryContent.directory)
     }
 
-    public static func buildBlock() -> EmptyDirectoryComponent {
-        EmptyDirectoryComponent()
+    public static func buildBlock() -> EmptyDirectoryContent {
+        EmptyDirectoryContent()
     }
 
     public static func buildBlock<T>(
         _ component: T
-    ) -> T where T: DirectoryComponent {
+    ) -> T where T: DirectoryContent {
         component
     }
 
     public static func buildBlock<each Component>(
         _ components: repeat each Component
-    ) -> _Block<repeat each Component> where repeat each Component: DirectoryComponent {
+    ) -> _Block<repeat each Component> where repeat each Component: DirectoryContent {
         .init(components: repeat each components)
     }
 
     public static func buildEither<First, Second>(
         first component: First
-    ) -> _Either<First, Second> where First: DirectoryComponent, Second: DirectoryComponent {
+    ) -> _Either<First, Second> where First: DirectoryContent, Second: DirectoryContent {
         .first(component)
     }
 
     public static func buildEither<First, Second>(
         second component: Second
-    ) -> _Either<First, Second> where First: DirectoryComponent, Second: DirectoryComponent {
+    ) -> _Either<First, Second> where First: DirectoryContent, Second: DirectoryContent {
         .second(component)
     }
 
     @DirectoryContentBuilder
     public static func buildOptional<T>(
         _ component: T?
-    ) -> _Either<T, EmptyDirectoryComponent> where T: DirectoryComponent {
+    ) -> _Either<T, EmptyDirectoryContent> where T: DirectoryContent {
         if let component {
             component
         } else {
-            EmptyDirectoryComponent()
+            EmptyDirectoryContent()
         }
     }
 
     public static func buildArray<T>(
         _ components: [T]
-    ) -> _List<T> where T: DirectoryComponent {
+    ) -> _List<T> where T: DirectoryContent {
         .init(components)
     }
 
-    public struct _AlreadySerialized: DirectoryComponent {
+    public struct _AlreadySerialized: DirectoryContent {
 
-        // MARK: - DirectoryComponent
+        // MARK: - DirectoryContent
 
         public func _serialize() -> [SerializedDirectoryContent] {
             content
@@ -142,9 +142,9 @@ public enum DirectoryContentBuilder {
 
     }
 
-    public struct _Block<each Component>: DirectoryComponent where repeat each Component: DirectoryComponent {
+    public struct _Block<each Component>: DirectoryContent where repeat each Component: DirectoryContent {
 
-        // MARK: - DirectoryComponent
+        // MARK: - DirectoryContent
 
         public func _serialize() -> [SerializedDirectoryContent] {
             var result = [SerializedDirectoryContent]()
@@ -166,7 +166,7 @@ public enum DirectoryContentBuilder {
 
     }
 
-    public enum _Either<First, Second>: DirectoryComponent where First: DirectoryComponent, Second: DirectoryComponent {
+    public enum _Either<First, Second>: DirectoryContent where First: DirectoryContent, Second: DirectoryContent {
 
         // MARK: - API
 
@@ -174,7 +174,7 @@ public enum DirectoryContentBuilder {
 
         case second(Second)
 
-        // MARK: - DirectoryComponent
+        // MARK: - DirectoryContent
 
         public func _serialize() -> [SerializedDirectoryContent] {
             switch self {
@@ -186,9 +186,9 @@ public enum DirectoryContentBuilder {
         }
     }
 
-    public struct _List<Element>: DirectoryComponent where Element: DirectoryComponent {
+    public struct _List<Element>: DirectoryContent where Element: DirectoryContent {
 
-        // MARK: - DirectoryComponent
+        // MARK: - DirectoryContent
 
         public func _serialize() -> [SerializedDirectoryContent] {
             list
