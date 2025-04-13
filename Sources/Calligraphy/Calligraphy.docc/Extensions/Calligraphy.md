@@ -6,11 +6,12 @@ A declarative API for composing multi-line strings, files, and folders in Swift
 
 Foo and also Bar
 
+@Links(visualStyle: compactGrid) {
+    - <doc:Installation>
+    - <doc:ComposingStrings>
+}
+
 ## Topics
-
-### Getting Started
-
-- <doc:Installation>
 
 ### String Composition
 
