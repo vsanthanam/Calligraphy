@@ -1,5 +1,5 @@
 // Calligraphy
-// Quoted.swift
+// JoinedTests.swift
 //
 // MIT License
 //
@@ -23,42 +23,62 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-extension StringComponent {
+import Calligraphy
+import Testing
 
-    public func quoted(
-        _ markType: QuotationMark.`Type` = .double
-    ) -> some StringComponent {
-        Quoted(markType) { self }
+@Suite
+struct JoinedTests {
+
+    @Test
+    func string() {
+        let joined = Joined(separator: ", ") {
+            "foo"
+            "bar"
+            "baz"
+        }
+        #expect(joined.build() == "foo, bar, baz")
     }
 
-}
-
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Quoted<T>: StringComponent where T: StringComponent {
-
-    // MARK: - Initializers
-
-    public init(
-        _ markType: QuotationMark.`Type` = .double,
-        @StringBuilder components: () -> T
-    ) {
-        self.markType = markType
-        self.components = components()
-    }
-
-    // MARK: - StringComponent
-
-    public var body: some StringComponent {
-        components
-            .delimited {
-                QuotationMark(markType)
+    @Test
+    func builder() {
+        let joined = Joined {
+            "foo"
+            "bar"
+            "baz"
+        } separator: {
+            Line {
+                ","
+                Space()
             }
+        }
+        #expect(joined.build() == "foo, bar, baz")
     }
 
-    // MARK: - Private
+    @Test
+    func stringModifier() {
+        let joined = StringComponents {
+            "foo"
+            "bar"
+            "baz"
+        }
+        .joined(separator: ", ")
+        #expect(joined.build() == "foo, bar, baz")
+    }
 
-    private let components: T
-    private let markType: QuotationMark.`Type`
+    @Test
+    func stringBuilder() {
+        let joined = StringComponents {
+            "foo"
+            "bar"
+            "baz"
+        }
+        .joined {
+            Line {
+                ","
+                Space()
+            }
+        }
+        #expect(joined.build() == "foo, bar, baz")
+    }
 
 }

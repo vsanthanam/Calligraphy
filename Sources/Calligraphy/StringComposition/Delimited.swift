@@ -25,7 +25,7 @@
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
-    
+
     /// Add a delimiter to the start and end of the upstream
     /// - Parameter delimiter: The delimiter used to frame both sides of the upstream
     /// - Returns: The delimited upstream
@@ -58,7 +58,7 @@ extension StringComponent {
 public struct Delimited<T, Delimiter>: StringComponent where T: StringComponent, Delimiter: StringComponent {
 
     // MARK: - Initializers
-    
+
     /// Create a delimted string component
     /// - Parameters:
     ///   - delimiter: The delimiter to use on either side
@@ -69,7 +69,7 @@ public struct Delimited<T, Delimiter>: StringComponent where T: StringComponent,
     ) where Delimiter == RawStringComponent {
         self.init(components: components) { delimiter }
     }
-    
+
     /// Create a delimited string component
     /// - Parameters:
     ///   - components: The components to delimit

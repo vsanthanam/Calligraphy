@@ -1,5 +1,5 @@
 // Calligraphy
-// Quoted.swift
+// LinesTests.swift
 //
 // MIT License
 //
@@ -23,42 +23,65 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-extension StringComponent {
+import Calligraphy
+import Testing
 
-    public func quoted(
-        _ markType: QuotationMark.`Type` = .double
-    ) -> some StringComponent {
-        Quoted(markType) { self }
+@Suite
+struct LinesTests {
+
+    func single() {
+        let lines = Lines {
+            "foo"
+            "bar"
+            "baz"
+        }
+
+        let expected = #"""
+        foo
+        bar
+        baz
+        """#
+
+        #expect(lines.build() == expected)
     }
 
-}
+    func multiple() {
+        let lines = Lines(spacing: 2) {
+            "foo"
+            "bar"
+            "baz"
+        }
 
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Quoted<T>: StringComponent where T: StringComponent {
+        let expected = #"""
+        foo
 
-    // MARK: - Initializers
+        bar
 
-    public init(
-        _ markType: QuotationMark.`Type` = .double,
-        @StringBuilder components: () -> T
-    ) {
-        self.markType = markType
-        self.components = components()
+        baz
+        """#
+
+        #expect(lines.build() == expected)
     }
 
-    // MARK: - StringComponent
+    @Test
+    func modifier() {
+        let lines = StringComponents {
+            "foo"
+            "bar"
+            "baz"
+        }
+        .lines(spacing: 3)
 
-    public var body: some StringComponent {
-        components
-            .delimited {
-                QuotationMark(markType)
-            }
+        let expected = #"""
+        foo
+
+
+        bar
+
+
+        baz
+        """#
+
+        #expect(lines.build() == expected)
     }
-
-    // MARK: - Private
-
-    private let components: T
-    private let markType: QuotationMark.`Type`
-
 }

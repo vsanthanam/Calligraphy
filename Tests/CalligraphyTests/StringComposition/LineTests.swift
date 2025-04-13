@@ -1,5 +1,5 @@
 // Calligraphy
-// EmptyStringComponent.swift
+// LineTests.swift
 //
 // MIT License
 //
@@ -23,17 +23,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// An empty string component
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct EmptyStringComponent: StringComponent {
+import Calligraphy
+import Testing
 
-    // MARK: - Initializers
+@Test
+func line() {
+    let line = Line {
+        "foo"
+        "bar"
+        "baz"
+    }
 
-    /// Create an empty string component
-    public init() {}
-
-    // MARK: - StringComponent
-
-    public let content: String? = nil
-
+    #expect(line.build() == "foobarbaz")
 }

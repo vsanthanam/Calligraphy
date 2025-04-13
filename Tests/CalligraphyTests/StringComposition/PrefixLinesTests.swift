@@ -1,5 +1,5 @@
 // Calligraphy
-// CalligraphyTests.swift
+// PrefixLinesTests.swift
 //
 // MIT License
 //
@@ -23,26 +23,51 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@testable import Calligraphy
-import Foundation
+import Calligraphy
 import Testing
 
-@Test
-func example() async throws {
-
-    let str = String(components: {
-        StringComponents {
+@Suite
+struct PrefixLinesTests {
+    
+    @Test
+    func stringModifier() {
+        let prefixLines = Lines {
             "foo"
             "bar"
             "baz"
         }
-        .delimited(by: "|")
-        .joined(separator: "-")
-    })
-
-    let expected = """
-    |foo-bar-baz|
-    """
-
-    #expect(str == expected)
+        .prefixLines(with: "- ")
+        
+        let expected = #"""
+        - foo
+        - bar
+        - baz
+        """#
+        
+        #expect(prefixLines.build() == expected)
+    }
+    
+    @Test
+    func stringBuilder() {
+        let prefixLines = Lines {
+            "foo"
+            "bar"
+            "baz"
+        }
+        .prefixLines {
+            Line {
+                "-"
+                Space()
+            }
+        }
+        
+        let expected = #"""
+        - foo
+        - bar
+        - baz
+        """#
+        
+        #expect(prefixLines.build() == expected)
+    }
+    
 }

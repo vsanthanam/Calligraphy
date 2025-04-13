@@ -1,5 +1,5 @@
 // Calligraphy
-// Quoted.swift
+// FrozenTests.swift
 //
 // MIT License
 //
@@ -23,42 +23,49 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-extension StringComponent {
+import Calligraphy
+import Testing
 
-    public func quoted(
-        _ markType: QuotationMark.`Type` = .double
-    ) -> some StringComponent {
-        Quoted(markType) { self }
+@Suite
+struct FrozenTests {
+
+    @Test
+    func standard() {
+
+        let frozen = Frozen {
+            "foo"
+            "bar"
+            "baz"
+        }
+        .joined(separator: "-")
+
+        let expected = #"""
+        foo
+        bar
+        baz
+        """#
+
+        #expect(frozen.build() == expected)
     }
 
-}
+    @Test
+    func frozenModifier() {
 
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Quoted<T>: StringComponent where T: StringComponent {
+        let frozen = StringComponents {
+            "foo"
+            "bar"
+            "baz"
+        }
+        .frozen()
+        .joined(separator: "-")
 
-    // MARK: - Initializers
+        let expected = #"""
+        foo
+        bar
+        baz
+        """#
 
-    public init(
-        _ markType: QuotationMark.`Type` = .double,
-        @StringBuilder components: () -> T
-    ) {
-        self.markType = markType
-        self.components = components()
+        #expect(frozen.build() == expected)
     }
-
-    // MARK: - StringComponent
-
-    public var body: some StringComponent {
-        components
-            .delimited {
-                QuotationMark(markType)
-            }
-    }
-
-    // MARK: - Private
-
-    private let components: T
-    private let markType: QuotationMark.`Type`
 
 }
