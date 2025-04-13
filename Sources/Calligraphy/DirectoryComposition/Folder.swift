@@ -25,7 +25,7 @@
 
 /// A re-usable, composable folder
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Folder<T>: Directory where T: DirectoryComponent {
+public struct Folder<T>: Directory where T: DirectoryContent {
 
     // MARK: - Initializers
 
@@ -45,7 +45,7 @@ public struct Folder<T>: Directory where T: DirectoryComponent {
 
     public let name: String
 
-    public var body: some DirectoryComponent {
+    public var body: some DirectoryContent {
         contents
     }
 

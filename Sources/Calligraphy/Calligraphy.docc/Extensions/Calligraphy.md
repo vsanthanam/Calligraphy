@@ -36,7 +36,7 @@ Foo and also Bar
 
 ### Directory Composition
 
-- ``DirectoryComponent``
+- ``DirectoryContent``
 - ``DirectoryContentBuilder``
 - ``Directory``
 - ``TextFile``
@@ -44,8 +44,8 @@ Foo and also Bar
 - ``File``
 - ``Folder``
 - ``Files``
-- ``EmptyDirectoryComponent``
-- ``AnyDirectoryComponent``
+- ``EmptyDirectoryContent``
+- ``AnyDirectoryContent``
 - ``SerializedDirectoryContent``
 
 ### Data Composition

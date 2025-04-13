@@ -1,5 +1,5 @@
 // Calligraphy
-// EmptyDirectoryComponentTests.swift
+// EmptyDirectoryContentTests.swift
 //
 // MIT License
 //
@@ -28,6 +28,6 @@ import Testing
 
 @Test
 func emptyDirectoryContent() {
-    let content = EmptyDirectoryComponent()
+    let content = EmptyDirectoryContent()
     #expect(content._serialize() == [])
 }

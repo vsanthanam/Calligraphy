@@ -24,7 +24,7 @@
 // SOFTWARE.
 
 /// An entrypoint for the ``DirectoryContentBuilder`` result builder
-public struct Files<T>: DirectoryComponent where T: DirectoryComponent {
+public struct Files<T>: DirectoryContent where T: DirectoryContent {
 
     /// Create a list of directory content
     /// - Parameter files: The directory content
@@ -34,7 +34,7 @@ public struct Files<T>: DirectoryComponent where T: DirectoryComponent {
         self.files = files()
     }
 
-    // MARK: - DirectoryComponent
+    // MARK: - DirectoryContent
 
     public func _serialize() -> [SerializedDirectoryContent] {
         files._serialize()
@@ -42,6 +42,6 @@ public struct Files<T>: DirectoryComponent where T: DirectoryComponent {
 
     // MARK: - Private
 
-    private let files: DirectoryComponent
+    private let files: DirectoryContent
 
 }

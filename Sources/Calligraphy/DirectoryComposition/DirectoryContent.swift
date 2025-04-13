@@ -1,5 +1,5 @@
 // Calligraphy
-// DirectoryComponent.swift
+// DirectoryContent.swift
 //
 // MIT License
 //
@@ -25,20 +25,20 @@
 
 import Foundation
 
-/// A directory component
+/// A directory content
 ///
-/// A `DirectoryComponent` is a type that represents the contents of a directory. When serialized, it could represent one or more files or folders
+/// A `DirectoryContent` is a type that represents the contents of a directory. When serialized, it could represent one or more files or folders
 ///
 /// Typically, you will not create types that conform to this protocol. Instead, implement ``Directory``, ``TextFile`` or ``DataFile``.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public protocol DirectoryComponent: Sendable {
+public protocol DirectoryContent: Sendable {
 
     func _serialize() -> [SerializedDirectoryContent]
 
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-extension DirectoryComponent {
+extension DirectoryContent {
 
     /// Write the contents of a directory to a file URL, in parallel
     /// - Parameter directoryURL: The a file URL

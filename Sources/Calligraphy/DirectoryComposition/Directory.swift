@@ -27,12 +27,12 @@ import Foundation
 
 /// A directory
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public protocol Directory: DirectoryComponent {
+public protocol Directory: DirectoryContent {
 
     /// The name of the directory
     var name: String { get }
 
-    associatedtype Body: DirectoryComponent = Never
+    associatedtype Body: DirectoryContent = Never
 
     @DirectoryContentBuilder
     var body: Body { get }
@@ -42,7 +42,7 @@ public protocol Directory: DirectoryComponent {
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-extension Never: DirectoryComponent {
+extension Never: DirectoryContent {
 
     public func _serialize() -> [SerializedDirectoryContent] {
         fatalError()
