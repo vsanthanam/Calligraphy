@@ -42,4 +42,4 @@ Explore [the documentation](https://vsanthanam.github.io/Calligraphy/docs/docume
 
 ## License
 
-**Calligraphy** is available under the MIT license. See the LICENSE file for more information.
+**Calligraphy** is available under the [MIT license](https://en.wikipedia.org/wiki/MIT_License). See the [LICENSE](https://github.com/vsanthanam/Calligraphy/blob/main/LICENSE) file for more information.

@@ -42,5 +42,5 @@ From there, you can copy the contents of `Sources/Calligraphy` to the destinatio
 You can also download a specific version of the package from the [GitHub Releases](https://github.com/vsanthanam/Calligraphy/releases) page, or from the [Swift Package Index](https://swiftpackageindex.com/vsanthanam/Calligraphy).
 
 @Small {
-    Calligraphy is available under the [MIT license](https://opensource.org/license/mit). See the LICENSE file for more information.
+    Calligraphy is available under the [MIT license](https://en.wikipedia.org/wiki/MIT_License). See the [LICENSE](https://github.com/vsanthanam/Calligraphy/blob/main/LICENSE) file for more information.
 }
