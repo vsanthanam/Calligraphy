@@ -25,17 +25,39 @@
 
 import Foundation
 
+/// ## Discussion
+///
+/// Calligraphy adds convenience initializers to allow you to easily create Foundation `Data` types from data components
+///
+/// You can pass in a component directly using ``Foundation/Data/init(_:)``:
+///
+/// ```swift
+/// let component = MyDataComponent()
+/// let data = Data(component)
+/// ```
+///
+/// You can also pass in multiple combined components using ``Foundation/Data/init(components:)``:
+///
+/// ```swift
+/// let data = Data(components: { @DataBuilder () -> some DAtaComponent {
+///     ...
+/// })
+/// ```
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension Data {
 
     // MARK: - Initializers
 
+    /// Create data from a data component
+    /// - Parameter component: The data component
     public init(
         _ component: some DataComponent
     ) {
         self = component.data ?? .init()
     }
 
+    /// Create data from a data builder
+    /// - Parameter components: The data components to combine
     public init(
         @DataBuilder components: () -> some DataComponent
     ) {
