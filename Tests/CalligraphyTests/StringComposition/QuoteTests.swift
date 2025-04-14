@@ -27,11 +27,11 @@ import Calligraphy
 import Testing
 
 @Suite
-struct QuotedTests {
+struct QuoteTests {
 
     @Test
     func standard() {
-        let quoted = Quoted {
+        let quote = Quote {
             Lines {
                 "foo"
                 "bar"
@@ -45,7 +45,7 @@ struct QuotedTests {
         baz"
         """#
 
-        #expect(quoted.build() == expected)
+        #expect(quote.build() == expected)
     }
 
     @Test
