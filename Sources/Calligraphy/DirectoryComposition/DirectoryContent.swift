@@ -147,7 +147,7 @@ extension [SerializedDirectoryContent] {
     }
 
     fileprivate func performWriteOperations() async throws -> [URL] {
-        try await withThrowingTaskGroup(of: [URL].self) { group in
+        try await withThrowingTaskGroup { group in
             for content in self {
                 group.addTask {
                     try await content.performWriteOperation()
