@@ -252,12 +252,24 @@ struct StringBuilderTests {
 
         }
         
+        struct Empty: StringComponent {
+            
+            var body: some StringComponent {
+                
+            }
+            
+        }
+        
         let foo = Foo()
         let bar = Bar()
+        let empty = Empty()
         
         #expect((foo + bar).build() == "foobar")
         #expect(("foo" + bar).build() == "foobar")
         #expect((foo + "bar").build() == "foobar")
+        #expect((foo + empty).build() == "foo")
+        #expect((empty + bar).build() == "bar")
+        #expect((empty + empty).build() == "")
     }
 
 }
