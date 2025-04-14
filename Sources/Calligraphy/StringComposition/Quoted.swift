@@ -29,16 +29,35 @@ extension StringComponent {
     public func quoted(
         _ markType: QuotationMark.`Type` = .double
     ) -> some StringComponent {
-        Quoted(markType) { self }
+        Quote(markType) { self }
     }
 
 }
 
+/// A string component that adds quotation marks to either side of its wrapped children.
+///
+/// Use this type to wrap a group of child components with quotation marks:
+///
+/// ```swift
+/// let component = Quote(.single) {
+///     "The quick brown fox jumps over the lazy dog"
+/// }
+/// ```
+///
+/// The above example would yield the following string:
+///
+/// ```
+/// 'The quick brown fox jumps over the lazy dog'
+/// ```
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Quoted<T>: StringComponent where T: StringComponent {
+public struct Quote<T>: StringComponent where T: StringComponent {
 
     // MARK: - Initializers
-
+    
+    /// Created a quoted string component
+    /// - Parameters:
+    ///   - markType: The type of quotation mark to use
+    ///   - components: The components to quote
     public init(
         _ markType: QuotationMark.`Type` = .double,
         @StringBuilder components: () -> T
