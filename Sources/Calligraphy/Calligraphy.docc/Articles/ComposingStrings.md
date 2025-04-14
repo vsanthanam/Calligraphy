@@ -1,6 +1,6 @@
 # Composing Strings
 
-Use's Calligraphy's declarative API to compose complex, multi-line strings in Swift.
+Use's Calligraphy's declarative APIs to compose complex, multi-line strings in Swift.
 
 ## Overview
 

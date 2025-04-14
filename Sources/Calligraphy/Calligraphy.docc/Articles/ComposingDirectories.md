@@ -1,16 +1,14 @@
 # Composing Directories
 
-A declarative API for creating and managing files and folders in Swift.
+Use's Calligraphy's declarative APIs to compose directories and their contents. 
 
 ## Overview
 
 Calligraphy provides a powerful and type-safe API for composing directories and their contents. The library offers both built-in types for common use cases and the ability to create custom directory content types.
 
-## Built-in Types
-
 ### Files
 
-The `File` type allows you to create both text and data files:
+The ``File`` type allows you to create both text and data files:
 
 ```swift
 // Create a text file
@@ -28,7 +26,7 @@ let dataFile = File("config.json") {
 
 ### Folders
 
-The `Folder` type enables you to create nested directory structures:
+The ``Folder`` type enables you to create nested directory structures:
 
 ```swift
 let project = Folder("MyProject") {
@@ -37,9 +35,6 @@ let project = Folder("MyProject") {
     }
     Folder("Sources") {
         File("main.swift") {
-            "print(\"Hello, World!\")"
-<<<<<<< Updated upstream
-=======
             Line {
                 "print("
                 Quoted {
@@ -47,41 +42,36 @@ let project = Folder("MyProject") {
                 }
                 ")"
             }
->>>>>>> Stashed changes
         }
     }
 }
 ```
 
-## Creating Custom Types
+## Custom Directory Content Types
 
-### Custom Directories
+#### Custom Text Files
 
-You can create custom directory types by conforming to the `Directory` protocol:
+For text files, conform to the ``TextFile`` protocol:
 
 ```swift
-struct MyProject: Directory {
-    let name = "MyProject"
+struct ReadmeFile: DataFile {
+
+    let name = "README.md"
     
-    var body: some DirectoryContent {
-        File("README.md") {
-            "# My Project"
-        }
-        Folder("Sources") {
-            File("main.swift") {
-                "print(\"Hello, World!\")"
-            }
-        }
+    var body: some StringComponent {
+        "# My Project"
     }
+
 }
 ```
 
-### Custom Data Files
+#### Custom Data Files
 
-For binary data files, conform to the `DataFile` protocol:
+For binary data files, conform to the ``DataFile`` protocol:
 
 ```swift
 struct ConfigFile: DataFile {
+
     let name = "config.bin"
     
     var body: some DataComponent {
@@ -89,19 +79,37 @@ struct ConfigFile: DataFile {
         0x02  // Flags
         0x03  // Data
     }
+
 }
 ```
 
-## Writing to Disk
+#### Custom Directories
 
-All directory content types can be written to disk using the `write(to:)` method:
+You can create custom directory types by conforming to the ``Directory`` protocol:
+
+```swift
+struct MyProject: Directory {
+
+    let name = "MyProject"
+    
+    var body: some DirectoryContent {
+        ReadmeFile()
+        ConfigFile()
+    }
+
+}
+```
+
+### Writing to Disk
+
+All directory content types can be written to disk using the ``DirectoryContent/write(to:)`` method:
 
 ```swift
 let project = MyProject()
 try await project.write(to: URL(fileURLWithPath: "/path/to/project"))
 ```
 
-## Relationship to Other Builders
+### Combining with @StringBuilder and @DataBuilder
 
 The directory composition API works seamlessly with other Calligraphy builders:
 
@@ -131,11 +139,3 @@ struct Documentation: Directory {
     }
 }
 ```
-
-## Best Practices
-
-1. Use meaningful names for files and folders
-2. Keep directory structures shallow when possible
-3. Use custom types for reusable directory patterns
-4. Leverage the type system to ensure correct composition
-5. Use async/await for disk operations

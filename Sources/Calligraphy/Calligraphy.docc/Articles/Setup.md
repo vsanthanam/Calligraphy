@@ -1,4 +1,4 @@
-# Installation
+# Project Setup
 
 Add Calligraphy in an existing Swift project
 

@@ -9,7 +9,7 @@ Foo and also Bar
 ## Get Started
 
 @Links(visualStyle: compactGrid) {
-    - <doc:Installation>
+    - <doc:Setup>
     - <doc:ComposingStrings>
     - <doc:ComposingDirectories>
 }
