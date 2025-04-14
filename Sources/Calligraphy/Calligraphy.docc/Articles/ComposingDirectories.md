@@ -52,7 +52,7 @@ let project = Folder("MyProject") {
 }
 ```
 
-## Custom Directory Content Types
+### Custom Directory Content Types
 
 #### Custom Text Files
 
@@ -105,15 +105,6 @@ struct MyProject: Directory {
 }
 ```
 
-### Writing to Disk
-
-All directory content types can be written to disk using the ``DirectoryContent/write(to:)`` method:
-
-```swift
-let project = MyProject()
-try await project.write(to: URL(fileURLWithPath: "/path/to/project"))
-```
-
 ### Combining with @StringBuilder and @DataBuilder
 
 The directory composition API works seamlessly with other Calligraphy builders:
@@ -143,4 +134,18 @@ struct Documentation: Directory {
         }
     }
 }
+```
+
+### Writing to Disk
+
+All directory content types can be written to disk using the ``DirectoryContent/write(to:)`` method:
+
+```swift
+let project = Files {
+    Folder("Project") {
+        Documentation()
+        MyProject()
+    }
+}
+try await project.write(to: URL(fileURLWithPath: "/path/to/project"))
 ```
