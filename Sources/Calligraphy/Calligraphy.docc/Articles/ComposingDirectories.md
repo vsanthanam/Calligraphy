@@ -5,7 +5,7 @@
     @PageKind(article)
 }
 
-Use @`DirectoryContentBuilder` to declaratively compose directories and their contents. 
+Use @`DirectoryContentBuilder` to compose complex, nested directory structures and write them to disk.
 
 ## Overview
 

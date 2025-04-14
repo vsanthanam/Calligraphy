@@ -5,7 +5,7 @@
     @PageKind(article)
 }
 
-Add Calligraphy in an existing Swift project
+Add Calligraphy in an existing Swift project.
 
 ## Add to an Xcode Project via SPM
 

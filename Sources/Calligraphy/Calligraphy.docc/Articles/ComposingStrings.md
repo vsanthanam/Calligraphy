@@ -12,7 +12,7 @@ Use `@StringBuilder` to compose complex, multi-line strings in Swift.
 The Calligraphy library introduces a domain-specific language (DSL) for string composition that makes it easy to create rich, reusable, and complex string content. At its core, this DSL is built around two key concepts:
 
 1. The ``StringComponent`` protocol, which represents individual pieces of string content
-2. The ``StringBuilder`` result builder, which provides a declarative syntax for composing multiple components
+2. The ``StringBuilder`` result builder, which provides declarative syntax for composing multiple components into larger ones.
 
 ## Making String Components
 
