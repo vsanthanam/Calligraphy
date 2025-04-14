@@ -76,7 +76,7 @@ func generateMessage(for user: User?) -> some StringComponent {
 }
 ```
 
-You can use the @StringBuilder result builder in several different way:
+You can use the @StringBuilder result builder in several different ways:
 
 - By applying the `@StringBuilder` attribute to any Swift function
 - When defining your own `StringComponent`, by implementing the `body` property
