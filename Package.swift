@@ -2,6 +2,7 @@
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
+import CompilerPluginSupport
 
 let package = Package(
     name: "Calligraphy",
@@ -25,11 +26,30 @@ let package = Package(
         .package(
             url: "https://github.com/swiftlang/swift-docc-plugin",
             from: "1.4.3"
+        ),
+        .package(
+            url: "https://github.com/swiftlang/swift-syntax",
+            exact: "601.0.1"
         )
     ],
     targets: [
         .target(
             name: "Calligraphy",
+            dependencies: [
+                "CalligraphyCompilerPlugin"
+            ],
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency=complete")
+            ]
+        ),
+        .macro(
+            name: "CalligraphyCompilerPlugin",
+            dependencies: [
+                .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
+                .product(name: "SwiftSyntax", package: "swift-syntax"),
+                .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
+                .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+            ],
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency=complete")
             ]
