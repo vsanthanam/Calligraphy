@@ -114,3 +114,13 @@ public enum SerializedDirectoryContent: Equatable, Sendable {
     }
 
 }
+
+extension [SerializedDirectoryContent] {
+
+    public init(
+        @DirectoryContentBuilder directoryContent: () -> some DirectoryContent
+    ) {
+        self = directoryContent()._serialize()
+    }
+    
+}
