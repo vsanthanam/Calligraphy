@@ -1,5 +1,10 @@
 # Project Setup
 
+@Metadata {
+    @PageImage(purpose: card, source: "get-started.png", alt: "Setup Icon")
+    @PageKind(article)
+}
+
 Add Calligraphy in an existing Swift project
 
 ## Add to an Xcode Project via SPM

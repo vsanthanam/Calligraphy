@@ -1,5 +1,10 @@
 # Composing Strings
 
+@Metadata {
+    @PageImage(purpose: card, source: "composing-strings.png", alt: "Code book with fountain pen")
+    @PageKind(article)
+}
+
 Use's Calligraphy's declarative APIs to compose complex, multi-line strings in Swift.
 
 ## Overview

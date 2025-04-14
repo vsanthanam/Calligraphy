@@ -1,5 +1,10 @@
 # Composing Directories
 
+@Metadata {
+    @PageImage(purpose: card, source: "composing-directories.png", alt: "Declarative file with folder illustration")
+    @PageKind(article)
+}
+
 Use's Calligraphy's declarative APIs to compose directories and their contents. 
 
 ## Overview
