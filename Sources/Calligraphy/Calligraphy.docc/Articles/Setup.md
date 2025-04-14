@@ -1,11 +1,12 @@
 # Project Setup
 
 @Metadata {
-    @PageImage(purpose: card, source: "get-started.png", alt: "Setup Icon")
+    @PageImage(purpose: card, source: "getting-started.png", alt: "Setup Icon")
     @PageKind(article)
+    @CallToAction(url: "https://www.github.com/vsanthanam/Calligraphy", purpose: link, label: "View on GitHub")
 }
 
-Add Calligraphy in an existing Swift project.
+Add Calligraphy in an existing Xcode Project or Swift Package.
 
 ## Add to an Xcode Project via SPM
 
@@ -39,3 +40,7 @@ $ git clone https://github.com/vsanthanam/Calligraphy.git
 From there, you can copy the contents of `Sources/Calligraphy` to the destination of your choice.
 
 You can also download a specific version of the package from the [GitHub Releases](https://github.com/vsanthanam/Calligraphy/releases) page, or from the [Swift Package Index](https://swiftpackageindex.com/vsanthanam/Calligraphy).
+
+@Small {
+    Calligraphy is available under the [MIT license](https://opensource.org/license/mit). See the LICENSE file for more information.
+}
