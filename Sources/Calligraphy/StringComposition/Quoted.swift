@@ -53,7 +53,7 @@ extension StringComponent {
 public struct Quote<T>: StringComponent where T: StringComponent {
 
     // MARK: - Initializers
-    
+
     /// Created a quoted string component
     /// - Parameters:
     ///   - markType: The type of quotation mark to use

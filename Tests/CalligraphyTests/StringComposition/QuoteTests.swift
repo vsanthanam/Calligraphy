@@ -1,5 +1,5 @@
 // Calligraphy
-// QuotedTests.swift
+// QuoteTests.swift
 //
 // MIT License
 //

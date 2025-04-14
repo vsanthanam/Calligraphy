@@ -23,17 +23,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/// ## Discussion
+///
+/// Calligraphy adds convenience initializers to allow you to easily create Swift strings from string components.
+///
+/// You can pass in a component directly using ``Swift/String/init(_:)``:
+///
+/// ```swift
+/// let component = MyStringComponent()
+/// let string = String(component)
+/// ```
+///
+/// You can also pass in multiple combined components using ``Swift/String/init(components:)``:
+///
+/// ```swift
+/// let string = String(components: { @StringBuilder () -> some StringComponent {
+///     "Hello, World!"
+///     "This is a declarative, multi-line string"
+///     "Created with Calligraphy!"
+/// })
+/// ```
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension String {
 
     // MARK: - Initializers
 
+    /// Create a string from a string component
+    /// - Parameter component: The string component
     public init(
         _ component: some StringComponent
     ) {
         self = component.content ?? ""
     }
 
+    /// Create a string from a string builder
+    /// - Parameter components: The string components to combine
     public init(
         @StringBuilder components: () -> some StringComponent
     ) {

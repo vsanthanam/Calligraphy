@@ -5,7 +5,7 @@
     @PageKind(article)
 }
 
-Use's Calligraphy's declarative APIs to compose complex, multi-line strings in Swift.
+Use `@StringBuilder` to compose complex, multi-line strings in Swift.
 
 ## Overview
 
@@ -47,6 +47,11 @@ struct WelcomeMessage: StringComponent {
 }
 ```
 
+You can create a Swift string from a `StringComponent` using two library provided initializers:
+
+- ``Swift/String/init(_:)``
+- ``Swift/String/init(components:)``
+
 ## Combining String Components
 
 The ``StringBuilder`` result builder provides a declarative syntax for composing multiple string components. It supports all the standard control flow statements you'd expect: if-else, optional binding, switch statements, and for loops.
@@ -71,9 +76,16 @@ func generateMessage(for user: User?) -> some StringComponent {
 }
 ```
 
-### String Separators
+You can use the @StringBuilder result builder in several different way:
 
-Unless explicitly specified otherwise, the `StringBuilder` uses a newline character (`\n`) as the separator between components. You can change this behavior in several ways:
+- By applying the `@StringBuilder` attribute to any Swift function
+- When defining your own `StringComponent`, by implementing the `body` property
+- Using the ``StringComponents`` struct, which provides you with an entry point to the DSL and typed value you can store, pass around, modify, and use in other string builders.
+- Using the ``Swift/String/init(components:)`` string initializer, which accepts a `@StringBuilder` closure as an argument.
+
+### Component Separators
+
+Unless explicitly specified by an upstream parent, `@StringBuilder` uses a newline character (`\n`) as the separator when assembling its children into a larger, parent component. You can change this behavior in several ways:
 
 #### The Line component
 
@@ -93,7 +105,7 @@ This example would yield the following string:
 foobarbaz
 ```
 
-#### The Lines Component
+#### The Lines component
 
 You can also use the ``Lines`` component, which can add one or more new lines when joining its children:
 

@@ -1,5 +1,5 @@
 // Calligraphy
-// EmptyDirectoryContent.swift
+// EmptyDirectoryComponent.swift
 //
 // MIT License
 //

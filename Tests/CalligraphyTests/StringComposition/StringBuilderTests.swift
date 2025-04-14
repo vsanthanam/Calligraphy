@@ -232,38 +232,36 @@ struct StringBuilderTests {
         #expect(components is StringBuilder._Either<AnyStringComponent, StringBuilder._Skip>)
         #expect(components.build() == "foo")
     }
-    
+
     @Test
     func operators() {
-        
+
         struct Foo: StringComponent {
-            
+
             var body: some StringComponent {
                 "foo"
             }
 
         }
-        
+
         struct Bar: StringComponent {
-            
+
             var body: some StringComponent {
                 "bar"
             }
 
         }
-        
+
         struct Empty: StringComponent {
-            
-            var body: some StringComponent {
-                
-            }
-            
+
+            var body: some StringComponent {}
+
         }
-        
+
         let foo = Foo()
         let bar = Bar()
         let empty = Empty()
-        
+
         #expect((foo + bar).build() == "foobar")
         #expect(("foo" + bar).build() == "foobar")
         #expect((foo + "bar").build() == "foobar")

@@ -23,20 +23,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/// A quotation mark with multiple available styles
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct QuotationMark: StringComponent {
 
     // MARK: - Initializers
 
+    /// Create a quotation mark
+    /// - Parameter type: The type of quotation mark to use
     public init(_ type: Type) {
         self.type = type
     }
 
     // MARK: - API
 
+    /// The available types of quotation marks
     public enum `Type`: String, Equatable, Sendable {
+
+        /// A single quote (`'`)
         case single = "'"
+
+        /// A double quote (`"`)
         case double = "\""
+
+        /// A triple quote (`'''`)
         case triple = "'''"
     }
 

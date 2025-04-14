@@ -4,7 +4,7 @@ A declarative API for composing multi-line strings, files, and folders in Swift
 
 ## Overview
 
-Calligraphy provides a powerful and intuitive way to compose complex text structures in Swift. Whether you're building multi-line strings, generating code, or creating entire directory structures, Calligraphy offers a declarative API that makes your code more readable and maintainable.
+Calligraphy provides a powerful and intuitive way to compose complex text structures in Swift. Drawing inspiration from SwiftUI's declarative approach, Calligraphy offers a familiar API design that will feel natural to SwiftUI developers. Whether you're building multi-line strings, generating code, or creating entire directory structures, Calligraphy's declarative API makes your code more readable and maintainable.
 
 The library is organized into three main areas:
 
@@ -17,6 +17,8 @@ The library is organized into three main areas:
 Calligraphy's type-safe API and builder patterns make it ideal for code generation, configuration file creation, and any scenario where you need to programmatically generate text or file structures.
 
 ## Start Here
+
+These articles will help you setup Calligraphy in a new or exising project and detail the library's core concepts.
 
 @Links(visualStyle: detailedGrid) {
     - <doc:Setup>

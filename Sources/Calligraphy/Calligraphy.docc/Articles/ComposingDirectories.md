@@ -5,7 +5,7 @@
     @PageKind(article)
 }
 
-Use's Calligraphy's declarative APIs to compose directories and their contents. 
+Use @`DirectoryContentBuilder` to declaratively compose directories and their contents. 
 
 ## Overview
 

@@ -26,6 +26,9 @@
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
+    /// Add a tab to every line in the upstream
+    /// - Parameter numberOfTabs: The number of tabs to add
+    /// - Returns: A tabbed version of the upstream
     public func tabbed(
         _ numberOfTabs: Int = 1
     ) -> some StringComponent {
@@ -34,11 +37,16 @@ extension StringComponent {
 
 }
 
+/// A string compoments with tabs on every line
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct Tabbed<T>: StringComponent where T: StringComponent {
 
     // MARK: - Initializers
 
+    /// Create a tabbed string component
+    /// - Parameters:
+    ///   - numberOfTabs: The number of tabs to each line
+    ///   - components: The components to tab
     public init(
         _ numberOfTabs: Int = 1,
         @StringBuilder components: () -> T
