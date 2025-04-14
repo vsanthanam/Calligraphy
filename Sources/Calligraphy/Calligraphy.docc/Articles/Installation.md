@@ -2,7 +2,7 @@
 
 Add Calligraphy in an existing Swift project
 
-## Xcode Project via SPM
+## Add to an Xcode Project via SPM
 
 To add Calligraphy as a dependency to an Xcode Project, open the project in Xcode and perform the following steps:
 
@@ -10,7 +10,7 @@ To add Calligraphy as a dependency to an Xcode Project, open the project in Xcod
 
 2. Enter package URL `https://github.com/vsanthanam/Calligraphy.git` and select your release and of choice.
 
-## Add Calligraphy to a Swift Package
+## Add to a Swift Package
 
 To add Calligraphy as a dependency to an existing Swift package, add the following line of code to the `dependencies` parameter of your `Package.swift` file:
 
