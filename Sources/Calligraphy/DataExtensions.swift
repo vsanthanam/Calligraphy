@@ -39,7 +39,7 @@ import Foundation
 /// You can also pass in multiple combined components using ``Foundation/Data/init(components:)``:
 ///
 /// ```swift
-/// let data = Data(components: { @DataBuilder () -> some DAtaComponent {
+/// let data = Data(components: { @DataBuilder () -> some DataComponent {
 ///     ...
 /// })
 /// ```
