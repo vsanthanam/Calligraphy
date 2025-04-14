@@ -38,6 +38,16 @@ let project = Folder("MyProject") {
     Folder("Sources") {
         File("main.swift") {
             "print(\"Hello, World!\")"
+<<<<<<< Updated upstream
+=======
+            Line {
+                "print("
+                Quoted {
+                    "Hello, World!"
+                }
+                ")"
+            }
+>>>>>>> Stashed changes
         }
     }
 }
