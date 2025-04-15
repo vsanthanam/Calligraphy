@@ -47,36 +47,6 @@ public enum DirectoryContentBuilder {
         [expression]
     }
 
-    @DirectoryContentBuilder
-    public static func buildExpression(
-        _ expression: SerializedDirectoryContent.File
-    ) -> _AlreadySerialized {
-        .file(expression)
-    }
-
-    @DirectoryContentBuilder
-    public static func buildExpression(
-        _ expression: SerializedDirectoryContent.Directory
-    ) -> _AlreadySerialized {
-        .directory(expression)
-    }
-
-    @DirectoryContentBuilder
-    public static func buildExpression(
-        _ expression: [SerializedDirectoryContent.File]
-    ) -> _AlreadySerialized {
-        expression
-            .map(SerializedDirectoryContent.file)
-    }
-
-    @DirectoryContentBuilder
-    public static func buildExpression(
-        _ expression: [SerializedDirectoryContent.Directory]
-    ) -> _AlreadySerialized {
-        expression
-            .map(SerializedDirectoryContent.directory)
-    }
-
     public static func buildBlock() -> EmptyDirectoryContent {
         EmptyDirectoryContent()
     }

@@ -39,7 +39,7 @@ func directoryDefaultSerialization() {
 
     let fooDirectory = FooDirectory()
     let serialized = fooDirectory._serialize()
-    let expected = [SerializedDirectoryContent.directory(.init("Foo", children: fooDirectory.body._serialize()))]
+    let expected = [SerializedDirectoryContent.directory("Foo", permissions: .default, content: fooDirectory.body._serialize())]
     #expect(serialized == expected)
 
 }

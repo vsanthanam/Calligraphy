@@ -34,7 +34,7 @@
 /// let string = String(component)
 /// ```
 ///
-/// You can also pass in multiple combined components using ``Swift/String/init(components:)``:
+/// You can also pass in multiple combined components using ``Swift/String/build(_:)``:
 ///
 /// ```swift
 /// let string = String(components: { @StringBuilder () -> some StringComponent {
@@ -56,12 +56,8 @@ extension String {
         self = component.content ?? ""
     }
 
-    /// Create a string from a string builder
-    /// - Parameter components: The string components to combine
-    public init(
-        @StringBuilder components: () -> some StringComponent
-    ) {
-        self.init(components())
+    public static func build(@StringBuilder _ components: () -> some StringComponent) -> String {
+        .init(components())
     }
 
 }

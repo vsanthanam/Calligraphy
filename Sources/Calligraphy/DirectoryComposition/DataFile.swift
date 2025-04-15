@@ -32,19 +32,18 @@ public protocol DataFile: DataComponent, DirectoryContent {
     /// The name of the data file
     var name: String { get }
 
+    var permissions: FilePermissions { get }
+
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension DataFile {
 
+    public var permissions: FilePermissions { .default }
+
     public func _serialize() -> [SerializedDirectoryContent] {
         [
-            .file(
-                .init(
-                    name,
-                    content: .data(Data(self))
-                )
-            )
+            .data(name, permissions: permissions, data: Data(self))
         ]
     }
 

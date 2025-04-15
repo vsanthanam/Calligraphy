@@ -28,134 +28,147 @@ import Foundation
 /// A re-usable, composable file
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct File: DirectoryContent {
-
+    
     // MARK: - Initializers
-
-    /// Create a text file, declaratively
+    
+    /// Create a text file using a @StringBuilder
     /// - Parameters:
     ///   - name: The name of the file
-    ///   - encoding: The string encoding to use when the file is written to disk
-    ///   - text: The text in the file
+    ///   - permissions: The file's permissions
+    ///   - encoding: The file's encoding
+    ///   - text: The contents of the file
     public init(
         _ name: String,
+        permissions: FilePermissions = .default,
         encoding: String.Encoding = .utf8,
         @StringBuilder text: () -> some StringComponent
     ) {
-        self.init(
+        backing = .text(
             name,
-            .text(
-                String(components: text),
-                encoding
-            )
+            permissions: permissions,
+            text: String.build(text),
+            encoding: encoding
         )
     }
 
-    /// Create a text file with a file extension, declaratively
+    /// Create a text file with a file extension using a @StringBuilder
     /// - Parameters:
     ///   - name: The name of the file
-    ///   - extension: The file extension
-    ///   - encoding: The string encoding to use when the file is written to disk
-    ///   - text: The text in the file
+    ///   - fileExtension: The file extension
+    ///   - permissions: The file's permissions
+    ///   - encoding: The file's encoding
+    ///   - text: The contents of the file
     public init(
         _ name: String,
-        extension: String,
+        fileExtension: String,
+        permissions: FilePermissions = .default,
         encoding: String.Encoding = .utf8,
         @StringBuilder text: () -> some StringComponent
     ) {
-        self.init(
+        backing = .text(
             name,
-            `extension`,
-            .text(
-                String(components: text),
-                encoding
-            )
+            fileExtension: fileExtension,
+            permissions: permissions,
+            text: String.build(text),
+            encoding: encoding
         )
     }
-
+    
     /// Create a text file
     /// - Parameters:
     ///   - name: The name of the file
-    ///   - encoding: The string encoding to use when the file is written to disk
-    ///   - text: The text in the file
+    ///   - permissions: The file's permissions
+    ///   - text: The contents of the file
+    ///   - encoding: The file's encoding
     public init(
         _ name: String,
+        permissions: FilePermissions = .default,
+        text: String,
         encoding: String.Encoding = .utf8,
-        text: String
     ) {
         self.init(
             name,
+            permissions: permissions,
             encoding: encoding
         ) {
             text
         }
     }
 
-    /// Create a text file with a file extension, declaratively
+    /// Create a text file with a file extension
     /// - Parameters:
     ///   - name: The name of the file
-    ///   - extension: The file extension
-    ///   - encoding: The string encoding to use when the file is written to disk
-    ///   - text: The text in the file
+    ///   - fileExtension: The file extension
+    ///   - permissions: The file's permissions
+    ///   - text: The contents of the file
+    ///   - encoding: The file's encoding
     public init(
         _ name: String,
-        extension: String,
+        fileExtension: String,
+        permissions: FilePermissions = .default,
+        text: String,
         encoding: String.Encoding = .utf8,
-        text: String
     ) {
         self.init(
             name,
-            extension: `extension`,
+            fileExtension: fileExtension,
+            permissions: permissions,
             encoding: encoding
         ) {
             text
         }
     }
-
-    /// Create a data file, declaratively
+    
+    /// Create a data file using a @DataBuilder
     /// - Parameters:
     ///   - name: The name of the file
-    ///   - data: The data in the file
+    ///   - permissions: The file's permissions
+    ///   - data: The contents of the file
     public init(
         _ name: String,
+        permissions: FilePermissions = .default,
         @DataBuilder data: () -> some DataComponent
     ) {
-        self.init(
+        backing = .data(
             name,
-            .data(
-                Data(components: data)
-            )
+            permissions: permissions,
+            data: Data.build(data)
         )
     }
 
-    /// Create a data file with a file extension, declaratively
+    /// Create a data file with a file extension using a @DataBuilder
     /// - Parameters:
     ///   - name: The name of the file
-    ///   - extension: The file extension
-    ///   - data: The data in the file
+    ///   - fileExtension: The file extension
+    ///   - permissions: The file's permissions
+    ///   - data: The contents of the file
     public init(
         _ name: String,
-        extension: String,
+        fileExtension: String,
+        permissions: FilePermissions = .default,
         @DataBuilder data: () -> some DataComponent
     ) {
-        self.init(
+        backing = .data(
             name,
-            `extension`,
-            .data(
-                Data(components: data)
-            )
+            fileExtension: fileExtension,
+            permissions: permissions,
+            data: Data.build(data)
         )
     }
 
     /// Create a data file
     /// - Parameters:
     ///   - name: The name of the file
-    ///   - data: The data in the file
+    ///   - permissions: The file's permissions
+    ///   - data: The contents of the file
     public init(
         _ name: String,
+        permissions: FilePermissions = .default,
         data: Data
     ) {
         self.init(
-            name
+            name,
+            permissions: permissions
         ) {
             data
         }
@@ -164,53 +177,246 @@ public struct File: DirectoryContent {
     /// Create a data file with a file extension
     /// - Parameters:
     ///   - name: The name of the file
-    ///   - extension: The file extension
-    ///   - data: The data in the file
+    ///   - fileExtension: The file extension
+    ///   - permissions: The file's permissions
+    ///   - data: The contents of the file
     public init(
         _ name: String,
-        extension: String,
+        fileExtension: String,
+        permissions: FilePermissions = .default,
         data: Data
     ) {
         self.init(
             name,
-            extension: `extension`
+            fileExtension: fileExtension,
+            permissions: permissions
         ) {
             data
         }
     }
-
+    
     // MARK: - DirectoryContent
 
     public func _serialize() -> [SerializedDirectoryContent] {
-        [
-            .file(backing)
-        ]
+        [backing]
     }
 
     // MARK: - Private
-
-    private init(
-        _ name: String,
-        _ content: SerializedDirectoryContent.File.Content
-    ) {
-        backing = .init(
-            name,
-            content: content
-        )
-    }
-
-    private init(
-        _ name: String,
-        _ extension: String,
-        _ content: SerializedDirectoryContent.File.Content
-    ) {
-        let name = name + "." + `extension`
-        self.init(
-            name,
-            content
-        )
-    }
-
-    private let backing: SerializedDirectoryContent.File
+    
+    private let backing: SerializedDirectoryContent
 
 }
+
+//    // MARK: - Initializers
+//
+//    /// Create a text file, declaratively
+//    /// - Parameters:
+//    ///   - name: The name of the file
+//    ///   - permissions: The file's permissions
+//    ///   - encoding: The string encoding to use when the file is written to disk
+//    ///   - text: The text in the file
+//    public init(
+//        _ name: String,
+//        permissions: FilePermissions = .default,
+//        encoding: String.Encoding = .utf8,
+//        @StringBuilder text: () -> some StringComponent
+//    ) {
+//        self.init(
+//            name,
+//            permissions,
+//            .text(
+//                String.build(text),
+//                encoding
+//            )
+//        )
+//    }
+//
+//    /// Create a text file with a file extension, declaratively
+//    /// - Parameters:
+//    ///   - name: The name of the file
+//    ///   - extension: The file extension
+//    ///   - permissions: The file's permissions
+//    ///   - encoding: The string encoding to use when the file is written to disk
+//    ///   - text: The text in the file
+//    public init(
+//        _ name: String,
+//        extension: String,
+//        permissions: FilePermissions = .default,
+//        encoding: String.Encoding = .utf8,
+//        @StringBuilder text: () -> some StringComponent
+//    ) {
+//        self.init(
+//            name,
+//            `extension`,
+//            permissions,
+//            .text(
+//                String.build(text),
+//                encoding
+//            )
+//        )
+//    }
+//
+//    /// Create a text file
+//    /// - Parameters:
+//    ///   - name: The name of the file
+//    ///   - permissions: The file's permissions
+//    ///   - encoding: The string encoding to use when the file is written to disk
+//    ///   - text: The text in the file
+//    public init(
+//        _ name: String,
+//        permissions: FilePermissions = .default,
+//        encoding: String.Encoding = .utf8,
+//        text: String
+//    ) {
+//        self.init(
+//            name,
+//            permissions: permissions,
+//            encoding: encoding
+//        ) {
+//            text
+//        }
+//    }
+//
+//    /// Create a text file with a file extension, declaratively
+//    /// - Parameters:
+//    ///   - name: The name of the file
+//    ///   - extension: The file extension
+//    ///   - permissions: The file's permissions
+//    ///   - encoding: The string encoding to use when the file is written to disk
+//    ///   - text: The text in the file
+//    public init(
+//        _ name: String,
+//        extension: String,
+//        permissions: FilePermissions = .default,
+//        encoding: String.Encoding = .utf8,
+//        text: String
+//    ) {
+//        self.init(
+//            name,
+//            extension: `extension`,
+//            permissions: permissions,
+//            encoding: encoding
+//        ) {
+//            text
+//        }
+//    }
+//
+//    /// Create a data file, declaratively
+//    /// - Parameters:
+//    ///   - name: The name of the file
+//    ///   - permissions: The file's permissions
+//    ///   - data: The data in the file
+//    public init(
+//        _ name: String,
+//        permissions: FilePermissions = .default,
+//        @DataBuilder data: () -> some DataComponent
+//    ) {
+//        self.init(
+//            name,
+//            permissions,
+//            .data(
+//                Data(components: data)
+//            )
+//        )
+//    }
+//
+//    /// Create a data file with a file extension, declaratively
+//    /// - Parameters:
+//    ///   - name: The name of the file
+//    ///   - extension: The file extension
+//    ///   - permissions: The file's permissions
+//    ///   - data: The data in the file
+//    public init(
+//        _ name: String,
+//        extension: String,
+//        permissions: FilePermissions = .default,
+//        @DataBuilder data: () -> some DataComponent
+//    ) {
+//        self.init(
+//            name,
+//            `extension`,
+//            permissions,
+//            .data(
+//                Data(components: data)
+//            )
+//        )
+//    }
+//
+//    /// Create a data file
+//    /// - Parameters:
+//    ///   - name: The name of the file
+//    ///   - permissions: The file's permissions
+//    ///   - data: The data in the file
+//    public init(
+//        _ name: String,
+//        permissions: FilePermissions = .default,
+//        data: Data
+//    ) {
+//        self.init(
+//            name,
+//            permissions: permissions
+//        ) {
+//            data
+//        }
+//    }
+//
+//    /// Create a data file with a file extension
+//    /// - Parameters:
+//    ///   - name: The name of the file
+//    ///   - extension: The file extension
+//    ///   - permissions: The file's permissions
+//    ///   - data: The data in the file
+//    public init(
+//        _ name: String,
+//        extension: String,
+//        permissions: FilePermissions = .default,
+//        data: Data
+//    ) {
+//        self.init(
+//            name,
+//            extension: `extension`,
+//            permissions: permissions
+//        ) {
+//            data
+//        }
+//    }
+//
+//    // MARK: - DirectoryContent
+//
+//    public func _serialize() -> [SerializedDirectoryContent] {
+//        [
+//            .file(backing)
+//        ]
+//    }
+//
+//    // MARK: - Private
+//
+//    private init(
+//        _ name: String,
+//        _ permissions: FilePermissions,
+//        _ content: SerializedDirectoryContent.File.Content
+//    ) {
+//        backing = .init(
+//            name,
+//            permissions: permissions,
+//            content: content
+//        )
+//    }
+//
+//    private init(
+//        _ name: String,
+//        _ extension: String,
+//        _ permissions: FilePermissions,
+//        _ content: SerializedDirectoryContent.File.Content
+//    ) {
+//        let name = name + "." + `extension`
+//        self.init(
+//            name,
+//            permissions,
+//            content
+//        )
+//    }
+//
+//    private let backing: SerializedDirectoryContent.File
+//
+// }

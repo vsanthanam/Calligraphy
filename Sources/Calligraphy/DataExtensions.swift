@@ -36,7 +36,7 @@ import Foundation
 /// let data = Data(component)
 /// ```
 ///
-/// You can also pass in multiple combined components using ``Foundation/Data/init(components:)``:
+/// You can also pass in multiple combined components using ``Foundation/Data/build(_:)``:
 ///
 /// ```swift
 /// let data = Data(components: { @DataBuilder () -> some DataComponent {
@@ -56,11 +56,7 @@ extension Data {
         self = component.data ?? .init()
     }
 
-    /// Create data from a data builder
-    /// - Parameter components: The data components to combine
-    public init(
-        @DataBuilder components: () -> some DataComponent
-    ) {
+    public static func build(@DataBuilder _ components: () -> some DataComponent) -> Data {
         self.init(components())
     }
 

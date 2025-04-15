@@ -37,10 +37,10 @@ struct StringExtensionsTests {
 
     @Test
     func components() {
-        let str = String(components: {
+        let str = String.build {
             RawStringComponent("Foo")
             RawStringComponent("Bar")
-        })
+        }
         #expect(str == "Foo\nBar")
     }
 
