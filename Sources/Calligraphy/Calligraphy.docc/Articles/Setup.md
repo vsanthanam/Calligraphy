@@ -6,7 +6,7 @@
     @CallToAction(url: "https://www.github.com/vsanthanam/Calligraphy", purpose: link, label: "View on GitHub")
 }
 
-Add Calligraphy in an existing Xcode Project or Swift Package.
+Add Calligraphy to an existing Xcode Project or Swift Package.
 
 ## Add to an Xcode Project via SPM
 
