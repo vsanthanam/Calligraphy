@@ -63,6 +63,14 @@ public struct FilePermissions: OptionSet, Equatable, Hashable, Sendable, CustomS
     /// Other execute permission
     public static let executeOther = FilePermissions(rawValue: 0o001)
 
+    /// Default permissions
+    public static let `default`: FilePermissions = [
+        .readUser,
+        .writeUser,
+        .readGroup,
+        .readOther
+    ]
+    
     /// Default executable permissions
     public static let executable: FilePermissions = [
         .default,
@@ -84,13 +92,10 @@ public struct FilePermissions: OptionSet, Equatable, Hashable, Sendable, CustomS
         .executeOther
     ]
 
-    /// Default permissions
-    public static let `default`: FilePermissions = [
-        .readUser,
-        .writeUser,
-        .readGroup,
-        .readOther
-    ]
+    /// No permissions
+    public static let none: FilePermissions = []
+    
+    
 
     // MARK: - OptionSet
 
