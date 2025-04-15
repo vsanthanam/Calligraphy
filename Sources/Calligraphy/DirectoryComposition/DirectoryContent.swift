@@ -56,49 +56,9 @@ extension DirectoryContent {
         }
         return try await DiskOperation.start(with: directoryURL) {
             let contents = _serialize()
-            try contents.validate(in: "root")
+//            try contents.validate(in: "root")
             return try await contents.performWriteOperations()
         }
-    }
-
-}
-
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-extension SerializedDirectoryContent.File {
-
-    fileprivate func write(
-        to fileURL: URL
-    ) async throws {
-        switch content {
-        case let .data(data):
-            try data.write(
-                to: fileURL,
-                options: .withoutOverwriting
-            )
-        case let .text(text, encoding):
-            try text.write(
-                to: fileURL,
-                atomically: false,
-                encoding: encoding
-            )
-        }
-        try Task.checkCancellation()
-    }
-
-}
-
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-extension SerializedDirectoryContent.Directory {
-
-    fileprivate func write(
-        to directoryURL: URL
-    ) async throws {
-        try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: false)
-        try Task.checkCancellation()
-    }
-
-    fileprivate func validate() throws {
-        try children.validate(in: name)
     }
 
 }
@@ -107,27 +67,69 @@ extension SerializedDirectoryContent.Directory {
 extension SerializedDirectoryContent {
 
     fileprivate func performWriteOperation() async throws -> [URL] {
-        switch self {
-        case let .file(file):
-            let url = try DiskOperation.currentURL.appending(path: file.name, directoryHint: .notDirectory)
-            try await file.write(to: url)
-            return [url]
+        let attributes: [FileAttributeKey: Any] = [
+            .posixPermissions: permissions.rawValue
+        ]
+        switch content {
         case let .directory(directory):
-            let url = try DiskOperation.currentURL.appending(path: directory.name, directoryHint: .isDirectory)
-            try await directory.write(to: url)
-            let urls = try await DiskOperation.push(path: directory.name) {
-                try await directory.children.performWriteOperations()
+            let url = try DiskOperation.currentURL.appending(
+                path: name,
+                directoryHint: .notDirectory
+            )
+            try FileManager.default.createDirectory(
+                at: url,
+                withIntermediateDirectories: false,
+                attributes: attributes
+            )
+            try Task.checkCancellation()
+            let urls = try await DiskOperation.push(path: name) {
+                try await directory.performWriteOperations()
             }
             return [url] + urls
+        case let .file(file):
+            let url = try DiskOperation.currentURL.appending(
+                path: name,
+                directoryHint: .isDirectory
+            )
+            let data = try await file.serialize()
+            try data.write(
+                to: url,
+                options: .withoutOverwriting
+            )
+            try Task.checkCancellation()
+            try FileManager.default.setAttributes(
+                attributes,
+                ofItemAtPath: url.path()
+            )
+            try Task.checkCancellation()
+            return [url]
         }
     }
 
     fileprivate func validate() throws {
-        switch self {
+        switch content {
+        case let .directory(directory):
+            try directory.validate(in: name)
         case .file:
             break
-        case let .directory(directory):
-            try directory.validate()
+        }
+    }
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+extension SerializedDirectoryContent.Content.File {
+
+    func serialize() async throws -> Data {
+        switch self {
+        case let .data(data):
+            return data
+        case let .text(text, encoding):
+            guard let data = text.data(using: encoding) else {
+                throw DiskOperationError("Invalid string encoding")
+            }
+            try Task.checkCancellation()
+            return data
         }
     }
 

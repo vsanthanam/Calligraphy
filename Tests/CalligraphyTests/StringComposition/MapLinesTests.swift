@@ -81,7 +81,7 @@ struct MapLinesTests {
             }
         #expect(mapLines.build() == "")
     }
-    
+
     @Test
     func builderModifierWithNotEmptyRuleRule() {
         let mapLines = Lines(spacing: 2) {
@@ -95,9 +95,9 @@ struct MapLinesTests {
 
         let expected = #"""
         - foo
-        
+
         - bar
-        
+
         - baz
         """#
 

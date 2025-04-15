@@ -25,102 +25,99 @@
 
 import Foundation
 
-/// A serialized representation of the contents of a directory, which can be written to disk
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public enum SerializedDirectoryContent: Equatable, Sendable {
+public struct SerializedDirectoryContent: Equatable, Sendable {
 
-    // MARK: - API
-
-    /// A directory
-    case directory(Directory)
-
-    /// A file
-    case file(File)
-
-    public var name: String {
-        switch self {
-        case let .directory(directory):
-            directory.name
-        case let .file(file):
-            file.name
-        }
+    public static func directory(
+        _ name: String,
+        permissions: FilePermissions,
+        content: [SerializedDirectoryContent]
+    ) -> SerializedDirectoryContent {
+        .init(
+            name: name,
+            permissions: permissions,
+            content: .directory(content)
+        )
     }
 
-    /// A serialized directory
-    public struct Directory: Equatable, Sendable {
-
-        // MARK: - Initializers
-
-        /// Create a serialized directory
-        /// - Parameters:
-        ///   - name: The name of the directory
-        ///   - children: The directory's children
-        public init(
-            _ name: String,
-            children: [SerializedDirectoryContent]
-        ) {
-            self.name = name
-            self.children = children
-        }
-
-        // MARK: - API
-
-        /// The name of the directory
-        public let name: String
-
-        /// The directory's children
-        public let children: [SerializedDirectoryContent]
-
+    public static func data(
+        _ name: String,
+        permissions: FilePermissions,
+        data: Data
+    ) -> SerializedDirectoryContent {
+        .init(
+            name: name,
+            permissions: permissions,
+            content: .file(
+                .data(
+                    data
+                )
+            )
+        )
     }
 
-    /// A serialized file
-    public struct File: Equatable, Sendable {
+    public static func data(
+        _ name: String,
+        fileExtension: String,
+        permissions: FilePermissions,
+        data: Data
+    ) -> SerializedDirectoryContent {
+        .data(
+            name + "." + fileExtension,
+            permissions: permissions,
+            data: data
+        )
+    }
 
-        // MARK: - Initializers
+    public static func text(
+        _ name: String,
+        permissions: FilePermissions,
+        text: String,
+        encoding: String.Encoding
+    ) -> SerializedDirectoryContent {
+        .init(
+            name: name,
+            permissions: permissions,
+            content: .file(
+                .text(
+                    text,
+                    encoding
+                )
+            )
+        )
+    }
 
-        /// Create a serialized file
-        /// - Parameters:
-        ///   - name: The name of the file
-        ///   - content: The contents of the file
-        public init(
-            _ name: String,
-            content: Content
-        ) {
-            self.name = name
-            self.content = content
-        }
+    public static func text(
+        _ name: String,
+        fileExtension: String,
+        permissions: FilePermissions,
+        text: String,
+        encoding: String.Encoding
+    ) -> SerializedDirectoryContent {
+        .init(
+            name: name + "." + fileExtension,
+            permissions: permissions,
+            content: .file(.text(text, encoding))
+        )
+    }
 
-        // MARK: - API
+    public let name: String
 
-        /// The name of the file
-        public let name: String
+    public let permissions: FilePermissions
 
-        /// The contents of the file
-        public let content: Content
+    public let content: Content
 
-        /// A serialized file's contents
-        public enum Content: Equatable, Sendable {
+    public enum Content: Equatable, Sendable {
 
-            // MARK: - API
+        case directory([SerializedDirectoryContent])
 
-            /// Data file content
+        case file(File)
+
+        public enum File: Equatable, Sendable {
             case data(Data)
-
-            /// Text file content
             case text(String, String.Encoding)
-
         }
 
-    }
-
-}
-
-extension [SerializedDirectoryContent] {
-
-    public init(
-        @DirectoryContentBuilder directoryContent: () -> some DirectoryContent
-    ) {
-        self = directoryContent()._serialize()
     }
 
 }
