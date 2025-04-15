@@ -16,4 +16,4 @@ jobs:
     - name: Xcode Version
       run: sudo xcode-select --switch /Applications/Xcode_16.3.app
     - name: Run Tests
-      run: xcodebuild test -scheme Calligraphy -sdk iphonesimulator -destination "OS=18.2,name=iPhone 16"
+      run: xcodebuild test -scheme Calligraphy-Package -sdk iphonesimulator -destination "OS=18.2,name=iPhone 16"
