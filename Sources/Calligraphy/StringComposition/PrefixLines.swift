@@ -26,45 +26,64 @@
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
+    /// Prefix every line of the upstream
+    /// - Parameters:
+    ///   - prefix: The prefix to apply to every applicable line
+    ///   - rule: The rule used to determine which lines should get prefixed
+    /// - Returns: A prefixed version of the upstream
     public func prefixLines(
-        with prefix: String
+        with prefix: String,
+        _ rule: MapLinesRule = .all
     ) -> some StringComponent {
-        prefixLines { prefix }
+        prefixLines(rule) { prefix }
     }
 
+    /// Prefix every line of the upstream, declaratively
+    /// - Parameters:
+    ///   - rule: The prefix to apply to every applicable line
+    ///   - components: The `@StrinbBuilder` prefix to apply to every applicable line
+    /// - Returns: A prefixed version of the upstream
     public func prefixLines(
-        @StringBuilder with components: () -> some StringComponent
+        _ rule: MapLinesRule = .all,
+        @StringBuilder components: () -> some StringComponent
     ) -> some StringComponent {
         PrefixLines(
             self,
+            rule,
             components()
         )
     }
+
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-struct PrefixLines<Lines, Prefix>: StringComponent where Lines: StringComponent, Prefix: StringComponent {
+private struct PrefixLines<Lines, Prefix>: StringComponent where Lines: StringComponent, Prefix: StringComponent {
+
+    // MARK: - Initializers
+
+    init(
+        _ lines: Lines,
+        _ rule: MapLinesRule,
+        _ prefix: Prefix
+    ) {
+        self.lines = lines
+        self.rule = rule
+        self.prefix = prefix
+    }
 
     // MARK: - StringComponent
 
     var body: some StringComponent {
         lines
-            .mapLines { line in
+            .mapLines(rule) { line in
                 prefix + line
             }
     }
 
     // MARK: - Private
 
-    fileprivate init(
-        _ lines: Lines,
-        _ prefix: Prefix
-    ) {
-        self.lines = lines
-        self.prefix = prefix
-    }
-
     private let lines: Lines
+    private let rule: MapLinesRule
     private let prefix: Prefix
 
 }

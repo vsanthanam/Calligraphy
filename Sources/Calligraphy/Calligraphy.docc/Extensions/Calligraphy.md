@@ -39,6 +39,7 @@ These articles will help you setup Calligraphy in a new or exising project and d
 - ``Lines``
 - ``Quote``
 - ``Tabbed``
+- ``MapLinesRule``
 - ``StringComponents``
 - ``DoubleQuote``
 - ``QuotationMark``

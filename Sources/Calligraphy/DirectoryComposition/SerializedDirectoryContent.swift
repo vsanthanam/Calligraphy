@@ -122,5 +122,5 @@ extension [SerializedDirectoryContent] {
     ) {
         self = directoryContent()._serialize()
     }
-    
+
 }

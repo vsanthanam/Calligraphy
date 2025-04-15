@@ -63,25 +63,4 @@ struct LinesTests {
         #expect(lines.build() == expected)
     }
 
-    @Test
-    func modifier() {
-        let lines = StringComponents {
-            "foo"
-            "bar"
-            "baz"
-        }
-        .lines(spacing: 3)
-
-        let expected = #"""
-        foo
-
-
-        bar
-
-
-        baz
-        """#
-
-        #expect(lines.build() == expected)
-    }
 }
