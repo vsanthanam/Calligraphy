@@ -26,17 +26,30 @@
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
+    /// Suffix every line of the upstream
+    /// - Parameters:
+    ///   - suffix: The suffix to apply to every applicable line
+    ///   - rule: The rule used to determine which lines should get suffixed
+    /// - Returns: A suffixed version of the upstream
     public func suffixLines(
-        with suffix: String
+        with suffix: String,
+        _ rule: MapLinesRule = .all
     ) -> some StringComponent {
-        suffixLines { suffix }
+        suffixLines(rule) { suffix }
     }
 
+    /// Suffix every line of the upstream, declaratively
+    /// - Parameters:
+    ///   - rule: The suffix to apply to every applicable line
+    ///   - components: The `@StringBuilder` suffix to apply to every applicable line
+    /// - Returns: A suffixed version of the upstream
     public func suffixLines(
-        @StringBuilder with components: () -> some StringComponent
+        _ rule: MapLinesRule = .all,
+        @StringBuilder components: () -> some StringComponent
     ) -> some StringComponent {
         SuffixLines(
             self,
+            rule,
             components()
         )
     }
@@ -44,15 +57,17 @@ extension StringComponent {
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-struct SuffixLines<Lines, Suffix>: StringComponent where Lines: StringComponent, Suffix: StringComponent {
+private struct SuffixLines<Lines, Suffix>: StringComponent where Lines: StringComponent, Suffix: StringComponent {
 
     // MARK: - Initializers
 
     init(
         _ lines: Lines,
+        _ rule: MapLinesRule,
         _ suffix: Suffix
     ) {
         self.lines = lines
+        self.rule = rule
         self.suffix = suffix
     }
 
@@ -60,7 +75,7 @@ struct SuffixLines<Lines, Suffix>: StringComponent where Lines: StringComponent,
 
     var body: some StringComponent {
         lines
-            .mapLines { line in
+            .mapLines(rule) { line in
                 line + suffix
             }
     }
@@ -68,6 +83,7 @@ struct SuffixLines<Lines, Suffix>: StringComponent where Lines: StringComponent,
     // MARK: - Private
 
     private let lines: Lines
+    private let rule: MapLinesRule
     private let suffix: Suffix
 
 }

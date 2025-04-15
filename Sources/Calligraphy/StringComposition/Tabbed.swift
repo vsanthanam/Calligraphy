@@ -51,7 +51,8 @@ public struct Tabbed<T>: StringComponent where T: StringComponent {
         _ numberOfTabs: Int = 1,
         @StringBuilder components: () -> T
     ) {
-        self.numberOfTabs = numberOfTabs
+        assert(numberOfTabs >= 0, "Number of tabs must be non-negative")
+        self.numberOfTabs = numberOfTabs >= 0 ? numberOfTabs : 1
         self.components = components()
     }
 
