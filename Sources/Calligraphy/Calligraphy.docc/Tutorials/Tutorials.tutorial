@@ -1,0 +1,14 @@
+@Metadata {
+    @PageImage(purpose: card, source: "composing-directories.png", alt: "Declarative file with folder illustration")
+}
+@Tutorials(name: "Site Generator") {
+    @Intro(title: "Site Generator") {
+        Build a simple static site genereator with Calligraphy
+        @Image(source: "tutorials-home.png")
+    }
+    @Chapter(name: "Project Setup") {
+        Bootstrap a command line utility with the Swift Package Manager
+        @Image(source: "project-setup", alt: "Download xcode illustration")
+        @TutorialReference(tutorial: "doc:DownloadXcode")
+    }
+}

@@ -1,0 +1,33 @@
+@Article(time: 60) {
+    @Intro(title: "Install Xcode") {
+        Download and Install Xcode 16 from offical Apple release channels.
+    }
+
+    ![Xcode App Icon](xcode.png)
+    
+    You can download Xcode from the [Mac App Store](https://www.apple.com/app-store/), or from Apple's [developer website](https://developer.apple.com).
+    
+    ### Mac App Store
+    
+    1. Open the App Store app. You can find it in `Applications/App Store.app`. The icon looks like this:
+    
+    ![Mac App Store Icon](mac-app-store.png)
+    
+    2. Search for "Xcode" in the search bar on the right hand side.
+    
+    ![Searching for "Xcode" in the Mac App Store](xcode-search.png)
+    
+    3. Download and install Xcode.
+    
+    ### Apple Developer Website
+    
+    1. Open your web browser and navigate to [`https://developer.apple.com`](https://developer.apple.com).
+    
+    2. Click on the "Develop" tab.
+    
+    3. Click on the Downloads sub-tab. You maybe asked to sign in to your Apple Developer account.
+    
+    4. Go to the "Applications" section and find Xcode 16.
+    
+    5. Download and install Xcode.
+}
