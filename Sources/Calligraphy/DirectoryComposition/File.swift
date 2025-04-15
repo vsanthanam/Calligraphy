@@ -28,7 +28,15 @@ import Foundation
 /// A re-usable, composable file
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct File: DirectoryContent {
-
+    
+    // MARK: - Initializers
+    
+    /// Create a text file using a @StringBuilder
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - permissions: The file's permissions
+    ///   - encoding: The file's encoding
+    ///   - text: The contents of the file
     public init(
         _ name: String,
         permissions: FilePermissions = .default,
@@ -43,6 +51,13 @@ public struct File: DirectoryContent {
         )
     }
 
+    /// Create a text file with a file extension using a @StringBuilder
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - fileExtension: The file extension
+    ///   - permissions: The file's permissions
+    ///   - encoding: The file's encoding
+    ///   - text: The contents of the file
     public init(
         _ name: String,
         fileExtension: String,
@@ -58,7 +73,13 @@ public struct File: DirectoryContent {
             encoding: encoding
         )
     }
-
+    
+    /// Create a text file
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - permissions: The file's permissions
+    ///   - text: The contents of the file
+    ///   - encoding: The file's encoding
     public init(
         _ name: String,
         permissions: FilePermissions = .default,
@@ -74,6 +95,13 @@ public struct File: DirectoryContent {
         }
     }
 
+    /// Create a text file with a file extension
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - fileExtension: The file extension
+    ///   - permissions: The file's permissions
+    ///   - text: The contents of the file
+    ///   - encoding: The file's encoding
     public init(
         _ name: String,
         fileExtension: String,
@@ -90,7 +118,12 @@ public struct File: DirectoryContent {
             text
         }
     }
-
+    
+    /// Create a data file using a @DataBuilder
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - permissions: The file's permissions
+    ///   - data: The contents of the file
     public init(
         _ name: String,
         permissions: FilePermissions = .default,
@@ -103,6 +136,12 @@ public struct File: DirectoryContent {
         )
     }
 
+    /// Create a data file with a file extension using a @DataBuilder
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - fileExtension: The file extension
+    ///   - permissions: The file's permissions
+    ///   - data: The contents of the file
     public init(
         _ name: String,
         fileExtension: String,
@@ -117,6 +156,11 @@ public struct File: DirectoryContent {
         )
     }
 
+    /// Create a data file
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - permissions: The file's permissions
+    ///   - data: The contents of the file
     public init(
         _ name: String,
         permissions: FilePermissions = .default,
@@ -130,6 +174,12 @@ public struct File: DirectoryContent {
         }
     }
 
+    /// Create a data file with a file extension
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - fileExtension: The file extension
+    ///   - permissions: The file's permissions
+    ///   - data: The contents of the file
     public init(
         _ name: String,
         fileExtension: String,
@@ -144,11 +194,15 @@ public struct File: DirectoryContent {
             data
         }
     }
+    
+    // MARK: - DirectoryContent
 
     public func _serialize() -> [SerializedDirectoryContent] {
         [backing]
     }
 
+    // MARK: - Private
+    
     private let backing: SerializedDirectoryContent
 
 }
