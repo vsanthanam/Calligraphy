@@ -4,13 +4,13 @@ A declarative API for composing multi-line strings, files, and folders in Swift
 
 ## Overview
 
-Calligraphy provides a powerful and intuitive way to compose complex text structures in Swift. Drawing inspiration from SwiftUI's declarative approach, Calligraphy offers a familiar API design that will feel natural to SwiftUI developers. Whether you're building multi-line strings, generating code, or creating entire directory structures, Calligraphy's declarative API makes your code more readable and maintainable.
+Calligraphy provides a powerful and intuitive way to compose complex text structures in Swift. Drawing inspiration from SwiftUI's declarative approach, Calligraphy offers a familiar API design that will feel natural to SwiftUI developers. Whether you're building multi-line strings, generating code, or creating entire directory structures, Calligraphy's declarative API makes your code more readable and maintainable than comparative strategies, such as a templating language.
 
 The library is organized into three main areas:
 
-- **String Composition**: Create and manipulate strings with components like `Line`, `Lines`, `Quoted`, and `Tabbed`. Build complex string structures using the `StringBuilder` and combine them with delimiters and formatting options.
+- **String Composition**: Create and manipulate strings with components like `Line`, `Lines`, and `Tabbed`. Build and compose your own `StringComponent` types and compose them into complex string structures using `@StringBuilder` with advanced delimiter and formatting options.
 
-- **Directory Composition**: Generate entire directory structures programmatically using `Directory`, `Folder`, and various file types like `TextFile` and `DataFile`. The `DirectoryContentBuilder` makes it easy to compose complex directory hierarchies.
+- **Directory Composition**: Generate entire directory structures programmatically using `Directory`, `Folder`, and `File`. Build and compose your own `TextFile` and `DataFile` types,and compose them into complex, nested directory structures using `@DirectoryContentBuilder`
 
 - **Data Composition**: Work with raw data using `DataComponent` and `DataBuilder`, allowing you to compose binary data structures in a declarative way.
 
