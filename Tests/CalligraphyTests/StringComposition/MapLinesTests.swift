@@ -81,5 +81,53 @@ struct MapLinesTests {
             }
         #expect(mapLines.build() == "")
     }
+    
+    @Test
+    func builderModifierWithNotEmptyRuleRule() {
+        let mapLines = Lines(spacing: 2) {
+            "foo"
+            "bar"
+            "baz"
+        }
+        .mapLines(.notEmpty) { line in
+            "- " + line
+        }
 
+        let expected = #"""
+        - foo
+        
+        - bar
+        
+        - baz
+        """#
+
+        #expect(mapLines.build() == expected)
+    }
+
+    @Test
+    func builderModifierWithEmptyRule() {
+        let mapLines = Lines(spacing: 2) {
+            "foo"
+            "bar"
+            "baz"
+        }
+        .mapLines(.empty) { line in
+            Line {
+                "----"
+                line
+                "|"
+                "----"
+            }
+        }
+
+        let expected = #"""
+        foo
+        ----|----
+        bar
+        ----|----
+        baz
+        """#
+
+        #expect(mapLines.build() == expected)
+    }
 }
