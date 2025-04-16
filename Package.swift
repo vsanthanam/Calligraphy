@@ -1,8 +1,8 @@
 // swift-tools-version: 6.1
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
-import PackageDescription
 import CompilerPluginSupport
+import PackageDescription
 
 let package = Package(
     name: "Calligraphy",
@@ -45,6 +45,15 @@ let package = Package(
                 .enableUpcomingFeature("StrictConcurrency=complete")
             ]
         ),
+        .testTarget(
+            name: "CalligraphyTests",
+            dependencies: [
+                "Calligraphy"
+            ],
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency=complete")
+            ]
+        ),
         .target(
             name: "CalligraphyMacros",
             dependencies: [
@@ -55,26 +64,48 @@ let package = Package(
                 .enableUpcomingFeature("StrictConcurrency=complete")
             ]
         ),
-        .macro(
-            name: "CalligraphyCompilerPlugin",
-            dependencies: [
-                .product(name: "SwiftSyntax", package: "swift-syntax"),
-                .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
-                .product(name: "SwiftSyntaxMacros", package: "swift-syntax")
-            ],
-            swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency=complete")
-            ]
-            
-        ),
         .testTarget(
-            name: "CalligraphyTests",
+            name: "CalligraphyMacrosTests",
             dependencies: [
+                "CalligraphyMacros",
                 "Calligraphy"
             ],
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency=complete")
             ]
-        )
+        ),
+        .macro(
+            name: "CalligraphyCompilerPlugin",
+            dependencies: [
+                .product(
+                    name: "SwiftSyntax",
+                    package: "swift-syntax"
+                ),
+                .product(
+                    name: "SwiftCompilerPlugin",
+                    package: "swift-syntax"
+                ),
+                .product(
+                    name: "SwiftSyntaxMacros",
+                    package: "swift-syntax"
+                )
+            ],
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency=complete")
+            ]
+        ),
+        .testTarget(
+            name: "CalligraphyCompilerPluginTests",
+            dependencies: [
+                "CalligraphyCompilerPlugin",
+                .product(
+                    name: "SwiftSyntaxMacrosTestSupport",
+                    package: "swift-syntax"
+                )
+            ],
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency=complete")
+            ]
+        ),
     ]
 )

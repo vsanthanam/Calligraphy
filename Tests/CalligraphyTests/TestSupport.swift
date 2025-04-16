@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensionsTests.swift
+// TestSupport.swift
 //
 // MIT License
 //

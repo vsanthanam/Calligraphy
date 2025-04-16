@@ -1,5 +1,5 @@
 // Calligraphy
-// CompilerPlugin.swift
+// FilePermissionsOctalMacro.swift
 //
 // MIT License
 //
@@ -23,39 +23,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import SwiftCompilerPlugin
+import SwiftSyntax
 import SwiftSyntaxMacros
 
-@main
-struct CompilerPlugin: SwiftCompilerPlugin.CompilerPlugin {
+struct FilePermissionsOctalMacro: ExpressionMacro {
 
-    let providingMacros: [Macro.Type] = [
-        FilePermissionsStringMacro.self,
-        FilePermissionsOctalMacro.self
-    ]
+    static func expansion(
+        of node: some FreestandingMacroExpansionSyntax,
+        in context: some MacroExpansionContext
+    ) throws -> ExprSyntax {
+        let stringValue = try node.arguments.first
+            .mustExist("#filePermissions macro requires a single octal literal argument")
+            .expression
+            .as(IntegerLiteralExprSyntax.self)
+            .mustExist("#filePermissions macro requires a single octal literal argument")
+            .literal.text
 
-}
-
-struct MacroError: Error, CustomStringConvertible {
-
-    init(_ message: String) {
-        self.message = message
-    }
-
-    var description: String { message }
-
-    private let message: String
-}
-
-extension Optional {
-
-    func mustExist(_ message: @autoclosure () -> String) throws -> Wrapped {
-        switch self {
-        case .none:
-            throw MacroError(message())
-        case let .some(wrapped):
-            wrapped
+        guard stringValue.hasPrefix("0o") else {
+            throw MacroError("#filePermissions macro requires a single octal literal argument")
         }
-    }
 
+        let octalPart = String(stringValue.dropFirst(2))
+        guard let intValue = Int(octalPart, radix: 8) else {
+            throw MacroError("#filePermissions macro requires a single octal literal argument")
+        }
+
+        guard intValue >= 0, intValue < 512 else {
+            throw MacroError("#filePermissions must be between 0o000 and 0o777")
+        }
+
+        return "Calligraphy.FilePermissions(rawValue: \(raw: stringValue))"
+    }
 }

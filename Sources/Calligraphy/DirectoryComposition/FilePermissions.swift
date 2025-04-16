@@ -36,66 +36,98 @@ public struct FilePermissions: OptionSet, Equatable, Hashable, Sendable, CustomS
 
     // MARK: - API
 
-    /// User read permission
+    /// User read permission (`r--------`)
     public static let readUser = FilePermissions(rawValue: 0o400)
 
-    /// User write permission
+    /// User write permission (`-w-------`)
     public static let writeUser = FilePermissions(rawValue: 0o200)
 
-    /// User execute permission
+    /// User execute permission (`--x------`)
     public static let executeUser = FilePermissions(rawValue: 0o100)
 
-    /// Group read permission
+    /// Group read permission (`---r-----`)
     public static let readGroup = FilePermissions(rawValue: 0o040)
 
-    /// Group write permission
+    /// Group write permission (`----w----`)
     public static let writeGroup = FilePermissions(rawValue: 0o020)
 
-    /// Group execute permission
+    /// Group execute permission (`-----x---`)
     public static let executeGroup = FilePermissions(rawValue: 0o010)
 
-    /// Other read permission
+    /// Other read permission (`------r--`)
     public static let readOther = FilePermissions(rawValue: 0o004)
 
-    /// Other write permission
+    /// Other write permission (`-------w-`)
     public static let writeOther = FilePermissions(rawValue: 0o002)
 
-    /// Other execute permission
+    /// Other execute permission (`--------x`)
     public static let executeOther = FilePermissions(rawValue: 0o001)
-
-    /// Default permissions
+    
+    /// All read permissions (`r--r--r--`)
+    public static let readAll: FilePermissions = [
+        .readUser,
+        .readGroup,
+        .readOther
+    ]
+    
+    /// All write permissions (`-w--w--w-`)
+    public static let writeAll: FilePermissions = [
+        .writeUser,
+        .writeGroup,
+        .writeOther
+    ]
+    
+    /// All execute permissions (`--x--x--x`)
+    public static let executeAll: FilePermissions = [
+        .executeUser,
+        .executeGroup,
+        .executeOther
+    ]
+    
+    /// All user permissions (`rwx------`)
+    public static let userAll: FilePermissions = [
+        .readUser,
+        .writeUser,
+        .executeUser
+    ]
+    
+    /// All group permissions (`---rwx---`)
+    public static let groupAll: FilePermissions = [
+        .readGroup,
+        .writeGroup,
+        .executeGroup
+    ]
+    
+    /// All other permissions (`------rwx`)
+    public static let otherAll: FilePermissions = [
+        .readOther,
+        .writeOther,
+        .executeOther
+    ]
+    
+    /// Default permissions (`rw-r--r--`)
     public static let `default`: FilePermissions = [
         .readUser,
         .writeUser,
         .readGroup,
         .readOther
     ]
-    
-    /// Default executable permissions
-    public static let executable: FilePermissions = [
+
+    /// Default executable permissions (`rwxr-xr-x`)
+    public static let defaultExecutable: FilePermissions = [
         .default,
-        .executeUser,
-        .executeGroup,
-        .executeOther
+        .executeAll
     ]
 
-    /// All permissions
+    /// All permissions (`rwxrwxrwx`)
     public static let all: FilePermissions = [
-        .readUser,
-        .writeUser,
-        .executeUser,
-        .readGroup,
-        .writeGroup,
-        .executeGroup,
-        .readOther,
-        .writeOther,
-        .executeOther
+        .userAll,
+        .groupAll,
+        .otherAll
     ]
 
-    /// No permissions
+    /// No permissions (`---------`)
     public static let none: FilePermissions = []
-    
-    
 
     // MARK: - OptionSet
 
@@ -109,15 +141,17 @@ public struct FilePermissions: OptionSet, Equatable, Hashable, Sendable, CustomS
 
     public var description: String {
         String.build {
-            Read(contains(.readUser))
-            Write(contains(.writeUser))
-            Execute(contains(.executeUser))
-            Read(contains(.readGroup))
-            Write(contains(.writeGroup))
-            Execute(contains(.executeGroup))
-            Read(contains(.readOther))
-            Write(contains(.writeOther))
-            Execute(contains(.executeOther))
+            Line {
+                Read(contains(.readUser))
+                Write(contains(.writeUser))
+                Execute(contains(.executeUser))
+                Read(contains(.readGroup))
+                Write(contains(.writeGroup))
+                Execute(contains(.executeGroup))
+                Read(contains(.readOther))
+                Write(contains(.writeOther))
+                Execute(contains(.executeOther))
+            }
         }
     }
 

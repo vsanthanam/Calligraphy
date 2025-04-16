@@ -1,5 +1,5 @@
 // Calligraphy
-// CompilerPlugin.swift
+// FilePermissionsOctalMacroTests.swift
 //
 // MIT License
 //
@@ -23,39 +23,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import SwiftCompilerPlugin
-import SwiftSyntaxMacros
+@testable import CalligraphyCompilerPlugin
+import SwiftSyntaxMacrosTestSupport
+import XCTest
 
-@main
-struct CompilerPlugin: SwiftCompilerPlugin.CompilerPlugin {
+final class FilePermissionsOctalMacroTests: XCTestCase {
 
-    let providingMacros: [Macro.Type] = [
-        FilePermissionsStringMacro.self,
-        FilePermissionsOctalMacro.self
-    ]
-
-}
-
-struct MacroError: Error, CustomStringConvertible {
-
-    init(_ message: String) {
-        self.message = message
-    }
-
-    var description: String { message }
-
-    private let message: String
-}
-
-extension Optional {
-
-    func mustExist(_ message: @autoclosure () -> String) throws -> Wrapped {
-        switch self {
-        case .none:
-            throw MacroError(message())
-        case let .some(wrapped):
-            wrapped
-        }
+    func test() {
+        assertMacroExpansion(
+            """
+            let x = #filePermissions(0o000)
+            """,
+            expandedSource:
+            """
+            let x = Calligraphy.FilePermissions(rawValue: 0o000)
+            """,
+            macros: [
+                "filePermissions": FilePermissionsOctalMacro.self
+            ]
+        )
     }
 
 }

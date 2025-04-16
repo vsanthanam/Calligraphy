@@ -28,9 +28,9 @@ import Foundation
 /// A re-usable, composable file
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct File: DirectoryContent {
-    
+
     // MARK: - Initializers
-    
+
     /// Create a text file using a @StringBuilder
     /// - Parameters:
     ///   - name: The name of the file
@@ -73,7 +73,7 @@ public struct File: DirectoryContent {
             encoding: encoding
         )
     }
-    
+
     /// Create a text file
     /// - Parameters:
     ///   - name: The name of the file
@@ -118,7 +118,7 @@ public struct File: DirectoryContent {
             text
         }
     }
-    
+
     /// Create a data file using a @DataBuilder
     /// - Parameters:
     ///   - name: The name of the file
@@ -194,7 +194,7 @@ public struct File: DirectoryContent {
             data
         }
     }
-    
+
     // MARK: - DirectoryContent
 
     public func _serialize() -> [SerializedDirectoryContent] {
@@ -202,7 +202,7 @@ public struct File: DirectoryContent {
     }
 
     // MARK: - Private
-    
+
     private let backing: SerializedDirectoryContent
 
 }
