@@ -47,8 +47,6 @@ jobs:
           path: .
       - name: Decompress Documentation
         run: unzip docs.zip
-      - name: Fix README
-        run: ./.scripts/clean-readme
       - name: Setup Jekyll Configuration
         run: ./.scripts/setup-theme 
       - name: Setup Pages
