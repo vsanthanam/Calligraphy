@@ -31,13 +31,13 @@ struct SerializedDirectoryContentTests {
 
     @Test
     func directoryName() {
-        let directory = SerializedDirectoryContent.directory("Foo", permissions: .default, content: [])
+        let directory = SerializedDirectoryContent.directory("Foo", content: [])
         #expect(directory.name == "Foo")
     }
 
     @Test
     func fileName() {
-        let file = SerializedDirectoryContent.text("Foo", permissions: .default, text: "Hello, World!", encoding: .utf8)
+        let file = SerializedDirectoryContent.text("Foo", text: "Hello, World!", encoding: .utf8)
         #expect(file.name == "Foo")
     }
 

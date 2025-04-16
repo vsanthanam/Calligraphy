@@ -58,7 +58,6 @@ These articles will help you setup Calligraphy in a new or exising project and d
 - ``Directory``
 - ``TextFile``
 - ``DataFile``
-- ``FilePermissions``
 - ``File``
 - ``Folder``
 - ``Files``

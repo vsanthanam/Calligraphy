@@ -56,7 +56,7 @@ extension DirectoryContent {
         }
         return try await DiskOperation.start(with: directoryURL) {
             let contents = _serialize()
-//            try contents.validate(in: "root")
+            try contents.validate(in: "root")
             return try await contents.performWriteOperations()
         }
     }
@@ -67,9 +67,6 @@ extension DirectoryContent {
 extension SerializedDirectoryContent {
 
     fileprivate func performWriteOperation() async throws -> [URL] {
-        let attributes: [FileAttributeKey: Any] = [
-            .posixPermissions: permissions.rawValue
-        ]
         switch content {
         case let .directory(directory):
             let url = try DiskOperation.currentURL.appending(
@@ -78,8 +75,7 @@ extension SerializedDirectoryContent {
             )
             try FileManager.default.createDirectory(
                 at: url,
-                withIntermediateDirectories: false,
-                attributes: attributes
+                withIntermediateDirectories: false
             )
             try Task.checkCancellation()
             let urls = try await DiskOperation.push(path: name) {
@@ -95,11 +91,6 @@ extension SerializedDirectoryContent {
             try data.write(
                 to: url,
                 options: .withoutOverwriting
-            )
-            try Task.checkCancellation()
-            try FileManager.default.setAttributes(
-                attributes,
-                ofItemAtPath: url.path()
             )
             try Task.checkCancellation()
             return [url]
