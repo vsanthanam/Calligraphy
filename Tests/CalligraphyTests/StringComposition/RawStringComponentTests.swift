@@ -26,7 +26,7 @@
 import Calligraphy
 import Testing
 
-@Test
+@Test("Raw String Component")
 func rawStringComponent() {
     let rawStringComponent = RawStringComponent("Hello World")
     #expect(rawStringComponent.build() == "Hello World")

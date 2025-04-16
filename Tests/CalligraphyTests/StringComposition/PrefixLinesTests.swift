@@ -26,10 +26,10 @@
 import Calligraphy
 import Testing
 
-@Suite
+@Suite("Prefix Lines Tests")
 struct PrefixLinesTests {
 
-    @Test
+    @Test("Modified with String")
     func stringModifier() {
         let prefixLines = Lines {
             "foo"
@@ -47,7 +47,7 @@ struct PrefixLinesTests {
         #expect(prefixLines.build() == expected)
     }
 
-    @Test
+    @Test("Modifier with Builder")
     func stringBuilder() {
         let prefixLines = Lines {
             "foo"

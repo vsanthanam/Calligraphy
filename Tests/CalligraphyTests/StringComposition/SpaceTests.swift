@@ -26,7 +26,7 @@
 import Calligraphy
 import Testing
 
-@Test
+@Test("Space Component")
 func space() {
     let space = Space()
     #expect(space.build() == " ")

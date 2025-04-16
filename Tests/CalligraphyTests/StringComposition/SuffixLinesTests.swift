@@ -26,10 +26,10 @@
 import Calligraphy
 import Testing
 
-@Suite
+@Suite("Suffix Lines Tests")
 struct SuffixLinesTests {
 
-    @Test
+    @Test("Modifier with String")
     func stringModifier() {
         let suffixLines = Lines {
             "foo"
@@ -47,7 +47,7 @@ struct SuffixLinesTests {
         #expect(suffixLines.build() == expected)
     }
 
-    @Test
+    @Test("Modifier with Builder")
     func stringBuilder() {
         let suffixLines = Lines {
             "foo"

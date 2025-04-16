@@ -26,16 +26,16 @@
 import Calligraphy
 import Testing
 
-@Suite
+@Suite("Serialized Directory Content Tests")
 struct SerializedDirectoryContentTests {
 
-    @Test
+    @Test("Directory Name")
     func directoryName() {
         let directory = SerializedDirectoryContent.directory("Foo", content: [])
         #expect(directory.name == "Foo")
     }
 
-    @Test
+    @Test("File Name")
     func fileName() {
         let file = SerializedDirectoryContent.text("Foo", text: "Hello, World!", encoding: .utf8)
         #expect(file.name == "Foo")

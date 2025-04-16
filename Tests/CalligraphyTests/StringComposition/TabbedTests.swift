@@ -26,10 +26,10 @@
 import Calligraphy
 import Testing
 
-@Suite
+@Suite("Tabbed Tests")
 struct TabbedTests {
 
-    @Test
+    @Test("Component")
     func standard() {
         let tabbed = Tabbed {
             "foo"
@@ -46,7 +46,7 @@ struct TabbedTests {
         #expect(tabbed.build() == expected)
     }
 
-    @Test
+    @Test("Modifier")
     func modifier() {
         let tabbed = Lines {
             "foo"

@@ -26,9 +26,10 @@
 import Calligraphy
 import Testing
 
-@Suite
+@Suite("Lines Component")
 struct LinesTests {
 
+    @Test("No Spacing Argument")
     func single() {
         let lines = Lines {
             "foo"
@@ -45,6 +46,7 @@ struct LinesTests {
         #expect(lines.build() == expected)
     }
 
+    @Test("With Spacing Argument")
     func multiple() {
         let lines = Lines(spacing: 2) {
             "foo"

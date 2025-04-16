@@ -26,10 +26,10 @@
 import Calligraphy
 import Testing
 
-@Suite
+@Suite("Map Lines Tests")
 struct MapLinesTests {
 
-    @Test
+    @Test("Modifier with String")
     func stringModifier() {
         let mapLines = Lines {
             "foo"
@@ -49,7 +49,7 @@ struct MapLinesTests {
         #expect(mapLines.build() == expected)
     }
 
-    @Test
+    @Test("Modifier with Builder")
     func builderModifier() {
         let mapLines = Lines {
             "foo"
@@ -73,7 +73,7 @@ struct MapLinesTests {
         #expect(mapLines.build() == expected)
     }
 
-    @Test
+    @Test("Empty Lines")
     func mapLinesEmpty() {
         let mapLines = Lines {}
             .mapLines { line in
@@ -82,8 +82,8 @@ struct MapLinesTests {
         #expect(mapLines.build() == "")
     }
 
-    @Test
-    func builderModifierWithNotEmptyRuleRule() {
+    @Test("Not Empty Rule")
+    func builderModifierWithNotEmptyRule() {
         let mapLines = Lines(spacing: 2) {
             "foo"
             "bar"
@@ -104,7 +104,7 @@ struct MapLinesTests {
         #expect(mapLines.build() == expected)
     }
 
-    @Test
+    @Test("Empty Rule")
     func builderModifierWithEmptyRule() {
         let mapLines = Lines(spacing: 2) {
             "foo"

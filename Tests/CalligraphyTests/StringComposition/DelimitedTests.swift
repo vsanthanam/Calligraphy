@@ -27,10 +27,10 @@
 import Foundation
 import Testing
 
-@Suite
+@Suite("Delimited Tests")
 struct DelimitedTests {
 
-    @Test
+    @Test("Modifier with String Delimiter")
     func modifierString() async throws {
 
         let delimited = StringComponents {
@@ -48,7 +48,7 @@ struct DelimitedTests {
         #expect(delimited.build() == expected)
     }
 
-    @Test
+    @Test("Modifier with Builder Delimiter")
     func modifierBuilder() async throws {
 
         let delimited = StringComponents {
@@ -68,7 +68,7 @@ struct DelimitedTests {
         #expect(delimited.build() == expected)
     }
 
-    @Test
+    @Test("Component with String Delimiter")
     func string() async throws {
 
         let delimited = Delimited(by: "|") {
@@ -85,7 +85,7 @@ struct DelimitedTests {
         #expect(delimited.build() == expected)
     }
 
-    @Test
+    @Test("Component with Builder Delimiter")
     func builder() async throws {
 
         let delimited = Delimited {

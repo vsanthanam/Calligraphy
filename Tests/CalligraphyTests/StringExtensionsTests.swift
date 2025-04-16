@@ -26,17 +26,17 @@
 import Calligraphy
 import Testing
 
-@Suite
+@Suite("String Extensions Tests")
 struct StringExtensionsTests {
 
-    @Test
-    func component() {
+    @Test("Initializer")
+    func initializer() {
         let str = String(RawStringComponent("Foo"))
         #expect(str == "Foo")
     }
 
-    @Test
-    func components() {
+    @Test("Build type method")
+    func build() {
         let str = String.build {
             RawStringComponent("Foo")
             RawStringComponent("Bar")

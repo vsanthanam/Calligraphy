@@ -26,10 +26,10 @@
 import Calligraphy
 import Testing
 
-@Suite
+@Suite("Map Modifier Tests")
 struct MapTests {
 
-    @Test
+    @Test("Modifier with String")
     func modifier() {
         let map = StringComponents {
             for i in 0 ..< Int.random(in: 0 ... 5) {
@@ -44,7 +44,7 @@ struct MapTests {
         #expect(map.build() == "")
     }
 
-    @Test
+    @Test("Modifier with Build")
     func builder() {
         let map = StringComponents {
             for i in 0 ..< Int.random(in: 0 ... 5) {

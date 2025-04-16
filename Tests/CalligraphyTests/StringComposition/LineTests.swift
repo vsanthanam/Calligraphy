@@ -26,7 +26,7 @@
 import Calligraphy
 import Testing
 
-@Test
+@Test("Line Component")
 func line() {
     let line = Line {
         "foo"

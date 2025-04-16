@@ -26,22 +26,22 @@
 import Calligraphy
 import Testing
 
-@Suite
+@Suite("Quotation Mark Tests")
 struct QuotationMarkTests {
 
-    @Test
+    @Test("Single")
     func single() {
         let mark = QuotationMark(.single)
         #expect(mark.build() == "'")
     }
 
-    @Test
+    @Test("Double")
     func double() {
         let mark = QuotationMark(.double)
         #expect(mark.build() == "\"")
     }
 
-    @Test
+    @Test("Triple")
     func triple() {
         let mark = QuotationMark(.triple)
         #expect(mark.build() == "'''")

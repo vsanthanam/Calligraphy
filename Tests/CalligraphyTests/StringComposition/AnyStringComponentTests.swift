@@ -26,7 +26,7 @@
 import Calligraphy
 import Testing
 
-@Test
+@Test("String Component Type Eraser")
 func anyStringComponent() {
 
     let standard = StringComponents {

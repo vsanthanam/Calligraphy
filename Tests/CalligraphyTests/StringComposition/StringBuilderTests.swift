@@ -26,10 +26,10 @@
 import Calligraphy
 import Testing
 
-@Suite
+@Suite("@StringBuilder Tests")
 struct StringBuilderTests {
 
-    @Test
+    @Test("String Expression")
     func string() {
 
         @StringBuilder
@@ -42,7 +42,7 @@ struct StringBuilderTests {
         #expect(components.build() == "foo")
     }
 
-    @Test
+    @Test("some StringProtocol Expression")
     func stringProtocol() {
         let substring = "foo" as Substring
 
@@ -56,7 +56,7 @@ struct StringBuilderTests {
         #expect(components.build() == "foo")
     }
 
-    @Test
+    @Test("some RawRepresentable Expression")
     func rawRepresentable() {
 
         enum Foo: String {
@@ -73,7 +73,7 @@ struct StringBuilderTests {
         #expect(components.build() == "bar")
     }
 
-    @Test
+    @Test("One Component")
     func singleComponent() {
 
         struct Foo: StringComponent {
@@ -94,7 +94,7 @@ struct StringBuilderTests {
         #expect(components.build() == "bar")
     }
 
-    @Test
+    @Test("Multiple Components")
     func multipleComponents() {
         struct Foo: StringComponent {
 
@@ -132,7 +132,10 @@ struct StringBuilderTests {
         #expect(components.build() == expected)
     }
 
-    @Test(arguments: [(true, "bar"), (false, "foo")])
+    @Test(
+        "If/Else Support",
+        arguments: [(true, "bar"), (false, "foo")]
+    )
     func testIfElse(flow: Bool, result: String) {
 
         struct Foo: StringComponent {
@@ -164,7 +167,10 @@ struct StringBuilderTests {
         #expect(components.build() == result)
     }
 
-    @Test(arguments: [(true, "bar\nfoo"), (false, "foo")])
+    @Test(
+        "Single If Support",
+        arguments: [(true, "bar\nfoo"), (false, "foo")]
+    )
     func singleIf(flow: Bool, result: String) {
 
         struct Foo: StringComponent {
@@ -196,7 +202,7 @@ struct StringBuilderTests {
         #expect(components.build() == result)
     }
 
-    @Test
+    @Test("For Loop Support")
     func forLoop() {
         @StringBuilder
         func builder() -> some StringComponent {
@@ -219,7 +225,7 @@ struct StringBuilderTests {
         #expect(components.build() == expected)
     }
 
-    @Test
+    @Test("Availablility Check Support")
     func availabilityCheck() {
         @StringBuilder
         func builder() -> some StringComponent {
@@ -233,7 +239,7 @@ struct StringBuilderTests {
         #expect(components.build() == "foo")
     }
 
-    @Test
+    @Test("+ Operators")
     func operators() {
 
         struct Foo: StringComponent {

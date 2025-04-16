@@ -26,7 +26,7 @@
 import Calligraphy
 import Testing
 
-@Test
+@Test("Single Quote Component")
 func singleQuote() {
 
     #expect(SingleQuote().build() == "'")

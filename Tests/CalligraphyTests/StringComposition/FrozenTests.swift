@@ -26,10 +26,10 @@
 import Calligraphy
 import Testing
 
-@Suite
+@Suite("Frozen Tests")
 struct FrozenTests {
 
-    @Test
+    @Test("Component")
     func standard() {
 
         let frozen = Frozen {
@@ -48,7 +48,7 @@ struct FrozenTests {
         #expect(frozen.build() == expected)
     }
 
-    @Test
+    @Test("Modifier")
     func frozenModifier() {
 
         let frozen = StringComponents {

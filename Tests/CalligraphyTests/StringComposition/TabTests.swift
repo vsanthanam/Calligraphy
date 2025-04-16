@@ -26,7 +26,7 @@
 import Calligraphy
 import Testing
 
-@Test
+@Test("Tab Component")
 func tab() {
     let tab = Tab()
     #expect(tab.build() == "    ")
