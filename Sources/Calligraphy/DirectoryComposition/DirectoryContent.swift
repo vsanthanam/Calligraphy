@@ -42,9 +42,9 @@ extension DirectoryContent {
 
     /// Write the contents of a directory to a file URL, in parallel
     /// - Parameters:
-    ///   - directoryURL: The a file URL that point to a directory where the content should be written to
-    ///   - shouldOverwrite: Whether or not existing content with the same name or structure should be overwritten with new content
-    /// - Returns:
+    ///   - directoryURL: The a file URL to a directory where the content should be written to.
+    ///   - shouldOverwrite: Whether or not existing content with the same name or structure should be overwritten with new content.
+    /// - Returns: A list of every file URL that was created during the process.
     @discardableResult
     public func write(
         to directoryURL: URL,

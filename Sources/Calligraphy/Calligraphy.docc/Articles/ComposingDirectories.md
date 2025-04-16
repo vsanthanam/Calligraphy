@@ -138,7 +138,7 @@ struct Documentation: Directory {
 
 ### Writing to Disk
 
-All directory content types can be written to disk using the ``DirectoryContent/write(to:)`` method:
+All directory content types can be written to disk using the ``DirectoryContent/write(to:shouldOverwrite:)`` method:
 
 ```swift
 let project = Files {
