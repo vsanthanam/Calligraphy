@@ -32,8 +32,6 @@ public protocol Directory: DirectoryContent {
     /// The name of the directory
     var name: String { get }
 
-    var permissions: FilePermissions { get }
-
     associatedtype Body: DirectoryContent = Never
 
     @DirectoryContentBuilder
@@ -69,8 +67,6 @@ extension Directory where Body == Never {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension Directory {
 
-    public var permissions: FilePermissions { .default }
-
     public var contents: [SerializedDirectoryContent] {
         body._serialize()
     }
@@ -79,7 +75,6 @@ extension Directory {
         [
             .directory(
                 name,
-                permissions: permissions,
                 content: contents
             )
         ]
