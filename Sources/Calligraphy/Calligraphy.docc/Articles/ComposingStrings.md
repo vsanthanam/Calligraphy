@@ -14,6 +14,25 @@ The Calligraphy library introduces a domain-specific language (DSL) for string c
 1. The ``StringComponent`` protocol, which represents individual pieces of string content
 2. The ``StringBuilder`` result builder, which provides declarative syntax for composing multiple components into larger ones.
 
+You can create a Swift string from a `StringComponent` using two library provided methods:
+
+- ``Swift/String/init(_:)``
+- ``Swift/String/build(_:)``
+
+The DSL support `StringComponent` conforming types, as well as Swift string literals, for example:
+
+
+```swift
+let declarativeString = String.build {
+    Line {
+        "Hello"
+        Space()
+        "World"
+    }
+    "Welcome to Calligraphy!"
+}
+```
+
 ## Making String Components
 
 A ``StringComponent`` is the basic building block of the Calligraphy DSL. Each string component represents either a concrete string value or a composition of one or more child components. You can implement `StringComponent` conformance in two ways:
@@ -46,11 +65,6 @@ struct WelcomeMessage: StringComponent {
 
 }
 ```
-
-You can create a Swift string from a `StringComponent` using two library provided methods:
-
-- ``Swift/String/init(_:)``
-- ``Swift/String/build(_:)``
 
 ## Combining String Components
 
