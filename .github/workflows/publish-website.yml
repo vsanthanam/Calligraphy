@@ -49,6 +49,8 @@ jobs:
         run: unzip docs.zip
       - name: Fix README
         run: ./.scripts/clean-readme
+      - name: Setup Jekyll Configuration
+        run: ./.scripts/setup-theme 
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Build with Jekyll
