@@ -41,11 +41,14 @@ public protocol DirectoryContent: Sendable {
 extension DirectoryContent {
 
     /// Write the contents of a directory to a file URL, in parallel
-    /// - Parameter directoryURL: The a file URL
-    /// - Returns: The URLs of every file and directory that was written to disk.
+    /// - Parameters:
+    ///   - directoryURL: The a file URL that point to a directory where the content should be written to
+    ///   - shouldOverwrite: Whether or not existing content with the same name or structure should be overwritten with new content
+    /// - Returns:
     @discardableResult
     public func write(
-        to directoryURL: URL
+        to directoryURL: URL,
+        shouldOverwrite: Bool = false
     ) async throws -> [URL] {
         guard directoryURL.isFileURL else {
             throw DiskOperationError("Provided URL is not a file URL")
@@ -54,10 +57,10 @@ extension DirectoryContent {
               isDirectory else {
             throw DiskOperationError("Provided URL does not point to a directory")
         }
+        let contents = _serialize()
+        try contents.validate(in: directoryURL)
         return try await DiskOperation.start(with: directoryURL) {
-            let contents = _serialize()
-            try contents.validate(in: "root")
-            return try await contents.performWriteOperations()
+            try await contents.performWriteOperations(shouldOverwrite: shouldOverwrite)
         }
     }
 
@@ -66,20 +69,21 @@ extension DirectoryContent {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension SerializedDirectoryContent {
 
-    fileprivate func performWriteOperation() async throws -> [URL] {
+    fileprivate func performWriteOperation(shouldOverwrite: Bool) async throws -> [URL] {
         switch content {
         case let .directory(directory):
             let url = try DiskOperation.currentURL.appending(
                 path: name,
                 directoryHint: .notDirectory
             )
+            try await deleteOrThrow(at: url, shouldOverwrite: shouldOverwrite)
             try FileManager.default.createDirectory(
                 at: url,
                 withIntermediateDirectories: false
             )
             try Task.checkCancellation()
             let urls = try await DiskOperation.push(path: name) {
-                try await directory.performWriteOperations()
+                try await directory.performWriteOperations(shouldOverwrite: shouldOverwrite)
             }
             return [url] + urls
         case let .file(file):
@@ -87,6 +91,7 @@ extension SerializedDirectoryContent {
                 path: name,
                 directoryHint: .isDirectory
             )
+            try await deleteOrThrow(at: url, shouldOverwrite: shouldOverwrite)
             let data = try await file.serialize()
             try data.write(
                 to: url,
@@ -97,10 +102,10 @@ extension SerializedDirectoryContent {
         }
     }
 
-    fileprivate func validate() throws {
+    fileprivate func validate(in parent: URL) throws {
         switch content {
         case let .directory(directory):
-            try directory.validate(in: name)
+            try directory.validate(in: parent.appending(path: name, directoryHint: .isDirectory))
         case .file:
             break
         }
@@ -129,21 +134,21 @@ extension SerializedDirectoryContent.Content.File {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension [SerializedDirectoryContent] {
 
-    fileprivate func validate(in parent: String) throws {
+    fileprivate func validate(in parent: URL) throws {
         let uniqueNames = Set<String>()
         for content in self {
             guard !uniqueNames.contains(content.name) else {
-                throw DiskOperationError("Invalid directory content - duplicate files or directories named '\(content.name)' found in parent '\(parent)'")
+                throw DiskOperationError("Invalid directory content - duplicate files or directories named '\(content.name)' found in parent '\(parent.path())'")
             }
-            try content.validate()
+            try content.validate(in: parent)
         }
     }
 
-    fileprivate func performWriteOperations() async throws -> [URL] {
+    fileprivate func performWriteOperations(shouldOverwrite: Bool) async throws -> [URL] {
         try await withThrowingTaskGroup { group in
             for content in self {
                 group.addTask {
-                    try await content.performWriteOperation()
+                    try await content.performWriteOperation(shouldOverwrite: shouldOverwrite)
                 }
             }
             do {
@@ -217,4 +222,32 @@ private enum DiskOperation {
     @TaskLocal
     private static var path: [String] = []
 
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+private func deleteOrThrow(at url: URL, shouldOverwrite: Bool) async throws {
+    func fileOrDirectoryExists(at url: URL) async throws -> Bool {
+        let resourceKeys: Set<URLResourceKey> = [.isRegularFileKey, .isDirectoryKey]
+        if let values = try? url.resourceValues(forKeys: resourceKeys) {
+            try Task.checkCancellation()
+            if let isDirectory = values.isDirectory, isDirectory {
+                return true
+            } else if let isRegularFile = values.isRegularFile, isRegularFile {
+                return true
+            } else {
+                return false
+            }
+        } else {
+            try Task.checkCancellation()
+            return false
+        }
+    }
+    if try await fileOrDirectoryExists(at: url) {
+        if shouldOverwrite {
+            try FileManager.default.removeItem(at: url)
+            try Task.checkCancellation()
+        } else {
+            throw DiskOperationError("File or directory already exists at proposed path '\(url.path())'")
+        }
+    }
 }
