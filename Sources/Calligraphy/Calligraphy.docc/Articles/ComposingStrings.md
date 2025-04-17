@@ -14,12 +14,7 @@ The Calligraphy library introduces a domain-specific language (DSL) for string c
 1. The ``StringComponent`` protocol, which represents individual pieces of string content
 2. The ``StringBuilder`` result builder, which provides declarative syntax for composing multiple components into larger ones.
 
-You can create a Swift string from a `StringComponent` using two library provided methods:
-
-- ``Swift/String/init(_:)``
-- ``Swift/String/build(_:)``
-
-The DSL support `StringComponent` conforming types, as well as Swift string literals, for example:
+The DSL supports `StringComponent` conforming types, as well as regular Swift strings, for example:
 
 
 ```swift
