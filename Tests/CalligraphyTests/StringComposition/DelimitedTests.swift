@@ -105,7 +105,7 @@ struct DelimitedTests {
         #expect(delimited.build() == expected)
     }
 
-    @Test
+    @Test("Empty delimited content")
     func emptyContent() async throws {
 
         let delimited = Delimited {} delimiter: {
@@ -115,7 +115,7 @@ struct DelimitedTests {
         #expect(delimited.build() == "")
     }
 
-    @Test
+    @Test("Content with empty delimiter")
     func emptyDelimiter() async throws {
 
         let delimited = Delimited {
