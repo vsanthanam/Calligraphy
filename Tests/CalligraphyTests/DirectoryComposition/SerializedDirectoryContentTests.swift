@@ -26,7 +26,7 @@
 import Calligraphy
 import Testing
 
-@Suite("Serialized Directory Content Tests")
+@Suite("Serialized Directory Content Tests", .tags(.dataComposition))
 struct SerializedDirectoryContentTests {
 
     @Test("Directory Name")

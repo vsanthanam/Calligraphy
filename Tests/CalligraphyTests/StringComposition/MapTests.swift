@@ -26,7 +26,7 @@
 import Calligraphy
 import Testing
 
-@Suite("Map Modifier Tests")
+@Suite("Map Modifier Tests", .tags(.stringComposition))
 struct MapTests {
 
     @Test("Modifier with String")
@@ -41,7 +41,7 @@ struct MapTests {
             nil
         }
 
-        #expect(map.build() == "")
+        #expect(map.content == nil)
     }
 
     @Test("Modifier with Build")
@@ -64,7 +64,7 @@ struct MapTests {
         bar
         """#
 
-        #expect(map.build() == expected)
+        #expect(map.content == expected)
     }
 
 }

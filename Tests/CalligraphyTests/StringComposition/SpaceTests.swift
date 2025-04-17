@@ -26,8 +26,8 @@
 import Calligraphy
 import Testing
 
-@Test("Space Component")
+@Test("Space Component", .tags(.stringComposition))
 func space() {
     let space = Space()
-    #expect(space.build() == " ")
+    #expect(space.content == " ")
 }

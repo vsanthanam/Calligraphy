@@ -26,7 +26,7 @@
 import Calligraphy
 import Testing
 
-@Suite("Tabbed Tests")
+@Suite("Tabbed Tests", .tags(.stringComposition))
 struct TabbedTests {
 
     @Test("Component")
@@ -43,7 +43,7 @@ struct TabbedTests {
             baz
         """#
 
-        #expect(tabbed.build() == expected)
+        #expect(tabbed.content == expected)
     }
 
     @Test("Modifier")
@@ -61,7 +61,7 @@ struct TabbedTests {
                 baz
         """#
 
-        #expect(tabbed.build() == expected)
+        #expect(tabbed.content == expected)
     }
 
 }

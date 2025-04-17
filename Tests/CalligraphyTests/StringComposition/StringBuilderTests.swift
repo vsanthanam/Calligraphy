@@ -26,7 +26,7 @@
 import Calligraphy
 import Testing
 
-@Suite("@StringBuilder Tests")
+@Suite("@StringBuilder Tests", .tags(.stringComposition))
 struct StringBuilderTests {
 
     @Test("String Expression")
@@ -39,7 +39,7 @@ struct StringBuilderTests {
 
         let components = builder()
         #expect(components is RawStringComponent)
-        #expect(components.build() == "foo")
+        #expect(components.content == "foo")
     }
 
     @Test("some StringProtocol Expression")
@@ -53,7 +53,7 @@ struct StringBuilderTests {
 
         let components = builder()
         #expect(components is RawStringComponent)
-        #expect(components.build() == "foo")
+        #expect(components.content == "foo")
     }
 
     @Test("some RawRepresentable Expression")
@@ -70,7 +70,18 @@ struct StringBuilderTests {
 
         let components = builder()
         #expect(components is RawStringComponent)
-        #expect(components.build() == "bar")
+        #expect(components.content == "bar")
+    }
+
+    @Test("No Components")
+    func noComponents() {
+
+        @StringBuilder
+        func builder() -> some StringComponent {}
+
+        let components = builder()
+        #expect(components is StringBuilder._Skip)
+        #expect(components.content == nil)
     }
 
     @Test("One Component")
@@ -91,7 +102,7 @@ struct StringBuilderTests {
 
         let components = builder()
         #expect(components is Foo)
-        #expect(components.build() == "bar")
+        #expect(components.content == "bar")
     }
 
     @Test("Multiple Components")
@@ -129,7 +140,7 @@ struct StringBuilderTests {
         bar
         foo
         """#
-        #expect(components.build() == expected)
+        #expect(components.content == expected)
     }
 
     @Test(
@@ -164,7 +175,7 @@ struct StringBuilderTests {
 
         let components = builder()
         #expect(components is StringBuilder._Either<Foo, Bar>)
-        #expect(components.build() == result)
+        #expect(components.content == result)
     }
 
     @Test(
@@ -199,7 +210,7 @@ struct StringBuilderTests {
 
         let components = builder()
         #expect(components is StringBuilder._Block<StringBuilder._Either<Foo, StringBuilder._Skip>, Bar>)
-        #expect(components.build() == result)
+        #expect(components.content == result)
     }
 
     @Test("For Loop Support")
@@ -222,7 +233,7 @@ struct StringBuilderTests {
         5
         7
         """#
-        #expect(components.build() == expected)
+        #expect(components.content == expected)
     }
 
     @Test("Availablility Check Support")
@@ -236,7 +247,7 @@ struct StringBuilderTests {
 
         let components = builder()
         #expect(components is StringBuilder._Either<AnyStringComponent, StringBuilder._Skip>)
-        #expect(components.build() == "foo")
+        #expect(components.content == "foo")
     }
 
     @Test("+ Operators")
@@ -268,12 +279,12 @@ struct StringBuilderTests {
         let bar = Bar()
         let empty = Empty()
 
-        #expect((foo + bar).build() == "foobar")
-        #expect(("foo" + bar).build() == "foobar")
-        #expect((foo + "bar").build() == "foobar")
-        #expect((foo + empty).build() == "foo")
-        #expect((empty + bar).build() == "bar")
-        #expect((empty + empty).build() == "")
+        #expect((foo + bar).content == "foobar")
+        #expect(("foo" + bar).content == "foobar")
+        #expect((foo + "bar").content == "foobar")
+        #expect((foo + empty).content == "foo")
+        #expect((empty + bar).content == "bar")
+        #expect((empty + empty).content == nil)
     }
 
 }

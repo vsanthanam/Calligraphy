@@ -27,7 +27,7 @@
 import Foundation
 import Testing
 
-@Suite("Delimited Tests")
+@Suite("Delimited Tests", .tags(.stringComposition))
 struct DelimitedTests {
 
     @Test("Modifier with String Delimiter")
@@ -45,7 +45,7 @@ struct DelimitedTests {
         |foo-bar-baz|
         """
 
-        #expect(delimited.build() == expected)
+        #expect(delimited.content == expected)
     }
 
     @Test("Modifier with Builder Delimiter")
@@ -65,7 +65,7 @@ struct DelimitedTests {
         ?foo%bar%baz?
         """
 
-        #expect(delimited.build() == expected)
+        #expect(delimited.content == expected)
     }
 
     @Test("Component with String Delimiter")
@@ -82,7 +82,7 @@ struct DelimitedTests {
         |foo-bar-baz|
         """
 
-        #expect(delimited.build() == expected)
+        #expect(delimited.content == expected)
     }
 
     @Test("Component with Builder Delimiter")
@@ -102,7 +102,7 @@ struct DelimitedTests {
         baz!!!
         """
 
-        #expect(delimited.build() == expected)
+        #expect(delimited.content == expected)
     }
 
     @Test("Empty delimited content")
@@ -112,7 +112,7 @@ struct DelimitedTests {
             "!!!"
         }
 
-        #expect(delimited.build() == "")
+        #expect(delimited.content == nil)
     }
 
     @Test("Content with empty delimiter")
@@ -125,7 +125,7 @@ struct DelimitedTests {
         } delimiter: {}
             .joined(separator: ", ")
 
-        #expect(delimited.build() == "foo, bar, baz")
+        #expect(delimited.content == "foo, bar, baz")
     }
 
 }

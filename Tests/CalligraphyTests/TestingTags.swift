@@ -1,5 +1,5 @@
 // Calligraphy
-// StringComponentExtensions.swift
+// TestingTags.swift
 //
 // MIT License
 //
@@ -23,12 +23,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Calligraphy
+import Testing
 
-extension StringComponent {
+extension Tag {
 
-    func build() -> String {
-        String(self)
-    }
+    @Tag
+    static var stringComposition: Self
+
+    @Tag
+    static var directoryComposition: Self
+
+    @Tag
+    static var dataComposition: Self
 
 }

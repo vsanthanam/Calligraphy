@@ -26,7 +26,7 @@
 import Calligraphy
 import Testing
 
-@Suite("Frozen Tests")
+@Suite("Frozen Tests", .tags(.stringComposition))
 struct FrozenTests {
 
     @Test("Component")
@@ -45,7 +45,7 @@ struct FrozenTests {
         baz
         """#
 
-        #expect(frozen.build() == expected)
+        #expect(frozen.content == expected)
     }
 
     @Test("Modifier")
@@ -65,7 +65,7 @@ struct FrozenTests {
         baz
         """#
 
-        #expect(frozen.build() == expected)
+        #expect(frozen.content == expected)
     }
 
 }

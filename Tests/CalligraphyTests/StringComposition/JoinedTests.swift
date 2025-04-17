@@ -26,7 +26,7 @@
 import Calligraphy
 import Testing
 
-@Suite("Joined Tests")
+@Suite("Joined Tests", .tags(.stringComposition))
 struct JoinedTests {
 
     @Test("Component with String Separator")
@@ -36,7 +36,7 @@ struct JoinedTests {
             "bar"
             "baz"
         }
-        #expect(joined.build() == "foo, bar, baz")
+        #expect(joined.content == "foo, bar, baz")
     }
 
     @Test("Component with Builder Separator")
@@ -51,7 +51,7 @@ struct JoinedTests {
                 Space()
             }
         }
-        #expect(joined.build() == "foo, bar, baz")
+        #expect(joined.content == "foo, bar, baz")
     }
 
     @Test("Modifier with String Separator")
@@ -62,7 +62,7 @@ struct JoinedTests {
             "baz"
         }
         .joined(separator: ", ")
-        #expect(joined.build() == "foo, bar, baz")
+        #expect(joined.content == "foo, bar, baz")
     }
 
     @Test("Modifier with Builder Separator")
@@ -78,7 +78,7 @@ struct JoinedTests {
                 Space()
             }
         }
-        #expect(joined.build() == "foo, bar, baz")
+        #expect(joined.content == "foo, bar, baz")
     }
 
 }

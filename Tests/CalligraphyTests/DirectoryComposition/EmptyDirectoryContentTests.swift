@@ -26,7 +26,7 @@
 import Calligraphy
 import Testing
 
-@Test("Empty Directory Content")
+@Test("Empty Directory Content", .tags(.dataComposition))
 func emptyDirectoryContent() {
     let content = EmptyDirectoryContent()
     #expect(content._serialize() == [])

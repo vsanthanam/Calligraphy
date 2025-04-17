@@ -40,7 +40,7 @@ struct FooDataFile: DataFile {
 
 }
 
-@Test("Data File Protocol Serialization")
+@Test("Data File Protocol Serialization", .tags(.dataComposition))
 func dataFileDefaultSerialization() {
 
     let fooTextFile = FooDataFile()

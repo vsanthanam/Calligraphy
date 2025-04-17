@@ -26,8 +26,8 @@
 import Calligraphy
 import Testing
 
-@Test("Tab Component")
+@Test("Tab Component", .tags(.stringComposition))
 func tab() {
     let tab = Tab()
-    #expect(tab.build() == "    ")
+    #expect(tab.content == "    ")
 }
