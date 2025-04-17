@@ -1,6 +1,3 @@
-@Metadata {
-    @PageImage(purpose: card, source: "composing-directories.png", alt: "Declarative file with folder illustration")
-}
 @Tutorials(name: "Site Generator") {
     @Intro(title: "Site Generator") {
         Build a simple static site genereator with Calligraphy
@@ -10,5 +7,16 @@
         Bootstrap a command line utility with the Swift Package Manager
         @Image(source: "project-setup", alt: "Download xcode illustration")
         @TutorialReference(tutorial: "doc:DownloadXcode")
+        @TutorialReference(tutorial: "doc:NewCLI")
+    }
+    @Resources {
+        Explore more resources for learning about Calligraphy
+        
+        @Documentation(destionation: "https://usecalligraphy.com/docs/documentation/calligraphy") {
+            Browse and search Calligraphy-related documentation.
+
+            - [Composing Strings](https://usecalligraphy.com/docs/documentation/calligraphy/composingstrings")
+            - [Composing Directories](https://usecalligraphy.com/docs/documentation/calligraphy/composingdirectories")
+        }
     }
 }

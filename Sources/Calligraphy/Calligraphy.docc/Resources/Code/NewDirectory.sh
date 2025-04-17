@@ -1,0 +1,2 @@
+$ mkdir SiteGenerator
+$ cd SiteGenerator
