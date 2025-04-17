@@ -1,0 +1,120 @@
+@Tutorial(time: 10) {
+    @XcodeRequirement(title: "Xcode 16.3", destination: "https://developer.apple.com")
+    @Intro(title: "Boostrap a CLI") {
+        Set up a Swift Package to integrate with the Swift Argument Parser
+        
+<!--        @Image(source: <#file#>, alt: "<#accessible description#>")-->
+    }
+    @Section(title: "Create a Swift Package") {
+        @ContentAndMedia {
+            Make a new Swift Package from the command line.
+            
+<!--            @Image(source: <#file#>, alt: "<#accessible description#>")-->
+        }
+        @Steps {
+            @Step {
+                Create a new directory and visit it.
+                
+                @Code(name: "Terminal Window", file: "NewDirectory.sh")
+            }
+            @Step {
+                Create new Swift Package using the `swift` command line utility.
+                
+                @Code(name: "Terminal Window", file: "NewPackage.sh")
+            }
+            @Step {
+                Create a new file called `sitegenerator` with the `touch` command.
+                
+                @Code(name: "Terminal Window", file: "MakeScript.sh")
+            }
+            @Step {
+                Open that file with a text editor of your choice, and add the following script.
+                
+                This will enable you enable to easily build and test your CLI from the command line.
+                @Code(name: "sitegenerator", file: "sitegenerator.sh")
+            }
+            @Step {
+                Go back to the terminal and turn the file into an executable with the `chmod` command.
+                
+                @Code(name: "Terminal Window", file: "Chmod.sh", previousFile: "MakeScript.sh")
+            }
+            
+            @Step {
+                Build and run your package using `./sitegenerator`, and you should see something like this:
+                
+                @Code(name: "Terminal Window", file: "TestScript.sh")
+            }
+        }
+    }
+    @Section(title: "Integrate Dependencies") {
+        @ContentAndMedia {
+            Add remote dependendies to your new command line package.
+        }
+        @Steps {
+            @Step {
+                Double click on your Package.swift file. This should launch Xcode.
+                
+                The template generated file should look something like this.
+                @Code(name: "Package.swift", file: "Package.swift")
+            }
+            @Step {
+                Add the [Swift Argument Parser](https://github.com/apple/swift-argument-parser) as a package dependecy.
+                
+                @Code(name: "Package.swift", file: "AddSwiftArgumentParserPackage.swift")
+            }
+            @Step {
+                Add `ArgumentParser` as a target dependency.
+                
+                @Code(name: "Package.swift", file: "AddArgumentParserDependency.swift")
+            }
+            @Step {
+                Add Caligraphy as a package dependecy.
+                
+                You'll also need to add macOS 15 as package supported platform.             
+                @Code(name: "Package.swift", file: "AddCalligraphyPackage.swift")
+            }
+            @Step {
+                Add `Caligraphy` as a target dependecy.
+                
+                It's a good idea to go back to the command line and run `./sitegenerator` to make sure that everything can stil builds and runs as expected before continuing.
+                @Code(name: "Package.swift", file: "AddCalligraphyDependency.swift")
+            }
+        }
+    }
+    @Section(title: "Create a command") {
+        @ContentAndMedia {
+            Create a basic command with the Swift Argument Parser
+        }
+        @Steps {
+            @Step {
+                Open `main.swift` in Xcode
+                
+                The template generated file should look something like this:
+                @Code(name: "main.swift", file: "main.swift")
+            }
+            @Step {
+                Rename this file to `RootCommand.swift`
+                
+                Then, import the `ArgumentParser` module, delete the existing contents of the file, and create a new struct called `RootCommand`.
+                Annotate this struct with `@main`.
+                @Code(name: "RootCommand.swift", file: "RootCommand.swift")
+            }
+            @Step {
+                Implement the `ParsableArgument` protocol by adding the `run` method to `RootCommand`.
+                
+                Again, to back to the command line and run `./sitegenerator` to make sure that everything can stil builds and runs as expected before continuing.
+                @Code(name: "RootCommand.swift", file: "RootCommandConformance.swift")
+            }
+            @Step {
+                Add an argument to the command, and update the `run` method to use it
+                @Code(name: "RootCommand.swift", file: "RootCommandNameArgument.swift")
+            }
+            @Step {
+                Run `./sitegenerator` again, but this time with an argument.
+                
+                You should see something like this:
+                @Code(name: "Terminal Window", file: "TestScaffolding.sh")
+            }
+        }
+    }
+}
