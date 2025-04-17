@@ -54,6 +54,8 @@ let project = Folder("MyProject") {
 
 ### Custom Directory Content Types
 
+You can create reusabe file and folder types that represent higher level concepts, such as a particular kind of file template or an asset bundle. To do this, you can create types that conform to the `TextFile`, `DataFile`, or `Directory` protocols.
+
 #### Custom Text Files
 
 For text files, conform to the ``TextFile`` protocol:
@@ -145,6 +147,9 @@ let project = Files {
     Folder("Project") {
         Documentation()
         MyProject()
+    }
+    File("License", fileExtension: "txt") {
+        "License Here"
     }
 }
 try await project.write(to: URL(fileURLWithPath: "/path/to/project"))
