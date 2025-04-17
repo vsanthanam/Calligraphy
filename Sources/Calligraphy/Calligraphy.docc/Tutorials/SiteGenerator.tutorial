@@ -17,7 +17,7 @@
             - <doc:ComposingStrings>
             - <doc:ComposingDirectories>
         }
-        @Downloads(destination: "https://usecaligraphy.com/Sources/Calligraphy/Calligraphy.docc/Resources/Downloads/index.html") {
+        @Downloads(destination: "https://usecalligraphy.com/Sources/Calligraphy/Calligraphy.docc/Resources/Downloads/index.html") {
             Download Calligraphy Releases and Sample Code
             - [Xcode](https://developer.apple.com)
             - [Calligraphy on GitHub](https://github.com/vsanthanam/Calligraphy/releases)
