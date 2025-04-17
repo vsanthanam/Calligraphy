@@ -11,12 +11,16 @@
     }
     @Resources {
         Explore more resources for learning about Calligraphy
-        
-        @Documentation(destionation: "https://usecalligraphy.com/docs/documentation/calligraphy") {
+        @Documentation(destination: "https://usecalligraphy.com/docs/documentation/calligraphy") {
             Browse and search Calligraphy-related documentation.
-
-            - [Composing Strings](https://usecalligraphy.com/docs/documentation/calligraphy/composingstrings")
-            - [Composing Directories](https://usecalligraphy.com/docs/documentation/calligraphy/composingdirectories")
+            - <doc:Setup>
+            - <doc:ComposingStrings>
+            - <doc:ComposingDirectories>
+        }
+        @Downloads(destination: "https://usecaligraphy.com/Sources/Calligraphy/Calligraphy.docc/Resources/Downloads/index.html") {
+            Download Calligraphy Releases and Sample Code
+            - [Xcode](https://developer.apple.com)
+            - [Calligraphy on GitHub](https://github.com/vsanthanam/Calligraphy/releases)
         }
     }
 }
