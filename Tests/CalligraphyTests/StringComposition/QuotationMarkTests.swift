@@ -26,25 +26,25 @@
 import Calligraphy
 import Testing
 
-@Suite("Quotation Mark Tests")
+@Suite("Quotation Mark Tests", .tags(.stringComposition))
 struct QuotationMarkTests {
 
     @Test("Single")
     func single() {
         let mark = QuotationMark(.single)
-        #expect(mark.build() == "'")
+        #expect(mark.content == "'")
     }
 
     @Test("Double")
     func double() {
         let mark = QuotationMark(.double)
-        #expect(mark.build() == "\"")
+        #expect(mark.content == "\"")
     }
 
     @Test("Triple")
     func triple() {
         let mark = QuotationMark(.triple)
-        #expect(mark.build() == "'''")
+        #expect(mark.content == "'''")
     }
 
 }

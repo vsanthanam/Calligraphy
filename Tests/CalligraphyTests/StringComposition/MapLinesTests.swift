@@ -26,7 +26,7 @@
 import Calligraphy
 import Testing
 
-@Suite("Map Lines Tests")
+@Suite("Map Lines Tests", .tags(.stringComposition))
 struct MapLinesTests {
 
     @Test("Modifier with String")
@@ -46,7 +46,7 @@ struct MapLinesTests {
         - BAZ
         """#
 
-        #expect(mapLines.build() == expected)
+        #expect(mapLines.content == expected)
     }
 
     @Test("Modifier with Builder")
@@ -70,7 +70,7 @@ struct MapLinesTests {
         - baz
         """#
 
-        #expect(mapLines.build() == expected)
+        #expect(mapLines.content == expected)
     }
 
     @Test("Empty Lines")
@@ -79,7 +79,7 @@ struct MapLinesTests {
             .mapLines { line in
                 "testing" + line
             }
-        #expect(mapLines.build() == "")
+        #expect(mapLines.content == nil)
     }
 
     @Test("Not Empty Rule")
@@ -101,7 +101,7 @@ struct MapLinesTests {
         - baz
         """#
 
-        #expect(mapLines.build() == expected)
+        #expect(mapLines.content == expected)
     }
 
     @Test("Empty Rule")
@@ -128,6 +128,6 @@ struct MapLinesTests {
         baz
         """#
 
-        #expect(mapLines.build() == expected)
+        #expect(mapLines.content == expected)
     }
 }

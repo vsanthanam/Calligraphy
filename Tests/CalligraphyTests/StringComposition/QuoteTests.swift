@@ -26,7 +26,7 @@
 import Calligraphy
 import Testing
 
-@Suite("Quote Tests")
+@Suite("Quote Tests", .tags(.stringComposition))
 struct QuoteTests {
 
     @Test("Component")
@@ -45,7 +45,7 @@ struct QuoteTests {
         baz"
         """#
 
-        #expect(quote.build() == expected)
+        #expect(quote.content == expected)
     }
 
     @Test("Modifier")
@@ -63,7 +63,7 @@ struct QuoteTests {
         baz'''
         """#
 
-        #expect(quoted.build() == expected)
+        #expect(quoted.content == expected)
     }
 
 }

@@ -26,7 +26,7 @@
 import Calligraphy
 import Testing
 
-@Suite("Prefix Lines Tests")
+@Suite("Prefix Lines Tests", .tags(.stringComposition))
 struct PrefixLinesTests {
 
     @Test("Modified with String")
@@ -44,7 +44,7 @@ struct PrefixLinesTests {
         - baz
         """#
 
-        #expect(prefixLines.build() == expected)
+        #expect(prefixLines.content == expected)
     }
 
     @Test("Modifier with Builder")
@@ -67,7 +67,7 @@ struct PrefixLinesTests {
         - baz
         """#
 
-        #expect(prefixLines.build() == expected)
+        #expect(prefixLines.content == expected)
     }
 
 }

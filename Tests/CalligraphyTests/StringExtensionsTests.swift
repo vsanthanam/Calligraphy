@@ -26,7 +26,7 @@
 import Calligraphy
 import Testing
 
-@Suite("String Extensions Tests")
+@Suite("String Extensions Tests", .tags(.stringComposition))
 struct StringExtensionsTests {
 
     @Test("Initializer")

@@ -26,7 +26,7 @@
 import Calligraphy
 import Testing
 
-@Test("Line Component")
+@Test("Line Component", .tags(.stringComposition))
 func line() {
     let line = Line {
         "foo"
@@ -34,5 +34,5 @@ func line() {
         "baz"
     }
 
-    #expect(line.build() == "foobarbaz")
+    #expect(line.content == "foobarbaz")
 }

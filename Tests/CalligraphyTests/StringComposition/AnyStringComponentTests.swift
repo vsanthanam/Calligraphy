@@ -26,7 +26,7 @@
 import Calligraphy
 import Testing
 
-@Test("String Component Type Eraser")
+@Test("String Component Type Eraser", .tags(.stringComposition))
 func anyStringComponent() {
 
     let standard = StringComponents {
@@ -37,6 +37,6 @@ func anyStringComponent() {
 
     let typeErased = AnyStringComponent(standard)
 
-    #expect(standard.build() == typeErased.build())
+    #expect(standard.content == typeErased.content)
 
 }

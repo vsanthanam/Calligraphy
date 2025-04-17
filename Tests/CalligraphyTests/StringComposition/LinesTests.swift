@@ -26,7 +26,7 @@
 import Calligraphy
 import Testing
 
-@Suite("Lines Component")
+@Suite("Lines Component", .tags(.stringComposition))
 struct LinesTests {
 
     @Test("No Spacing Argument")
@@ -43,7 +43,7 @@ struct LinesTests {
         baz
         """#
 
-        #expect(lines.build() == expected)
+        #expect(lines.content == expected)
     }
 
     @Test("With Spacing Argument")
@@ -62,7 +62,7 @@ struct LinesTests {
         baz
         """#
 
-        #expect(lines.build() == expected)
+        #expect(lines.content == expected)
     }
 
 }

@@ -26,9 +26,9 @@
 import Calligraphy
 import Testing
 
-@Test("Triple Quote Component")
+@Test("Triple Quote Component", .tags(.stringComposition))
 func tripleQuote() {
 
-    #expect(TripleQuote().build() == "'''")
+    #expect(TripleQuote().content == "'''")
 
 }
