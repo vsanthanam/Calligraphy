@@ -26,7 +26,7 @@
 import Calligraphy
 import Testing
 
-@Test
+@Test("Double Quote Component")
 func doubleQuote() {
 
     #expect(DoubleQuote().build() == "\"")

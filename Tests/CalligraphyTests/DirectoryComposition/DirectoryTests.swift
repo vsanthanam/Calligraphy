@@ -34,7 +34,7 @@ struct FooDirectory: Directory {
 
 }
 
-@Test
+@Test("Directory Protocol Serialize")
 func directoryDefaultSerialization() {
 
     let fooDirectory = FooDirectory()
