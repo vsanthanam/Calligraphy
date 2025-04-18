@@ -45,7 +45,7 @@ struct FrozenTests {
         baz
         """#
 
-        #expect(frozen.content == expected)
+        #expect(frozen._content == expected)
     }
 
     @Test("Modifier")
@@ -65,7 +65,7 @@ struct FrozenTests {
         baz
         """#
 
-        #expect(frozen.content == expected)
+        #expect(frozen._content == expected)
     }
 
 }

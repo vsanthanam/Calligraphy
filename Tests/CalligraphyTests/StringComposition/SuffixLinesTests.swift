@@ -44,7 +44,7 @@ struct SuffixLinesTests {
         baz -
         """#
 
-        #expect(suffixLines.content == expected)
+        #expect(suffixLines._content == expected)
     }
 
     @Test("Modifier with Builder")
@@ -67,7 +67,7 @@ struct SuffixLinesTests {
         baz -
         """#
 
-        #expect(suffixLines.content == expected)
+        #expect(suffixLines._content == expected)
     }
 
 }

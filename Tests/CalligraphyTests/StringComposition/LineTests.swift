@@ -34,5 +34,5 @@ func line() {
         "baz"
     }
 
-    #expect(line.content == "foobarbaz")
+    #expect(line._content == "foobarbaz")
 }

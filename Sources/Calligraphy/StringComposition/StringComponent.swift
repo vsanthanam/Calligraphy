@@ -31,16 +31,12 @@ public protocol StringComponent: Sendable {
     ///
     /// Typically, you do not need to explicitly spell out this type.
     /// Instead. implement ``body`` using an opaque `some StringComponent` type, and allow the compiler to expand the result builder and choose the correct type to satisfy the protocol
-    associatedtype Body: StringComponent = Never
+    associatedtype Body: StringComponent
 
     /// The string this component represents
-    ///
-    /// If you implement the ``body`` property, you do not need to implement this property.
-    var content: String? { get }
+    var _content: String? { get }
 
     /// The sub components used to build this string component.
-    ///
-    /// If you implement the ``content`` property, you do not need to implement this property.
     @StringBuilder
     var body: Body { get }
 
@@ -49,22 +45,8 @@ public protocol StringComponent: Sendable {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension Never: StringComponent {
 
-    public var content: String? {
+    public var _content: String? {
         fatalError()
-    }
-
-}
-
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-extension StringComponent where Body == Never {
-
-    @available(*, unavailable)
-    public var content: String? {
-        fatalError()
-    }
-
-    public var body: Never {
-        fatalError("StringComponent \(Self.self) does not have a body. Do not invoke this property directly.")
     }
 
 }
@@ -72,8 +54,8 @@ extension StringComponent where Body == Never {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
-    public var content: String? {
-        body.content
+    public var _content: String? {
+        body._content
     }
 
 }

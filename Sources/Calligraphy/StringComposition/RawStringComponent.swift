@@ -30,7 +30,7 @@ public struct RawStringComponent: StringComponent {
     // MARK: - Initializers
 
     /// Create a raw string component
-    /// - Parameter value: <#value description#>
+    /// - Parameter value: The value contained in the component
     public init(_ value: String) {
         self.value = value
     }
@@ -42,8 +42,12 @@ public struct RawStringComponent: StringComponent {
 
     // MARK: - StringComponent
 
-    public var content: String? {
+    public var _content: String? {
         value
+    }
+
+    public var body: Never {
+        fatalErrorPrivateStringComponent()
     }
 
 }

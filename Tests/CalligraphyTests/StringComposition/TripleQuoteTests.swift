@@ -29,6 +29,6 @@ import Testing
 @Test("Triple Quote Component", .tags(.stringComposition))
 func tripleQuote() {
 
-    #expect(TripleQuote().content == "'''")
+    #expect(TripleQuote()._content == "'''")
 
 }

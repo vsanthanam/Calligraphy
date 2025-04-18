@@ -41,7 +41,7 @@ struct MapTests {
             nil
         }
 
-        #expect(map.content == nil)
+        #expect(map._content == nil)
     }
 
     @Test("Modifier with Build")
@@ -64,7 +64,7 @@ struct MapTests {
         bar
         """#
 
-        #expect(map.content == expected)
+        #expect(map._content == expected)
     }
 
 }

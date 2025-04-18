@@ -1,5 +1,5 @@
 // Calligraphy
-// RootCommandNameArgument.swift
+// EmptyStringComponent.swift
 //
 // MIT License
 //
@@ -23,16 +23,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import ArgumentParser
+/// An empty string component
+public struct EmptyStringComponent: StringComponent {
 
-@main
-struct RootCommand: ParsableCommand {
+    /// Create an empty string component
+    public init() {}
 
-    @Argument
-    var name: String
+    // MARK: - StringComponent
 
-    func run() throws {
-        print("Hello, \(name)!")
+    public let _content: String? = nil
+
+    public var body: Never {
+        fatalErrorPrivateStringComponent()
     }
 
 }

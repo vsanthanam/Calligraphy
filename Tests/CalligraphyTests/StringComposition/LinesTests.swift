@@ -43,7 +43,7 @@ struct LinesTests {
         baz
         """#
 
-        #expect(lines.content == expected)
+        #expect(lines._content == expected)
     }
 
     @Test("With Spacing Argument")
@@ -62,7 +62,7 @@ struct LinesTests {
         baz
         """#
 
-        #expect(lines.content == expected)
+        #expect(lines._content == expected)
     }
 
 }

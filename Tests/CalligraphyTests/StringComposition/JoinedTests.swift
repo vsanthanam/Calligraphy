@@ -36,7 +36,7 @@ struct JoinedTests {
             "bar"
             "baz"
         }
-        #expect(joined.content == "foo, bar, baz")
+        #expect(joined._content == "foo, bar, baz")
     }
 
     @Test("Component with Builder Separator")
@@ -51,7 +51,7 @@ struct JoinedTests {
                 Space()
             }
         }
-        #expect(joined.content == "foo, bar, baz")
+        #expect(joined._content == "foo, bar, baz")
     }
 
     @Test("Modifier with String Separator")
@@ -62,7 +62,7 @@ struct JoinedTests {
             "baz"
         }
         .joined(separator: ", ")
-        #expect(joined.content == "foo, bar, baz")
+        #expect(joined._content == "foo, bar, baz")
     }
 
     @Test("Modifier with Builder Separator")
@@ -78,7 +78,7 @@ struct JoinedTests {
                 Space()
             }
         }
-        #expect(joined.content == "foo, bar, baz")
+        #expect(joined._content == "foo, bar, baz")
     }
 
 }

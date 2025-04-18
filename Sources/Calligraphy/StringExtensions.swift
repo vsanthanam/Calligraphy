@@ -53,10 +53,15 @@ extension String {
     public init(
         _ component: some StringComponent
     ) {
-        self = component.content ?? ""
+        self = component._content ?? ""
     }
 
-    public static func build(@StringBuilder _ components: () -> some StringComponent) -> String {
+    /// Build a string with a `@StringBuilder`
+    /// - Parameter components: The components to assemble into a string
+    /// - Returns: The string
+    public static func build(
+        @StringBuilder _ components: () -> some StringComponent
+    ) -> String {
         .init(components())
     }
 

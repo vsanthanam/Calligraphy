@@ -63,8 +63,12 @@ private struct Map<T>: StringComponent where T: StringComponent {
 
     // MARK: - StringComponent
 
-    var content: String? {
-        fn(upstream.content)
+    var _content: String? {
+        fn(upstream._content)
+    }
+
+    public var body: Never {
+        fatalErrorPrivateStringComponent()
     }
 
     // MARK: - Private

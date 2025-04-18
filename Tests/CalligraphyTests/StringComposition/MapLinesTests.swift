@@ -46,7 +46,7 @@ struct MapLinesTests {
         - BAZ
         """#
 
-        #expect(mapLines.content == expected)
+        #expect(mapLines._content == expected)
     }
 
     @Test("Modifier with Builder")
@@ -70,7 +70,7 @@ struct MapLinesTests {
         - baz
         """#
 
-        #expect(mapLines.content == expected)
+        #expect(mapLines._content == expected)
     }
 
     @Test("Empty Lines")
@@ -79,7 +79,7 @@ struct MapLinesTests {
             .mapLines { line in
                 "testing" + line
             }
-        #expect(mapLines.content == nil)
+        #expect(mapLines._content == nil)
     }
 
     @Test("Not Empty Rule")
@@ -101,7 +101,7 @@ struct MapLinesTests {
         - baz
         """#
 
-        #expect(mapLines.content == expected)
+        #expect(mapLines._content == expected)
     }
 
     @Test("Empty Rule")
@@ -128,6 +128,6 @@ struct MapLinesTests {
         baz
         """#
 
-        #expect(mapLines.content == expected)
+        #expect(mapLines._content == expected)
     }
 }

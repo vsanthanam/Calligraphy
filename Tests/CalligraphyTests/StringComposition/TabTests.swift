@@ -29,5 +29,5 @@ import Testing
 @Test("Tab Component", .tags(.stringComposition))
 func tab() {
     let tab = Tab()
-    #expect(tab.content == "    ")
+    #expect(tab._content == "    ")
 }

@@ -45,11 +45,15 @@ public struct Frozen: StringComponent {
     public init(
         @StringBuilder components: () -> some StringComponent
     ) {
-        content = components().content
+        _content = components()._content
     }
 
     // MARK: - StringComponent
 
-    public let content: String?
+    public let _content: String?
+
+    public var body: Never {
+        fatalErrorPrivateStringComponent()
+    }
 
 }
