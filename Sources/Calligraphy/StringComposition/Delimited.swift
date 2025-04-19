@@ -30,7 +30,7 @@ extension StringComponent {
     /// - Parameter delimiter: The delimiter used to frame both sides of the upstream
     /// - Returns: The delimited upstream
     public func delimited(
-        by delimiter: String
+        by delimiter: some StringProtocol
     ) -> some StringComponent {
         Delimited(
             by: delimiter
@@ -64,7 +64,7 @@ public struct Delimited<T, Delimiter>: StringComponent where T: StringComponent,
     ///   - delimiter: The delimiter to use on either side
     ///   - components: The components to delimit
     public init(
-        by delimiter: String,
+        by delimiter: some StringProtocol,
         @StringBuilder components: () -> T
     ) where Delimiter == RawStringComponent {
         self.init(components: components) { delimiter }

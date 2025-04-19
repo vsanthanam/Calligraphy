@@ -178,6 +178,7 @@ public enum DataBuilder {
         public var body: Never {
             fatalErrorPrivateDataComponent()
         }
+
     }
 
     public struct _List<Element>: DataComponent where Element: DataComponent {
@@ -211,36 +212,4 @@ public enum DataBuilder {
         private let list: [Element]
 
     }
-}
-
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-@DataBuilder
-public func + (_ lhs: some DataComponent, _ rhs: some DataComponent) -> some DataComponent {
-    lhs
-    rhs
-}
-
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-@DataBuilder
-public func + (_ lhs: some DataComponent, _ rhs: Data) -> some DataComponent {
-    lhs
-    rhs
-}
-
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-@DataBuilder
-public func + (_ lhs: Data, _ rhs: some DataComponent) -> some DataComponent {
-    lhs
-    rhs
-}
-
-extension DataComponent {
-
-    func fatalErrorPrivateDataComponent(
-        file: StaticString = #file,
-        line: UInt = #line
-    ) -> Never {
-        fatalError("DataComponent \(Self.self) does not have a body. Do not invoke this property directly.", file: file, line: line)
-    }
-
 }

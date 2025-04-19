@@ -32,7 +32,7 @@ extension StringComponent {
     ///   - rule: The rule used to determine which lines should get suffixed
     /// - Returns: A suffixed version of the upstream
     public func suffixLines(
-        with suffix: String,
+        with suffix: some StringProtocol,
         _ rule: MapLinesRule = .all
     ) -> some StringComponent {
         suffixLines(rule) { suffix }

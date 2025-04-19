@@ -27,7 +27,7 @@
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public protocol StringComponent: Sendable {
 
-    /// The type of data component representing the body of this string component.
+    /// The type of string component representing the body of this string component.
     ///
     /// Typically, you do not need to explicitly spell out this type.
     /// Instead. implement ``body`` using an opaque `some StringComponent` type, and allow the compiler to expand the result builder and choose the correct type to satisfy the protocol
@@ -58,4 +58,48 @@ extension StringComponent {
         body._content
     }
 
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+extension StringComponent {
+
+    func fatalErrorPrivateStringComponent(
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> Never {
+        fatalError("StringComponent \(Self.self) does not have a body. Do not invoke this property directly.", file: file, line: line)
+    }
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+@StringBuilder
+public func + (_ lhs: some StringComponent, _ rhs: some StringComponent) -> some StringComponent {
+    if let lhs = lhs._content, let rhs = rhs._content {
+        lhs + rhs
+    } else if let lhs = lhs._content {
+        lhs + rhs
+    } else if let rhs = rhs._content {
+        lhs + rhs
+    }
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+@StringBuilder
+public func + (_ lhs: some StringComponent, _ rhs: some StringProtocol) -> some StringComponent {
+    if let lhs = lhs._content {
+        lhs + String(rhs)
+    } else {
+        rhs
+    }
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+@StringBuilder
+public func + (_ lhs: some StringProtocol, _ rhs: some StringComponent) -> some StringComponent {
+    if let rhs = rhs._content {
+        String(lhs) + rhs
+    } else {
+        lhs
+    }
 }

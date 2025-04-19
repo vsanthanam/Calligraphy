@@ -30,7 +30,7 @@ extension StringComponent {
     /// - Parameter separator: The separator used to join the components
     /// - Returns: The joined string components
     public func joined(
-        separator: String
+        separator: some StringProtocol
     ) -> some StringComponent {
         Joined(
             separator: separator
@@ -76,7 +76,7 @@ public struct Joined<T, Separator>: StringComponent where T: StringComponent, Se
     ///   - separator: The separator used to join the components
     ///   - content: The string components to join
     public init(
-        separator: String,
+        separator: some StringProtocol,
         @StringBuilder content: () -> T
     ) where Separator == RawStringComponent {
         self.init(content: content) { separator }

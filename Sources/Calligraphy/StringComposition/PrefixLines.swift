@@ -32,7 +32,7 @@ extension StringComponent {
     ///   - rule: The rule used to determine which lines should get prefixed
     /// - Returns: A prefixed version of the upstream
     public func prefixLines(
-        with prefix: String,
+        with prefix: some StringProtocol,
         _ rule: MapLinesRule = .all
     ) -> some StringComponent {
         prefixLines(rule) { prefix }
