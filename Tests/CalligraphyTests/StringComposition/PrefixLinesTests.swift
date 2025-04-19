@@ -44,7 +44,7 @@ struct PrefixLinesTests {
         - baz
         """#
 
-        #expect(prefixLines.content == expected)
+        #expect(prefixLines._content == expected)
     }
 
     @Test("Modifier with Builder")
@@ -67,7 +67,7 @@ struct PrefixLinesTests {
         - baz
         """#
 
-        #expect(prefixLines.content == expected)
+        #expect(prefixLines._content == expected)
     }
 
 }

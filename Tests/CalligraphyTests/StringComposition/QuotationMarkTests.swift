@@ -32,19 +32,19 @@ struct QuotationMarkTests {
     @Test("Single")
     func single() {
         let mark = QuotationMark(.single)
-        #expect(mark.content == "'")
+        #expect(mark._content == "'")
     }
 
     @Test("Double")
     func double() {
         let mark = QuotationMark(.double)
-        #expect(mark.content == "\"")
+        #expect(mark._content == "\"")
     }
 
     @Test("Triple")
     func triple() {
         let mark = QuotationMark(.triple)
-        #expect(mark.content == "'''")
+        #expect(mark._content == "'''")
     }
 
 }

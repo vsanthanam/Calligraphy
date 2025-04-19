@@ -29,6 +29,6 @@ import Testing
 @Test("Single Quote Component", .tags(.stringComposition))
 func singleQuote() {
 
-    #expect(SingleQuote().content == "'")
+    #expect(SingleQuote()._content == "'")
 
 }

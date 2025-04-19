@@ -34,17 +34,21 @@ public struct AnyStringComponent: StringComponent {
     public init(
         _ component: some StringComponent
     ) {
-        _content = { component.content }
+        __content = { component._content }
     }
 
     // MARK: - StringComponent
 
-    public var content: String? {
-        _content()
+    public var _content: String? {
+        __content()
+    }
+
+    public var body: Never {
+        fatalErrorPrivateStringComponent()
     }
 
     // MARK: - Private
 
-    private let _content: @Sendable () -> String?
+    private let __content: @Sendable () -> String?
 
 }

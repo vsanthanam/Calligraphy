@@ -8,13 +8,23 @@ A component of a declaratively composed string
 
 ## Overview
 
-A `StringComponent` is the basic building block of a ``StringBuilder`` DSL. Each string component represents either a hard coded string, or one or more child string components. You can implement`StringComponent` conformance either declaratively or imperatively. 
+A `StringComponent` is the basic building block of a ``StringBuilder`` DSL. Each string component represents one or more child string components or Swift strings.
 
-- To declaratively implement a string component that represents a composition of one or more child components, implement the ``body`` property.
+To create a String component, implement the ``body`` property and use the result builder to declare the child strings or components
 
-- To imperatively implement a string component that represents a Swift string, implement the ``content`` property.
+```swift
+struct Greeting: StringComponent {
 
-- Important: If you implement both the `content` property *and* the `body` property, the `content` property will be respected over the `body` property.
+    let name: String
+
+    var body: some StringComponent {
+        "Hello"
+        name
+        "Welcome to Calligraphy!"
+    }
+
+}
+```
 
 ## Topics
 
@@ -25,7 +35,6 @@ A `StringComponent` is the basic building block of a ``StringBuilder`` DSL. Each
 ### Instance Properties
 
 - ``body``
-- ``content``
 
 ### Modifiers
 

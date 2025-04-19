@@ -50,6 +50,7 @@ These articles will help you setup Calligraphy in a new or exising project and d
 - ``Space``
 - ``Tab``
 - ``TripleQuote``
+- ``EmptyStringComponent``
 - ``AnyStringComponent``
 
 ### Directory Composition

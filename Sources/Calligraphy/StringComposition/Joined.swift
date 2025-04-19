@@ -84,10 +84,14 @@ public struct Joined<T, Separator>: StringComponent where T: StringComponent, Se
 
     // MARK: - StringComponent
 
-    public var content: String? {
+    public var _content: String? {
         StringBuilder.$separator.withValue(String(separator)) {
-            components.content
+            components._content
         }
+    }
+
+    public var body: Never {
+        fatalErrorPrivateStringComponent()
     }
 
     // MARK: - Private

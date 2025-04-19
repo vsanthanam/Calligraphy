@@ -29,6 +29,6 @@ import Testing
 @Test("Double Quote Component", .tags(.stringComposition))
 func doubleQuote() {
 
-    #expect(DoubleQuote().content == "\"")
+    #expect(DoubleQuote()._content == "\"")
 
 }

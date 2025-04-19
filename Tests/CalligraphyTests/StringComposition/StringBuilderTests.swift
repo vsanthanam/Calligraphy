@@ -23,7 +23,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Calligraphy
+@testable import Calligraphy
 import Testing
 
 @Suite("@StringBuilder Tests", .tags(.stringComposition))
@@ -39,7 +39,7 @@ struct StringBuilderTests {
 
         let components = builder()
         #expect(components is RawStringComponent)
-        #expect(components.content == "foo")
+        #expect(components._content == "foo")
     }
 
     @Test("some StringProtocol Expression")
@@ -53,7 +53,7 @@ struct StringBuilderTests {
 
         let components = builder()
         #expect(components is RawStringComponent)
-        #expect(components.content == "foo")
+        #expect(components._content == "foo")
     }
 
     @Test("some RawRepresentable Expression")
@@ -70,7 +70,7 @@ struct StringBuilderTests {
 
         let components = builder()
         #expect(components is RawStringComponent)
-        #expect(components.content == "bar")
+        #expect(components._content == "bar")
     }
 
     @Test("No Components")
@@ -80,8 +80,8 @@ struct StringBuilderTests {
         func builder() -> some StringComponent {}
 
         let components = builder()
-        #expect(components is StringBuilder._Skip)
-        #expect(components.content == nil)
+        #expect(components is EmptyStringComponent)
+        #expect(components._content == nil)
     }
 
     @Test("One Component")
@@ -102,7 +102,7 @@ struct StringBuilderTests {
 
         let components = builder()
         #expect(components is Foo)
-        #expect(components.content == "bar")
+        #expect(components._content == "bar")
     }
 
     @Test("Multiple Components")
@@ -116,7 +116,11 @@ struct StringBuilderTests {
 
         struct Bar: StringComponent {
 
-            let content: String? = nil
+            let _content: String? = nil
+
+            var body: Never {
+                fatalErrorPrivateStringComponent()
+            }
         }
 
         struct Baz: StringComponent {
@@ -140,7 +144,7 @@ struct StringBuilderTests {
         bar
         foo
         """#
-        #expect(components.content == expected)
+        #expect(components._content == expected)
     }
 
     @Test(
@@ -175,7 +179,7 @@ struct StringBuilderTests {
 
         let components = builder()
         #expect(components is StringBuilder._Either<Foo, Bar>)
-        #expect(components.content == result)
+        #expect(components._content == result)
     }
 
     @Test(
@@ -209,8 +213,8 @@ struct StringBuilderTests {
         }
 
         let components = builder()
-        #expect(components is StringBuilder._Block<StringBuilder._Either<Foo, StringBuilder._Skip>, Bar>)
-        #expect(components.content == result)
+        #expect(components is StringBuilder._Block<StringBuilder._Either<Foo, EmptyStringComponent>, Bar>)
+        #expect(components._content == result)
     }
 
     @Test("For Loop Support")
@@ -225,7 +229,7 @@ struct StringBuilderTests {
         }
 
         let components = builder()
-        #expect(components is StringBuilder._List<StringBuilder._Either<RawStringComponent, StringBuilder._Skip>>)
+        #expect(components is StringBuilder._List<StringBuilder._Either<RawStringComponent, EmptyStringComponent>>)
 
         let expected = #"""
         1
@@ -233,7 +237,7 @@ struct StringBuilderTests {
         5
         7
         """#
-        #expect(components.content == expected)
+        #expect(components._content == expected)
     }
 
     @Test("Availablility Check Support")
@@ -246,8 +250,8 @@ struct StringBuilderTests {
         }
 
         let components = builder()
-        #expect(components is StringBuilder._Either<AnyStringComponent, StringBuilder._Skip>)
-        #expect(components.content == "foo")
+        #expect(components is StringBuilder._Either<AnyStringComponent, EmptyStringComponent>)
+        #expect(components._content == "foo")
     }
 
     @Test("+ Operators")
@@ -279,12 +283,12 @@ struct StringBuilderTests {
         let bar = Bar()
         let empty = Empty()
 
-        #expect((foo + bar).content == "foobar")
-        #expect(("foo" + bar).content == "foobar")
-        #expect((foo + "bar").content == "foobar")
-        #expect((foo + empty).content == "foo")
-        #expect((empty + bar).content == "bar")
-        #expect((empty + empty).content == nil)
+        #expect((foo + bar)._content == "foobar")
+        #expect(("foo" + bar)._content == "foobar")
+        #expect((foo + "bar")._content == "foobar")
+        #expect((foo + empty)._content == "foo")
+        #expect((empty + bar)._content == "bar")
+        #expect((empty + empty)._content == nil)
     }
 
 }

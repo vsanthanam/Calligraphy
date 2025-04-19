@@ -54,7 +54,7 @@ public enum StringBuilder {
         expression.rawValue
     }
 
-    public static func buildBlock() -> _Skip {
+    public static func buildBlock() -> EmptyStringComponent {
         .init()
     }
 
@@ -85,11 +85,11 @@ public enum StringBuilder {
     @StringBuilder
     public static func buildOptional<T>(
         _ component: T?
-    ) -> _Either<T, _Skip> where T: StringComponent {
+    ) -> _Either<T, EmptyStringComponent> where T: StringComponent {
         if let component {
             component
         } else {
-            _Skip()
+            EmptyStringComponent()
         }
     }
 
@@ -105,22 +105,14 @@ public enum StringBuilder {
         AnyStringComponent(component)
     }
 
-    public struct _Skip: StringComponent {
-
-        public let content: String? = nil
-
-        fileprivate init() {}
-
-    }
-
     public struct _Block<each Component>: StringComponent where repeat each Component: StringComponent {
 
         // MARK: - StringComponent
 
-        public var content: String? {
+        public var _content: String? {
             var result: String? = nil
             func append(_ component: some StringComponent) {
-                guard let content = component.content else {
+                guard let content = component._content else {
                     return
                 }
                 if let r = result {
@@ -133,6 +125,10 @@ public enum StringBuilder {
                 append(component)
             }
             return result
+        }
+
+        public var body: Never {
+            fatalErrorPrivateStringComponent()
         }
 
         // MARK: - Private
@@ -154,13 +150,17 @@ public enum StringBuilder {
 
         // MARK: - StringComponent
 
-        public var content: String? {
+        public var _content: String? {
             switch self {
             case let .first(component):
-                component.content
+                component._content
             case let .second(component):
-                component.content
+                component._content
             }
+        }
+
+        public var body: Never {
+            fatalErrorPrivateStringComponent()
         }
     }
 
@@ -168,10 +168,10 @@ public enum StringBuilder {
 
         // MARK: - StringComponent
 
-        public var content: String? {
+        public var _content: String? {
             list
                 .reduce(nil) { prev, component in
-                    guard let content = component.content else {
+                    guard let content = component._content else {
                         return prev
                     }
                     if let prev {
@@ -180,6 +180,10 @@ public enum StringBuilder {
                         return content
                     }
                 }
+        }
+
+        public var body: Never {
+            fatalErrorPrivateStringComponent()
         }
 
         // MARK: - Private
@@ -200,11 +204,11 @@ public enum StringBuilder {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @StringBuilder
 public func + (_ lhs: some StringComponent, _ rhs: some StringComponent) -> some StringComponent {
-    if let lhs = lhs.content, let rhs = rhs.content {
+    if let lhs = lhs._content, let rhs = rhs._content {
         lhs + rhs
-    } else if let lhs = lhs.content {
+    } else if let lhs = lhs._content {
         lhs + rhs
-    } else if let rhs = rhs.content {
+    } else if let rhs = rhs._content {
         lhs + rhs
     }
 }
@@ -212,7 +216,7 @@ public func + (_ lhs: some StringComponent, _ rhs: some StringComponent) -> some
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @StringBuilder
 public func + (_ lhs: some StringComponent, _ rhs: some StringProtocol) -> some StringComponent {
-    if let lhs = lhs.content {
+    if let lhs = lhs._content {
         lhs + String(rhs)
     } else {
         rhs
@@ -222,9 +226,20 @@ public func + (_ lhs: some StringComponent, _ rhs: some StringProtocol) -> some 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @StringBuilder
 public func + (_ lhs: some StringProtocol, _ rhs: some StringComponent) -> some StringComponent {
-    if let rhs = rhs.content {
+    if let rhs = rhs._content {
         String(lhs) + rhs
     } else {
         lhs
     }
+}
+
+extension StringComponent {
+
+    func fatalErrorPrivateStringComponent(
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> Never {
+        fatalError("StringComponent \(Self.self) does not have a body. Do not invoke this property directly.", file: file, line: line)
+    }
+
 }
