@@ -1,4 +1,4 @@
-name: Ubunti Latest Build / Test (spm)
+name: Ubuntu Latest Build / Test (spm)
 on:
   push:
     branches: [ "main" ]
