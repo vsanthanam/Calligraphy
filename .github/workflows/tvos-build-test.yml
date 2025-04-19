@@ -1,16 +1,12 @@
-name: tvos-build-test
-
+name: tvOS 18.4 Build / Test (Xcode 16.3)
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
 jobs:
   build:
-
     runs-on: macos-15
-
     steps:
     - uses: actions/checkout@v4
     - name: Xcode Version

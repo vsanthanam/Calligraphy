@@ -1,5 +1,4 @@
-name: lint-swift
-
+name: Lint Swift Sources
 on:
   push:
     branches: [ "main" ]
