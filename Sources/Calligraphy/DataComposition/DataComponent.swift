@@ -33,16 +33,12 @@ public protocol DataComponent: Sendable {
     ///
     /// Typically, you do not need to explicitly spell out this type.
     /// Instead. implement ``body`` using an opaque type, and allow the compiler to expand the result builder and choose the correct type to satisfy the protocol
-    associatedtype Body: DataComponent = Never
+    associatedtype Body: DataComponent
 
     /// The data contained in the coponent
-    ///
-    /// If you implement the ``body`` property, you do not need to implement this property.
-    var data: Data? { get }
+    var _data: Data? { get }
 
     /// The data contained in the component
-    ///
-    /// If you implement the ``data`` property, you do not need to implement this property.
     @DataBuilder
     var body: Body { get }
 
@@ -51,22 +47,8 @@ public protocol DataComponent: Sendable {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension Never: DataComponent {
 
-    public var data: Data? {
+    public var _data: Data? {
         fatalError()
-    }
-
-}
-
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-extension DataComponent where Body == Never {
-
-    @available(*, unavailable)
-    public var data: Data? {
-        fatalError()
-    }
-
-    public var body: Never {
-        fatalError("DataComponent \(Self.self) does not have a body. Do not invoke this property directly.")
     }
 
 }
@@ -74,8 +56,8 @@ extension DataComponent where Body == Never {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension DataComponent {
 
-    public var data: Data? {
-        body.data
+    public var _data: Data? {
+        body._data
     }
 
 }

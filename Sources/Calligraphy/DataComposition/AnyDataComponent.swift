@@ -36,17 +36,21 @@ public struct AnyDataComponent: DataComponent {
     public init(
         _ component: some DataComponent
     ) {
-        _data = { component.data }
+        __data = { component._data }
     }
 
     // MARK: - DataComponent
 
-    public var data: Data? {
-        _data()
+    public var _data: Data? {
+        __data()
+    }
+
+    public var body: Never {
+        fatalErrorPrivateDataComponent()
     }
 
     // MARK: - Private
 
-    private let _data: @Sendable () -> Data?
+    private let __data: @Sendable () -> Data?
 
 }

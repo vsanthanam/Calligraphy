@@ -32,12 +32,12 @@ public protocol Directory: DirectoryContent {
     /// The name of the directory
     var name: String { get }
 
-    associatedtype Body: DirectoryContent = Never
+    associatedtype Body: DirectoryContent
 
     @DirectoryContentBuilder
     var body: Body { get }
 
-    var contents: [SerializedDirectoryContent] { get }
+    var _contents: [SerializedDirectoryContent] { get }
 
 }
 
@@ -51,23 +51,9 @@ extension Never: DirectoryContent {
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-extension Directory where Body == Never {
-
-    @available(*, unavailable)
-    public func _serialize() -> [SerializedDirectoryContent] {
-        fatalError()
-    }
-
-    public var body: Never {
-        fatalError("Directory \(Self.self) does not have a body. Do not invoke this property directly.")
-    }
-
-}
-
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension Directory {
 
-    public var contents: [SerializedDirectoryContent] {
+    public var _contents: [SerializedDirectoryContent] {
         body._serialize()
     }
 
@@ -75,7 +61,7 @@ extension Directory {
         [
             .directory(
                 name,
-                content: contents
+                content: _contents
             )
         ]
     }

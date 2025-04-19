@@ -125,10 +125,10 @@ public enum DataBuilder {
 
         // MARK: - DataComponent
 
-        public var data: Data? {
+        public var _data: Data? {
             var result: Data? = nil
             func append(_ component: some DataComponent) {
-                guard let data = component.data else {
+                guard let data = component._data else {
                     return
                 }
                 if let r = result {
@@ -141,6 +141,10 @@ public enum DataBuilder {
                 append(component)
             }
             return result
+        }
+
+        public var body: Never {
+            fatalErrorPrivateDataComponent()
         }
 
         // MARK: - Private
@@ -162,25 +166,28 @@ public enum DataBuilder {
 
         // MARK: - DataComponent
 
-        public var data: Data? {
+        public var _data: Data? {
             switch self {
             case let .first(component):
-                component.data
+                component._data
             case let .second(component):
-                component.data
+                component._data
             }
         }
 
+        public var body: Never {
+            fatalErrorPrivateDataComponent()
+        }
     }
 
     public struct _List<Element>: DataComponent where Element: DataComponent {
 
         // MARK: - DataComponent
 
-        public var data: Data? {
+        public var _data: Data? {
             list
                 .reduce(nil) { prev, component in
-                    guard let data = component.data else {
+                    guard let data = component._data else {
                         return prev
                     }
                     if let prev {
@@ -189,6 +196,10 @@ public enum DataBuilder {
                         return data
                     }
                 }
+        }
+
+        public var body: Never {
+            fatalErrorPrivateDataComponent()
         }
 
         // MARK: - Private
@@ -221,4 +232,15 @@ public func + (_ lhs: some DataComponent, _ rhs: Data) -> some DataComponent {
 public func + (_ lhs: Data, _ rhs: some DataComponent) -> some DataComponent {
     lhs
     rhs
+}
+
+extension DataComponent {
+
+    func fatalErrorPrivateDataComponent(
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> Never {
+        fatalError("DataComponent \(Self.self) does not have a body. Do not invoke this property directly.", file: file, line: line)
+    }
+
 }

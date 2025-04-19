@@ -53,7 +53,7 @@ extension Data {
     public init(
         _ component: some DataComponent
     ) {
-        self = component.data ?? .init()
+        self = component._data ?? .init()
     }
 
     public static func build(@DataBuilder _ components: () -> some DataComponent) -> Data {
