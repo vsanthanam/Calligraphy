@@ -1,4 +1,4 @@
-name: visionos-build-test
+name: VisionOS 2.4 Build / Test (Xcode 16.3)
 
 on:
   push:
