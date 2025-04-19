@@ -1,0 +1,33 @@
+name: Run Tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize]
+    branches: [main]
+
+permissions:
+  checks: write
+  contents: read
+
+jobs:
+  test-macos-spm:
+    runs-on: macos-15
+    steps:
+    - uses: actions/checkout@v4
+    - name: Xcode Version
+      run: sudo xcode-select --switch /Applications/Xcode_16.3.app
+    - name: Run Tests
+      run: swift test --xunit-output junit.xml --parallel
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      with:
+        name: junit-results
+        path: junit-swift-testing.xml
+    - name: Publish test results to GitHub
+      uses: dorny/test-reporter@v1
+      if: github.event.pull_request.head.repo.full_name == github.repository
+      with:
+        name: Run Tests Results
+        path: junit-swift-testing.xml
+        reporter: swift-xunit
