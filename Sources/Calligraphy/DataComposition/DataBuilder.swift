@@ -146,7 +146,7 @@ public enum DataBuilder {
         public var body: Never {
             fatalErrorPrivateDataComponent()
         }
-        
+
         // MARK: - Private
 
         fileprivate init(components: repeat each Component) {
@@ -197,7 +197,7 @@ public enum DataBuilder {
                     }
                 }
         }
-        
+
         public var body: Never {
             fatalErrorPrivateDataComponent()
         }

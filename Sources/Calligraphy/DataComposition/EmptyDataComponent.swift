@@ -37,7 +37,7 @@ public struct EmptyDataComponent: DataComponent {
     // MARK: - DataComponent
 
     public let _data: Data? = nil
-    
+
     public var body: Never {
         fatalErrorPrivateDataComponent()
     }

@@ -48,7 +48,7 @@ public struct AnyDataComponent: DataComponent {
     public var body: Never {
         fatalErrorPrivateDataComponent()
     }
-    
+
     // MARK: - Private
 
     private let __data: @Sendable () -> Data?

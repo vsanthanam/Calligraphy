@@ -49,7 +49,7 @@ public struct RawDataComponent: DataComponent {
     public var _data: Data? {
         value
     }
-    
+
     public var body: Never {
         fatalErrorPrivateDataComponent()
     }
