@@ -23,8 +23,7 @@ These articles will help you setup Calligraphy in a new or exising project and d
 @Links(visualStyle: detailedGrid) {
     - <doc:Setup>
     - <doc:ComposingStrings>
-    - <doc:ComposingDirectories>
-    - <doc:SiteGenerator>
+    - <doc:ComposingDirectories>g
 }
 
 ## Topics
