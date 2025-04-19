@@ -3,7 +3,7 @@ on:
   pull_request:
     branches: [ "main" ]
 jobs:
-  build-macos:
+  build-docc:
     runs-on: macos-15
     steps:
     - uses: actions/checkout@v4
