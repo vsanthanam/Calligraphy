@@ -23,11 +23,11 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: junit-results
-        path: junit.xml
+        path: junit-swift-testing.xml
     - name: Publish test results to GitHub
       uses: dorny/test-reporter@v1
       if: github.event.pull_request.head.repo.full_name == github.repository
       with:
-        name: Swift Tests
-        path: junit.xml
+        name: Run Tests Results
+        path: junit-swift-testing.xml
         reporter: swift-xunit
