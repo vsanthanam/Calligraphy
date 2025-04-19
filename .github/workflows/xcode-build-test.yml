@@ -2,6 +2,8 @@ name: Build & Test (Xcode)
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 jobs:
   build-macos:
     runs-on: macos-15
