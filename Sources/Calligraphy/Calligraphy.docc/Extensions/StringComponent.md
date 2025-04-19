@@ -50,6 +50,14 @@ struct Greeting: StringComponent {
 - ``prefixLines(with:_:)``
 - ``prefixLines(_:components:)``
 - ``quoted(_:)``
+- ``separatedBy(_:)``
+- ``separatedBy(separator:)``
 - ``suffixLines(with:_:)``
 - ``suffixLines(_:components:)``
 - ``tabbed(_:)``
+
+### Operators
+
+- ``+(_:_:)-(StringComponent,StringComponent)``
+- ``+(_:_:)-(StringProtocol,StringComponent)``
+- ``+(_:_:)-(StringComponent,StringProtocol)``

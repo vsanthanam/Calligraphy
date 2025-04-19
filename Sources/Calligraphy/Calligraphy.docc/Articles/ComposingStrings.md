@@ -30,17 +30,16 @@ let declarativeString = String.build {
 
 ## Making String Components
 
-A ``StringComponent`` is the basic building block of the Calligraphy DSL. Each string component represents either a concrete string value or a composition of one or more child components. You can implement `StringComponent` conformance in two ways:
-
-1. **Imperatively** by implementing the `content` property to return a concrete string value
-2. **Declaratively** by implementing the `body` property to compose child components
+A ``StringComponent`` is the basic building block of the Calligraphy DSL. Each string component represents either a concrete string value or a composition of one or more child components or strings. Create a `StringComponent` by implementing the ``StringComponent/body`` property:
 
 For example, here's a simple string component that returns a hard-coded string:
 
 ```swift
 struct Greeting: StringComponent {
     
-    let content: String?  = "Hello, World!"
+    var body: some StringComponent {
+        "Hello, World!"
+    }
     
 }
 ```
@@ -55,6 +54,7 @@ struct WelcomeMessage: StringComponent {
             "Welcome to Calligraphy!"
             "This is a multi-line message."
             "Each line is a separate component."
+            Greeting()
         }
     }
 

@@ -38,7 +38,7 @@ public protocol DataComponent: Sendable {
     /// The data contained in the coponent
     var _data: Data? { get }
 
-    /// The data contained in the component
+    /// The sub components used to build this data component.
     @DataBuilder
     var body: Body { get }
 
@@ -60,4 +60,36 @@ extension DataComponent {
         body._data
     }
 
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+extension DataComponent {
+
+    func fatalErrorPrivateDataComponent(
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> Never {
+        fatalError("DataComponent \(Self.self) does not have a body. Do not invoke this property directly.", file: file, line: line)
+    }
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+@DataBuilder
+public func + (_ lhs: some DataComponent, _ rhs: some DataComponent) -> some DataComponent {
+    lhs
+    rhs
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+@DataBuilder
+public func + (_ lhs: some DataComponent, _ rhs: Data) -> some DataComponent {
+    lhs
+    rhs
+}
+
+@DataBuilder
+public func + (_ lhs: Data, _ rhs: some DataComponent) -> some DataComponent {
+    lhs
+    rhs
 }
