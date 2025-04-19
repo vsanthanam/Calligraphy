@@ -126,12 +126,21 @@ extension [SerializedDirectoryContent] {
     fileprivate func validate(
         in parent: URL
     ) throws {
-        let uniqueNames = Set<String>()
+        var uniqueNames = Set<String>()
         for content in self {
-            guard !uniqueNames.contains(content.name) else {
+            let name = content.name
+            // TODO: - Properly check filenames
+            guard !name.isEmpty else {
+                throw DiskOperationError("Invalid directory content - empty name found in parent '\(parent.path())'")
+            }
+            guard name.contains(" ") else {
+                throw DiskOperationError("Invalid directory content - file or directory name '\(name)' contains whitespace in parent '\(parent.path())'")
+            }
+            guard !uniqueNames.contains(name) else {
                 throw DiskOperationError("Invalid directory content - duplicate files or directories named '\(content.name)' found in parent '\(parent.path())'")
             }
             try content.validate(in: parent)
+            uniqueNames.insert(content.name)
         }
     }
 
