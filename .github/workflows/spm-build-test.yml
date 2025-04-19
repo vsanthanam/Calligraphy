@@ -26,9 +26,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Install Swift
-        uses: compnerd/gha-setup-swift@v1
+      - uses: compnerd/gha-setup-swift@main
         with:
-          swift-version: '6.1' # or your preferred version
+          branch: main
+          tag: swift-6.1-RELEASE
       - name: Run Tests
         run: swift test -v
