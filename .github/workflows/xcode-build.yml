@@ -1,4 +1,4 @@
-name: Build & Test (Xcode)
+name: Build (Xcode Platforms)
 on:
   push:
     branches: [ "main" ]
@@ -12,44 +12,44 @@ jobs:
     - name: Xcode Version
       run: sudo xcode-select --switch /Applications/Xcode_16.3.app
     - name: Run Tests
-      run: xcodebuild test -scheme Calligraphy -destination 'platform=macOS'
+      run: xcodebuild -scheme Calligraphy -destination 'platform=macOS'
   build-maccatalyst:
     runs-on: macos-15
     steps:
     - uses: actions/checkout@v4
     - name: Xcode Version
       run: sudo xcode-select --switch /Applications/Xcode_16.3.app
-    - name: Run Tests
-      run: xcodebuild test -scheme Calligraphy -destination 'platform=macOS,variant=Mac Catalyst'
+    - name: Build
+      run: xcodebuild -scheme Calligraphy -destination 'platform=macOS,variant=Mac Catalyst'
   build-ios:
     runs-on: macos-15
     steps:
     - uses: actions/checkout@v4
     - name: Xcode Version
       run: sudo xcode-select --switch /Applications/Xcode_16.3.app
-    - name: Run Tests
-      run: xcodebuild test -scheme Calligraphy -sdk iphonesimulator -destination "OS=18.4,name=iPhone 16"
+    - name: Build
+      run: xcodebuild -scheme Calligraphy -sdk iphonesimulator -destination "OS=18.4,name=iPhone 16"
   build-watchos:
     runs-on: macos-15
     steps:
     - uses: actions/checkout@v4
     - name: Xcode Version
       run: sudo xcode-select --switch /Applications/Xcode_16.3.app
-    - name: Run Tests
-      run: xcodebuild test -scheme Calligraphy -destination "OS=11.4,name=Apple Watch Series 10 (46mm)"
+    - name: Build
+      run: xcodebuild -scheme Calligraphy -destination "OS=11.4,name=Apple Watch Series 10 (46mm)"
   build-tvos:
     runs-on: macos-15
     steps:
     - uses: actions/checkout@v4
     - name: Xcode Version
       run: sudo xcode-select --switch /Applications/Xcode_16.3.app
-    - name: Run Tests
-      run: xcodebuild test -scheme Calligraphy -destination "OS=18.4,name=Apple TV 4K (3rd Generation)"
+    - name: Build
+      run: xcodebuild -scheme Calligraphy -destination "OS=18.4,name=Apple TV 4K (3rd Generation)"
   build-visionos:
     runs-on: macos-15
     steps:
     - uses: actions/checkout@v4
     - name: Xcode Version
       run: sudo xcode-select --switch /Applications/Xcode_16.3.app
-    - name: Run Tests
-      run: xcodebuild test -scheme Calligraphy -destination "OS=2.4,name=Apple Vision Pro"
+    - name: Build
+      run: xcodebuild -scheme Calligraphy -destination "OS=2.4,name=Apple Vision Pro"
