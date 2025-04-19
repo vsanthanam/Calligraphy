@@ -1,0 +1,13 @@
+name: Build Documentation
+on:
+  pull_request:
+    branches: [ "main" ]
+jobs:
+  build-macos:
+    runs-on: macos-15
+    steps:
+    - uses: actions/checkout@v4
+    - name: Xcode Version
+      run: sudo xcode-select --switch /Applications/Xcode_16.3.app
+    - name: Validate Documentation
+      run: ./.scripts/check-docc

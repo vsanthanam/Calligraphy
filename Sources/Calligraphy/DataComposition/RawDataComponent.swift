@@ -46,8 +46,12 @@ public struct RawDataComponent: DataComponent {
 
     // MARK: - DataComponent
 
-    public var data: Data? {
+    public var _data: Data? {
         value
+    }
+    
+    public var body: Never {
+        fatalErrorPrivateDataComponent()
     }
 
 }
