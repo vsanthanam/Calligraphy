@@ -35,15 +35,19 @@ public struct Folder<T>: Directory where T: DirectoryContent {
     ///   - contents: The contents of the folder
     public init(
         _ name: String,
+        permissions: FilePermissions = .defaultDirectory,
         @DirectoryContentBuilder contents: () -> T
     ) {
         self.name = name
+        self.permissions = permissions
         self.contents = contents()
     }
 
     // MARK: - Directory
 
     public let name: String
+
+    public let permissions: FilePermissions
 
     public var body: some DirectoryContent {
         contents

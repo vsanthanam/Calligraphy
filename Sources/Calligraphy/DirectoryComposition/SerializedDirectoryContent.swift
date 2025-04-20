@@ -30,20 +30,24 @@ public struct SerializedDirectoryContent: Equatable, Sendable {
 
     public static func directory(
         _ name: String,
+        permissions: FilePermissions,
         content: [SerializedDirectoryContent]
     ) -> SerializedDirectoryContent {
         .init(
             name: name,
+            permissions: permissions,
             content: .directory(content)
         )
     }
 
     public static func data(
         _ name: String,
+        permissions: FilePermissions,
         data: Data
     ) -> SerializedDirectoryContent {
         .init(
             name: name,
+            permissions: permissions,
             content: .file(
                 .data(
                     data
@@ -55,21 +59,25 @@ public struct SerializedDirectoryContent: Equatable, Sendable {
     public static func data(
         _ name: String,
         fileExtension: String,
+        permissions: FilePermissions,
         data: Data
     ) -> SerializedDirectoryContent {
         .data(
             name + "." + fileExtension,
+            permissions: permissions,
             data: data
         )
     }
 
     public static func text(
         _ name: String,
+        permissions: FilePermissions,
         text: String,
         encoding: String.Encoding
     ) -> SerializedDirectoryContent {
         .init(
             name: name,
+            permissions: permissions,
             content: .file(
                 .text(
                     text,
@@ -82,16 +90,20 @@ public struct SerializedDirectoryContent: Equatable, Sendable {
     public static func text(
         _ name: String,
         fileExtension: String,
+        permissions: FilePermissions,
         text: String,
         encoding: String.Encoding
     ) -> SerializedDirectoryContent {
         .init(
             name: name + "." + fileExtension,
+            permissions: permissions,
             content: .file(.text(text, encoding))
         )
     }
 
     public let name: String
+
+    public let permissions: FilePermissions
 
     public let content: Content
 

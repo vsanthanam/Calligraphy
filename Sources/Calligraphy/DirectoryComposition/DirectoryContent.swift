@@ -77,6 +77,7 @@ extension SerializedDirectoryContent {
             let url = try DiskOperation.currentURL.appending(directory: name)
             try await FileManager.default.findExisting(at: url, shouldOverwrite: shouldOverwrite)
             try await FileManager.default.createDirectory(at: url)
+            try await FileManager.default.setPermissions(permissions, at: url)
             let urls = try await DiskOperation.push(path: name) {
                 try await directory.performWriteOperations(shouldOverwrite: shouldOverwrite)
             }
@@ -85,6 +86,7 @@ extension SerializedDirectoryContent {
             let url = try DiskOperation.currentURL.appending(file: name)
             try await FileManager.default.findExisting(at: url, shouldOverwrite: shouldOverwrite)
             try await file.serialize().write(toURL: url)
+            try await FileManager.default.setPermissions(permissions, at: url)
             return [url]
         }
     }
@@ -283,6 +285,19 @@ extension FileManager {
                 throw DiskOperationError("File or directory already exists at proposed path '\(url.path())'")
             }
         }
+    }
+
+    fileprivate func setPermissions(
+        _ permissions: FilePermissions,
+        at url: URL
+    ) async throws {
+        #if !os(Windows)
+            try setAttributes(
+                [.posixPermissions: permissions.rawValue],
+                ofItemAtPath: url.path()
+            )
+            try Task.checkCancellation()
+        #endif
     }
 
 }

@@ -38,11 +38,13 @@ public struct File: DirectoryContent {
     ///   - text: The contents of the file
     public init(
         _ name: String,
+        permissions: FilePermissions = .defaultFile,
         encoding: String.Encoding = .utf8,
         @StringBuilder text: () -> some StringComponent
     ) {
         backing = .text(
             name,
+            permissions: permissions,
             text: String.build(text),
             encoding: encoding
         )
@@ -57,12 +59,14 @@ public struct File: DirectoryContent {
     public init(
         _ name: String,
         fileExtension: String,
+        permissions: FilePermissions = .defaultFile,
         encoding: String.Encoding = .utf8,
         @StringBuilder text: () -> some StringComponent
     ) {
         backing = .text(
             name,
             fileExtension: fileExtension,
+            permissions: permissions,
             text: String.build(text),
             encoding: encoding
         )
@@ -75,11 +79,13 @@ public struct File: DirectoryContent {
     ///   - encoding: The file's encoding
     public init(
         _ name: String,
+        permissions: FilePermissions = .defaultFile,
         text: String,
         encoding: String.Encoding = .utf8,
     ) {
         self.init(
             name,
+            permissions: permissions,
             encoding: encoding
         ) {
             text
@@ -95,12 +101,14 @@ public struct File: DirectoryContent {
     public init(
         _ name: String,
         fileExtension: String,
+        permissions: FilePermissions = .defaultFile,
         text: String,
         encoding: String.Encoding = .utf8,
     ) {
         self.init(
             name,
             fileExtension: fileExtension,
+            permissions: permissions,
             encoding: encoding
         ) {
             text
@@ -113,10 +121,12 @@ public struct File: DirectoryContent {
     ///   - data: The contents of the file
     public init(
         _ name: String,
+        permissions: FilePermissions = .defaultFile,
         @DataBuilder data: () -> some DataComponent
     ) {
         backing = .data(
             name,
+            permissions: permissions,
             data: Data.build(data)
         )
     }
@@ -129,11 +139,13 @@ public struct File: DirectoryContent {
     public init(
         _ name: String,
         fileExtension: String,
+        permissions: FilePermissions = .defaultFile,
         @DataBuilder data: () -> some DataComponent
     ) {
         backing = .data(
             name,
             fileExtension: fileExtension,
+            permissions: permissions,
             data: Data.build(data)
         )
     }
@@ -144,10 +156,12 @@ public struct File: DirectoryContent {
     ///   - data: The contents of the file
     public init(
         _ name: String,
+        permissions: FilePermissions,
         data: Data
     ) {
         self.init(
             name,
+            permissions: permissions
         ) {
             data
         }
@@ -161,11 +175,13 @@ public struct File: DirectoryContent {
     public init(
         _ name: String,
         fileExtension: String,
+        permissions: FilePermissions = .defaultFile,
         data: Data
     ) {
         self.init(
             name,
             fileExtension: fileExtension,
+            permissions: permissions
         ) {
             data
         }
