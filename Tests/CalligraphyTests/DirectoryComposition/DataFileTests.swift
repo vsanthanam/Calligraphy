@@ -46,7 +46,7 @@ func dataFileDefaultSerialization() {
     let fooTextFile = FooDataFile()
     let serialized = fooTextFile._serialize()
     let expected = [
-        SerializedDirectoryContent.data("foo", data: .init([0x48, 0x65, 0x6C, 0x6C, 0x6F]))
+        SerializedDirectoryContent.data("foo", permissions: .defaultFile, data: .init([0x48, 0x65, 0x6C, 0x6C, 0x6F]))
     ]
     #expect(serialized == expected)
 
