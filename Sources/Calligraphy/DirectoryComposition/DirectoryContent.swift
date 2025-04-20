@@ -129,18 +129,32 @@ extension [SerializedDirectoryContent] {
         var uniqueNames = Set<String>()
         for content in self {
             let name = content.name
-            // TODO: - Properly check filenames
+
             guard !name.isEmpty else {
                 throw DiskOperationError("Invalid directory content - empty name found in parent '\(parent.path())'")
             }
-            guard name.contains(" ") else {
-                throw DiskOperationError("Invalid directory content - file or directory name '\(name)' contains whitespace in parent '\(parent.path())'")
+
+            let illegalCharacters = CharacterSet(charactersIn: "/\\:?*\"<>|")
+            guard name.rangeOfCharacter(from: illegalCharacters) == nil else {
+                throw DiskOperationError("Invalid directory content - file or directory name '\(name)' contains illegal characters in parent '\(parent.path())'")
             }
+
+            #if os(Windows)
+                let reservedNames = ["CON", "PRN", "AUX", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"]
+                guard !reservedNames.contains(name.uppercased()) else {
+                    throw DiskOperationError("Invalid directory content - file or directory name '\(name)' is a reserved name in parent '\(parent.path())'")
+                }
+
+                guard !name.hasSuffix("."), !name.hasSuffix(" ") else {
+                    throw DiskOperationError("Invalid directory content - file or directory name '\(name)' ends with a period or space in parent '\(parent.path())'")
+                }
+            #endif
+
             guard !uniqueNames.contains(name) else {
                 throw DiskOperationError("Invalid directory content - duplicate files or directories named '\(content.name)' found in parent '\(parent.path())'")
             }
-            try content.validate(in: parent)
             uniqueNames.insert(content.name)
+            try content.validate(in: parent)
         }
     }
 
