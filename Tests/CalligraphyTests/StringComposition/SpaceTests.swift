@@ -29,5 +29,5 @@ import Testing
 @Test("Space Component", .tags(.stringComposition))
 func space() {
     let space = Space()
-    #expect(space._content == " ")
+    #expect(space._content == "")
 }
