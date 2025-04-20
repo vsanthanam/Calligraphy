@@ -30,4 +30,3 @@ jobs:
         name: Run Tests Results
         path: junit-swift-testing.xml
         reporter: swift-xunit
-        only-summary: true
