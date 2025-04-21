@@ -32,6 +32,7 @@ public protocol Directory: DirectoryContent {
     /// The name of the directory
     var name: String { get }
 
+    /// The permissions of the directory
     var permissions: FilePermissions { get }
 
     associatedtype Body: DirectoryContent

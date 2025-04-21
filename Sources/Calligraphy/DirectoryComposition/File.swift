@@ -34,6 +34,7 @@ public struct File: DirectoryContent {
     /// Create a text file using a @StringBuilder
     /// - Parameters:
     ///   - name: The name of the file
+    ///   - permissions: The permissions of the file
     ///   - encoding: The file's encoding
     ///   - text: The contents of the file
     public init(
@@ -54,6 +55,7 @@ public struct File: DirectoryContent {
     /// - Parameters:
     ///   - name: The name of the file
     ///   - fileExtension: The file extension
+    ///   - permissions: The permissions of the file
     ///   - encoding: The file's encoding
     ///   - text: The contents of the file
     public init(
@@ -75,6 +77,7 @@ public struct File: DirectoryContent {
     /// Create a text file
     /// - Parameters:
     ///   - name: The name of the file
+    ///   - permissions: The permissions of the file
     ///   - text: The contents of the file
     ///   - encoding: The file's encoding
     public init(
@@ -96,6 +99,7 @@ public struct File: DirectoryContent {
     /// - Parameters:
     ///   - name: The name of the file
     ///   - fileExtension: The file extension
+    ///   - permissions: The permissions of the file
     ///   - text: The contents of the file
     ///   - encoding: The file's encoding
     public init(
@@ -118,6 +122,7 @@ public struct File: DirectoryContent {
     /// Create a data file using a @DataBuilder
     /// - Parameters:
     ///   - name: The name of the file
+    ///   - permissions: The permissions of the file
     ///   - data: The contents of the file
     public init(
         _ name: String,
@@ -135,6 +140,7 @@ public struct File: DirectoryContent {
     /// - Parameters:
     ///   - name: The name of the file
     ///   - fileExtension: The file extension
+    ///   - permissions: The permissions of the file
     ///   - data: The contents of the file
     public init(
         _ name: String,
@@ -153,6 +159,7 @@ public struct File: DirectoryContent {
     /// Create a data file
     /// - Parameters:
     ///   - name: The name of the file
+    ///   - permissions: The permissions of the file
     ///   - data: The contents of the file
     public init(
         _ name: String,
@@ -171,6 +178,7 @@ public struct File: DirectoryContent {
     /// - Parameters:
     ///   - name: The name of the file
     ///   - fileExtension: The file extension
+    ///   - permissions: The permissions of the file
     ///   - data: The contents of the file
     public init(
         _ name: String,

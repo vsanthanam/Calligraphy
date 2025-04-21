@@ -32,6 +32,7 @@ public struct Folder<T>: Directory where T: DirectoryContent {
     /// Create a folder
     /// - Parameters:
     ///   - name: The name of the folder
+    ///   - permissions: The permissions of the folder
     ///   - contents: The contents of the folder
     public init(
         _ name: String,
