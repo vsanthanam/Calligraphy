@@ -31,7 +31,7 @@ public protocol TextFile: StringComponent, DirectoryContent {
 
     /// The name of the file
     var name: String { get }
-    
+
     /// The permissions of the file
     var permissions: FilePermissions { get }
 

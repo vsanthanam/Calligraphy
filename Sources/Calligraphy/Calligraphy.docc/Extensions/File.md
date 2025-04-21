@@ -4,14 +4,14 @@
 
 ### Creating Text Files
 
-- ``init(_:text:encoding:)``
-- ``init(_:fileExtension:text:encoding:)``
-- ``init(_:encoding:text:)``
-- ``init(_:fileExtension:encoding:text:)``
+- ``init(_:permissions:text:encoding:)``
+- ``init(_:fileExtension:permissions:text:encoding:)``
+- ``init(_:permissions:encoding:text:)``
+- ``init(_:fileExtension:permissions:encoding:text:)``
 
 ### Creating Data Files
 
-- ``init(_:data:)-(_,Data)``
-- ``init(_:fileExtension:data:)-(_,_,Data)``
-- ``init(_:data:)-(_,()->DataComponent)``
-- ``init(_:fileExtension:data:)-(_,_,()->DataComponent)``
+- ``init(_:permissions:data:)-(_,_,Data)``
+- ``init(_:fileExtension:permissions:data:)-(_,_,_,Data)``
+- ``init(_:permissions:data:)-(_,_,()->DataComponent)``
+- ``init(_:fileExtension:permissions:data:)-(_,_,_,()->DataComponent)``
