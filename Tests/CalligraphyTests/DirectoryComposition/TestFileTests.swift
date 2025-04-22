@@ -42,7 +42,7 @@ func textFileDefaultSerialization() {
     let fooTextFile = FooTextFile()
     let serialized = fooTextFile._serialize()
     let expected = [
-        SerializedDirectoryContent.text("foo", text: "Hello, World!", encoding: .utf8)
+        SerializedDirectoryContent.text("foo", permissions: .defaultFile, text: "Hello, World!", encoding: .utf8)
     ]
     #expect(serialized == expected)
 
