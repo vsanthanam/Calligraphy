@@ -31,7 +31,7 @@ public struct File: DirectoryContent {
 
     // MARK: - Initializers
 
-    /// Create a text file using a @StringBuilder
+    /// Create a text file using a `@StringBuilder`
     /// - Parameters:
     ///   - name: The name of the file
     ///   - permissions: The permissions of the file
@@ -51,7 +51,7 @@ public struct File: DirectoryContent {
         )
     }
 
-    /// Create a text file with a file extension using a @StringBuilder
+    /// Create a text file with a file extension using a `@StringBuilder`
     /// - Parameters:
     ///   - name: The name of the file
     ///   - fileExtension: The file extension
@@ -119,7 +119,7 @@ public struct File: DirectoryContent {
         }
     }
 
-    /// Create a data file using a @DataBuilder
+    /// Create a data file using a `@DataBuilder`
     /// - Parameters:
     ///   - name: The name of the file
     ///   - permissions: The permissions of the file
@@ -136,7 +136,7 @@ public struct File: DirectoryContent {
         )
     }
 
-    /// Create a data file with a file extension using a @DataBuilder
+    /// Create a data file with a file extension using a `@DataBuilder`
     /// - Parameters:
     ///   - name: The name of the file
     ///   - fileExtension: The file extension
