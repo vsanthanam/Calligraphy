@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensionsTests.swift
+// AnyDirectoryContentTests.swift
 //
 // MIT License
 //
@@ -26,29 +26,15 @@
 import Calligraphy
 import Testing
 
-@Suite("String Extensions Tests", .tags(.stringComposition))
-struct StringExtensionsTests {
+@Test("Directory Content Type Eraser", .tags(.directoryComposition))
+func anyDirectoryContent() {
 
-    @Test("Initializer")
-    func initializer() {
-        let str = String(RawStringComponent("Foo"))
-        #expect(str == "Foo")
+    let standard = Files {
+        File("foo") { "bar" }
+        File("baz") { "qux" }
     }
 
-    @Test("Initializer with Empty Component")
-    func initializerEmpty() {
-        let component = StringComponents {}
-        let str = String(component)
-        #expect(str == "")
-    }
-
-    @Test("Build type method")
-    func build() {
-        let str = String.build {
-            RawStringComponent("Foo")
-            RawStringComponent("Bar")
-        }
-        #expect(str == "Foo\nBar")
-    }
+    let typeErased = AnyDirectoryContent(standard)
+    #expect(standard._serialize() == typeErased._serialize())
 
 }

@@ -25,9 +25,18 @@
 
 import Foundation
 
+/// A serializable representation of a directory entry, either a file or folder.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct SerializedDirectoryContent: Equatable, Sendable {
+public struct SerializedDirectoryContent: Equatable, Hashable, Codable, Sendable {
 
+    // MARK: - API
+
+    /// A directory content
+    /// - Parameters:
+    ///   - name: The name of the directory
+    ///   - permissions: The permisions of the directory
+    ///   - content: The directory's children
+    /// - Returns: The serialized content
     public static func directory(
         _ name: String,
         permissions: FilePermissions,
@@ -40,6 +49,12 @@ public struct SerializedDirectoryContent: Equatable, Sendable {
         )
     }
 
+    /// A data file
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - permissions: The permisions of the file
+    ///   - data: The file's contents
+    /// - Returns: The serialized content
     public static func data(
         _ name: String,
         permissions: FilePermissions,
@@ -48,14 +63,17 @@ public struct SerializedDirectoryContent: Equatable, Sendable {
         .init(
             name: name,
             permissions: permissions,
-            content: .file(
-                .data(
-                    data
-                )
-            )
+            content: .data(data)
         )
     }
 
+    /// A data file with a file extension
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - fileExtension: The file extension
+    ///   - permissions: The permisions of the file
+    ///   - data: The file's content
+    /// - Returns: The serialized content
     public static func data(
         _ name: String,
         fileExtension: String,
@@ -69,6 +87,13 @@ public struct SerializedDirectoryContent: Equatable, Sendable {
         )
     }
 
+    /// A text file
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - permissions: The permisions of the file
+    ///   - text: The contents of the file
+    ///   - encoding: The string encoding to use when writing the file to disk
+    /// - Returns: The serialized content
     public static func text(
         _ name: String,
         permissions: FilePermissions,
@@ -78,15 +103,18 @@ public struct SerializedDirectoryContent: Equatable, Sendable {
         .init(
             name: name,
             permissions: permissions,
-            content: .file(
-                .text(
-                    text,
-                    encoding
-                )
-            )
+            content: .text(text, encoding: encoding)
         )
     }
 
+    /// A text file with a file extension
+    /// - Parameters:
+    ///   - name: The name of the file
+    ///   - fileExtension: The file extension
+    ///   - permissions: The permisions of the file
+    ///   - text: The contents of the file
+    ///   - encoding: The string encoding to use when writing the file to disk
+    /// - Returns: The serialized content
     public static func text(
         _ name: String,
         fileExtension: String,
@@ -94,28 +122,119 @@ public struct SerializedDirectoryContent: Equatable, Sendable {
         text: String,
         encoding: String.Encoding
     ) -> SerializedDirectoryContent {
-        .init(
-            name: name + "." + fileExtension,
+        .text(
+            name + "." + fileExtension,
             permissions: permissions,
-            content: .file(.text(text, encoding))
+            text: text,
+            encoding: encoding
         )
     }
 
+    /// The name of the content
     public let name: String
 
+    /// The permissions of the content
     public let permissions: FilePermissions
 
+    /// The content
     public let content: Content
 
-    public enum Content: Equatable, Sendable {
+    /// The available kinds of directory content
+    public enum Content: Equatable, Hashable, Codable, Sendable {
 
+        // MARK: - API
+
+        /// A directorry
         case directory([SerializedDirectoryContent])
 
+        /// A file
         case file(File)
 
-        public enum File: Equatable, Sendable {
+        /// A text file
+        /// - Parameters:
+        ///   - content: The text content of the file
+        ///   - encoding: The encoding of the file
+        /// - Returns: The content
+        public static func text(
+            _ content: String,
+            encoding: String.Encoding
+        ) -> Content {
+            .file(
+                .text(
+                    content,
+                    encoding
+                )
+            )
+        }
+
+        /// A data file
+        /// - Parameter data: The data content of the file
+        /// - Returns: The content
+        public static func data(
+            _ data: Data
+        ) -> Content {
+            .file(
+                .data(
+                    data
+                )
+            )
+        }
+
+        /// The available kinds of files
+        public enum File: Equatable, Hashable, Codable, Sendable {
+
+            /// A data file
             case data(Data)
+
+            /// A text file
             case text(String, String.Encoding)
+
+            // MARK: - Codable
+
+            public init(
+                from decoder: any Decoder
+            ) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                let type = try container.decode(CaseType.self, forKey: .type)
+                switch type {
+                case .data:
+                    self = try .data(container.decode(Data.self, forKey: .data))
+                case .text:
+                    let encoding = try String.Encoding(rawValue: container.decode(String.Encoding.RawValue.self, forKey: .encoding))
+                    let text = try container.decode(String.self, forKey: .text)
+                    self = .text(text, encoding)
+                }
+            }
+
+            public func encode(
+                to encoder: any Encoder
+            ) throws {
+                var container = encoder.container(keyedBy: CodingKeys.self)
+                switch self {
+                case let .data(data):
+                    try container.encode(CaseType.data, forKey: .type)
+                    try container.encode(data, forKey: .data)
+                case let .text(text, encoding):
+                    try container.encode(CaseType.text, forKey: .type)
+                    try container.encode(text, forKey: .text)
+                    try container.encode(encoding.rawValue, forKey: .encoding)
+                }
+            }
+
+            // MARK: - Private
+
+            enum CodingKeys: String, CodingKey {
+                case data
+                case text
+                case encoding
+                case type
+            }
+
+            enum CaseType: String, Codable {
+                case data
+                case text
+            }
+
         }
 
     }

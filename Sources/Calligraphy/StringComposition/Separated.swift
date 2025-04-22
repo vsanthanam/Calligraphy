@@ -30,10 +30,7 @@ extension StringComponent {
     public func separatedBy<T>(
         @StringBuilder separator: () -> T
     ) -> some StringComponent where T: StringComponent {
-        let components = String(self).components(separatedBy: String.build(separator))
-        for component in components {
-            component
-        }
+        Separated(self, separator())
     }
 
     public func separatedBy(

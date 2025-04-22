@@ -24,7 +24,7 @@
 // SOFTWARE.
 
 /// A bitmask representing unix permissions
-public struct FilePermissions: OptionSet, Sendable, Equatable, Hashable, Identifiable, CustomStringConvertible {
+public struct FilePermissions: OptionSet, Equatable, Hashable, Identifiable, Codable, CustomStringConvertible, Sendable {
 
     // MARK: - API
 
@@ -70,6 +70,9 @@ public struct FilePermissions: OptionSet, Sendable, Equatable, Hashable, Identif
     /// The default directory permissions
     public static let defaultDirectory: FilePermissions = [.readUser, .writeUser, .executeUser, .readGroup, .executeGroup, .readOther, .executeOther]
 
+    /// The default permissions for an executable file
+    public static let executableFile: FilePermissions = [.defaultFile, .executeUser, .executeGroup, .executeOther]
+
     // MARK: - OptionSet
 
     public init(rawValue: Int) {
@@ -89,7 +92,16 @@ public struct FilePermissions: OptionSet, Sendable, Equatable, Hashable, Identif
     // MARK: - CustomStringConvertible
 
     public var description: String {
-        var chars: [Character] = Array(symbolic)
+
+        func bit(
+            _ read: FilePermissions,
+            _ write: FilePermissions,
+            _ exec: FilePermissions
+        ) -> [Character] {
+            [contains(read) ? "r" : "-", contains(write) ? "w" : "-", contains(exec) ? "x" : "-"]
+        }
+
+        var chars = bit(.readUser, .writeUser, .executeUser) + bit(.readGroup, .writeGroup, .executeGroup) + bit(.readOther, .writeOther, .executeOther)
 
         if contains(.setUserID) {
             let exec = contains(.executeUser)
@@ -107,18 +119,6 @@ public struct FilePermissions: OptionSet, Sendable, Equatable, Hashable, Identif
         }
 
         return String(chars)
-    }
-
-    var symbolic: String {
-        func bit(
-            _ read: FilePermissions,
-            _ write: FilePermissions,
-            _ exec: FilePermissions
-        ) -> String {
-            [contains(read) ? "r" : "-", contains(write) ? "w" : "-", contains(exec) ? "x" : "-"].joined()
-        }
-
-        return bit(.readUser, .writeUser, .executeUser) + bit(.readGroup, .writeGroup, .executeGroup) + bit(.readOther, .writeOther, .executeOther)
     }
 
 }

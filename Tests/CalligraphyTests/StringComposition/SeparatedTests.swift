@@ -1,5 +1,5 @@
 // Calligraphy
-// StringExtensionsTests.swift
+// SeparatedTests.swift
 //
 // MIT License
 //
@@ -26,29 +26,33 @@
 import Calligraphy
 import Testing
 
-@Suite("String Extensions Tests", .tags(.stringComposition))
-struct StringExtensionsTests {
+@Suite("Separated Tests", .tags(.stringComposition))
+struct SeparatedTests {
 
-    @Test("Initializer")
-    func initializer() {
-        let str = String(RawStringComponent("Foo"))
-        #expect(str == "Foo")
-    }
-
-    @Test("Initializer with Empty Component")
-    func initializerEmpty() {
-        let component = StringComponents {}
-        let str = String(component)
-        #expect(str == "")
-    }
-
-    @Test("Build type method")
-    func build() {
-        let str = String.build {
-            RawStringComponent("Foo")
-            RawStringComponent("Bar")
+    @Test("Modifier with String")
+    func stringModifier() {
+        let component = Lines {
+            StringComponents {
+                "1-2-3-4-5"
+            }
+            .separatedBy("-")
         }
-        #expect(str == "Foo\nBar")
+        #expect(component._content == "1\n2\n3\n4\n5")
+    }
+
+    @Test("Modifier with Builder")
+    func builderModifier() {
+        let component = Line {
+            StringComponents {
+                "1"
+                "2"
+                "3"
+                "4"
+                "5"
+            }
+            .separatedBy("\n")
+        }
+        #expect(component._content == "12345")
     }
 
 }

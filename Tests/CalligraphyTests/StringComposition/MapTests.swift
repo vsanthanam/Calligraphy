@@ -44,7 +44,7 @@ struct MapTests {
         #expect(map._content == nil)
     }
 
-    @Test("Modifier with Build")
+    @Test("Modifier with Builder")
     func builder() {
         let map = StringComponents {
             for i in 0 ..< Int.random(in: 0 ... 5) {
