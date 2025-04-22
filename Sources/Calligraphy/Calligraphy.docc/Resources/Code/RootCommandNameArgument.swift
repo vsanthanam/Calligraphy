@@ -1,5 +1,5 @@
 // Calligraphy
-// RootCommandNameArgument.swift
+// RootCommand.swift
 //
 // MIT License
 //

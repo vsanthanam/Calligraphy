@@ -163,7 +163,7 @@ public struct File: DirectoryContent {
     ///   - data: The contents of the file
     public init(
         _ name: String,
-        permissions: FilePermissions,
+        permissions: FilePermissions = .defaultFile,
         data: Data
     ) {
         self.init(

@@ -18,16 +18,4 @@ jobs:
     - name: Xcode Version
       run: sudo xcode-select --switch /Applications/Xcode_16.3.app
     - name: Run Tests
-      continue-on-error: true
-      run: swift test --xunit-output junit.xml --parallel
-    - name: Upload test results
-      uses: actions/upload-artifact@v4
-      with:
-        name: junit-results
-        path: junit-swift-testing.xml
-    - name: Publish test results to GitHub
-      uses: dorny/test-reporter@v1
-      with:
-        name: Run Tests Results
-        path: junit-swift-testing.xml
-        reporter: swift-xunit
+      run: swift test
