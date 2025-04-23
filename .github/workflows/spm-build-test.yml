@@ -17,7 +17,7 @@ jobs:
     - name: Xcode Version
       run: sudo xcode-select --switch /Applications/Xcode_16.3.app
     - name: Build
-      run: swift build -v
+      run: swift build -v --build-path .build
     - name: Upload Build
       uses: actions/upload-artifact@v4
       with:
@@ -46,7 +46,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build
-        run: swift build -v
+        run: swift build -v --build-path .build
       - name: Upload Build
         uses: actions/upload-artifact@v4
         with:
@@ -78,7 +78,7 @@ jobs:
           branch: swift-6.1-release
           tag: 6.1-RELEASE
       - name: Build
-        run: swift build -v
+        run: swift build -v --build-path .build
       - name: Upload Build
         uses: actions/upload-artifact@v4
         with:
