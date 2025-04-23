@@ -114,13 +114,6 @@ jobs:
         with:
           branch: swift-6.1-release
           tag: 6.1-RELEASE
-      - name: Download Build
-        uses: actions/download-artifact@v4
-        with:
-          name: windows-build
-          path: .
-      - name: Unzip Build
-        run: Expand-Archive -Path build.zip -DestinationPath .
       - name: Test Calligraphy
         run: swift test
   # test-android:
