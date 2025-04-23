@@ -18,11 +18,13 @@ jobs:
       run: sudo xcode-select --switch /Applications/Xcode_16.3.app
     - name: Build
       run: swift build -v --build-path .build
+    - name: Compress Build
+      run: zip -r build.zip .build
     - name: Upload Build
       uses: actions/upload-artifact@v4
       with:
         name: macos-build
-        path: .build/
+        path: build.zip
   test-macos:
     needs: build-macos
     runs-on: macos-15
@@ -35,6 +37,8 @@ jobs:
         with:
           name: macos-build
           path: .
+      - name: Decompress Build
+        run: unzip build.zip
       - name: Test
         run: swift test
   build-ubuntu:
