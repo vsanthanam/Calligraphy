@@ -20,7 +20,7 @@ jobs:
       - name: Build Documentation
         run: swift package generate-documentation --target Calligraphy
       - name: Compress DocC Archive
-        run: zip -r .build/plugins/Swift-DocC/outputs/Calligraphy.doccarchive Calligraphy.doccarchive.zip
+        run: zip -r Calligraphy.doccarchive.zip .build/plugins/Swift-DocC/outputs/Calligraphy.doccarchive
       - name: Upload Documentation
         uses: actions/upload-artifact@v4
         with:
