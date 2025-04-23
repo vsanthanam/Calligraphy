@@ -51,7 +51,7 @@ public struct RawDataComponent: DataComponent {
     }
 
     public var body: Never {
-        fatalErrorPrivateDataComponent()
+        fatalErrorImperativeDataComponent()
     }
 
 }

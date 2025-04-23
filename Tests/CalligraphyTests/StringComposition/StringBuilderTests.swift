@@ -119,7 +119,7 @@ struct StringBuilderTests {
             let _content: String? = nil
 
             var body: Never {
-                fatalErrorPrivateStringComponent()
+                fatalErrorImperativeStringComponent()
             }
         }
 

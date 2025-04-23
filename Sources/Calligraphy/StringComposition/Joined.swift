@@ -91,7 +91,7 @@ public struct Joined<T, Separator>: StringComponent where T: StringComponent, Se
     }
 
     public var body: Never {
-        fatalErrorPrivateStringComponent()
+        fatalErrorImperativeStringComponent()
     }
 
     // MARK: - Private

@@ -128,7 +128,7 @@ public enum StringBuilder {
         }
 
         public var body: Never {
-            fatalErrorPrivateStringComponent()
+            fatalErrorImperativeStringComponent()
         }
 
         // MARK: - Private
@@ -160,7 +160,7 @@ public enum StringBuilder {
         }
 
         public var body: Never {
-            fatalErrorPrivateStringComponent()
+            fatalErrorImperativeStringComponent()
         }
     }
 
@@ -183,7 +183,7 @@ public enum StringBuilder {
         }
 
         public var body: Never {
-            fatalErrorPrivateStringComponent()
+            fatalErrorImperativeStringComponent()
         }
 
         // MARK: - Private

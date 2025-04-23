@@ -44,7 +44,7 @@ public struct AnyStringComponent: StringComponent {
     }
 
     public var body: Never {
-        fatalErrorPrivateStringComponent()
+        fatalErrorImperativeStringComponent()
     }
 
     // MARK: - Private

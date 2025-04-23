@@ -39,7 +39,7 @@ public struct EmptyDataComponent: DataComponent {
     public let _data: Data? = nil
 
     public var body: Never {
-        fatalErrorPrivateDataComponent()
+        fatalErrorImperativeDataComponent()
     }
 
 }
