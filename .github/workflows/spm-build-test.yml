@@ -22,28 +22,48 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: macos-build
-        path: .build
+        path: .build/
   test-macos:
     needs: build-macos
     runs-on: macos-15
     steps:
+      - uses: actions/checkout@v4
       - name: Xcode Version
         run: sudo xcode-select --switch /Applications/Xcode_16.3.app
       - name: Download Build
         uses: actions/download-artifact@v4
         with:
           name: macos-build
-          path: .build
+          path: .build/
       - name: Test
         run: swift test
-  test-ubuntu:
+  build-ubuntu:
     runs-on: ubuntu-latest
+    outputs:
+      artifact-name: ubuntu-build
     container:
       image: swift:6.1
     steps:
       - uses: actions/checkout@v4
       - name: Build
         run: swift build -v
+      - name: Upload Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: ubuntu-build
+          path: .build/
+  test-ubuntu:
+    needs: build-ubuntu
+    runs-on: ubuntu-latest
+    container:
+      image: swift:6.1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Build
+        uses: actions/download-artifact@v4
+        with:
+          name: ubuntu-build
+          path: .build/
       - name: Test
         run: swift test
   test-windows:
