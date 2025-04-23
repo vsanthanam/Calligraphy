@@ -1,13 +1,17 @@
-name: Archive Documentation
+name: New Release
 on:
   release:
     types: [published]
-  workflow_dispatch:
 permissions:
   contents: read
   pages: write
   id-token: write
 jobs:
+  publish-website:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Workflow
+        run: gh workflow run publish-website.yml --repo ${{ github.repository }} --ref ${{ github.event.release.tag_name }}
   build-docc-archive:
     runs-on: macos-15
     outputs:
