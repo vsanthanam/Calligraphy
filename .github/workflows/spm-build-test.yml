@@ -13,10 +13,11 @@ jobs:
     outputs:
       artifact-name: macos-build
     steps:
-    - uses: actions/checkout@v4
-    - name: Xcode Version
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Select Xcode Version
       run: sudo xcode-select --switch /Applications/Xcode_16.3.app
-    - name: Build
+    - name: Build Calligraphy
       run: swift build -v --build-path .build
     - name: Compress Build
       run: zip -r build.zip .build
@@ -29,7 +30,8 @@ jobs:
     needs: build-macos
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Xcode Version
         run: sudo xcode-select --switch /Applications/Xcode_16.3.app
       - name: Download Build
@@ -39,7 +41,7 @@ jobs:
           path: .
       - name: Decompress Build
         run: unzip build.zip
-      - name: Test
+      - name: Test Calligraphy
         run: swift test
   build-ubuntu:
     runs-on: ubuntu-latest
@@ -48,8 +50,9 @@ jobs:
     container:
       image: swift:6.1
     steps:
-      - uses: actions/checkout@v4
-      - name: Build
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build Calligraphy
         run: swift build -v --build-path .build
       - name: Install `zip`
         run: apt-get update && apt-get install -y zip
@@ -66,7 +69,8 @@ jobs:
     container:
       image: swift:6.1
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Download Build
         uses: actions/download-artifact@v4
         with:
@@ -76,20 +80,21 @@ jobs:
         run: apt-get update && apt-get install -y unzip
       - name: Decompress Build
         run: unzip build.zip
-      - name: Test
+      - name: Test Calligraphy
         run: swift test
   build-windows:
     runs-on: windows-latest
     outputs:
       artifact-name: windows-build
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
-      - uses: compnerd/gha-setup-swift@main
+      - name: Setup Swift 6.1
+        uses: compnerd/gha-setup-swift@main
         with:
           branch: swift-6.1-release
           tag: 6.1-RELEASE
-      - name: Build
+      - name: Build Calligraphy
         run: swift build -v --build-path .build
       - name: Compress Build
         run: Compress-Archive -Path .build -DestinationPath build.zip
@@ -102,9 +107,10 @@ jobs:
     needs: build-windows
     runs-on: windows-latest
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
-      - uses: compnerd/gha-setup-swift@main
+      - name: Setup Swift 6.1
+        uses: compnerd/gha-setup-swift@main
         with:
           branch: swift-6.1-release
           tag: 6.1-RELEASE
@@ -115,7 +121,7 @@ jobs:
           path: .
       - name: Unzip Build
         run: Expand-Archive -Path build.zip -DestinationPath .
-      - name: Test
+      - name: Test Calligraphy
         run: swift test
   # test-android:
   #   runs-on: ubuntu-latest

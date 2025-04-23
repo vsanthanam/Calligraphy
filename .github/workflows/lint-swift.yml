@@ -8,8 +8,9 @@ jobs:
   swiftformat:
     runs-on: macos-15
     steps:
-    - uses: actions/checkout@v4
-    - name: Xcode Version
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Select Xcode Version
       run: sudo xcode-select --switch /Applications/Xcode_16.3.app
     - name: Lint with SwiftFormat
       run: ./.scripts/lint-swiftformat
