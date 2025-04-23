@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Trigger Workflow
         run: gh workflow run publish-website.yml --repo ${{ github.repository }} --ref ${{ github.event.release.tag_name }}
+        env:
+          GH_TOKEN: ${{ github.token }}
   build-docc-archive:
     runs-on: macos-15
     outputs:
