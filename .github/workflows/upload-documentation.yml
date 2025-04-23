@@ -11,7 +11,7 @@ jobs:
   build-docc-archive:
     runs-on: macos-15
     outputs:
-      artifact-name: Calligraphy.doccarchive.zip
+      artifact-name: archive
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,8 +24,8 @@ jobs:
       - name: Upload Documentation
         uses: actions/upload-artifact@v4
         with:
-          name: docs
-          path: docs.zip
+          name: archive
+          path: Calligraphy.doccarchive.zip
   attach-archive:
     needs: build-docc-archive
     runs-on: ubuntu-latest
@@ -35,7 +35,7 @@ jobs:
       - name: Download Documentation Archive
         uses: actions/download-artifact@v4
         with:
-          name: Calligraphy.doccarchive.zip
+          name: archive
           path: .
       - name: Attach DocC Archive to Release
         uses: actions/upload-release-asset@v1
