@@ -1,0 +1,46 @@
+name: Archive Documentation
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+jobs:
+  build-docc-archive:
+    runs-on: macos-15
+    outputs:
+      artifact-name: Calligraphy.doccarchive.zip
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Xcode Version
+        run: sudo xcode-select --switch /Applications/Xcode_16.3.app
+      - name: Build Documentation
+        run: swift package generate-documentation --target Calligraphy
+      - name: Compress DocC Archive
+        run: zip -r .build/plugins/Swift-DocC/outputs/Calligraphy.doccarchive Calligraphy.doccarchive.zip
+      - name: Upload Documentation
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs
+          path: docs.zip
+  attach-archive:
+    needs: build-docc-archive
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Download Documentation Archive
+        uses: actions/download-artifact@v4
+        with:
+          name: Calligraphy.doccarchive.zip
+          path: .
+      - name: Attach DocC Archive to Release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./Calligraphy.doccarchive.zip
+          asset_name: Calligraphy.doccarchive.zip
+          asset_content_type: application/zip
