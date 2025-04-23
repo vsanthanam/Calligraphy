@@ -85,7 +85,7 @@ jobs:
           name: windows-build
           path: .build/
   test-windows:
-    needs: windows-build
+    needs: build-windows
     runs-on: windows-latest
     steps:
       - name: Checkout code
