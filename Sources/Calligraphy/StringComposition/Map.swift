@@ -68,7 +68,7 @@ private struct Map<T>: StringComponent where T: StringComponent {
     }
 
     public var body: Never {
-        fatalErrorPrivateStringComponent()
+        fatalErrorImperativeStringComponent()
     }
 
     // MARK: - Private

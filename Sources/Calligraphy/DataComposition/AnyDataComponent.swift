@@ -46,7 +46,7 @@ public struct AnyDataComponent: DataComponent {
     }
 
     public var body: Never {
-        fatalErrorPrivateDataComponent()
+        fatalErrorImperativeDataComponent()
     }
 
     // MARK: - Private

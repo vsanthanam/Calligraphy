@@ -53,7 +53,7 @@ public struct Frozen: StringComponent {
     public let _content: String?
 
     public var body: Never {
-        fatalErrorPrivateStringComponent()
+        fatalErrorImperativeStringComponent()
     }
 
 }

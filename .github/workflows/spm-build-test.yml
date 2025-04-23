@@ -38,3 +38,41 @@ jobs:
         run: swift build -v
       - name: Test
         run: swift test
+  # test-android:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Set up Android NDK
+  #       uses: android-actions/setup-android@v3
+  #       with:
+  #         ndk-version: r25c
+  #     - name: Install Swift for Android dependencies
+  #       run: |
+  #         sudo apt-get update
+  #         sudo apt-get install -y clang cmake ninja-build unzip
+  #     - name: Download Swift for Android toolchain
+  #       run: |
+  #         wget https://github.com/readdle/swift-android-toolchain/releases/download/6.0.3-r3/swift-android.zip
+  #         unzip swift-android.zip
+  #         echo "$PWD/swift-android/bin" >> $GITHUB_PATH
+  #     - name: Configure Swift Android environment
+  #       run: |
+  #         export SWIFT_ANDROID_HOME=$PWD/swift-android
+  #         export SWIFT_ANDROID_ARCH=armv7
+  #         export SWIFT_ANDROID_NDK_HOME=$ANDROID_NDK_ROOT
+  #         export PATH=$SWIFT_ANDROID_HOME/bin:$PATH
+  #         export SWIFT_ANDROID_SDK=$ANDROID_SDK_ROOT
+  #         export SWIFT_ANDROID_NDK=$ANDROID_NDK_ROOT
+  #         export SWIFT_ANDROID_TRIPLE=armv7-unknown-linux-androideabi
+  #         echo "SWIFT_ANDROID_HOME=$SWIFT_ANDROID_HOME" >> $GITHUB_ENV
+  #         echo "SWIFT_ANDROID_ARCH=$SWIFT_ANDROID_ARCH" >> $GITHUB_ENV
+  #         echo "SWIFT_ANDROID_NDK_HOME=$SWIFT_ANDROID_NDK_HOME" >> $GITHUB_ENV
+  #         echo "PATH=$PATH" >> $GITHUB_ENV
+  #         echo "SWIFT_ANDROID_SDK=$SWIFT_ANDROID_SDK" >> $GITHUB_ENV
+  #         echo "SWIFT_ANDROID_NDK=$SWIFT_ANDROID_NDK" >> $GITHUB_ENV
+  #     - name: Build for Android
+  #       run: |
+  #         swift build -v --triple armv7-unknown-linux-androideabi
+  #     - name: Test Android
+  #       run: |
+  #         echo "Skipping tests: cross-compilation for Android doesn't support swift test"

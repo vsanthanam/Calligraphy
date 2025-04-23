@@ -47,7 +47,7 @@ public struct RawStringComponent: StringComponent {
     }
 
     public var body: Never {
-        fatalErrorPrivateStringComponent()
+        fatalErrorImperativeStringComponent()
     }
 
 }

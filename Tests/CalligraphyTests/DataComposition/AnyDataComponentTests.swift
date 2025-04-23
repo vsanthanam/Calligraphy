@@ -1,5 +1,5 @@
 // Calligraphy
-// EmptyDataComponent.swift
+// AnyDataComponentTests.swift
 //
 // MIT License
 //
@@ -23,23 +23,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import Calligraphy
 import Foundation
+import Testing
 
-/// An empty data component
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct EmptyDataComponent: DataComponent {
+@Test("Data Component Type Eraser", .tags(.dataComposition))
+func anyDataComponent() {
 
-    // MARK: - Initializers
-
-    /// Create an empty data component
-    public init() {}
-
-    // MARK: - DataComponent
-
-    public let _data: Data? = nil
-
-    public var body: Never {
-        fatalErrorImperativeDataComponent()
+    let standard = DataComponents {
+        Data()
     }
+    let typeErased = AnyDataComponent(standard)
+    #expect(standard._data == typeErased._data)
 
 }

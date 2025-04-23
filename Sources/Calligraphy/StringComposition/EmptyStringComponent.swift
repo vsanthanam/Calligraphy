@@ -34,7 +34,7 @@ public struct EmptyStringComponent: StringComponent {
     public let _content: String? = nil
 
     public var body: Never {
-        fatalErrorPrivateStringComponent()
+        fatalErrorImperativeStringComponent()
     }
 
 }

@@ -144,7 +144,7 @@ public enum DataBuilder {
         }
 
         public var body: Never {
-            fatalErrorPrivateDataComponent()
+            fatalErrorImperativeDataComponent()
         }
 
         // MARK: - Private
@@ -176,7 +176,7 @@ public enum DataBuilder {
         }
 
         public var body: Never {
-            fatalErrorPrivateDataComponent()
+            fatalErrorImperativeDataComponent()
         }
 
     }
@@ -200,7 +200,7 @@ public enum DataBuilder {
         }
 
         public var body: Never {
-            fatalErrorPrivateDataComponent()
+            fatalErrorImperativeDataComponent()
         }
 
         // MARK: - Private

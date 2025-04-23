@@ -24,6 +24,7 @@
 // SOFTWARE.
 
 import Calligraphy
+import Foundation
 import Testing
 
 @Suite("Serialized Directory Content Tests", .tags(.dataComposition))
@@ -48,6 +49,19 @@ struct SerializedDirectoryContentTests {
             encoding: .utf8
         )
         #expect(file.name == "Foo")
+    }
+
+    @Test("Codable Support")
+    func codableSupport() throws {
+        let file = SerializedDirectoryContent.text(
+            "Foo",
+            permissions: .defaultFile,
+            text: "Hello, World!",
+            encoding: .utf8
+        )
+        let data = try JSONEncoder().encode(file)
+        let decoded = try JSONDecoder().decode(SerializedDirectoryContent.self, from: data)
+        #expect(file == decoded)
     }
 
 }
