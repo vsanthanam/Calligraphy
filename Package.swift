@@ -29,6 +29,10 @@ let package = Package(
         .package(
             url: "https://github.com/nicklockwood/SwiftFormat",
             exact: "0.55.0"
+        ),
+        .package(
+            url: "https://github.com/apple/swift-collections.git",
+            exact: "1.1.4"
         )
     ],
     targets: [
@@ -41,7 +45,8 @@ let package = Package(
         .testTarget(
             name: "CalligraphyTests",
             dependencies: [
-                "Calligraphy"
+                "Calligraphy",
+                .product(name: "Collections", package: "swift-collections")
             ],
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency=complete")
