@@ -51,11 +51,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build
         run: swift build -v --build-path .build
+      - name: Compress Build
+        run: zip -r build.zip .build
       - name: Upload Build
         uses: actions/upload-artifact@v4
         with:
           name: ubuntu-build
-          path: .build/
+          path: build.zip
   test-ubuntu:
     needs: build-ubuntu
     runs-on: ubuntu-latest
@@ -68,6 +70,8 @@ jobs:
         with:
           name: ubuntu-build
           path: .
+      - name: Decompress Build
+        run: unzip build.zip
       - name: Test
         run: swift test
   build-windows:
