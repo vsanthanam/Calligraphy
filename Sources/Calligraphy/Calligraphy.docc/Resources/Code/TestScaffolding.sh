@@ -1,4 +1,4 @@
-$ ./sitegenerator
+$ ./sitegenerator Steve
 
 + swift run --package-path . -- SiteGenerator Steve
 [1/1] Planning build
