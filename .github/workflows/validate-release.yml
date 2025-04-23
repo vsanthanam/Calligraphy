@@ -3,17 +3,8 @@ on:
   release:
     types: [published]
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 jobs:
-  publish-website:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger Workflow
-        run: gh workflow run publish-website.yml --repo ${{ github.repository }} --ref ${{ github.event.release.tag_name }}
-        env:
-          GH_TOKEN: ${{ github.token }}
   build-docc-archive:
     runs-on: macos-15
     outputs:
@@ -44,9 +35,6 @@ jobs:
           name: archive
           path: .
       - name: Attach DocC Archive to Release
-        uses: actions/upload-release-asset@v1
+        uses: softprops/action-gh-release@v1
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./Calligraphy.doccarchive.zip
-          asset_name: Calligraphy.doccarchive.zip
-          asset_content_type: application/zip
+          files: ./Calligraphy.doccarchive.zip
