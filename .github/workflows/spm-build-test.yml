@@ -17,12 +17,12 @@ jobs:
     - name: Xcode Version
       run: sudo xcode-select --switch /Applications/Xcode_16.3.app
     - name: Build
-      run: swift build -v --build-path .build
+      run: swift build -v
     - name: Upload Build
       uses: actions/upload-artifact@v4
       with:
         name: macos-build
-        path: .build/
+        path: ./.build/
   test-macos:
     needs: build-macos
     runs-on: macos-15
@@ -34,7 +34,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: macos-build
-          path: .build/
+          path: ./.build/
       - name: Test
         run: swift test
   build-ubuntu:
@@ -46,12 +46,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build
-        run: swift build -v --build-path .build
+        run: swift build -v
       - name: Upload Build
         uses: actions/upload-artifact@v4
         with:
           name: ubuntu-build
-          path: .build/
+          path: ./.build/
   test-ubuntu:
     needs: build-ubuntu
     runs-on: ubuntu-latest
@@ -63,7 +63,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ubuntu-build
-          path: .build/
+          path: ./.build/
       - name: Test
         run: swift test
   build-windows:
@@ -78,12 +78,12 @@ jobs:
           branch: swift-6.1-release
           tag: 6.1-RELEASE
       - name: Build
-        run: swift build -v --build-path .build
+        run: swift build -v
       - name: Upload Build
         uses: actions/upload-artifact@v4
         with:
           name: windows-build
-          path: .build/
+          path: ./.build/
   test-windows:
     needs: build-windows
     runs-on: windows-latest
@@ -98,7 +98,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: windows-build
-          path: .build/
+          path: ./.build/
       - name: Test
         run: swift test
   # test-android:
