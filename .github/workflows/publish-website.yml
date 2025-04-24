@@ -19,7 +19,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_16.3.app
+        run: ./.scripts/xcode-select
       - name: Build Documentation
         run: ./.scripts/build-docs
       - name: Compress Documentation

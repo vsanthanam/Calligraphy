@@ -1,7 +1,10 @@
-name: Validate Documentation
+name: Lint Documentation
 on:
   pull_request:
     branches: [ "main" ]
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   build-docc:
     runs-on: macos-15
@@ -9,6 +12,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Select Xcode Version
-      run: sudo xcode-select --switch /Applications/Xcode_16.3.app
+      run: ./.scripts/xcode-select
     - name: Validate Documentation
-      run: ./.scripts/check-docc
+      run: ./.scripts/lint-docc

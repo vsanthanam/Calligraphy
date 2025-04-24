@@ -1,4 +1,4 @@
-name: Validate Release
+name: Create Release Artifacts
 on:
   release:
     types: [published]
@@ -13,7 +13,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_16.3.app
+        run: ./.scripts/xcode-select
       - name: Build Documentation
         run: swift package generate-documentation --target Calligraphy
       - name: Compress DocC Archive
