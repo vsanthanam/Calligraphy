@@ -8,7 +8,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  build-macos:
+  build-macos-spm:
     runs-on: macos-15
     outputs:
       artifact-name: macos-build
@@ -26,8 +26,8 @@ jobs:
       with:
         name: macos-build
         path: build.zip
-  test-macos:
-    needs: build-macos
+  test-macos-spm:
+    needs: build-macos-spm
     runs-on: macos-15
     steps:
       - name: Checkout
@@ -43,7 +43,7 @@ jobs:
         run: unzip build.zip
       - name: Test Calligraphy
         run: swift test
-  build-ubuntu:
+  build-ubuntu-spm:
     runs-on: ubuntu-latest
     outputs:
       artifact-name: ubuntu-build
@@ -63,8 +63,8 @@ jobs:
         with:
           name: ubuntu-build
           path: build.zip
-  test-ubuntu:
-    needs: build-ubuntu
+  test-ubuntu-spm:
+    needs: build-ubuntu-spm
     runs-on: ubuntu-latest
     container:
       image: swift:6.1
@@ -82,7 +82,7 @@ jobs:
         run: unzip build.zip
       - name: Test Calligraphy
         run: swift test
-  build-windows:
+  build-windows-spm:
     runs-on: windows-latest
     outputs:
       artifact-name: windows-build
@@ -103,8 +103,8 @@ jobs:
         with:
           name: windows-build
           path: build.zip
-  test-windows:
-    needs: build-windows
+  test-windows-spm:
+    needs: build-windows-spm
     runs-on: windows-latest
     steps:
       - name: Checkout
