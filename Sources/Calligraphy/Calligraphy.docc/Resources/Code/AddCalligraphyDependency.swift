@@ -15,7 +15,7 @@ let package = Package(
         ),
         .package(
             url: "git@github.com:vsanthanam/Calligraphy.git",
-            from: "1.0.0"
+            from: "1.0.2"
         )
     ],
     targets: [
