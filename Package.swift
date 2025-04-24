@@ -15,9 +15,21 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "Calligraphy",
+            name: "FileBuilder",
             targets: [
-                "Calligraphy"
+                "FileBuilder"
+            ]
+        ),
+        .library(
+            name: "StringBuilder",
+            targets: [
+                "StringBuilder"
+            ]
+        ),
+        .library(
+            name: "DataBuilder",
+            targets: [
+                "DataBuilder"
             ]
         )
     ],
@@ -37,20 +49,54 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "Calligraphy",
+            name: "FileBuilder",
+            dependencies: [
+                "StringBuilder",
+                "DataBuilder"
+            ],
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency=complete")
             ]
         ),
         .testTarget(
-            name: "CalligraphyTests",
+            name: "FileBuilderTests",
             dependencies: [
-                "Calligraphy",
+                "FileBuilder"
+            ],
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency=complete")
+            ]
+        ),
+        .target(
+            name: "StringBuilder",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency=complete")
+            ]
+        ),
+        .testTarget(
+            name: "StringBuilderTests",
+            dependencies: [
+                "StringBuilder"
+            ],
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency=complete")
+            ]
+        ),
+        .target(
+            name: "DataBuilder",
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency=complete")
+            ]
+        ),
+        .testTarget(
+            name: "DataBuilderTests",
+            dependencies: [
+                "DataBuilder",
                 .product(name: "Collections", package: "swift-collections")
             ],
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency=complete")
             ]
-        )
+        ),
     ]
 )
