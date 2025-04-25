@@ -13,6 +13,7 @@ assignees: vsanthanam
 - [ ] Make necessary changes to framework source code
 - [ ] If applicable, change `platforms` in `Package.swift
 - [ ] If applicable, update `@available` declarations
+- [ ] Update `.swiftformat` to include the correct version of Swift
 - [ ] Update README badges to include accurate platforms, Swift versions
 - [ ] Update DocC articles to include accurate platforms, Xcode versions
 - [ ] Update DocC tutorials to inlcude accurate Xcode versions, links
