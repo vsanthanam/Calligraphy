@@ -14,11 +14,7 @@ The library is organized into three main areas:
 
 - **Data Composition**: Work with raw data using `DataComponent` and `DataBuilder`, allowing you to compose binary data structures in a declarative way.
 
-Calligraphy's type-safe API and builder patterns make it ideal for code generation, configuration file creation, and any scenario where you need to programmatically generate text or file structures.
-
-## Quick Start
-
-These articles will help you setup Calligraphy in a new or exising project and detail the library's core concepts.
+Calligraphy's type-safe API and builder patterns make it ideal for code generation, configuration file creation, and any scenario where you need to programmatically generate complex text or file structures.
 
 @Links(visualStyle: detailedGrid) {
     - <doc:Setup>
