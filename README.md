@@ -1,3 +1,5 @@
+[![Calligraphy](https://raw.githubusercontent.com/vsanthanam/Calligraphy/main/Resources/Icon.png)](https://www.usecalligraphy.com)
+
 # Calligraphy
 
 [![MIT License](https://img.shields.io/github/license/vsanthanam/Calligraphy)](https://github.com/vsanthanam/Calligraphy/blob/main/LICENSE)
