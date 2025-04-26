@@ -1,4 +1,4 @@
-[![Calligraphy](https://raw.githubusercontent.com/vsanthanam/Calligraphy/main/Resources/Icon.png)](https://www.usecalligraphy.com)
+[![Calligraphy](https://raw.githubusercontent.com/vsanthanam/Calligraphy/main/Resources/Banner.png)](https://www.usecalligraphy.com)
 
 # Calligraphy
 

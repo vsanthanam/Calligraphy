@@ -21,7 +21,7 @@ jobs:
       - name: Xcode Version
         run: ./.scripts/xcode-select
       - name: Build Documentation
-        run: ./.scripts/build-docs
+        run: ./.scripts/build-static-docc
       - name: Compress Documentation
         run: zip -r docs.zip docs
       - name: Upload Documentation
