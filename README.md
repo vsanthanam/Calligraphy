@@ -6,7 +6,7 @@
 [![Swift Version](https://img.shields.io/badge/swift-6.1-critical)](https://swift.org)
 [![Documentation](https://img.shields.io/badge/Documentation-GitHub-8A2BE2)](https://usecalligraphy.com/docs/documentation/calligraphy)
 
-A declarative library for composing strings, text, files, and folder in Swift
+A declarative library for composing strings, text, files, and folders in Swift
 
 ## Installation
 
