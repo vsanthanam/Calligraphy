@@ -14,7 +14,7 @@ To add Calligraphy as a dependency to an Xcode Project, open the project in Xcod
 
 1. Choose `File` → `Add Packages...`
 
-2. Enter package URL `https://github.com/vsanthanam/Calligraphy.git` and select your release and of choice.
+2. Enter package URL `https://github.com/vsanthanam/Calligraphy.git` and select your release of choice.
 
 ## Add to a Swift Package
 

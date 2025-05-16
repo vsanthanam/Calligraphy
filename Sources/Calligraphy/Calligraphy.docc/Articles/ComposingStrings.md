@@ -89,7 +89,7 @@ You can use the @StringBuilder result builder in several different ways:
 
 - By applying the `@StringBuilder` attribute to any Swift function
 - When defining your own `StringComponent`, by implementing the `body` property
-- Using the ``StringComponents`` struct, which provides you with an entry point to the DSL and typed value you can store, pass around, modify, and use in other string builders.
+- Using the ``StringComponents`` struct, which provides you with an entry point to the DSL and typed value you can store, pass around, modify, and compose into in other string builders.
 - Using the ``Swift/String/build(_:)`` type method, which accepts a `@StringBuilder` closure as an argument.
 
 ### Component Separators
