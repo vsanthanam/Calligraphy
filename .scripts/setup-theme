@@ -1,9 +1,11 @@
 #!/bin/bash
 
 cat > _config.yml <<EOF
-remote_theme: pages-themes/cayman@v0.2.0
+remote_theme: vsanthanam/aviary@v0.2.0
 plugins:
 - jekyll-remote-theme
+documentation_url: "https://www.usecalligraphy.com/docs/documentation/calligraphy"
+copyright_owner: "Varun Santhanam"
 EOF
 
 echo "✅ _config.yml created."
