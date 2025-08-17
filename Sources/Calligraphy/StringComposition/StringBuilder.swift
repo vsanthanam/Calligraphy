@@ -116,7 +116,7 @@ public enum StringBuilder {
                     return
                 }
                 if let r = result {
-                    result = r + StringBuilder.separator + content
+                    result = r + StringEnvironment.activeSeparator + content
                 } else {
                     result = content
                 }
@@ -175,7 +175,7 @@ public enum StringBuilder {
                         return prev
                     }
                     if let prev {
-                        return prev + StringBuilder.separator + content
+                        return prev + StringEnvironment.activeSeparator + content
                     } else {
                         return content
                     }
@@ -196,7 +196,14 @@ public enum StringBuilder {
 
     }
 
+}
+
+enum StringEnvironment {
+
     @TaskLocal
-    static var separator = "\n"
+    static var activeSeparator = "\n"
+
+    @TaskLocal
+    static var activeTabDefinition: Tab.Definition = .default
 
 }

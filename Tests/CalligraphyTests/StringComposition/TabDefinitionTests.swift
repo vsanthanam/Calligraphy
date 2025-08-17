@@ -1,5 +1,5 @@
 // Calligraphy
-// TabTests.swift
+// TabDefinitionTests.swift
 //
 // MIT License
 //
@@ -26,28 +26,44 @@
 import Calligraphy
 import Testing
 
-@Suite("Tab Tests", .tags(.stringComposition))
-struct TabTests {
+@Suite("Tab Definition Tests", .tags(.stringComposition))
+public struct TabLengthTests {
 
-    @Test("Tab Character Component")
-    func characterTab() {
-        let tab = Tab()
-            .tabDefinition(.tab)
-        #expect(tab._content == "\t")
+    @Test("Default tab definition")
+    func defaultLength() {
+        let list = Lines {
+            "foo"
+            "bar"
+            "baz"
+        }
+        .tabbed()
+
+        let expected = """
+          foo
+          bar
+          baz
+        """
+
+        #expect(list._content == expected)
     }
 
-    @Test("Spaces Tab Component")
-    func spacesTab() {
-        let tab = Tab()
-            .tabDefinition(.spaces(3))
-        #expect(tab._content == "   ")
-    }
+    @Test("Custom tab definition")
+    func customLength() {
+        let list = Lines {
+            "foo"
+            "bar"
+            "baz"
+        }
+        .tabbed()
+        .tabDefinition(.spaces(4))
 
-    @Test("Default Tab Component")
-    func defaultTab() {
-        let tab = Tab()
-            .tabDefinition(.default)
-        #expect(tab._content == "  ")
+        let expected = """
+            foo
+            bar
+            baz
+        """
+
+        #expect(list._content == expected)
     }
 
 }

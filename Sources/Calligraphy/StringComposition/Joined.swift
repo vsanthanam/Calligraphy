@@ -85,7 +85,7 @@ public struct Joined<T, Separator>: StringComponent where T: StringComponent, Se
     // MARK: - StringComponent
 
     public var _content: String? {
-        StringBuilder.$separator.withValue(String(separator)) {
+        StringEnvironment.$activeSeparator.withValue(String(separator)) {
             components._content
         }
     }

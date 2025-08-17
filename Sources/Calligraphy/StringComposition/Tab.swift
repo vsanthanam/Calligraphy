@@ -37,11 +37,36 @@ public struct Tab: StringComponent {
     // MARK: - StringComponent
 
     public var body: some StringComponent {
-        Line {
-            for _ in 0 ..< 4 {
-                Space()
+        _Guts(StringEnvironment.activeTabDefinition)
+    }
+
+    public enum Definition: Sendable {
+        case tab
+        case spaces(Int)
+        public static let `default`: Definition = .spaces(2)
+    }
+
+    private struct _Guts: StringComponent {
+
+        init(_ definition: Tab.Definition) {
+            self.definition = definition
+        }
+
+        var body: some StringComponent {
+            switch definition {
+            case .tab:
+                "\t"
+            case let .spaces(count):
+                Line {
+                    for _ in 0 ..< count {
+                        Space()
+                    }
+                }
             }
         }
+
+        private let definition: Tab.Definition
+
     }
 
 }

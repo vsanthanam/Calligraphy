@@ -1,5 +1,5 @@
 // Calligraphy
-// TabTests.swift
+// TabDefinition.swift
 //
 // MIT License
 //
@@ -23,31 +23,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Calligraphy
-import Testing
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+extension StringComponent {
 
-@Suite("Tab Tests", .tags(.stringComposition))
-struct TabTests {
-
-    @Test("Tab Character Component")
-    func characterTab() {
-        let tab = Tab()
-            .tabDefinition(.tab)
-        #expect(tab._content == "\t")
+    public func tabDefinition(
+        _ definition: Tab.Definition
+    ) -> some StringComponent {
+        TabDefinition(self, definition: definition)
     }
 
-    @Test("Spaces Tab Component")
-    func spacesTab() {
-        let tab = Tab()
-            .tabDefinition(.spaces(3))
-        #expect(tab._content == "   ")
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+struct TabDefinition<T>: StringComponent where T: StringComponent {
+
+    init(_ wrapped: T, definition: Tab.Definition) {
+        self.wrapped = wrapped
+        self.definition = definition
     }
 
-    @Test("Default Tab Component")
-    func defaultTab() {
-        let tab = Tab()
-            .tabDefinition(.default)
-        #expect(tab._content == "  ")
+    var _content: String? {
+        StringEnvironment.$activeTabDefinition.withValue(definition) {
+            wrapped._content
+        }
     }
+
+    var body: Never {
+        fatalErrorImperativeStringComponent()
+    }
+
+    private let wrapped: T
+    private let definition: Tab.Definition
 
 }

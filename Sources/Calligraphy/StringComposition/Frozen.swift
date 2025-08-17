@@ -45,7 +45,7 @@ public struct Frozen: StringComponent {
     public init(
         @StringBuilder components: () -> some StringComponent
     ) {
-        _content = components()._content
+        _content = String.build { components() }
     }
 
     // MARK: - StringComponent
