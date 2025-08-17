@@ -8,6 +8,87 @@
 
 A declarative library for composing strings, text, files, and folders in Swift
 
+## Overview
+
+Calligraphy is a SwiftUI-inspired library that provides a declarative API for composing strings, text, files, and directories in Swift. Using result builders, it makes complex text manipulation and file generation more readable and maintainable.
+
+Create and manipulate strings with a declarative syntax:
+
+```swift
+let message = String.build {
+    Line {
+        "Hello"
+        Space()
+        "World"
+    }
+    "Welcome to Calligraphy!"
+}
+// Result: "Hello World\nWelcome to Calligraphy!"
+```
+
+Generate entire directory structures programmatically:
+
+```swift
+let project = Folder("MyProject") {
+    File("README.md") {
+        "# My Project"
+        ""
+        "A sample project created with Calligraphy"
+    }
+    Folder("Sources") {
+        File("main.swift") {
+            Line {
+                "print("
+                Quoted {
+                    "Hello, World!"
+                }
+                ")"
+            }
+        }
+    }
+}
+
+// Write to disk
+try await project.write(to: URL(fileURLWithPath: "/path/to/output"))
+```
+
+Calligraphy's declarative approach offers significant advantages over traditional imperative string construction.
+
+Without Calligraphy:
+
+```swift
+// Creating a list of items with conditionals
+func createItemList(items: [String], includeHeader: Bool) -> String {
+    var result = ""
+    if includeHeader {
+        result += "# Item List\n\n"
+    }
+    for (index, item) in items.enumerated() {
+        result += "\(index + 1). \(item)\n"
+    }
+    return result
+}
+```
+
+With Calligraphy:
+
+```swift
+// Creating the same list with Calligraphy
+func createItemList(items: [String], includeHeader: Bool) -> String {
+    String.build {
+        if includeHeader {
+            "# Item List"
+            ""
+        }
+        for (index, item) in items.enumerated() {
+            "\(index + 1). \(item)"
+        }
+    }
+}
+```
+
+The declarative approach more closely resembles the final output structure, making it easier to read, maintain, and modify. It also eliminates common issues like missing newlines or inconsistent formatting that plague imperative string construction. This style of API is significantly more readable and maintainable than concatenating strings, using templating languages, or manually creating file structures, especially for complex code generation or configuration tasks.
+
 ## Installation
 
 Calligraphy currently distributed exclusively through the [Swift Package Manager](https://www.swift.org/package-manager/). 
