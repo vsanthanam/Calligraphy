@@ -159,7 +159,7 @@ struct DataBuilderTests {
         "If/Else Support",
         arguments: [(true, Data([0x46, 0x6F, 0x6F])), (false, Data([0x42, 0x61, 0x72]))]
     )
-    func testIfElse(flow: Bool, result: Data) {
+    func ifElse(flow: Bool, result: Data) {
 
         struct Foo: DataComponent {
 

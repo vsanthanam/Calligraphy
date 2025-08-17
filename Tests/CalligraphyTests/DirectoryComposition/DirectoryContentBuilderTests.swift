@@ -138,7 +138,7 @@ struct DirectoryContentBuilderTests {
             (false, [SerializedDirectoryContent.text("Bar", permissions: .defaultFile, text: "bar", encoding: .utf8)])
         ]
     )
-    func testIfElse(flow: Bool, result: [SerializedDirectoryContent]) {
+    func ifElse(flow: Bool, result: [SerializedDirectoryContent]) {
 
         struct Foo: Directory {
 

@@ -151,7 +151,7 @@ struct StringBuilderTests {
         "If/Else Support",
         arguments: [(true, "bar"), (false, "foo")]
     )
-    func testIfElse(flow: Bool, result: String) {
+    func ifElse(flow: Bool, result: String) {
 
         struct Foo: StringComponent {
 
