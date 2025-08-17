@@ -1,5 +1,5 @@
 // Calligraphy
-// Empty.swift
+// Blank.swift
 //
 // MIT License
 //
@@ -23,4 +23,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
+/// A blank string component that produces an empty string.
+public struct Blank: StringComponent {
+
+    // MARK: - Initializers
+
+    /// Create a blank string component.
+    public init() {}
+
+    // MARK: - StringComponent
+
+    public var body: some StringComponent {
+        ""
+    }
+
+}
