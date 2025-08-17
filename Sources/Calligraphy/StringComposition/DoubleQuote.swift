@@ -23,19 +23,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// A double quote (`"`)
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct DoubleQuote: StringComponent {
 
-    // MARK: - Initializers
-
-    /// Create a double quote
     public init() {}
 
-    // MARK: - StringComponent
-
     public var body: some StringComponent {
-        QuotationMark(.double)
+        QuotationMark()
+            .quotationMarkStyle(.double)
     }
 
 }

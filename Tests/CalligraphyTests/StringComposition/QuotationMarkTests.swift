@@ -29,21 +29,16 @@ import Testing
 @Suite("Quotation Mark Tests", .tags(.stringComposition))
 struct QuotationMarkTests {
 
-    @Test("Single")
+    @Test("Default Quotation Mark")
     func single() {
-        let mark = QuotationMark(.single)
-        #expect(mark._content == "'")
-    }
-
-    @Test("Double")
-    func double() {
-        let mark = QuotationMark(.double)
+        let mark = QuotationMark()
         #expect(mark._content == "\"")
     }
 
-    @Test("Triple")
-    func triple() {
-        let mark = QuotationMark(.triple)
+    @Test("Styled Quotation Mark")
+    func double() {
+        let mark = QuotationMark()
+            .quotationMarkStyle(.triple)
         #expect(mark._content == "'''")
     }
 

@@ -49,12 +49,13 @@ struct Greeting: StringComponent {
 - ``mapLines(_:with:)``
 - ``prefixLines(with:_:)``
 - ``prefixLines(_:components:)``
-- ``quoted(_:)``
+- ``quotationMarkStyle(_:)``
 - ``separatedBy(_:)``
 - ``separatedBy(separator:)``
 - ``suffixLines(with:_:)``
 - ``suffixLines(_:components:)``
 - ``tabbed(_:)``
+- ``tabDefinition(_:)``
 
 ### Operators
 

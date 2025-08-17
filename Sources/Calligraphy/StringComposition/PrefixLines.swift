@@ -41,7 +41,7 @@ extension StringComponent {
     /// Prefix every line of the upstream, declaratively
     /// - Parameters:
     ///   - rule: The prefix to apply to every applicable line
-    ///   - components: The `@StrinbBuilder` prefix to apply to every applicable line
+    ///   - components: The `@StringBuilder` prefix to apply to every applicable line
     /// - Returns: A prefixed version of the upstream
     public func prefixLines(
         _ rule: MapLinesRule = .all,

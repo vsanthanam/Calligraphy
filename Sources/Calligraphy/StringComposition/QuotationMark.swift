@@ -23,41 +23,59 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// A quotation mark with multiple available styles
+/// Create a quotation mark.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct QuotationMark: StringComponent {
 
     // MARK: - Initializers
 
     /// Create a quotation mark
-    /// - Parameter type: The type of quotation mark to use
-    public init(_ type: Type) {
-        self.type = type
-    }
+    public init() {}
 
     // MARK: - API
 
-    /// The available types of quotation marks
-    public enum `Type`: String, Equatable, Sendable {
+    /// The available quotation mark styles.
+    public enum Style: Sendable {
 
-        /// A single quote (`'`)
-        case single = "'"
+        /// Single quotation mark (`'`)
+        case single
 
-        /// A double quote (`"`)
-        case double = "\""
+        /// Double quotation mark (`"`)
+        case double
 
-        /// A triple quote (`'''`)
-        case triple = "'''"
+        /// Triple quotation mark (`'''`)
+        case triple
+
+        /// The default quotation mark style.
+        public static let `default`: Style = .double
     }
 
     // MARK: - StringComponent
 
     public var body: some StringComponent {
-        type
+        _Guts(StringEnvironment.activeQuotationMarkStyle)
     }
 
     // MARK: - Private
 
-    private let type: `Type`
+    private struct _Guts: StringComponent {
 
+        init(_ style: QuotationMark.Style) {
+            self.style = style
+        }
+
+        var body: some StringComponent {
+            switch style {
+            case .single:
+                "'"
+            case .double:
+                "\""
+            case .triple:
+                "'''"
+            }
+        }
+
+        private let style: QuotationMark.Style
+
+    }
 }

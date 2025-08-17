@@ -23,7 +23,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// A string component backed by a Swift string
+/// A string component backed by a Swift string.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct RawStringComponent: StringComponent {
 
@@ -31,8 +31,8 @@ public struct RawStringComponent: StringComponent {
 
     /// Create a raw string component
     /// - Parameter value: The value contained in the component
-    public init(_ value: String) {
-        self.value = value
+    public init(_ value: some StringProtocol) {
+        self.value = String(value)
     }
 
     // MARK: - API

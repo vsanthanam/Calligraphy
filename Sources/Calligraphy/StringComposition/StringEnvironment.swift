@@ -1,5 +1,5 @@
 // Calligraphy
-// Lines.swift
+// StringEnvironment.swift
 //
 // MIT License
 //
@@ -23,41 +23,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// Multiple lines of text.
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Lines<T>: StringComponent where T: StringComponent {
+enum StringEnvironment {
 
-    // MARK: - Initializers
+    @TaskLocal
+    static var activeSeparator = "\n"
 
-    /// Create lines of text
-    /// - Parameters:
-    ///   - spacing: The spacing to use between each line
-    ///   - components: The contents of each line
-    public init(
-        spacing: Int = 1,
-        @StringBuilder components: () -> T
-    ) {
-        assert(spacing > 0, "Spacing must be greater than zero")
-        self.spacing = spacing > 0 ? spacing : 1
-        self.components = components()
-    }
+    @TaskLocal
+    static var activeTabDefinition: Tab.Definition = .default
 
-    // MARK: - StringComponent
-
-    public var body: some StringComponent {
-        components
-            .joined {
-                Line {
-                    for _ in 0 ..< spacing {
-                        NewLine()
-                    }
-                }
-            }
-    }
-
-    // MARK: - Private
-
-    private let spacing: Int
-    private let components: T
+    @TaskLocal
+    static var activeQuotationMarkStyle: QuotationMark.Style = .default
 
 }
