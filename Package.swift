@@ -28,7 +28,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/nicklockwood/SwiftFormat",
-            exact: "0.55.0"
+            exact: "0.57.2"
         ),
         .package(
             url: "https://github.com/apple/swift-collections.git",
