@@ -9,7 +9,7 @@ set +e
 output=$(swift package \
     --allow-writing-to-directory "$temp_dir" \
     generate-documentation \
-    --target Calligraphy \
+    --product Calligraphy \
     --output-path "$temp_dir" \
     --transform-for-static-hosting \
     --hosting-base-path temp-docs 2>&1)

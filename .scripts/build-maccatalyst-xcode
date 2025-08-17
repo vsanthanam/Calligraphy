@@ -1,3 +1,13 @@
 #!/bin/bash
 
-xcodebuild -scheme Calligraphy -destination 'platform=macOS,variant=Mac Catalyst'
+xcodebuild \
+  -scheme $1 \
+  -configuration Release \
+  -sdk macosx \
+  -destination 'platform=macOS,variant=Mac Catalyst' \
+  BUILD_LIBRARY_FOR_DISTRIBUTION=YES \
+  SKIP_INSTALL=NO \
+  CODE_SIGN_IDENTITY="" \
+  CODE_SIGNING_REQUIRED=NO \
+  CODE_SIGNING_ALLOWED=NO \
+  clean build
