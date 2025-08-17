@@ -39,6 +39,7 @@ Calligraphy's type-safe API and builder patterns make it ideal for code generati
 - ``StringComponents``
 - ``DoubleQuote``
 - ``QuotationMark``
+- ``Blank``
 - ``NewLine``
 - ``RawStringComponent``
 - ``SingleQuote``
