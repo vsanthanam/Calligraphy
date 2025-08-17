@@ -1,5 +1,5 @@
 // Calligraphy
-// Lines.swift
+// QuotationMarkStyle.swift
 //
 // MIT License
 //
@@ -23,41 +23,39 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// Multiple lines of text.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Lines<T>: StringComponent where T: StringComponent {
+extension StringComponent {
 
-    // MARK: - Initializers
-
-    /// Create lines of text
-    /// - Parameters:
-    ///   - spacing: The spacing to use between each line
-    ///   - components: The contents of each line
-    public init(
-        spacing: Int = 1,
-        @StringBuilder components: () -> T
-    ) {
-        assert(spacing > 0, "Spacing must be greater than zero")
-        self.spacing = spacing > 0 ? spacing : 1
-        self.components = components()
+    /// Apply a quotation mark style to the upstream component(s).
+    /// - Parameter style: The quotation mark style to apply.
+    /// - Returns: A new string component with the specified quotation mark style applied.
+    public func quotationMarkStyle(
+        _ style: QuotationMark.Style
+    ) -> some StringComponent {
+        QuotationMarkStyle(self, style)
     }
 
-    // MARK: - StringComponent
+}
 
-    public var body: some StringComponent {
-        components
-            .joined {
-                Line {
-                    for _ in 0 ..< spacing {
-                        NewLine()
-                    }
-                }
-            }
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+private struct QuotationMarkStyle<T>: StringComponent where T: StringComponent {
+
+    init(_ wrapped: T, _ style: QuotationMark.Style) {
+        self.wrapped = wrapped
+        self.style = style
     }
 
-    // MARK: - Private
+    var _content: String? {
+        StringEnvironment.$activeQuotationMarkStyle.withValue(style) {
+            wrapped._content
+        }
+    }
 
-    private let spacing: Int
-    private let components: T
+    var body: Never {
+        fatalErrorImperativeStringComponent()
+    }
+
+    private let wrapped: T
+    private let style: QuotationMark.Style
 
 }

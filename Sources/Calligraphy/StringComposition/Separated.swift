@@ -26,6 +26,9 @@
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
+    /// Separate the upstream components using the provided separator
+    /// - Parameter separator: The separator to use between components
+    /// - Returns: The separated components, using the provided separator
     @StringBuilder
     public func separatedBy<T>(
         @StringBuilder separator: () -> T
@@ -33,6 +36,9 @@ extension StringComponent {
         Separated(self, separator())
     }
 
+    /// Separate the upstream components using the provided separator
+    /// - Parameter separator: The separator to use between components
+    /// - Returns: The separated components, using the provided separator
     public func separatedBy(
         _ separator: some StringProtocol
     ) -> some StringComponent {

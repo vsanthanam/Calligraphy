@@ -35,16 +35,9 @@ public enum StringBuilder {
     }
 
     public static func buildExpression(
-        _ expression: String
-    ) -> RawStringComponent {
-        .init(expression)
-    }
-
-    @StringBuilder
-    public static func buildExpression(
         _ expression: some StringProtocol
     ) -> RawStringComponent {
-        String(expression)
+        .init(expression)
     }
 
     @StringBuilder
@@ -195,15 +188,5 @@ public enum StringBuilder {
         private let list: [Element]
 
     }
-
-}
-
-enum StringEnvironment {
-
-    @TaskLocal
-    static var activeSeparator = "\n"
-
-    @TaskLocal
-    static var activeTabDefinition: Tab.Definition = .default
 
 }

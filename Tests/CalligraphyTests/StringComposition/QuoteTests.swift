@@ -55,12 +55,12 @@ struct QuoteTests {
             "bar"
             "baz"
         }
-        .quoted(.triple)
+        .quoted()
 
         let expected = #"""
-        '''foo
+        "foo
         bar
-        baz'''
+        baz"
         """#
 
         #expect(quoted._content == expected)

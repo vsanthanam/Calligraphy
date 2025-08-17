@@ -1,5 +1,5 @@
 // Calligraphy
-// Quoted.swift
+// Quote.swift
 //
 // MIT License
 //
@@ -27,12 +27,9 @@
 extension StringComponent {
 
     /// Add quotation marks to the start and end of the upstream
-    /// - Parameter markType: The type of quotation mark to use
     /// - Returns: The quoted upstream
-    public func quoted(
-        _ markType: QuotationMark.`Type` = .double
-    ) -> some StringComponent {
-        Quote(markType) { self }
+    public func quoted() -> some StringComponent {
+        Quote { self }
     }
 
 }
@@ -58,14 +55,10 @@ public struct Quote<T>: StringComponent where T: StringComponent {
     // MARK: - Initializers
 
     /// Created a quoted string component
-    /// - Parameters:
-    ///   - markType: The type of quotation mark to use
-    ///   - components: The components to quote
+    /// - Parameter components: The components to quote
     public init(
-        _ markType: QuotationMark.`Type` = .double,
         @StringBuilder components: () -> T
     ) {
-        self.markType = markType
         self.components = components()
     }
 
@@ -74,13 +67,12 @@ public struct Quote<T>: StringComponent where T: StringComponent {
     public var body: some StringComponent {
         components
             .delimited {
-                QuotationMark(markType)
+                QuotationMark()
             }
     }
 
     // MARK: - Private
 
     private let components: T
-    private let markType: QuotationMark.`Type`
 
 }
