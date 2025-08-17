@@ -38,9 +38,9 @@ struct TabbedTests {
         }
 
         let expected = #"""
-            foo
-            bar
-            baz
+          foo
+          bar
+          baz
         """#
 
         #expect(tabbed._content == expected)
@@ -56,9 +56,9 @@ struct TabbedTests {
         .tabbed(2)
 
         let expected = #"""
-                foo
-                bar
-                baz
+            foo
+            bar
+            baz
         """#
 
         #expect(tabbed._content == expected)
