@@ -5,4 +5,16 @@
 //  Created by Varun Santhanam on 8/17/25.
 //
 
-import Foundation
+public struct Empty: StringComponent {
+    
+    // MARK: - Initializers
+    
+    public init() {}
+    
+    // MARK: - StringComponent
+    
+    public var body: some StringComponent {
+        ""
+    }
+    
+}
