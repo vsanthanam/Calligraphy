@@ -1,5 +1,5 @@
 // Calligraphy
-// AnyDataComponentTests.swift
+// CalligraphyCompilerPlugin.swift
 //
 // MIT License
 //
@@ -23,32 +23,46 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Calligraphy
-import Foundation
-import Testing
+import SwiftCompilerPlugin
+import SwiftSyntax
+import SwiftSyntaxBuilder
+import SwiftSyntaxMacros
 
-@Suite("Data Component Type Eraser Test", .tags(.dataComposition))
-struct AnyDataComponentTests {
+@main
+struct CalligraphyCompilerPlugin: CompilerPlugin {
 
-    @Test("Initalize")
-    func basic() {
+    let providingMacros: [any Macro.Type] = [
+        FilePermissionsOctalMacro.self,
+        FilePermissionsStringMacro.self
+    ]
 
-        let standard = DataComponents {
-            Data()
+}
+
+extension Optional {
+
+    func mustExist(
+        _ message: @autoclosure () -> String = "Macro Expansion Failed"
+    ) throws -> Wrapped {
+        switch self {
+        case let .some(value):
+            return value
+        case .none:
+            throw MacroError(message())
         }
-        let typeErased = AnyDataComponent(standard)
-        #expect(standard._data == typeErased._data)
-
     }
 
-    @Test("Imperative Body")
-    func body() async {
-        await #expect(processExitsWith: .failure) {
-            let standard = DataComponents {
-                Data()
-            }
-            AnyDataComponent(standard).body
-        }
+}
+
+struct MacroError: Error, CustomStringConvertible {
+
+    init(
+        _ message: String = "Macro Expansion Failed"
+    ) {
+        self.message = message
     }
+
+    let message: String
+
+    var description: String { message }
 
 }

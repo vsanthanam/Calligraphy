@@ -1,5 +1,5 @@
 // Calligraphy
-// SwiftCompilerPlugin.swift
+// CalligraphyCompilerPluginTests.swift
 //
 // MIT License
 //
@@ -23,46 +23,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import SwiftCompilerPlugin
-import SwiftSyntax
-import SwiftSyntaxBuilder
-import SwiftSyntaxMacros
+@testable import CalligraphyCompilerPlugin
+import XCTest
 
-@main
-struct SwiftCompilerPlugin: CompilerPlugin {
+final class CalligraphyCompilerPluginTests: XCTestCase {
 
-    let providingMacros: [any Macro.Type] = [
-        FilePermissionsOctalMacro.self,
-        FilePermissionsStringMacro.self
-    ]
-
-}
-
-extension Optional {
-
-    func mustExist(
-        _ message: @autoclosure () -> String = "Macro Expansion Failed"
-    ) throws -> Wrapped {
-        switch self {
-        case let .some(value):
-            return value
-        case .none:
-            throw MacroError(message())
-        }
+    func test_plugins() {
+        let plugin = CalligraphyCompilerPlugin()
+        XCTAssert(plugin.providingMacros[0] == FilePermissionsOctalMacro.self)
+        XCTAssert(plugin.providingMacros[1] == FilePermissionsStringMacro.self)
     }
-
-}
-
-struct MacroError: Error, CustomStringConvertible {
-
-    init(
-        _ message: String = "Macro Expansion Failed"
-    ) {
-        self.message = message
-    }
-
-    let message: String
-
-    var description: String { message }
 
 }
