@@ -39,9 +39,9 @@ import Foundation
 /// You can also pass in multiple combined components using ``Foundation/Data/build(_:)``:
 ///
 /// ```swift
-/// let data = Data(components: { @DataBuilder () -> some DataComponent {
+/// let data = Data.build {
 ///     ...
-/// })
+/// }
 /// ```
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension Data {
@@ -56,7 +56,9 @@ extension Data {
         self = component._data ?? .init()
     }
 
-    public static func build(@DataBuilder _ components: () -> some DataComponent) -> Data {
+    public static func build(
+        @DataBuilder _ components: () -> some DataComponent
+    ) -> Data {
         self.init(components())
     }
 

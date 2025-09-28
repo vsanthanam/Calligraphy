@@ -24,6 +24,7 @@
 // SOFTWARE.
 
 import Calligraphy
+import Foundation
 import Testing
 
 struct FooTextFile: TextFile {

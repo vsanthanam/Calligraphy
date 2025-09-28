@@ -80,7 +80,7 @@ struct StringBuilderTests {
         func builder() -> some StringComponent {}
 
         let components = builder()
-        #expect(components is EmptyStringComponent)
+        #expect(components is StringBuilder._Skip)
         #expect(components._content == nil)
     }
 
@@ -213,7 +213,7 @@ struct StringBuilderTests {
         }
 
         let components = builder()
-        #expect(components is StringBuilder._Block<StringBuilder._Either<Foo, EmptyStringComponent>, Bar>)
+        #expect(components is StringBuilder._Block<StringBuilder._Either<Foo, StringBuilder._Skip>, Bar>)
         #expect(components._content == result)
     }
 
@@ -229,7 +229,7 @@ struct StringBuilderTests {
         }
 
         let components = builder()
-        #expect(components is StringBuilder._List<StringBuilder._Either<RawStringComponent, EmptyStringComponent>>)
+        #expect(components is StringBuilder._List<StringBuilder._Either<RawStringComponent, StringBuilder._Skip>>)
 
         let expected = #"""
         1
@@ -250,7 +250,7 @@ struct StringBuilderTests {
         }
 
         let components = builder()
-        #expect(components is StringBuilder._Either<AnyStringComponent, EmptyStringComponent>)
+        #expect(components is StringBuilder._Either<AnyStringComponent, StringBuilder._Skip>)
         #expect(components._content == "foo")
     }
 

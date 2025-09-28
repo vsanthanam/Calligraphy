@@ -1,13 +1,13 @@
 {
-  "originHash" : "12b2828504cf390a7348f46fa2b4d708abfa28a719f624e1e0ec1fb0f4cd5113",
+  "originHash" : "fae90d06486de08304e6e8089346a62185ac70c2def8a7e4a6e42a040bab0ea0",
   "pins" : [
     {
       "identity" : "swift-collections",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections.git",
       "state" : {
-        "revision" : "671108c96644956dddcd89dd59c203dcdb36cec7",
-        "version" : "1.1.4"
+        "revision" : "8c0c0a8b49e080e54e5e328cc552821ff07cd341",
+        "version" : "1.2.1"
       }
     },
     {
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nicklockwood/SwiftFormat",
       "state" : {
-        "revision" : "b83a8f132ff5430f3b6ff7d912baa407caea9e29",
-        "version" : "0.57.2"
+        "revision" : "ccd88da3288eff9af8f83a513244298d03cdf9b1",
+        "version" : "0.58.1"
       }
     }
   ],

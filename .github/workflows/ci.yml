@@ -71,7 +71,7 @@ jobs:
     name: Build with Xcode (${{ matrix.platform }}, ${{ matrix.scheme }})
     needs: changes
     if: ${{ needs.changes.outputs.code == 'true' }}
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -83,7 +83,7 @@ jobs:
     name: Run SwiftFormat 
     needs: changes
     if: ${{ needs.changes.outputs.swift == 'true' || needs.changes.outputs.yaml == 'true' }}
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -95,7 +95,7 @@ jobs:
     name: Build Calligraphy (macOS)
     needs: changes
     if: ${{ needs.changes.outputs.swift == 'true' || needs.changes.outputs.yaml == 'true' }}
-    runs-on: macos-15
+    runs-on: macos-26
     outputs:
       artifact-name: macos-build
     steps:
@@ -116,7 +116,7 @@ jobs:
     name: Test Calligraphy (macOS)
     needs: [build-macos-spm, changes]
     if: ${{ needs.changes.outputs.swift == 'true' || needs.changes.outputs.yaml == 'true' }}
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -139,7 +139,7 @@ jobs:
     outputs:
       artifact-name: ubuntu-build
     container:
-      image: swift:6.1
+      image: swift:6.2
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -160,7 +160,7 @@ jobs:
     if: ${{ needs.changes.outputs.swift == 'true' || needs.changes.outputs.yaml == 'true' }}
     runs-on: ubuntu-latest
     container:
-      image: swift:6.1
+      image: swift:6.2
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -179,7 +179,7 @@ jobs:
     name: Validate Documentation
     needs: changes
     if: ${{ needs.changes.outputs.swift == 'true' || needs.changes.outputs.yaml == 'true' || needs.changes.outputs.markdown == 'true' }}
-    runs-on: macos-15
+    runs-on: macos-26
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -187,21 +187,6 @@ jobs:
       run: ./.scripts/xcode-select
     - name: Validate Documentation
       run: ./.scripts/lint-docc
-  # build-xcframework:
-  #   strategy:
-  #     matrix:
-  #       target: [Calligraphy]
-  #   name: Build XCFramework (${{ matrix.target }})
-  #   needs: changes
-  #   if: ${{ needs.changes.outputs.code == 'true' }}
-  #   runs-on: macos-15
-  #   steps:
-  #   - name: Checkout
-  #     uses: actions/checkout@v4
-  #   - name: Select Xcode Version
-  #     run: ./.scripts/xcode-select
-  #   - name: Build XCFramework
-  #     run: ./.scripts/build-xcframework ${{ matrix.target }}
   validate-pr:
     name: Validate Pull Request
     if: ${{ always() && github.event_name == 'pull_request' }}

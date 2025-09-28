@@ -6,7 +6,7 @@ permissions:
   contents: write
 jobs:
   build-docc-archive:
-    runs-on: macos-15
+    runs-on: macos-26
     outputs:
       artifact-name: archive
     steps:
