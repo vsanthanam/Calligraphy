@@ -32,7 +32,7 @@ Generate entire directory structures programmatically:
 let project = Folder("MyProject") {
     File("README.md") {
         "# My Project"
-        ""
+        Blank()
         "A sample project created with Calligraphy"
     }
     Folder("Sources") {
@@ -78,7 +78,7 @@ func createItemList(items: [String], includeHeader: Bool) -> String {
     String.build {
         if includeHeader {
             "# Item List"
-            ""
+            Blank()
         }
         for (index, item) in items.enumerated() {
             "\(index + 1). \(item)"
