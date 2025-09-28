@@ -57,6 +57,8 @@ Calligraphy's type-safe API and builder patterns make it ideal for code generati
 - ``TextFile``
 - ``DataFile``
 - ``FilePermissions``
+- ``filePermissions(_:)-7g6n8``
+- ``filePermissions(_:)-4o1io``
 - ``File``
 - ``Folder``
 - ``Files``

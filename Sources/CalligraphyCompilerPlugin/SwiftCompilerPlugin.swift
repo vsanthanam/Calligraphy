@@ -1,5 +1,5 @@
 // Calligraphy
-// DoubleQuote.swift
+// SwiftCompilerPlugin.swift
 //
 // MIT License
 //
@@ -23,19 +23,46 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// A double quote (`"`)
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct DoubleQuote: StringComponent {
+import SwiftCompilerPlugin
+import SwiftSyntax
+import SwiftSyntaxBuilder
+import SwiftSyntaxMacros
 
-    // MARK: - Initializers
+@main
+struct SwiftCompilerPlugin: CompilerPlugin {
 
-    public init() {}
+    let providingMacros: [any Macro.Type] = [
+        FilePermissionsOctalMacro.self,
+        FilePermissionsStringMacro.self
+    ]
 
-    // MARK: - StringComponent
+}
 
-    public var body: some StringComponent {
-        QuotationMark()
-            .quotationMarkStyle(.double)
+extension Optional {
+
+    func mustExist(
+        _ message: @autoclosure () -> String = "Macro Expansion Failed"
+    ) throws -> Wrapped {
+        switch self {
+        case let .some(value):
+            return value
+        case .none:
+            throw MacroError(message())
+        }
     }
+
+}
+
+struct MacroError: Error, CustomStringConvertible {
+
+    init(
+        _ message: String = "Macro Expansion Failed"
+    ) {
+        self.message = message
+    }
+
+    let message: String
+
+    var description: String { message }
 
 }
