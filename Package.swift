@@ -1,6 +1,7 @@
 // swift-tools-version: 6.2
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
+import CompilerPluginSupport
 import PackageDescription
 
 let package = Package(
@@ -33,11 +34,36 @@ let package = Package(
         .package(
             url: "https://github.com/apple/swift-collections.git",
             exact: "1.2.1"
+        ),
+        .package(
+            url: "https://github.com/swiftlang/swift-syntax",
+            exact: "602.0.0"
         )
     ],
     targets: [
         .target(
             name: "Calligraphy",
+            dependencies: [
+                "CalligraphyCompilerPlugin"
+            ],
+            swiftSettings: [
+                .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+                .enableUpcomingFeature("ExistentialAny"),
+                .enableUpcomingFeature("MemberImportVisibility"),
+            ]
+        ),
+        .macro(
+            name: "CalligraphyCompilerPlugin",
+            dependencies: [
+                .product(
+                    name: "SwiftSyntaxMacros",
+                    package: "swift-syntax"
+                ),
+                .product(
+                    name: "SwiftCompilerPlugin",
+                    package: "swift-syntax"
+                )
+            ],
             swiftSettings: [
                 .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
                 .enableUpcomingFeature("ExistentialAny"),
