@@ -43,6 +43,6 @@ public struct Files<T>: DirectoryContent where T: DirectoryContent {
 
     // MARK: - Private
 
-    private let files: DirectoryContent
+    private let files: T
 
 }

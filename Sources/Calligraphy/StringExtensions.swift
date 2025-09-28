@@ -37,11 +37,11 @@
 /// You can also pass in multiple combined components using ``Swift/String/build(_:)``:
 ///
 /// ```swift
-/// let string = String(components: { @StringBuilder () -> some StringComponent {
+/// let string = String.build {
 ///     "Hello, World!"
 ///     "This is a declarative, multi-line string"
 ///     "Created with Calligraphy!"
-/// })
+/// }
 /// ```
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension String {

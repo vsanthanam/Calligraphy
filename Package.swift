@@ -1,4 +1,4 @@
-// swift-tools-version: 6.1
+// swift-tools-version: 6.2
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -39,7 +39,9 @@ let package = Package(
         .target(
             name: "Calligraphy",
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency=complete")
+                .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+                .enableUpcomingFeature("ExistentialAny"),
+                .enableUpcomingFeature("MemberImportVisibility"),
             ]
         ),
         .testTarget(
@@ -49,8 +51,11 @@ let package = Package(
                 .product(name: "Collections", package: "swift-collections")
             ],
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency=complete")
+                .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+                .enableUpcomingFeature("ExistentialAny"),
+                .enableUpcomingFeature("MemberImportVisibility"),
             ]
         )
-    ]
+    ],
+    swiftLanguageModes: [.v6]
 )
