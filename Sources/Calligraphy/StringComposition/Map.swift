@@ -67,7 +67,7 @@ private struct Map<T>: StringComponent where T: StringComponent {
         fn(upstream._content)
     }
 
-    public var body: Never {
+    var body: Never {
         fatalErrorImperativeStringComponent()
     }
 

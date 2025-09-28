@@ -28,6 +28,7 @@ Calligraphy's type-safe API and builder patterns make it ideal for code generati
 
 - ``StringComponent``
 - ``StringBuilder``
+- ``Blank``
 - ``Delimited``
 - ``Frozen``
 - ``Joined``
@@ -46,7 +47,6 @@ Calligraphy's type-safe API and builder patterns make it ideal for code generati
 - ``Space``
 - ``Tab``
 - ``TripleQuote``
-- ``EmptyStringComponent``
 - ``AnyStringComponent``
 
 ### Directory Composition

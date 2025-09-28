@@ -47,7 +47,7 @@ public enum StringBuilder {
         expression.rawValue
     }
 
-    public static func buildBlock() -> EmptyStringComponent {
+    public static func buildBlock() -> _Skip {
         .init()
     }
 
@@ -78,11 +78,11 @@ public enum StringBuilder {
     @StringBuilder
     public static func buildOptional<T>(
         _ component: T?
-    ) -> _Either<T, EmptyStringComponent> where T: StringComponent {
+    ) -> _Either<T, _Skip> where T: StringComponent {
         if let component {
             component
         } else {
-            EmptyStringComponent()
+            _Skip()
         }
     }
 
@@ -186,6 +186,21 @@ public enum StringBuilder {
         }
 
         private let list: [Element]
+
+    }
+
+    public struct _Skip: StringComponent {
+
+        /// Create an empty string component
+        public init() {}
+
+        // MARK: - StringComponent
+
+        public let _content: String? = nil
+
+        public var body: Never {
+            fatalErrorImperativeStringComponent()
+        }
 
     }
 
