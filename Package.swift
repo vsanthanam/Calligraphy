@@ -52,6 +52,18 @@ let package = Package(
                 .enableUpcomingFeature("MemberImportVisibility"),
             ]
         ),
+        .testTarget(
+            name: "CalligraphyTests",
+            dependencies: [
+                "Calligraphy",
+                .product(name: "Collections", package: "swift-collections")
+            ],
+            swiftSettings: [
+                .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+                .enableUpcomingFeature("ExistentialAny"),
+                .enableUpcomingFeature("MemberImportVisibility"),
+            ]
+        ),
         .macro(
             name: "CalligraphyCompilerPlugin",
             dependencies: [
@@ -71,10 +83,17 @@ let package = Package(
             ]
         ),
         .testTarget(
-            name: "CalligraphyTests",
+            name: "CalligraphyCompilerPluginTests",
             dependencies: [
-                "Calligraphy",
-                .product(name: "Collections", package: "swift-collections")
+                "CalligraphyCompilerPlugin",
+                .product(
+                    name: "SwiftSyntaxMacros",
+                    package: "swift-syntax"
+                ),
+                .product(
+                    name: "SwiftSyntaxMacrosTestSupport",
+                    package: "swift-syntax"
+                )
             ],
             swiftSettings: [
                 .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
