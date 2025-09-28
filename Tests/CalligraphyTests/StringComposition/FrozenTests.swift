@@ -68,4 +68,15 @@ struct FrozenTests {
         #expect(frozen._content == expected)
     }
 
+    @Test("Imperative Body")
+    func body() async {
+        await #expect(processExitsWith: .failure) {
+            StringComponents {
+                "foo"
+            }
+            .frozen()
+            .body
+        }
+    }
+
 }

@@ -27,7 +27,10 @@ import Calligraphy
 import Testing
 
 @Test("Blank Component")
-func blank() {
+func blank() async {
     let component = Blank()
     #expect(component._content == "")
+    await #expect(processExitsWith: .failure) {
+        Blank().body
+    }
 }

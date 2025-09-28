@@ -81,4 +81,15 @@ struct JoinedTests {
         #expect(joined._content == "foo, bar, baz")
     }
 
+    @Test("Imperative Body")
+    func body() async {
+        await #expect(processExitsWith: .failure) {
+            _ = StringComponents {
+                "foo"
+                "bar"
+            }
+            .joined(separator: "qux")
+            .body
+        }
+    }
 }
