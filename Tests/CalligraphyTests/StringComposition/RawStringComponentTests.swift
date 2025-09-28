@@ -27,7 +27,11 @@ import Calligraphy
 import Testing
 
 @Test("Raw String Component", .tags(.stringComposition))
-func rawStringComponent() {
+func rawStringComponent() async {
     let rawStringComponent = RawStringComponent("Hello World")
     #expect(rawStringComponent._content == "Hello World")
+    #expect(rawStringComponent.value == "Hello World")
+    await #expect(processExitsWith: .failure) {
+        RawStringComponent("foo").body
+    }
 }

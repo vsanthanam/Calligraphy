@@ -34,8 +34,10 @@ public struct Blank: StringComponent {
 
     // MARK: - StringComponent
 
-    public var body: some StringComponent {
-        ""
+    public let _content: String = ""
+
+    public var body: Never {
+        fatalErrorImperativeStringComponent()
     }
 
 }
