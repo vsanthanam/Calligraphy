@@ -28,7 +28,7 @@ import Foundation
 import Testing
 
 @Suite("File Permissions Tests", .tags(.directoryComposition))
-struct FilePermissionsMacroTests {
+struct FilePermissionsTests {
 
     @Test("Octal Macro - 0o644")
     func octal0644() {

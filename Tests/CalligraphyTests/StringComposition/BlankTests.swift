@@ -26,7 +26,7 @@
 import Calligraphy
 import Testing
 
-@Test("Blank Component")
+@Test("Blank Component", .tags(.stringComposition))
 func blank() {
     let component = Blank()
     #expect(component._content == "")
