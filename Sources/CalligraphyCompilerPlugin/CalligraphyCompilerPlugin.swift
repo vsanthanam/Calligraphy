@@ -1,5 +1,5 @@
 // Calligraphy
-// SwiftCompilerPlugin.swift
+// CalligraphyCompilerPlugin.swift
 //
 // MIT License
 //

@@ -27,13 +27,28 @@ import Calligraphy
 import Foundation
 import Testing
 
-@Test("Data Component Type Eraser", .tags(.dataComposition))
-func anyDataComponent() {
+@Suite("Data Component Type Eraser Test", .tags(.dataComposition))
+struct AnyDataComponentTests {
 
-    let standard = DataComponents {
-        Data()
+    @Test("Initalize")
+    func basic() {
+
+        let standard = DataComponents {
+            Data()
+        }
+        let typeErased = AnyDataComponent(standard)
+        #expect(standard._data == typeErased._data)
+
     }
-    let typeErased = AnyDataComponent(standard)
-    #expect(standard._data == typeErased._data)
+
+    @Test("Imperative Body")
+    func body() async {
+        await #expect(processExitsWith: .failure) {
+            let standard = DataComponents {
+                Data()
+            }
+            AnyDataComponent(standard).body
+        }
+    }
 
 }
