@@ -69,28 +69,52 @@ extension DirectoryContent {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension SerializedDirectoryContent {
 
-    @concurrent
-    fileprivate func performWriteOperation(
-        shouldOverwrite: Bool
-    ) async throws -> [URL] {
-        switch content {
-        case let .directory(directory):
-            let url = try DiskOperation.currentURL.appending(directory: name)
-            try await FileManager.default.findExisting(at: url, shouldOverwrite: shouldOverwrite)
-            try await FileManager.default.createDirectory(at: url)
-            try await FileManager.default.setPermissions(permissions, at: url)
-            let urls = try await DiskOperation.push(path: name) {
-                try await directory.performWriteOperations(shouldOverwrite: shouldOverwrite)
+    #if swift(>=6.2)
+        @concurrent
+        fileprivate func performWriteOperation(
+            shouldOverwrite: Bool
+        ) async throws -> [URL] {
+            switch content {
+            case let .directory(directory):
+                let url = try DiskOperation.currentURL.appending(directory: name)
+                try await FileManager.default.findExisting(at: url, shouldOverwrite: shouldOverwrite)
+                try await FileManager.default.createDirectory(at: url)
+                try await FileManager.default.setPermissions(permissions, at: url)
+                let urls = try await DiskOperation.push(path: name) {
+                    try await directory.performWriteOperations(shouldOverwrite: shouldOverwrite)
+                }
+                return [url] + urls
+            case let .file(file):
+                let url = try DiskOperation.currentURL.appending(file: name)
+                try await FileManager.default.findExisting(at: url, shouldOverwrite: shouldOverwrite)
+                try await file.serialize().write(toURL: url)
+                try await FileManager.default.setPermissions(permissions, at: url)
+                return [url]
             }
-            return [url] + urls
-        case let .file(file):
-            let url = try DiskOperation.currentURL.appending(file: name)
-            try await FileManager.default.findExisting(at: url, shouldOverwrite: shouldOverwrite)
-            try await file.serialize().write(toURL: url)
-            try await FileManager.default.setPermissions(permissions, at: url)
-            return [url]
         }
-    }
+    #else
+        fileprivate func performWriteOperation(
+            shouldOverwrite: Bool
+        ) async throws -> [URL] {
+            switch content {
+            case let .directory(directory):
+                let url = try DiskOperation.currentURL.appending(directory: name)
+                try await FileManager.default.findExisting(at: url, shouldOverwrite: shouldOverwrite)
+                try await FileManager.default.createDirectory(at: url)
+                try await FileManager.default.setPermissions(permissions, at: url)
+                let urls = try await DiskOperation.push(path: name) {
+                    try await directory.performWriteOperations(shouldOverwrite: shouldOverwrite)
+                }
+                return [url] + urls
+            case let .file(file):
+                let url = try DiskOperation.currentURL.appending(file: name)
+                try await FileManager.default.findExisting(at: url, shouldOverwrite: shouldOverwrite)
+                try await file.serialize().write(toURL: url)
+                try await FileManager.default.setPermissions(permissions, at: url)
+                return [url]
+            }
+        }
+    #endif
 
     fileprivate func validate(
         in parent: URL
