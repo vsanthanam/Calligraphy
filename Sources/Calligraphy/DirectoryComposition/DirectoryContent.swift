@@ -189,23 +189,43 @@ extension [SerializedDirectoryContent] {
     fileprivate func performWriteOperations(
         shouldOverwrite: Bool
     ) async throws -> [URL] {
-        try await withThrowingTaskGroup { group in
-            for content in self {
-                group.addTask {
-                    try await content.performWriteOperation(shouldOverwrite: shouldOverwrite)
+        #if swift(>=6.1)
+            try await withThrowingTaskGroup { group in
+                for content in self {
+                    group.addTask {
+                        try await content.performWriteOperation(shouldOverwrite: shouldOverwrite)
+                    }
+                }
+                do {
+                    var result = [URL]()
+                    for try await urls in group {
+                        result += urls
+                    }
+                    return result
+                } catch {
+                    group.cancelAll()
+                    throw error
                 }
             }
-            do {
-                var result = [URL]()
-                for try await urls in group {
-                    result += urls
+        #else
+            try await withThrowingTaskGroup(of: [URL].self) { group in
+                for content in self {
+                    group.addTask {
+                        try await content.performWriteOperation(shouldOverwrite: shouldOverwrite)
+                    }
                 }
-                return result
-            } catch {
-                group.cancelAll()
-                throw error
+                do {
+                    var result = [URL]()
+                    for try await urls in group {
+                        result += urls
+                    }
+                    return result
+                } catch {
+                    group.cancelAll()
+                    throw error
+                }
             }
-        }
+        #endif
     }
 
 }
