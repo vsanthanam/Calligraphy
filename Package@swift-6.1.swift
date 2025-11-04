@@ -38,6 +38,9 @@ let package = Package(
             dependencies: [
                 "CalligraphyCompilerPlugin"
             ],
+            resources: [
+                .process("PrivacyInfo.xcprivacy")
+            ],
             swiftSettings: [
                 .enableUpcomingFeature("ExistentialAny"),
                 .enableUpcomingFeature("MemberImportVisibility"),
