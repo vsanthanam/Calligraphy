@@ -39,7 +39,7 @@ let package = Package(
                 "CalligraphyCompilerPlugin"
             ],
             resources: [
-                .copy("PrivacyInfo.xcprivacy")
+                .process("PrivacyInfo.xcprivacy")
             ],
             swiftSettings: [
                 .enableUpcomingFeature("ExistentialAny"),
