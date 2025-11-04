@@ -34,7 +34,7 @@ func anyDirectoryContent() {
         File("baz") { "qux" }
     }
 
-    let typeErased = AnyDirectoryContent(standard)
+    let typeErased = AnyDirectoryContent(erasing: standard)
     #expect(standard._serialize() == typeErased._serialize())
 
 }

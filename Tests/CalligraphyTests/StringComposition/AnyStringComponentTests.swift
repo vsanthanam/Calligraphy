@@ -35,7 +35,7 @@ func anyStringComponent() {
         "baz"
     }
 
-    let typeErased = AnyStringComponent(standard)
+    let typeErased = AnyStringComponent(erasing: standard)
 
     #expect(standard._content == typeErased._content)
 
