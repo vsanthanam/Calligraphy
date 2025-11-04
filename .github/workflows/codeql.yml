@@ -14,8 +14,6 @@ name: "CodeQL"
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
   schedule:
     - cron: '15 7 * * 6'
 concurrency:
@@ -91,7 +89,7 @@ jobs:
       name: Xcode Select
       shell: bash
       run: |
-        sudo xcode-select --switch /Applications/Xcode_26.0.app
+        sudo xcode-select --switch /Applications/Xcode_16.4.app
     - if: matrix.build-mode == 'manual' && matrix.language == 'swift'
       name: Build Calligraphy
       shell: bash
