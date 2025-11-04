@@ -29,11 +29,11 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/nicklockwood/SwiftFormat",
-            exact: "0.58.1"
+            exact: "0.58.5"
         ),
         .package(
             url: "https://github.com/apple/swift-collections.git",
-            exact: "1.2.1"
+            exact: "1.3.0"
         ),
         .package(
             url: "https://github.com/swiftlang/swift-syntax",
