@@ -1,11 +1,16 @@
 name: Calligraphy CI
 permissions:
   contents: read
+  pull-requests: write
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - "main"
+      - "*release*"
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - "main"
+      - "*release*"
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -13,17 +18,29 @@ jobs:
   build-xcode:
     strategy:
       matrix:
-        platform: [macos, maccatalyst, ios, watchos, tvos, visionos]
-        scheme: [Calligraphy]
-    name: Build with Xcode (${{ matrix.platform }}, ${{ matrix.scheme }})
+        platform: ['macos', 'maccatalyst', 'ios', 'watchos', 'tvos', 'visionos']
+        include:
+          - platform: 'macos'
+            name: 'macOS'
+          - platform: 'maccatalyst'
+            name: 'Mac Catalyst'
+          - platform: 'ios'
+            name: 'iOS'
+          - platform: 'watchos'
+            name: 'watchOS'
+          - platform: 'tvos'
+            name: 'tvOS'
+          - platform: 'visionos'
+            name: 'visionOS'
+    name: Build with Xcode (${{ matrix.name }})
     runs-on: macos-26
     steps:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Select Xcode Version
       run: ./.scripts/xcode-select
-    - name: Build Calligraphy
-      run: ./.scripts/build-${{ matrix.platform }}-xcode ${{ matrix.scheme }}
+    - name: Build Calligraphy for ${{ matrix.name }}
+      run: ./.scripts/build-${{ matrix.platform }}-xcode Calligraphy
   swiftformat:
     name: Run SwiftFormat 
     runs-on: macos-26
@@ -36,53 +53,76 @@ jobs:
       run: ./.scripts/lint-swiftformat
   build-macos-spm:
     name: Build Calligraphy (macOS)
-    runs-on: macos-26
+    strategy:
+      matrix:
+        swift: ['6.1', '6.2']
+        include:
+          - swift: '6.1'
+            runner: 'macos-15'
+            xcode: '16.4'
+          - swift: '6.2'
+            runner: 'macos-26'
+            xcode: '26.0'
+    runs-on: ${{ matrix.runner }}
     outputs:
       artifact-name: macos-build
     steps:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Select Xcode Version
-      run: ./.scripts/xcode-select
+      run: ./.scripts/xcode-select ${{ matrix.xcode }}
     - name: Build Calligraphy
-      run: swift build -v --build-path .build
+      run: swift build -v --build-tests --build-path .build
     - name: Compress Build
       run: zip -r build.zip .build
     - name: Upload Build
       uses: actions/upload-artifact@v4
       with:
-        name: macos-build
+        name: macos-build-${{ matrix.swift }}
         path: build.zip
   test-macos-spm:
     name: Test Calligraphy (macOS)
+    strategy:
+      matrix:
+        swift: ['6.1', '6.2']
+        include:
+          - swift: '6.1'
+            runner: 'macos-15'
+            xcode: '16.4'
+          - swift: '6.2'
+            runner: 'macos-26'
+            xcode: '26.0'
     needs: build-macos-spm
-    runs-on: macos-26
+    runs-on: ${{ matrix.runner }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Xcode Version
-        run: ./.scripts/xcode-select
+        run: ./.scripts/xcode-select ${{ matrix.xcode }}
       - name: Download Build
         uses: actions/download-artifact@v4
         with:
-          name: macos-build
+          name: macos-build-${{ matrix.swift }}
           path: .
       - name: Decompress Build
         run: unzip build.zip
       - name: Test Calligraphy
-        run: swift test
+        run: swift test --skip-build
   build-ubuntu-spm:
     name: Build Calligraphy (Ubuntu)
+    strategy:
+      matrix:
+        swift: ['6.1', '6.2']
     runs-on: ubuntu-latest
     outputs:
       artifact-name: ubuntu-build
     container:
-      image: swift:6.2
+      image: swift:${{ matrix.swift }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Build Calligraphy
-        run: swift build -v --build-path .build
+        run: swift build -v --build-tests --build-path .build
       - name: Install `zip`
         run: apt-get update && apt-get install -y zip
       - name: Compress Build
@@ -90,28 +130,31 @@ jobs:
       - name: Upload Build
         uses: actions/upload-artifact@v4
         with:
-          name: ubuntu-build
+          name: ubuntu-build-${{ matrix.swift }}
           path: build.zip
   test-ubuntu-spm:
     name: Test Calligraphy (Ubuntu)
+    strategy:
+      matrix:
+        swift: ['6.1', '6.2']
     needs: build-ubuntu-spm
     runs-on: ubuntu-latest
     container:
-      image: swift:6.2
+      image: swift:${{ matrix.swift }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Download Build
         uses: actions/download-artifact@v4
         with:
-          name: ubuntu-build
+          name: ubuntu-build-${{ matrix.swift }}
           path: .
       - name: Install `unzip`
         run: apt-get update && apt-get install -y unzip
       - name: Decompress Build
         run: unzip build.zip
       - name: Test Calligraphy
-        run: swift test
+        run: swift test --skip-build
   lint-docc:
     name: Validate Documentation
     runs-on: macos-26
@@ -121,7 +164,7 @@ jobs:
     - name: Select Xcode Version
       run: ./.scripts/xcode-select
     - name: Validate Documentation
-      run: ./.scripts/lint-docc
+      run: ./.scripts/lint-docc    
   validate-pr:
     name: Validate Pull Request
     if: ${{ always() && github.event_name == 'pull_request' }}
@@ -131,7 +174,6 @@ jobs:
       - test-macos-spm
       - build-ubuntu-spm
       - test-ubuntu-spm
-      # - build-xcframework
       - swiftformat
       - lint-docc
     runs-on: ubuntu-latest
@@ -140,12 +182,12 @@ jobs:
         run: |
           # If any job failed, this status will not be 'success'
           if [[ "${{ needs.build-xcode.result }}" == "failure" ]] || \
-            [[ "${{ needs.build-macos-spm.result }}" == "failure" ]] || \
-            [[ "${{ needs.test-macos-spm.result }}" == "failure" ]] || \
-            [[ "${{ needs.build-ubuntu-spm.result }}" == "failure" ]] || \
-            [[ "${{ needs.test-ubuntu-spm.result }}" == "failure" ]] || \
-            [[ "${{ needs.swiftformat.result }}" == "failure" ]] || \
-            [[ "${{ needs.lint-docc.result }}" == "failure" ]]; then
+             [[ "${{ needs.build-macos-spm.result }}" == "failure" ]] || \
+             [[ "${{ needs.test-macos-spm.result }}" == "failure" ]] || \
+             [[ "${{ needs.build-ubuntu-spm.result }}" == "failure" ]] || \
+             [[ "${{ needs.test-ubuntu-spm.result }}" == "failure" ]] || \
+             [[ "${{ needs.swiftformat.result }}" == "failure" ]] || \
+             [[ "${{ needs.lint-docc.result }}" == "failure" ]]; then
             echo "❌ Upstream job failed."
             exit 1
           else

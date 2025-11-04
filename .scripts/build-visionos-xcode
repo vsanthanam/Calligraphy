@@ -5,7 +5,7 @@ xcodebuild \
   -configuration Release \
   -sdk xros \
   -destination 'generic/platform=visionOS' \
-  BUILD_LIBRARY_FOR_DISTRIBUTION=YES \
+  BUILD_LIBRARY_FOR_DISTRIBUTION=NO \
   SKIP_INSTALL=NO \
   CODE_SIGN_IDENTITY="" \
   CODE_SIGNING_REQUIRED=NO \
