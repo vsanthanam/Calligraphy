@@ -30,7 +30,7 @@ public struct AnyStringComponent: StringComponent {
     // MARK: - Initializers
 
     /// Create a type-erased string component
-    /// - Parameter component: The string component to type-erase
+    /// - Parameter stringComponent: The string component to type-erase
     public init<T: StringComponent>(
         erasing stringComponent: T
     ) {

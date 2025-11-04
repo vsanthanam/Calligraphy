@@ -36,7 +36,7 @@ struct AnyDataComponentTests {
         let standard = DataComponents {
             Data()
         }
-        let typeErased = AnyDataComponent(standard)
+        let typeErased = AnyDataComponent(erasing: standard)
         #expect(standard._data == typeErased._data)
 
     }
@@ -48,7 +48,7 @@ struct AnyDataComponentTests {
                 let standard = DataComponents {
                     Data()
                 }
-                AnyDataComponent(standard).body
+                AnyDataComponent(erasing: standard).body
             }
         }
     #endif

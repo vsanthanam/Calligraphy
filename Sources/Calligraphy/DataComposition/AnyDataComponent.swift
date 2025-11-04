@@ -32,7 +32,7 @@ public struct AnyDataComponent: DataComponent {
     // MARK: - Initializers
 
     /// Create a type-erased data component
-    /// - Parameter component: The data component to type-erase
+    /// - Parameter dataComponent: The data component to type-erase
     public init<T>(
         erasing dataComponent: T
     ) where T: DataComponent {
