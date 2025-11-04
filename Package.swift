@@ -46,6 +46,9 @@ let package = Package(
             dependencies: [
                 "CalligraphyCompilerPlugin"
             ],
+            resources: [
+                .copy("PrivacyInfo.xcprivacy")
+            ],
             swiftSettings: [
                 .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
                 .enableUpcomingFeature("ExistentialAny"),
