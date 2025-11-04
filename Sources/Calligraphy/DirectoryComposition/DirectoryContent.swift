@@ -208,7 +208,7 @@ extension [SerializedDirectoryContent] {
                 }
             }
         #else
-            try await withThrowingTaskGroup(of: URL.self) { group in
+            try await withThrowingTaskGroup(of: [URL].self) { group in
                 for content in self {
                     group.addTask {
                         try await content.performWriteOperation(shouldOverwrite: shouldOverwrite)
