@@ -31,10 +31,10 @@ public struct AnyStringComponent: StringComponent {
 
     /// Create a type-erased string component
     /// - Parameter component: The string component to type-erase
-    public init(
-        _ component: some StringComponent
+    public init<T: StringComponent>(
+        erasing stringComponent: T
     ) {
-        __content = { component._content }
+        __content = { stringComponent._content }
     }
 
     // MARK: - StringComponent
