@@ -33,10 +33,10 @@ public struct AnyDataComponent: DataComponent {
 
     /// Create a type-erased data component
     /// - Parameter component: The data component to type-erase
-    public init(
-        _ component: some DataComponent
-    ) {
-        __data = { component._data }
+    public init<T>(
+        erasing dataComponent: T
+    ) where T: DataComponent {
+        __data = { dataComponent._data }
     }
 
     // MARK: - DataComponent

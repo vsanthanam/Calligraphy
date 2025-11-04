@@ -95,7 +95,7 @@ public enum StringBuilder {
     public static func buildLimitedAvailability(
         _ component: some StringComponent
     ) -> AnyStringComponent {
-        AnyStringComponent(component)
+        AnyStringComponent(erasing: component)
     }
 
     public struct _Block<each Component>: StringComponent where repeat each Component: StringComponent {

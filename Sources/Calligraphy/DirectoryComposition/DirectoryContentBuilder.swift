@@ -95,7 +95,7 @@ public enum DirectoryContentBuilder {
     public static func buildLimitedAvailability(
         _ component: some DirectoryContent
     ) -> AnyDirectoryContent {
-        AnyDirectoryContent(component)
+        AnyDirectoryContent(erasing: component)
     }
 
     public struct _AlreadySerialized: DirectoryContent {

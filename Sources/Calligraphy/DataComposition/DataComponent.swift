@@ -27,6 +27,7 @@ import Foundation
 
 /// A data component
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+@_typeEraser(AnyDataComponent)
 public protocol DataComponent: Sendable {
 
     /// The type of data component representing the body of this data component.

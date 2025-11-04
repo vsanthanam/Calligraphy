@@ -118,7 +118,7 @@ public enum DataBuilder {
     public static func buildLimitedAvailability(
         _ component: some DataComponent
     ) -> AnyDataComponent {
-        AnyDataComponent(component)
+        AnyDataComponent(erasing: component)
     }
 
     public struct _Block<each Component>: DataComponent where repeat each Component: DataComponent {

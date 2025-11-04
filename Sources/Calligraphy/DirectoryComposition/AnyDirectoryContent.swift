@@ -31,9 +31,9 @@ public struct AnyDirectoryContent: DirectoryContent {
 
     /// Create a type-erased directory content
     /// - Parameter directoryContent: The directory content to type-erase
-    public init(
-        _ directoryContent: some DirectoryContent
-    ) {
+    public init<T>(
+        erasing directoryContent: T
+    ) where T: DirectoryContent {
         __serialize = directoryContent._serialize
     }
 
