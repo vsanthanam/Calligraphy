@@ -84,7 +84,7 @@ public struct File: DirectoryContent {
         _ name: String,
         permissions: FilePermissions = .defaultFile,
         text: String,
-        encoding: String.Encoding = .utf8,
+        encoding: String.Encoding = .utf8
     ) {
         self.init(
             name,
@@ -107,7 +107,7 @@ public struct File: DirectoryContent {
         fileExtension: String,
         permissions: FilePermissions = .defaultFile,
         text: String,
-        encoding: String.Encoding = .utf8,
+        encoding: String.Encoding = .utf8
     ) {
         self.init(
             name,
