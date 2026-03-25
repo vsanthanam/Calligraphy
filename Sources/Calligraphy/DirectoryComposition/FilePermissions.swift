@@ -59,6 +59,7 @@
 /// - ``FilePermissions/executableFile``: `rwxr-xr-x` (`0o755`), appropriate for executables
 ///
 /// You can also create instances of this type with string or octal literals using the built-in macros ``filePermissions(_:)-7g6n8`` or ``filePermissions(_:)-4o1io``.
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct FilePermissions: OptionSet, Equatable, Hashable, Identifiable, Codable, CustomStringConvertible, Sendable {
 
     // MARK: - API

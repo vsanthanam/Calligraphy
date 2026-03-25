@@ -35,7 +35,7 @@ extension StringComponent {
         with prefix: some StringProtocol,
         _ rule: MapLinesRule = .all
     ) -> some StringComponent {
-        prefixLines(rule) { prefix }
+        prefixLines(when: rule) { prefix }
     }
 
     /// Prefix every line of the upstream, declaratively
@@ -44,7 +44,7 @@ extension StringComponent {
     ///   - components: The `@StringBuilder` prefix to apply to every applicable line
     /// - Returns: A prefixed version of the upstream
     public func prefixLines(
-        _ rule: MapLinesRule = .all,
+        when rule: MapLinesRule = .all,
         @StringBuilder components: () -> some StringComponent
     ) -> some StringComponent {
         PrefixLines(
