@@ -3,7 +3,7 @@
 //
 // MIT License
 //
-// Copyright (c) 2025 Varun Santhanam
+// Copyright (c) 2026 Varun Santhanam
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the  Software), to deal
 //
@@ -28,7 +28,7 @@ import Foundation
 /// Rules to use when appling a line mapping modifier
 ///
 /// Instances of this enum are used to augment line mapping modifiers, such as ``StringComponent/mapLines(_:_:)``, ``StringComponents/prefixLines(with:_:)``, and ``StringComponents/suffixLines(with:_:)``
-public enum MapLinesRule: Equatable, Sendable {
+public enum MapLinesRule: Equatable {
 
     /// Apply the mapper function to every line
     case all
@@ -51,7 +51,7 @@ extension StringComponent {
     /// - Returns: A mapped version of the upstream
     public func mapLines(
         _ rule: MapLinesRule = .all,
-        with components: @Sendable @escaping (String) -> some StringComponent
+        with components: @escaping (String) -> some StringComponent
     ) -> some StringComponent {
         MapLines(self, rule) { line in
             String(components(line))
@@ -65,7 +65,7 @@ extension StringComponent {
     /// - Returns: A mapepd version of the upstream
     public func mapLines(
         _ rule: MapLinesRule = .all,
-        _ fn: @Sendable @escaping (String) -> String?
+        _ fn: @escaping (String) -> String?
     ) -> some StringComponent {
         MapLines(self, rule, fn)
     }
@@ -79,7 +79,7 @@ private struct MapLines<T>: StringComponent where T: StringComponent {
     init(
         _ lines: T,
         _ rule: MapLinesRule,
-        _ fn: @Sendable @escaping (String) -> String?
+        _ fn: @escaping (String) -> String?
     ) {
         self.lines = lines
         self.rule = rule
@@ -134,6 +134,6 @@ private struct MapLines<T>: StringComponent where T: StringComponent {
 
     private let lines: T
     private let rule: MapLinesRule
-    private let fn: @Sendable (String) -> String?
+    private let fn: (String) -> String?
 
 }

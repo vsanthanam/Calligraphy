@@ -3,7 +3,7 @@
 //
 // MIT License
 //
-// Copyright (c) 2025 Varun Santhanam
+// Copyright (c) 2026 Varun Santhanam
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the  Software), to deal
 //
@@ -30,7 +30,7 @@ extension StringComponent {
     /// - Parameter fn: The mapper function
     /// - Returns: The mapped upstream component
     public func map(
-        _ fn: @Sendable @escaping (String?) -> String?
+        _ fn: @escaping (String?) -> String?
     ) -> some StringComponent {
         Map(self, fn)
     }
@@ -39,7 +39,7 @@ extension StringComponent {
     /// - Parameter components: The mapper function
     /// - Returns: The mapped upstream component
     public func map(
-        @StringBuilder with components: @Sendable @escaping (String?) -> some StringComponent
+        @StringBuilder with components: @escaping (String?) -> some StringComponent
     ) -> some StringComponent {
         Map(self) { content in
             String(components(content))
@@ -55,7 +55,7 @@ private struct Map<T>: StringComponent where T: StringComponent {
 
     init(
         _ upstream: T,
-        _ fn: @Sendable @escaping (String?) -> String?
+        _ fn: @escaping (String?) -> String?
     ) {
         self.upstream = upstream
         self.fn = fn
@@ -74,5 +74,5 @@ private struct Map<T>: StringComponent where T: StringComponent {
     // MARK: - Private
 
     private let upstream: T
-    private let fn: @Sendable (String?) -> String?
+    private let fn: (String?) -> String?
 }

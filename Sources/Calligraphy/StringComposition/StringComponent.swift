@@ -3,7 +3,7 @@
 //
 // MIT License
 //
-// Copyright (c) 2025 Varun Santhanam
+// Copyright (c) 2026 Varun Santhanam
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the  Software), to deal
 //
@@ -26,7 +26,7 @@
 /// A component of a declaratively composed string.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @_typeEraser(AnyStringComponent)
-public protocol StringComponent: Sendable {
+public protocol StringComponent {
 
     /// The type of string component representing the body of this string component.
     ///
