@@ -27,12 +27,15 @@
 extension StringComponent {
 
     /// Add a tab to every line in the upstream
-    /// - Parameter numberOfTabs: The number of tabs to add
+    /// - Parameters:
+    ///   - numberOfTabs: The number of tabs to add
+    ///   - rule: When to apply the tabs
     /// - Returns: A tabbed version of the upstream
     public func tabbed(
-        _ numberOfTabs: Int = 1
+        _ numberOfTabs: Int = 1,
+        when rule: MapLinesRule = .notEmpty
     ) -> some StringComponent {
-        Tabbed(numberOfTabs) { self }
+        Tabbed(numberOfTabs, when: rule) { self }
     }
 
 }
@@ -46,13 +49,16 @@ public struct Tabbed<T>: StringComponent where T: StringComponent {
     /// Create a tabbed string component
     /// - Parameters:
     ///   - numberOfTabs: The number of tabs to each line
+    ///   - rule: When to apply the tabs
     ///   - components: The components to tab
     public init(
         _ numberOfTabs: Int = 1,
+        when rule: MapLinesRule = .notEmpty,
         @StringBuilder components: () -> T
     ) {
         assert(numberOfTabs >= 0, "Number of tabs must be non-negative")
         self.numberOfTabs = numberOfTabs >= 0 ? numberOfTabs : 1
+        self.rule = rule
         self.components = components()
     }
 
@@ -60,7 +66,7 @@ public struct Tabbed<T>: StringComponent where T: StringComponent {
 
     public var body: some StringComponent {
         components
-            .prefixLines {
+            .prefixLines(when: rule) {
                 Line {
                     for _ in 0 ..< numberOfTabs {
                         Tab()
@@ -72,6 +78,7 @@ public struct Tabbed<T>: StringComponent where T: StringComponent {
     // MARK: - Private
 
     private let numberOfTabs: Int
+    private let rule: MapLinesRule
     private let components: T
 
 }
