@@ -24,8 +24,8 @@
 // SOFTWARE.
 
 @testable import Calligraphy
-import Collections
 import Foundation
+import OrderedCollections
 import Testing
 
 @Suite("@DataBuilder Tests", .tags(.stringComposition))
