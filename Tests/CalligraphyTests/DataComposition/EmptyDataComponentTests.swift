@@ -27,7 +27,7 @@ import Calligraphy
 import Testing
 
 @Test("Empty Data Component", .tags(.dataComposition))
-func emptyDataComponent() throws {
+func emptyDataComponent() {
     let component = EmptyDataComponent()
     #expect(component._data == nil)
 }
