@@ -31,7 +31,7 @@ import Testing
 struct DelimitedTests {
 
     @Test("Modifier with String Delimiter")
-    func modifierString() async throws {
+    func modifierString() {
 
         let delimited = StringComponents {
             "foo"
@@ -49,7 +49,7 @@ struct DelimitedTests {
     }
 
     @Test("Modifier with Builder Delimiter")
-    func modifierBuilder() async throws {
+    func modifierBuilder() {
 
         let delimited = StringComponents {
             "foo"
@@ -69,7 +69,7 @@ struct DelimitedTests {
     }
 
     @Test("Component with String Delimiter")
-    func string() async throws {
+    func string() {
 
         let delimited = Delimited(by: "|") {
             "foo"
@@ -86,7 +86,7 @@ struct DelimitedTests {
     }
 
     @Test("Component with Builder Delimiter")
-    func builder() async throws {
+    func builder() {
 
         let delimited = Delimited {
             "foo"
@@ -106,7 +106,7 @@ struct DelimitedTests {
     }
 
     @Test("Empty delimited content")
-    func emptyContent() async throws {
+    func emptyContent() {
 
         let delimited = Delimited {} delimiter: {
             "!!!"
@@ -116,7 +116,7 @@ struct DelimitedTests {
     }
 
     @Test("Content with empty delimiter")
-    func emptyDelimiter() async throws {
+    func emptyDelimiter() {
 
         let delimited = Delimited {
             "foo"

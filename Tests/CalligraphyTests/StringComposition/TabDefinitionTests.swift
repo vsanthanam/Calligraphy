@@ -27,7 +27,7 @@ import Calligraphy
 import Testing
 
 @Suite("Tab Definition Tests", .tags(.stringComposition))
-public struct TabLengthTests {
+struct TabLengthTests {
 
     @Test("Default tab definition")
     func defaultLength() {

@@ -43,9 +43,13 @@ public protocol TextFile: StringComponent, DirectoryContent {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension TextFile {
 
-    public var permissions: FilePermissions { .defaultFile }
+    public var permissions: FilePermissions {
+        .defaultFile
+    }
 
-    public var encoding: String.Encoding { .utf8 }
+    public var encoding: String.Encoding {
+        .utf8
+    }
 
     public func _serialize() -> [SerializedDirectoryContent] {
         [

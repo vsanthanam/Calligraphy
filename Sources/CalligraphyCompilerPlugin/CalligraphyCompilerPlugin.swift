@@ -63,6 +63,8 @@ struct MacroError: Error, CustomStringConvertible {
 
     let message: String
 
-    var description: String { message }
+    var description: String {
+        message
+    }
 
 }
