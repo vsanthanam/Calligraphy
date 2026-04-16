@@ -26,8 +26,8 @@
 import Calligraphy
 import Testing
 
-@Test("Double Quote Component", .tags(.stringComposition))
-func doubleQuote() {
+@Test(.tags(.stringComposition))
+func `Double Quote Component`() {
 
     #expect(DoubleQuote()._content == "\"")
 

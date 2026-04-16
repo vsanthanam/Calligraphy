@@ -34,8 +34,8 @@ struct FooDirectory: Directory {
 
 }
 
-@Test("Directory Protocol Serialize", .tags(.directoryComposition))
-func directoryDefaultSerialization() {
+@Test(.tags(.directoryComposition))
+func `Directory Protocol Serialize`() {
 
     let fooDirectory = FooDirectory()
     let serialized = fooDirectory._serialize()

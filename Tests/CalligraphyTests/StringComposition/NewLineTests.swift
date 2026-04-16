@@ -26,8 +26,8 @@
 import Calligraphy
 import Testing
 
-@Test("New Line Component", .tags(.stringComposition))
-func newLine() {
+@Test(.tags(.stringComposition))
+func `New Line Component`() {
     let newLine = NewLine()
     #expect(newLine._content == "\n")
 }

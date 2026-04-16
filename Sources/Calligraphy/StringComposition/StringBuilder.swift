@@ -28,9 +28,9 @@
 @resultBuilder
 public enum StringBuilder {
 
-    public static func buildExpression<T>(
+    public static func buildExpression<T: StringComponent>(
         _ expression: T
-    ) -> T where T: StringComponent {
+    ) -> T {
         expression
     }
 
@@ -41,19 +41,46 @@ public enum StringBuilder {
     }
 
     @StringBuilder
-    public static func buildExpression<T>(
-        _ expression: T
-    ) -> RawStringComponent where T: RawRepresentable, T.RawValue: StringProtocol {
+    public static func buildExpression(
+        _ expression: some RawRepresentable<some StringProtocol>
+    ) -> RawStringComponent {
         expression.rawValue
+    }
+
+    @StringBuilder
+    public static func buildExpression<T: StringComponent>(
+        _ expression: [T]
+    ) -> _List<T> {
+        for item in expression {
+            item
+        }
+    }
+
+    @StringBuilder
+    public static func buildExpression(
+        _ expression: [some StringProtocol]
+    ) -> _List<RawStringComponent> {
+        for item in expression {
+            item
+        }
+    }
+
+    @StringBuilder
+    public static func buildExpression(
+        _ expression: [some RawRepresentable<some StringProtocol>]
+    ) -> _List<RawStringComponent> {
+        for item in expression {
+            item
+        }
     }
 
     public static func buildBlock() -> _Skip {
         .init()
     }
 
-    public static func buildBlock<T>(
+    public static func buildBlock<T: StringComponent>(
         _ component: T
-    ) -> T where T: StringComponent {
+    ) -> T {
         component
     }
 
@@ -63,22 +90,22 @@ public enum StringBuilder {
         .init(components: repeat each components)
     }
 
-    public static func buildEither<First, Second>(
+    public static func buildEither<First: StringComponent, Second: StringComponent>(
         first component: First
-    ) -> _Either<First, Second> where First: StringComponent, Second: StringComponent {
+    ) -> _Either<First, Second> {
         .first(component)
     }
 
-    public static func buildEither<First, Second>(
+    public static func buildEither<First: StringComponent, Second: StringComponent>(
         second component: Second
-    ) -> _Either<First, Second> where First: StringComponent, Second: StringComponent {
+    ) -> _Either<First, Second> {
         .second(component)
     }
 
     @StringBuilder
-    public static func buildOptional<T>(
+    public static func buildOptional<T: StringComponent>(
         _ component: T?
-    ) -> _Either<T, _Skip> where T: StringComponent {
+    ) -> _Either<T, _Skip> {
         if let component {
             component
         } else {
@@ -86,9 +113,9 @@ public enum StringBuilder {
         }
     }
 
-    public static func buildArray<T>(
+    public static func buildArray<T: StringComponent>(
         _ components: [T]
-    ) -> _List<T> where T: StringComponent {
+    ) -> _List<T> {
         .init(components)
     }
 
@@ -134,7 +161,7 @@ public enum StringBuilder {
 
     }
 
-    public enum _Either<First, Second>: StringComponent where First: StringComponent, Second: StringComponent {
+    public enum _Either<First: StringComponent, Second: StringComponent>: StringComponent {
 
         // MARK: - API
 
@@ -157,7 +184,7 @@ public enum StringBuilder {
         }
     }
 
-    public struct _List<Element>: StringComponent where Element: StringComponent {
+    public struct _List<Element: StringComponent>: StringComponent {
 
         // MARK: - StringComponent
 

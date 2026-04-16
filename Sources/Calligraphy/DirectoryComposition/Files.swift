@@ -25,7 +25,7 @@
 
 /// An entrypoint for the ``DirectoryContentBuilder`` result builder
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Files<T>: DirectoryContent where T: DirectoryContent {
+public struct Files<T: DirectoryContent>: DirectoryContent {
 
     /// Create a list of directory content
     /// - Parameter files: The directory content

@@ -26,11 +26,11 @@
 import Calligraphy
 import Testing
 
-@Suite("Tab Definition Tests", .tags(.stringComposition))
+@Suite(.tags(.stringComposition))
 public struct TabLengthTests {
 
-    @Test("Default tab definition")
-    func defaultLength() {
+    @Test
+    func `Default tab definition`() {
         let list = Lines {
             "foo"
             "bar"
@@ -47,8 +47,8 @@ public struct TabLengthTests {
         #expect(list._content == expected)
     }
 
-    @Test("Custom tab definition")
-    func customLength() {
+    @Test
+    func `Custom tab definition`() {
         let list = Lines {
             "foo"
             "bar"

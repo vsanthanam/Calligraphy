@@ -27,60 +27,60 @@ import Calligraphy
 import Foundation
 import Testing
 
-@Suite("File Tests", .tags(.directoryComposition))
+@Suite(.tags(.directoryComposition))
 struct FileTests {
 
-    @Test("String builder initializer")
-    func stringBuilder() {
+    @Test
+    func `String builder initializer`() {
         let file = File("foo") { "Bar" }
         let contents = file._serialize()
         #expect(contents == [.text("foo", permissions: .defaultFile, text: "Bar", encoding: .utf8)])
     }
 
-    @Test("String builder with extension initializer")
-    func stringExtensionBuilder() {
+    @Test
+    func `String builder with extension initializer`() {
         let file = File("foo", fileExtension: "txt") { "Bar" }
         let contents = file._serialize()
         #expect(contents == [.text("foo.txt", permissions: .defaultFile, text: "Bar", encoding: .utf8)])
     }
 
-    @Test("String initializer")
-    func string() {
+    @Test
+    func `String initializer`() {
         let file = File("foo", text: "Bar")
         let contents = file._serialize()
         #expect(contents == [.text("foo", permissions: .defaultFile, text: "Bar", encoding: .utf8)])
     }
 
-    @Test("String with extension initializer")
-    func stringExtension() {
+    @Test
+    func `String with extension initializer`() {
         let file = File("foo", fileExtension: "txt", text: "Bar")
         let contents = file._serialize()
         #expect(contents == [.text("foo.txt", permissions: .defaultFile, text: "Bar", encoding: .utf8)])
     }
 
-    @Test("Data builder initializer")
-    func dataBuilder() {
+    @Test
+    func `Data builder initializer`() {
         let file = File("foo") { Data("Bar".utf8) }
         let contents = file._serialize()
         #expect(contents == [.data("foo", permissions: .defaultFile, data: Data("Bar".utf8))])
     }
 
-    @Test("Data builder with extension initializer")
-    func dataExtensionBuilder() {
+    @Test
+    func `Data builder with extension initializer`() {
         let file = File("foo", fileExtension: "txt") { Data("Bar".utf8) }
         let contents = file._serialize()
         #expect(contents == [.data("foo.txt", permissions: .defaultFile, data: Data("Bar".utf8))])
     }
 
-    @Test("Data initializer")
-    func data() {
+    @Test
+    func `Data initializer`() {
         let file = File("foo", data: Data("Bar".utf8))
         let contents = file._serialize()
         #expect(contents == [.data("foo", permissions: .defaultFile, data: Data("Bar".utf8))])
     }
 
-    @Test("Data with extension initializer")
-    func dataExtension() {
+    @Test
+    func `Data with extension initializer`() {
         let file = File("foo", fileExtension: "txt", data: Data("Bar".utf8))
         let contents = file._serialize()
         #expect(contents == [.data("foo.txt", permissions: .defaultFile, data: Data("Bar".utf8))])

@@ -27,11 +27,11 @@
 import Foundation
 import Testing
 
-@Suite("Delimited Tests", .tags(.stringComposition))
+@Suite(.tags(.stringComposition))
 struct DelimitedTests {
 
-    @Test("Modifier with String Delimiter")
-    func modifierString() async throws {
+    @Test
+    func `Modifier with String Delimiter`() {
 
         let delimited = StringComponents {
             "foo"
@@ -48,8 +48,8 @@ struct DelimitedTests {
         #expect(delimited._content == expected)
     }
 
-    @Test("Modifier with Builder Delimiter")
-    func modifierBuilder() async throws {
+    @Test
+    func `Modifier with Builder Delimiter`() {
 
         let delimited = StringComponents {
             "foo"
@@ -68,8 +68,8 @@ struct DelimitedTests {
         #expect(delimited._content == expected)
     }
 
-    @Test("Component with String Delimiter")
-    func string() async throws {
+    @Test
+    func `Component with String Delimiter`() {
 
         let delimited = Delimited(by: "|") {
             "foo"
@@ -85,8 +85,8 @@ struct DelimitedTests {
         #expect(delimited._content == expected)
     }
 
-    @Test("Component with Builder Delimiter")
-    func builder() async throws {
+    @Test
+    func `Component with Builder Delimiter`() {
 
         let delimited = Delimited {
             "foo"
@@ -105,8 +105,8 @@ struct DelimitedTests {
         #expect(delimited._content == expected)
     }
 
-    @Test("Empty delimited content")
-    func emptyContent() async throws {
+    @Test
+    func `Empty delimited content`() {
 
         let delimited = Delimited {} delimiter: {
             "!!!"
@@ -115,8 +115,8 @@ struct DelimitedTests {
         #expect(delimited._content == nil)
     }
 
-    @Test("Content with empty delimiter")
-    func emptyDelimiter() async throws {
+    @Test
+    func `Content with empty delimiter`() {
 
         let delimited = Delimited {
             "foo"

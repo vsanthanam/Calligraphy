@@ -26,11 +26,11 @@
 import Calligraphy
 import Testing
 
-@Suite("Separated Tests", .tags(.stringComposition))
+@Suite(.tags(.stringComposition))
 struct SeparatedTests {
 
-    @Test("Modifier with String")
-    func stringModifier() {
+    @Test
+    func `Modifier with String`() {
         let component = Lines {
             StringComponents {
                 "1-2-3-4-5"
@@ -40,8 +40,8 @@ struct SeparatedTests {
         #expect(component._content == "1\n2\n3\n4\n5")
     }
 
-    @Test("Modifier with Builder")
-    func builderModifier() {
+    @Test
+    func `Modifier with Builder`() {
         let component = Line {
             StringComponents {
                 "1"

@@ -32,9 +32,9 @@ extension StringComponent {
     /// - Parameter separator: The separator to use between components
     /// - Returns: The separated components, using the provided separator
     @StringBuilder
-    public func separatedBy<T>(
+    public func separatedBy<T: StringComponent>(
         @StringBuilder separator: () -> T
-    ) -> some StringComponent where T: StringComponent {
+    ) -> some StringComponent {
         Separated(self, separator())
     }
 
@@ -50,7 +50,7 @@ extension StringComponent {
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-private struct Separated<T, Separator>: StringComponent where T: StringComponent, Separator: StringComponent {
+private struct Separated<T: StringComponent, Separator: StringComponent>: StringComponent {
 
     init(
         _ content: T,

@@ -28,11 +28,11 @@ import Foundation
 import OrderedCollections
 import Testing
 
-@Suite("@DataBuilder Tests", .tags(.stringComposition))
+@Suite(.tags(.stringComposition))
 struct DataBuilderTests {
 
-    @Test("Data Expression")
-    func data() {
+    @Test
+    func `Data Expression`() {
 
         @DataBuilder
         func builder() -> some DataComponent {
@@ -44,8 +44,8 @@ struct DataBuilderTests {
         #expect(components._data == Data([0x46, 0x6F, 0x6F]))
     }
 
-    @Test("[UInt8] Expression")
-    func uInt8Array() {
+    @Test
+    func `[UInt8] Expression`() {
 
         @DataBuilder
         func builder() -> some DataComponent {
@@ -57,8 +57,8 @@ struct DataBuilderTests {
         #expect(components._data == Data([0x46, 0x6F, 0x6F]))
     }
 
-    @Test("some Collection<Data> Expression")
-    func dataCollection() {
+    @Test
+    func `some Collection<Data> Expression`() {
 
         @DataBuilder
         func builder() -> some DataComponent {
@@ -70,8 +70,8 @@ struct DataBuilderTests {
         #expect(components._data == Data([0x46, 0x6F, 0x6F, 0x46, 0x6F, 0x6F]))
     }
 
-    @Test("some Collection<UInt8> Expression")
-    func uInt8Collection() {
+    @Test
+    func `some Collection<UInt8> Expression`() {
 
         @DataBuilder
         func builder() -> some DataComponent {
@@ -83,8 +83,8 @@ struct DataBuilderTests {
         #expect(components._data == Data([0x46, 0x6F]))
     }
 
-    @Test("No Components")
-    func noComponents() {
+    @Test
+    func `No Components`() {
 
         @DataBuilder
         func builder() -> some DataComponent {}
@@ -94,8 +94,8 @@ struct DataBuilderTests {
         #expect(components._data == nil)
     }
 
-    @Test("One Component")
-    func singleComponent() {
+    @Test
+    func `One Component`() {
 
         struct Foo: DataComponent {
 
@@ -115,8 +115,8 @@ struct DataBuilderTests {
         #expect(components._data == Data([0x46, 0x6F, 0x6F]))
     }
 
-    @Test("Multiple Components")
-    func multipleComponents() {
+    @Test
+    func `Multiple Components`() {
         struct Foo: DataComponent {
 
             var body: some DataComponent {
@@ -156,10 +156,10 @@ struct DataBuilderTests {
     }
 
     @Test(
-        "If/Else Support",
+
         arguments: [(true, Data([0x46, 0x6F, 0x6F])), (false, Data([0x42, 0x61, 0x72]))]
     )
-    func ifElse(flow: Bool, result: Data) {
+    func `If/Else Support`(flow: Bool, result: Data) {
 
         struct Foo: DataComponent {
 
@@ -192,10 +192,10 @@ struct DataBuilderTests {
     }
 
     @Test(
-        "Single If Support",
+
         arguments: [(true, Data([0x46, 0x6F, 0x6F, 0x42, 0x61, 0x72])), (false, Data([0x42, 0x61, 0x72]))]
     )
-    func singleIf(flow: Bool, result: Data) {
+    func `Single If Support`(flow: Bool, result: Data) {
 
         struct Foo: DataComponent {
 

@@ -26,25 +26,25 @@
 import Calligraphy
 import Testing
 
-@Suite("Tab Tests", .tags(.stringComposition))
+@Suite(.tags(.stringComposition))
 struct TabTests {
 
-    @Test("Tab Character Component")
-    func characterTab() {
+    @Test
+    func `Tab Character Component`() {
         let tab = Tab()
             .tabDefinition(.tab)
         #expect(tab._content == "\t")
     }
 
-    @Test("Spaces Tab Component")
-    func spacesTab() {
+    @Test
+    func `Spaces Tab Component`() {
         let tab = Tab()
             .tabDefinition(.spaces(3))
         #expect(tab._content == "   ")
     }
 
-    @Test("Default Tab Component")
-    func defaultTab() {
+    @Test
+    func `Default Tab Component`() {
         let tab = Tab()
             .tabDefinition(.default)
         #expect(tab._content == "  ")

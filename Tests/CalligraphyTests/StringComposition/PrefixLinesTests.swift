@@ -26,11 +26,11 @@
 import Calligraphy
 import Testing
 
-@Suite("Prefix Lines Tests", .tags(.stringComposition))
+@Suite(.tags(.stringComposition))
 struct PrefixLinesTests {
 
-    @Test("Modified with String")
-    func stringModifier() {
+    @Test
+    func `Modified with String`() {
         let prefixLines = Lines {
             "foo"
             "bar"
@@ -47,8 +47,8 @@ struct PrefixLinesTests {
         #expect(prefixLines._content == expected)
     }
 
-    @Test("Modifier with Builder")
-    func stringBuilder() {
+    @Test
+    func `Modifier with Builder`() {
         let prefixLines = Lines {
             "foo"
             "bar"

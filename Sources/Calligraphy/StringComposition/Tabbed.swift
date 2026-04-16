@@ -42,7 +42,7 @@ extension StringComponent {
 
 /// A string compoments with tabs on every line
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Tabbed<T>: StringComponent where T: StringComponent {
+public struct Tabbed<T: StringComponent>: StringComponent {
 
     // MARK: - Initializers
 

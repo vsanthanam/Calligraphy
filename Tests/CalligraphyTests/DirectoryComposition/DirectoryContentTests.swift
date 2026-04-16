@@ -27,11 +27,11 @@ import Calligraphy
 import Foundation
 import Testing
 
-@Suite("Directory Content Tests", .tags(.directoryComposition))
+@Suite(.tags(.directoryComposition))
 struct DirectoryContentTests {
 
-    @Test("Basic write")
-    func basicWrite() async throws {
+    @Test
+    func `Basic write`() async throws {
         let content = Files {
             File("foo.txt") {
                 "bar"

@@ -27,11 +27,11 @@ import Calligraphy
 import Foundation
 import Testing
 
-@Suite("Data Component Type Eraser Test", .tags(.dataComposition))
+@Suite(.tags(.dataComposition))
 struct AnyDataComponentTests {
 
-    @Test("Initalize")
-    func basic() {
+    @Test
+    func initalize() {
 
         let standard = DataComponents {
             Data()
@@ -42,8 +42,8 @@ struct AnyDataComponentTests {
     }
 
     #if swift(>=6.2)
-        @Test("Imperative Body")
-        func body() async {
+        @Test
+        func `Imperative Body`() async {
             await #expect(processExitsWith: .failure) {
                 let standard = DataComponents {
                     Data()

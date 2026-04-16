@@ -26,8 +26,8 @@
 import Calligraphy
 import Testing
 
-@Test("Single Quote Component", .tags(.stringComposition))
-func singleQuote() {
+@Test(.tags(.stringComposition))
+func `Single Quote Component`() {
 
     #expect(SingleQuote()._content == "'")
 

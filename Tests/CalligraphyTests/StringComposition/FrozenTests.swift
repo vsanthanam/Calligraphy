@@ -26,11 +26,11 @@
 import Calligraphy
 import Testing
 
-@Suite("Frozen Tests", .tags(.stringComposition))
+@Suite(.tags(.stringComposition))
 struct FrozenTests {
 
-    @Test("Component")
-    func standard() {
+    @Test
+    func component() {
 
         let frozen = Frozen {
             "foo"
@@ -48,8 +48,8 @@ struct FrozenTests {
         #expect(frozen._content == expected)
     }
 
-    @Test("Modifier")
-    func frozenModifier() {
+    @Test
+    func modifier() {
 
         let frozen = StringComponents {
             "foo"

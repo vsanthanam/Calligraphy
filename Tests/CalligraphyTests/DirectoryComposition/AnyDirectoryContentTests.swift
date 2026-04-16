@@ -26,8 +26,8 @@
 import Calligraphy
 import Testing
 
-@Test("Directory Content Type Eraser", .tags(.directoryComposition))
-func anyDirectoryContent() {
+@Test(.tags(.directoryComposition))
+func `Directory Content Type Eraser`() {
 
     let standard = Files {
         File("foo") { "bar" }

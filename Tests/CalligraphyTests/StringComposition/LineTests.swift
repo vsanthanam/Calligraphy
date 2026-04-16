@@ -26,8 +26,8 @@
 import Calligraphy
 import Testing
 
-@Test("Line Component", .tags(.stringComposition))
-func line() {
+@Test(.tags(.stringComposition))
+func `Line Component`() {
     let line = Line {
         "foo"
         "bar"

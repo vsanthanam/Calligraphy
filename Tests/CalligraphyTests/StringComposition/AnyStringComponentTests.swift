@@ -26,8 +26,8 @@
 import Calligraphy
 import Testing
 
-@Test("String Component Type Eraser", .tags(.stringComposition))
-func anyStringComponent() {
+@Test(.tags(.stringComposition))
+func `String Component Type Eraser`() {
 
     let standard = StringComponents {
         "foo"

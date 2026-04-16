@@ -28,9 +28,9 @@
 @resultBuilder
 public enum DirectoryContentBuilder {
 
-    public static func buildExpression<T>(
+    public static func buildExpression<T: DirectoryContent>(
         _ expression: T
-    ) -> T where T: DirectoryContent {
+    ) -> T {
         expression
     }
 
@@ -51,9 +51,9 @@ public enum DirectoryContentBuilder {
         EmptyDirectoryContent()
     }
 
-    public static func buildBlock<T>(
+    public static func buildBlock<T: DirectoryContent>(
         _ component: T
-    ) -> T where T: DirectoryContent {
+    ) -> T {
         component
     }
 
@@ -63,22 +63,22 @@ public enum DirectoryContentBuilder {
         .init(components: repeat each components)
     }
 
-    public static func buildEither<First, Second>(
+    public static func buildEither<First: DirectoryContent, Second: DirectoryContent>(
         first component: First
-    ) -> _Either<First, Second> where First: DirectoryContent, Second: DirectoryContent {
+    ) -> _Either<First, Second> {
         .first(component)
     }
 
-    public static func buildEither<First, Second>(
+    public static func buildEither<First: DirectoryContent, Second: DirectoryContent>(
         second component: Second
-    ) -> _Either<First, Second> where First: DirectoryContent, Second: DirectoryContent {
+    ) -> _Either<First, Second> {
         .second(component)
     }
 
     @DirectoryContentBuilder
-    public static func buildOptional<T>(
+    public static func buildOptional<T: DirectoryContent>(
         _ component: T?
-    ) -> _Either<T, EmptyDirectoryContent> where T: DirectoryContent {
+    ) -> _Either<T, EmptyDirectoryContent> {
         if let component {
             component
         } else {
@@ -86,9 +86,9 @@ public enum DirectoryContentBuilder {
         }
     }
 
-    public static func buildArray<T>(
+    public static func buildArray<T: DirectoryContent>(
         _ components: [T]
-    ) -> _List<T> where T: DirectoryContent {
+    ) -> _List<T> {
         .init(components)
     }
 
@@ -142,7 +142,7 @@ public enum DirectoryContentBuilder {
 
     }
 
-    public enum _Either<First, Second>: DirectoryContent where First: DirectoryContent, Second: DirectoryContent {
+    public enum _Either<First: DirectoryContent, Second: DirectoryContent>: DirectoryContent {
 
         // MARK: - API
 
@@ -162,7 +162,7 @@ public enum DirectoryContentBuilder {
         }
     }
 
-    public struct _List<Element>: DirectoryContent where Element: DirectoryContent {
+    public struct _List<Element: DirectoryContent>: DirectoryContent {
 
         // MARK: - DirectoryContent
 

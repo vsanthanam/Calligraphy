@@ -27,11 +27,11 @@ import Calligraphy
 import Foundation
 import Testing
 
-@Suite("Serialized Directory Content Tests", .tags(.directoryComposition))
+@Suite(.tags(.directoryComposition))
 struct SerializedDirectoryContentTests {
 
-    @Test("Directory Name")
-    func directoryName() {
+    @Test
+    func `Directory Name`() {
         let directory = SerializedDirectoryContent.directory(
             "Foo",
             permissions: .defaultDirectory,
@@ -40,8 +40,8 @@ struct SerializedDirectoryContentTests {
         #expect(directory.name == "Foo")
     }
 
-    @Test("File Name")
-    func fileName() {
+    @Test
+    func `File Name`() {
         let file = SerializedDirectoryContent.text(
             "Foo",
             permissions: .defaultFile,
@@ -51,8 +51,8 @@ struct SerializedDirectoryContentTests {
         #expect(file.name == "Foo")
     }
 
-    @Test("Codable Support")
-    func codableSupport() throws {
+    @Test
+    func `Codable Support`() throws {
         let file = SerializedDirectoryContent.text(
             "Foo",
             permissions: .defaultFile,

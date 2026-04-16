@@ -26,8 +26,8 @@
 import Calligraphy
 import Testing
 
-@Test("Space Component", .tags(.stringComposition))
-func space() {
+@Test(.tags(.stringComposition))
+func `Space Component`() {
     let space = Space()
     #expect(space._content == " ")
 }

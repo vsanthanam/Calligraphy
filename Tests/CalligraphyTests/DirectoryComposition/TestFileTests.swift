@@ -37,8 +37,8 @@ struct FooTextFile: TextFile {
 
 }
 
-@Test("Text File Protocol Serialize", .tags(.directoryComposition))
-func textFileDefaultSerialization() {
+@Test(.tags(.directoryComposition))
+func `Text File Protocol Serialize`() {
 
     let fooTextFile = FooTextFile()
     let serialized = fooTextFile._serialize()

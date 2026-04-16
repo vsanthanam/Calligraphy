@@ -26,8 +26,8 @@
 import Calligraphy
 import Testing
 
-@Test("Raw String Component", .tags(.stringComposition))
-func rawStringComponent() {
+@Test(.tags(.stringComposition))
+func `Raw String Component`() {
     let rawStringComponent = RawStringComponent("Hello World")
     #expect(rawStringComponent._content == "Hello World")
 }

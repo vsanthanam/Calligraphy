@@ -26,11 +26,11 @@
 import Calligraphy
 import Testing
 
-@Suite("Quote Tests", .tags(.stringComposition))
+@Suite(.tags(.stringComposition))
 struct QuoteTests {
 
-    @Test("Component")
-    func standard() {
+    @Test
+    func component() {
         let quote = Quote {
             Lines {
                 "foo"
@@ -48,7 +48,7 @@ struct QuoteTests {
         #expect(quote._content == expected)
     }
 
-    @Test("Modifier")
+    @Test
     func modifier() {
         let quoted = Lines {
             "foo"

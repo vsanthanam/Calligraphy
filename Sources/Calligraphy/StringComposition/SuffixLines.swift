@@ -57,7 +57,7 @@ extension StringComponent {
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-private struct SuffixLines<Lines, Suffix>: StringComponent where Lines: StringComponent, Suffix: StringComponent {
+private struct SuffixLines<Lines: StringComponent, Suffix: StringComponent>: StringComponent {
 
     // MARK: - Initializers
 

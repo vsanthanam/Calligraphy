@@ -26,17 +26,17 @@
 import Calligraphy
 import Testing
 
-@Suite("Quotation Mark Tests", .tags(.stringComposition))
+@Suite(.tags(.stringComposition))
 struct QuotationMarkTests {
 
-    @Test("Default Quotation Mark")
-    func single() {
+    @Test
+    func `Default Quotation Mark`() {
         let mark = QuotationMark()
         #expect(mark._content == "\"")
     }
 
-    @Test("Styled Quotation Mark")
-    func double() {
+    @Test
+    func `Styled Quotation Mark`() {
         let mark = QuotationMark()
             .quotationMarkStyle(.triple)
         #expect(mark._content == "'''")

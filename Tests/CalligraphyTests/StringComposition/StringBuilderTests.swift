@@ -26,11 +26,11 @@
 @testable import Calligraphy
 import Testing
 
-@Suite("@StringBuilder Tests", .tags(.stringComposition))
+@Suite(.tags(.stringComposition))
 struct StringBuilderTests {
 
-    @Test("String Expression")
-    func string() {
+    @Test
+    func `String Expression`() {
 
         @StringBuilder
         func builder() -> some StringComponent {
@@ -42,8 +42,8 @@ struct StringBuilderTests {
         #expect(components._content == "foo")
     }
 
-    @Test("some StringProtocol Expression")
-    func stringProtocol() {
+    @Test
+    func `some StringProtocol Expression`() {
         let substring = "foo" as Substring
 
         @StringBuilder
@@ -56,8 +56,8 @@ struct StringBuilderTests {
         #expect(components._content == "foo")
     }
 
-    @Test("some RawRepresentable Expression")
-    func rawRepresentable() {
+    @Test
+    func `some RawRepresentable Expression`() {
 
         enum Foo: String {
             case bar
@@ -73,8 +73,72 @@ struct StringBuilderTests {
         #expect(components._content == "bar")
     }
 
-    @Test("No Components")
-    func noComponents() {
+    @Test
+    func `[StringComponent] Array Expression`() {
+
+        struct Foo: StringComponent {
+
+            let value: String
+
+            var body: some StringComponent {
+                value
+            }
+
+        }
+
+        let items = [Foo(value: "foo"), Foo(value: "bar"), Foo(value: "baz")]
+
+        @StringBuilder
+        func builder() -> some StringComponent {
+            items
+        }
+
+        let components = builder()
+        #expect(components is StringBuilder._List<Foo>)
+        let expected = "foo\nbar\nbaz"
+        #expect(components._content == expected)
+    }
+
+    @Test
+    func `[StringProtocol] Array Expression`() {
+
+        let items = ["foo", "bar", "baz"]
+
+        @StringBuilder
+        func builder() -> some StringComponent {
+            items
+        }
+
+        let components = builder()
+        #expect(components is StringBuilder._List<RawStringComponent>)
+        let expected = "foo\nbar\nbaz"
+        #expect(components._content == expected)
+    }
+
+    @Test
+    func `[RawRepresentable] Array Expression`() {
+
+        enum Foo: String {
+            case foo
+            case bar
+            case baz
+        }
+
+        let items: [Foo] = [.foo, .bar, .baz]
+
+        @StringBuilder
+        func builder() -> some StringComponent {
+            items
+        }
+
+        let components = builder()
+        #expect(components is StringBuilder._List<RawStringComponent>)
+        let expected = "foo\nbar\nbaz"
+        #expect(components._content == expected)
+    }
+
+    @Test
+    func `No Components`() {
 
         @StringBuilder
         func builder() -> some StringComponent {}
@@ -84,8 +148,8 @@ struct StringBuilderTests {
         #expect(components._content == nil)
     }
 
-    @Test("One Component")
-    func singleComponent() {
+    @Test
+    func `One Component`() {
 
         struct Foo: StringComponent {
 
@@ -105,8 +169,8 @@ struct StringBuilderTests {
         #expect(components._content == "bar")
     }
 
-    @Test("Multiple Components")
-    func multipleComponents() {
+    @Test
+    func `Multiple Components`() {
         struct Foo: StringComponent {
 
             var body: some StringComponent {
@@ -148,10 +212,10 @@ struct StringBuilderTests {
     }
 
     @Test(
-        "If/Else Support",
+
         arguments: [(true, "bar"), (false, "foo")]
     )
-    func ifElse(flow: Bool, result: String) {
+    func `If/Else Support`(flow: Bool, result: String) {
 
         struct Foo: StringComponent {
 
@@ -183,10 +247,10 @@ struct StringBuilderTests {
     }
 
     @Test(
-        "Single If Support",
+
         arguments: [(true, "bar\nfoo"), (false, "foo")]
     )
-    func singleIf(flow: Bool, result: String) {
+    func `Single If Support`(flow: Bool, result: String) {
 
         struct Foo: StringComponent {
 
@@ -217,8 +281,8 @@ struct StringBuilderTests {
         #expect(components._content == result)
     }
 
-    @Test("For Loop Support")
-    func forLoop() {
+    @Test
+    func `For Loop Support`() {
         @StringBuilder
         func builder() -> some StringComponent {
             for i in 0 ..< 8 {
@@ -240,8 +304,8 @@ struct StringBuilderTests {
         #expect(components._content == expected)
     }
 
-    @Test("Availablility Check Support")
-    func availabilityCheck() {
+    @Test
+    func `Availablility Check Support`() {
         @StringBuilder
         func builder() -> some StringComponent {
             if #available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *) {
@@ -254,8 +318,8 @@ struct StringBuilderTests {
         #expect(components._content == "foo")
     }
 
-    @Test("+ Operators")
-    func operators() {
+    @Test
+    func `+ Operators`() {
 
         struct Foo: StringComponent {
 

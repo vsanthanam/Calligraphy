@@ -69,8 +69,10 @@ public struct FilePermissionsStringMacro: ExpressionMacro {
             throw MacroExpansionErrorMessage("filePermissions string must describe exactly 9 permission characters (optionally preceded by a file type), e.g. \"rwxr-xr-x\" or \"-rwxr-xr-x\"")
         }
 
-        // Helper to index into the string safely
-        func char(at i: Int) -> Character { normalized[normalized.index(normalized.startIndex, offsetBy: i)] }
+        /// Helper to index into the string safely
+        func char(at i: Int) -> Character {
+            normalized[normalized.index(normalized.startIndex, offsetBy: i)]
+        }
 
         // Validate allowed characters at each position
         let allowed: [Set<Character>] = [

@@ -26,11 +26,11 @@
 import Calligraphy
 import Testing
 
-@Suite("Joined Tests", .tags(.stringComposition))
+@Suite(.tags(.stringComposition))
 struct JoinedTests {
 
-    @Test("Component with String Separator")
-    func string() {
+    @Test
+    func `Component with String Separator`() {
         let joined = Joined(separator: ", ") {
             "foo"
             "bar"
@@ -39,8 +39,8 @@ struct JoinedTests {
         #expect(joined._content == "foo, bar, baz")
     }
 
-    @Test("Component with Builder Separator")
-    func builder() {
+    @Test
+    func `Component with Builder Separator`() {
         let joined = Joined {
             "foo"
             "bar"
@@ -54,8 +54,8 @@ struct JoinedTests {
         #expect(joined._content == "foo, bar, baz")
     }
 
-    @Test("Modifier with String Separator")
-    func stringModifier() {
+    @Test
+    func `Modifier with String Separator`() {
         let joined = StringComponents {
             "foo"
             "bar"
@@ -65,8 +65,8 @@ struct JoinedTests {
         #expect(joined._content == "foo, bar, baz")
     }
 
-    @Test("Modifier with Builder Separator")
-    func stringBuilder() {
+    @Test
+    func `Modifier with Builder Separator`() {
         let joined = StringComponents {
             "foo"
             "bar"

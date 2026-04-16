@@ -27,11 +27,11 @@
 import Foundation
 import Testing
 
-@Suite("@DirectoryContentBuilder Tests", .tags(.directoryComposition))
+@Suite(.tags(.directoryComposition))
 struct DirectoryContentBuilderTests {
 
-    @Test("Serialized Content (Array) Expression")
-    func arrayExpression() {
+    @Test
+    func `Serialized Content (Array) Expression`() {
 
         @DirectoryContentBuilder
         func builder() -> some DirectoryContent {
@@ -43,8 +43,8 @@ struct DirectoryContentBuilderTests {
         #expect(components._serialize() == [.text("foo", permissions: .defaultFile, text: "bar", encoding: .utf8)])
     }
 
-    @Test("Serialized Content Expression")
-    func contentExpression() {
+    @Test
+    func `Serialized Content Expression`() {
 
         @DirectoryContentBuilder
         func builder() -> some DirectoryContent {
@@ -56,8 +56,8 @@ struct DirectoryContentBuilderTests {
         #expect(components._serialize() == [.text("foo", permissions: .defaultFile, text: "bar", encoding: .utf8)])
     }
 
-    @Test("No Components")
-    func noComponents() {
+    @Test
+    func `No Components`() {
 
         @DirectoryContentBuilder
         func builder() -> some DirectoryContent {}
@@ -67,8 +67,8 @@ struct DirectoryContentBuilderTests {
         #expect(components._serialize() == [])
     }
 
-    @Test("One Component")
-    func singleComponent() {
+    @Test
+    func `One Component`() {
         struct Foo: Directory {
 
             let name = "Foo"
@@ -87,8 +87,8 @@ struct DirectoryContentBuilderTests {
         #expect(components._serialize() == [.directory("Foo", permissions: .defaultDirectory, content: [])])
     }
 
-    @Test("Multiple Components")
-    func multipleComponents() {
+    @Test
+    func `Multiple Components`() {
         struct Foo: Directory {
 
             let name = "Foo"
@@ -132,13 +132,13 @@ struct DirectoryContentBuilderTests {
     }
 
     @Test(
-        "If/Else Support",
+
         arguments: [
             (true, [SerializedDirectoryContent.directory("Foo", permissions: .defaultDirectory, content: [])]),
             (false, [SerializedDirectoryContent.text("Bar", permissions: .defaultFile, text: "bar", encoding: .utf8)])
         ]
     )
-    func ifElse(flow: Bool, result: [SerializedDirectoryContent]) {
+    func `If/Else Support`(flow: Bool, result: [SerializedDirectoryContent]) {
 
         struct Foo: Directory {
 
@@ -172,13 +172,13 @@ struct DirectoryContentBuilderTests {
     }
 
     @Test(
-        "Single If Support",
+
         arguments: [
             (true, [SerializedDirectoryContent.directory("Foo", permissions: .defaultDirectory, content: []), SerializedDirectoryContent.text("Bar", permissions: .defaultFile, text: "bar", encoding: .utf8)]),
             (false, [SerializedDirectoryContent.text("Bar", permissions: .defaultFile, text: "bar", encoding: .utf8)])
         ]
     )
-    func singleIf(flow: Bool, result: [SerializedDirectoryContent]) {
+    func `Single If Support`(flow: Bool, result: [SerializedDirectoryContent]) {
 
         struct Foo: Directory {
 
@@ -210,8 +210,8 @@ struct DirectoryContentBuilderTests {
         #expect(components._serialize() == result)
     }
 
-    @Test("For Loop Support")
-    func forLoop() {
+    @Test
+    func `For Loop Support`() {
         @DirectoryContentBuilder
         func builder() -> some DirectoryContent {
             for i in 0 ..< 8 {
@@ -234,9 +234,9 @@ struct DirectoryContentBuilderTests {
         #expect(components._serialize() == expected)
     }
 
-//
-    @Test("Availablility Check Support")
-    func availabilityCheck() {
+    ///
+    @Test
+    func `Availablility Check Support`() {
         @DirectoryContentBuilder
         func builder() -> some DirectoryContent {
             if #available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *) {

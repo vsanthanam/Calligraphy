@@ -30,9 +30,9 @@ import Foundation
 @resultBuilder
 public enum DataBuilder {
 
-    public static func buildExpression<T>(
+    public static func buildExpression<T: DataComponent>(
         _ expression: T
-    ) -> T where T: DataComponent {
+    ) -> T {
         expression
     }
 
@@ -74,9 +74,9 @@ public enum DataBuilder {
         EmptyDataComponent()
     }
 
-    public static func buildBlock<T>(
+    public static func buildBlock<T: DataComponent>(
         _ component: T
-    ) -> T where T: DataComponent {
+    ) -> T {
         component
     }
 
@@ -86,9 +86,9 @@ public enum DataBuilder {
         .init(components: repeat each components)
     }
 
-    public static func buildEither<First, Second>(
+    public static func buildEither<First: DataComponent, Second: DataComponent>(
         first component: First
-    ) -> _Either<First, Second> where First: DataComponent, Second: DataComponent {
+    ) -> _Either<First, Second> {
         .first(component)
     }
 
@@ -99,9 +99,9 @@ public enum DataBuilder {
     }
 
     @DataBuilder
-    public static func buildOptional<T>(
+    public static func buildOptional<T: DataComponent>(
         _ component: T?
-    ) -> _Either<T, EmptyDataComponent> where T: DataComponent {
+    ) -> _Either<T, EmptyDataComponent> {
         if let component {
             component
         } else {
@@ -109,9 +109,9 @@ public enum DataBuilder {
         }
     }
 
-    public static func buildArray<T>(
+    public static func buildArray<T: DataComponent>(
         _ components: [T]
-    ) -> _List<T> where T: DataComponent {
+    ) -> _List<T> {
         .init(components)
     }
 
@@ -157,7 +157,7 @@ public enum DataBuilder {
 
     }
 
-    public enum _Either<First, Second>: DataComponent where First: DataComponent, Second: DataComponent {
+    public enum _Either<First: DataComponent, Second: DataComponent>: DataComponent {
 
         // MARK: - API
 
@@ -181,7 +181,7 @@ public enum DataBuilder {
 
     }
 
-    public struct _List<Element>: DataComponent where Element: DataComponent {
+    public struct _List<Element: DataComponent>: DataComponent {
 
         // MARK: - DataComponent
 
