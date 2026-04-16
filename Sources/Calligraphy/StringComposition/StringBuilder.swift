@@ -41,10 +41,37 @@ public enum StringBuilder {
     }
 
     @StringBuilder
-    public static func buildExpression<T>(
-        _ expression: T
-    ) -> RawStringComponent where T: RawRepresentable, T.RawValue: StringProtocol {
+    public static func buildExpression(
+        _ expression: some RawRepresentable<some StringProtocol>
+    ) -> RawStringComponent {
         expression.rawValue
+    }
+
+    @StringBuilder
+    public static func buildExpression<T>(
+        _ expression: [T]
+    ) -> _List<T> where T: StringComponent {
+        for component in expression {
+            component
+        }
+    }
+
+    @StringBuilder
+    public static func buildExpression(
+        _ expression: [some StringProtocol]
+    ) -> _List<RawStringComponent> {
+        for component in expression {
+            component
+        }
+    }
+
+    @StringBuilder
+    public static func buildExpression(
+        _ expression: [some RawRepresentable<some StringProtocol>]
+    ) -> _List<RawStringComponent> {
+        for component in expression {
+            component
+        }
     }
 
     public static func buildBlock() -> _Skip {
