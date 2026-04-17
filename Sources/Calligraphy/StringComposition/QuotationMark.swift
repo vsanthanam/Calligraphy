@@ -43,8 +43,11 @@ public struct QuotationMark: StringComponent {
         /// Double quotation mark (`"`)
         case double
 
-        /// Triple quotation mark (`'''`)
-        case triple
+        /// Triple single quotation mark (`'''`)
+        case tripleSingle
+
+        /// Triple double quotation mark (`"""`)
+        case tripleDouble
 
         /// The default quotation mark style.
         public static let `default`: Style = .double
@@ -70,8 +73,10 @@ public struct QuotationMark: StringComponent {
                 "'"
             case .double:
                 "\""
-            case .triple:
+            case .tripleSingle:
                 "'''"
+            case .tripleDouble:
+                "\"\"\""
             }
         }
 

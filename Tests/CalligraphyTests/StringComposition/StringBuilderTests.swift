@@ -254,6 +254,134 @@ struct StringBuilderTests {
         #expect(components._content == "foo")
     }
 
+    @Test("[StringComponent] Array Expression")
+    func stringComponentArray() {
+
+        struct Foo: StringComponent {
+
+            var body: some StringComponent {
+                "foo"
+            }
+
+        }
+
+        @StringBuilder
+        func builder() -> some StringComponent {
+            [Foo(), Foo(), Foo()]
+        }
+
+        let components = builder()
+        #expect(components is StringBuilder._List<Foo>)
+
+        let expected = #"""
+        foo
+        foo
+        foo
+        """#
+        #expect(components._content == expected)
+    }
+
+    @Test("[StringProtocol] Array Expression")
+    func stringProtocolArray() {
+
+        @StringBuilder
+        func builder() -> some StringComponent {
+            ["foo", "bar", "baz"] as [String]
+        }
+
+        let components = builder()
+        #expect(components is StringBuilder._List<RawStringComponent>)
+
+        let expected = #"""
+        foo
+        bar
+        baz
+        """#
+        #expect(components._content == expected)
+    }
+
+    @Test("[RawRepresentable] Array Expression")
+    func rawRepresentableArray() {
+
+        enum Foo: String {
+            case bar
+            case baz
+        }
+
+        @StringBuilder
+        func builder() -> some StringComponent {
+            [Foo.bar, Foo.baz]
+        }
+
+        let components = builder()
+        #expect(components is StringBuilder._List<RawStringComponent>)
+        #expect(components._content == "bar\nbaz")
+    }
+
+    @Test("Array.map Support")
+    func arrayMap() {
+
+        // Demonstrates builder syntax (if/else) inside the @StringBuilder closure,
+        // which requires the custom @StringBuilder map overload since the two branches
+        // return different StringComponent types.
+        struct Foo: StringComponent {
+
+            var body: some StringComponent {
+                "foo"
+            }
+
+        }
+
+        struct Bar: StringComponent {
+
+            var body: some StringComponent {
+                "bar"
+            }
+
+        }
+
+        let flags = [true, false, true]
+
+        @StringBuilder
+        func builder() -> some StringComponent {
+            flags.map { flag in
+                if flag {
+                    Foo()
+                } else {
+                    Bar()
+                }
+            }
+        }
+
+        let components = builder()
+        let expected = "foo\nbar\nfoo"
+        #expect(components._content == expected)
+    }
+
+    @Test("Array.map as @StringBuilder Expression")
+    func arrayMapExpression() {
+
+        struct Foo: StringComponent {
+
+            let value: String
+
+            var body: some StringComponent {
+                value
+            }
+
+        }
+
+        let items = [Foo(value: "a"), Foo(value: "b"), Foo(value: "c")]
+
+        @StringBuilder
+        func builder() -> some StringComponent {
+            items.map(\.self)
+        }
+
+        let components = builder()
+        #expect(components._content == "a\nb\nc")
+    }
+
     @Test("+ Operators")
     func operators() {
 

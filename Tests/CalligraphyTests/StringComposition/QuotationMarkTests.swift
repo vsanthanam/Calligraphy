@@ -30,16 +30,37 @@ import Testing
 struct QuotationMarkTests {
 
     @Test("Default Quotation Mark")
-    func single() {
+    func defaultMark() {
         let mark = QuotationMark()
         #expect(mark._content == "\"")
     }
 
-    @Test("Styled Quotation Mark")
-    func double() {
+    @Test("Single Quotation Mark")
+    func singleMark() {
         let mark = QuotationMark()
-            .quotationMarkStyle(.triple)
+            .quotationMarkStyle(.single)
+        #expect(mark._content == "'")
+    }
+
+    @Test("Double Quotation Mark")
+    func doubleMark() {
+        let mark = QuotationMark()
+            .quotationMarkStyle(.double)
+        #expect(mark._content == "\"")
+    }
+
+    @Test("Triple Single Quotation Mark")
+    func tripleSingleMark() {
+        let mark = QuotationMark()
+            .quotationMarkStyle(.tripleSingle)
         #expect(mark._content == "'''")
+    }
+
+    @Test("Triple Double Quotation Mark")
+    func tripleDoubleMark() {
+        let mark = QuotationMark()
+            .quotationMarkStyle(.tripleDouble)
+        #expect(mark._content == "\"\"\"")
     }
 
 }

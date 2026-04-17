@@ -232,3 +232,17 @@ public enum StringBuilder {
     }
 
 }
+
+extension Array {
+
+    @_disfavoredOverload
+    @StringBuilder
+    public func map<T>(
+        @StringBuilder fn: (Element) -> T
+    ) -> StringBuilder._List<T> where T: StringComponent {
+        for component in self {
+            fn(component)
+        }
+    }
+
+}

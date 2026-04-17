@@ -35,7 +35,7 @@ public struct TripleQuote: StringComponent {
 
     public var body: some StringComponent {
         QuotationMark()
-            .quotationMarkStyle(.triple)
+            .quotationMarkStyle(.tripleSingle)
     }
 
 }
