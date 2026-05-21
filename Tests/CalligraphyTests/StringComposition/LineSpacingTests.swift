@@ -1,5 +1,5 @@
 // Calligraphy
-// StringEnvironment.swift
+// LineSpacingTests.swift
 //
 // MIT License
 //
@@ -23,17 +23,39 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-enum StringEnvironment {
+import Calligraphy
+import Testing
 
-    @TaskLocal
-    static var activeSeparator = "\n"
+@Test("Line Spacing Tests")
+func lineSpacingTests() {
 
-    @TaskLocal
-    static var activeTabDefinition: Tab.Definition = .default
+    let str = String.build {
+        Lines {
+            Lines(spacing: 1) {
+                "foo"
+                "bar"
+            }
+            Lines(spacing: 1) {
+                "baz"
+                "qux"
+            }
+            Lines(spacing: 1) {
+                "quux"
+                "corge"
+            }
+        }
+        .lineSpacing(2)
+    }
 
-    @TaskLocal
-    static var activeQuotationMarkStyle: QuotationMark.Style = .default
+    #expect(str == """
+    foo
+    bar
 
-    @TaskLocal
-    static var activeLineSpacing: Int = 1
+    baz
+    qux
+
+    quux
+    corge
+    """)
+
 }
