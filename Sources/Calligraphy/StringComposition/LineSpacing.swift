@@ -1,5 +1,5 @@
 // Calligraphy
-// Lines.swift
+// LineSpacing.swift
 //
 // MIT License
 //
@@ -23,55 +23,46 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// Multiple lines of text.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Lines<T>: StringComponent where T: StringComponent {
+extension StringComponent {
 
-    // MARK: - Initializers
+    /// Set the spacing between lines
+    /// - Parameter spacing: The line spacing. Must be greater than or equal to 1.
+    /// - Returns: The upstream, with the applied line spacing
+    public func lineSpacing(
+        _ spacing: Int
+    ) -> some StringComponent {
+        LineSpacing(
+            self,
+            spacing
+        )
+    }
 
-    /// Create lines of text
-    /// - Parameters:
-    ///   - spacing: The spacing to use between each line
-    ///   - components: The contents of each line
-    public init(
-        spacing: Int? = nil,
-        @StringBuilder components: () -> T
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+private struct LineSpacing<T>: StringComponent where T: StringComponent {
+
+    init(
+        _ wrapped: T,
+        _ spacing: Int
     ) {
+        precondition(spacing > 0, "Line spacing must be greater than or equal to one")
+        self.wrapped = wrapped
         self.spacing = spacing
-        self.components = components()
     }
 
-    // MARK: - StringComponent
-
-    public var body: some StringComponent {
-        if let spacing {
-            _Guts(lines: components)
-                .lineSpacing(spacing)
-        } else {
-            _Guts(lines: components)
+    var _content: String? {
+        StringEnvironment.$activeLineSpacing.withValue(spacing) {
+            wrapped._content
         }
     }
 
-    // MARK: - Private
-
-    private let spacing: Int?
-    private let components: T
-
-    private struct _Guts<Wrapped>: StringComponent where Wrapped: StringComponent {
-
-        let lines: Wrapped
-
-        var body: some StringComponent {
-            lines
-                .joined {
-                    Line {
-                        for _ in 0 ..< StringEnvironment.activeLineSpacing {
-                            NewLine()
-                        }
-                    }
-                }
-        }
-
+    var body: Never {
+        fatalErrorImperativeStringComponent()
     }
+
+    private let wrapped: T
+    private let spacing: Int
 
 }
