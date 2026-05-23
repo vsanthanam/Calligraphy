@@ -36,7 +36,7 @@ jobs:
     runs-on: macos-26
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
     - name: Select Xcode Version
       run: ./.scripts/xcode-select
     - name: Build Calligraphy for ${{ matrix.name }}
@@ -46,7 +46,7 @@ jobs:
     runs-on: macos-26
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
     - name: Select Xcode Version
       run: ./.scripts/xcode-select
     - name: Lint with SwiftFormat
@@ -68,7 +68,7 @@ jobs:
       artifact-name: macos-build
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
     - name: Select Xcode Version
       run: ./.scripts/xcode-select ${{ matrix.xcode }}
     - name: Build Calligraphy
@@ -76,7 +76,7 @@ jobs:
     - name: Compress Build
       run: zip -r build.zip .build
     - name: Upload Build
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: macos-build-${{ matrix.swift }}
         path: build.zip
@@ -96,11 +96,11 @@ jobs:
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Xcode Version
         run: ./.scripts/xcode-select ${{ matrix.xcode }}
       - name: Download Build
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: macos-build-${{ matrix.swift }}
           path: .
@@ -120,7 +120,7 @@ jobs:
       image: swift:${{ matrix.swift }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Build Calligraphy
         run: swift build -v --build-tests --build-path .build
       - name: Install `zip`
@@ -128,7 +128,7 @@ jobs:
       - name: Compress Build
         run: zip -r build.zip .build
       - name: Upload Build
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ubuntu-build-${{ matrix.swift }}
           path: build.zip
@@ -143,9 +143,9 @@ jobs:
       image: swift:${{ matrix.swift }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Download Build
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: ubuntu-build-${{ matrix.swift }}
           path: .
@@ -160,7 +160,7 @@ jobs:
     runs-on: macos-26
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
     - name: Select Xcode Version
       run: ./.scripts/xcode-select
     - name: Validate Documentation
