@@ -23,18 +23,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/// A property wrapper that reads a value from the surrounding ``StringEnvironmentValues``.
+///
+/// Use `StringEnvironment` inside a ``StringComponent`` to read values that have been injected by ancestor components. The wrapper resolves its value lazily, at the moment the component is rendered.
+///
+/// ```swift
+/// struct Greeting: StringComponent {
+///
+///     @StringEnvironment(\.separator)
+///     private var separator
+///
+///     var body: some StringComponent {
+///         // ...
+///     }
+///
+/// }
+/// ```
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @propertyWrapper
 public struct StringEnvironment<Value>: StringEnvironmentPropertyWrapper {
 
     // MARK: - Initializers
 
+    /// Read a value from ``StringEnvironmentValues`` by key path.
+    /// - Parameter keyPath: The key path identifying the value to read.
     public init(
         _ keyPath: KeyPath<StringEnvironmentValues, Value>
     ) {
         self.read = { $0[keyPath: keyPath] }
     }
 
+    /// Read a value from ``StringEnvironmentValues`` by ``StringEnvironmentKey``.
+    /// - Parameter key: The key type identifying the value to read.
     public init<Key>(
         _ key: Key.Type
     ) where Key: StringEnvironmentKey, Value == Key.Value {
@@ -43,6 +63,7 @@ public struct StringEnvironment<Value>: StringEnvironmentPropertyWrapper {
 
     // MARK: - Property Wrapper
 
+    /// The current value read from the surrounding environment.
     public var wrappedValue: Value {
         read(box.values)
     }

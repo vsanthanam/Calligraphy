@@ -23,6 +23,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/// Generate the boilerplate required to expose a property on ``StringEnvironmentValues`` as a readable environment value.
+///
+/// Apply `@StringEntry` to a stored property declared inside an extension on ``StringEnvironmentValues``. The macro synthesizes a private ``StringEnvironmentKey`` type and the getter/setter accessors that read from and write to the environment storage.
+///
+/// ```swift
+/// extension StringEnvironmentValues {
+///
+///     @StringEntry
+///     public var separator: String = "\n"
+///
+/// }
+/// ```
+///
+/// The expanded property reads its default from the initializer expression you provide, and can be set on any component using ``StringComponent/environment(_:_:)-(_,Value)`` or read using ``StringEnvironment``.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @attached(accessor)
 @attached(peer, names: prefixed(__Key_))

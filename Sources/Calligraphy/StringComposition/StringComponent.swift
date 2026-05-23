@@ -23,15 +23,43 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/// A type that contributes to the construction of a string.
+///
+/// A `StringComponent` is a declarative representation of a piece of text. By composing components together inside a ``StringBuilder``, you build up a final `String` value the same way you would build a view hierarchy in SwiftUI.
+///
+/// Typically, you will not implement ``render(in:)`` directly. Instead, implement ``body`` using an opaque type, and allow the compiler to expand the result builder and choose the correct type to satisfy the protocol.
+///
+/// ```swift
+/// struct Greeting: StringComponent {
+///
+///     let name: String
+///
+///     var body: some StringComponent {
+///         "Hello, " + name + "!"
+///     }
+///
+/// }
+/// ```
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @_typeEraser(AnyStringComponent)
 public protocol StringComponent {
 
+    /// The type of string component representing the body of this string component.
+    ///
+    /// Typically, you do not need to explicitly spell out this type.
+    /// Instead, implement ``body`` using an opaque type, and allow the compiler to expand the result builder and choose the correct type to satisfy the protocol.
     associatedtype Body: StringComponent
 
+    /// The sub components used to build this string component.
     @StringBuilder
     var body: Body { get }
 
+    /// Render this component into a `String` using the supplied environment.
+    ///
+    /// You rarely need to call this method directly. Instead, convert a component to a `String` using ``Swift/String/init(_:)``, which evaluates the component in a fresh environment.
+    ///
+    /// - Parameter environment: The environment values to read during rendering.
+    /// - Returns: The rendered string, or `nil` if the component contributes nothing.
     func render(
         in environment: StringEnvironmentValues
     ) -> String?
@@ -75,6 +103,14 @@ extension Never: StringComponent {
 
 }
 
+/// Concatenate two string components edge-to-edge on a single line.
+///
+/// The result is equivalent to wrapping both operands in a ``Line``.
+///
+/// - Parameters:
+///   - lhs: The component to render first.
+///   - rhs: The component to render second.
+/// - Returns: A ``Line`` that renders `lhs` followed by `rhs` with no separator.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public func + <LHS, RHS>(
     lhs: LHS,
@@ -86,6 +122,14 @@ public func + <LHS, RHS>(
     }
 }
 
+/// Concatenate a string and a string component edge-to-edge on a single line.
+///
+/// The string is converted to a ``RawStringComponent`` before joining.
+///
+/// - Parameters:
+///   - lhs: The string to render first.
+///   - rhs: The component to render second.
+/// - Returns: A ``Line`` that renders `lhs` followed by `rhs` with no separator.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public func + <LHS, RHS>(
     lhs: LHS,
@@ -94,6 +138,14 @@ public func + <LHS, RHS>(
     RawStringComponent(lhs) + rhs
 }
 
+/// Concatenate a string component and a string edge-to-edge on a single line.
+///
+/// The string is converted to a ``RawStringComponent`` before joining.
+///
+/// - Parameters:
+///   - lhs: The component to render first.
+///   - rhs: The string to render second.
+/// - Returns: A ``Line`` that renders `lhs` followed by `rhs` with no separator.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public func + <LHS, RHS>(
     lhs: LHS,

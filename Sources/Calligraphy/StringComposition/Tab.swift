@@ -23,9 +23,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/// A string component that renders a single tab.
+///
+/// The rendered output is controlled by the surrounding ``TabDefinition`` environment value. By default, a `Tab` renders as two spaces. To render an actual tab character, or a different number of spaces, apply the ``StringComponent/tabDefinition(_:)`` modifier to an ancestor component.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct Tab: StringComponent {
 
+    /// Create a tab component.
     public init() {}
 
     @StringEnvironment(\.tabDefinition)

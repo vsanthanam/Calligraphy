@@ -23,13 +23,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/// A representation of how a single ``Tab`` should be rendered.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public enum TabDefinition: Sendable {
 
+    /// Render a literal tab character (`\t`).
     case tab
 
+    /// Render the given number of spaces.
     case spaces(Int)
 
+    /// The default tab definition (two spaces).
     public static let `default`: TabDefinition = .spaces(2)
 
 }
@@ -37,6 +41,12 @@ public enum TabDefinition: Sendable {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
+    /// Apply a ``TabDefinition`` to this component.
+    ///
+    /// The supplied tab definition becomes the ``StringEnvironmentValues/tabDefinition`` for this component and its descendants. ``Tab`` and components built on top of it (such as ``Tabbed``) read this value when rendering.
+    ///
+    /// - Parameter tabDefinition: The tab definition to use.
+    /// - Returns: A component whose descendants render tabs using the supplied definition.
     public func tabDefinition(
         _ tabDefinition: TabDefinition
     ) -> some StringComponent {
@@ -51,6 +61,9 @@ extension StringComponent {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringEnvironmentValues {
 
+    /// The current tab definition.
+    ///
+    /// Defaults to ``TabDefinition/default`` (two spaces). ``Tab`` and components built on top of it (such as ``Tabbed``) read this value when rendering. Set it on an ancestor component using ``StringComponent/tabDefinition(_:)``.
     @StringEntry
     public var tabDefinition: TabDefinition = .default
 

@@ -23,17 +23,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/// The style of a quotation mark.
+///
+/// This value controls the character (or characters) rendered by ``QuotationMark`` and ``Quote``. Use ``StringComponent/quotationMarkStyle(_:)`` to apply a style to a component and its descendants.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public enum QuotationMarkStyle: String, Sendable {
 
+    /// A single straight-quote character (`'`).
     case single = "'"
 
+    /// A single double-quote character (`"`).
     case double = "\""
 
+    /// Three single straight-quote characters (`'''`).
     case tripleSingle = "'''"
 
+    /// Three double-quote characters (`"""`).
     case tripleDouble = "\"\"\""
 
+    /// The default quotation mark style (``QuotationMarkStyle/double``).
     public static let `default`: QuotationMarkStyle = .double
 
 }
@@ -41,6 +49,9 @@ public enum QuotationMarkStyle: String, Sendable {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringEnvironmentValues {
 
+    /// The style of quotation mark used by ``QuotationMark`` and ``Quote``.
+    ///
+    /// Defaults to ``QuotationMarkStyle/default``. Set it on an ancestor component using ``StringComponent/quotationMarkStyle(_:)``.
     @StringEntry
     public var quotationMarkStyle: QuotationMarkStyle = .default
 
@@ -49,6 +60,12 @@ extension StringEnvironmentValues {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
+    /// Apply a ``QuotationMarkStyle`` to this component.
+    ///
+    /// The supplied style becomes the ``StringEnvironmentValues/quotationMarkStyle`` for this component and its descendants. ``QuotationMark`` and ``Quote`` read this value when rendering.
+    ///
+    /// - Parameter style: The style of quotation mark to use.
+    /// - Returns: A component whose descendants render quotation marks with the supplied style.
     public func quotationMarkStyle(
         _ style: QuotationMarkStyle
     ) -> some StringComponent {

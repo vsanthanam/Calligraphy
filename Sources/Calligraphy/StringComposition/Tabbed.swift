@@ -26,6 +26,12 @@
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
+    /// Indent every line of this component with one or more tabs.
+    ///
+    /// - Parameters:
+    ///   - count: The number of tabs to insert at the start of each line. Defaults to `1`.
+    ///   - definition: An optional ``TabDefinition`` override. When `nil`, the tab definition provided by the surrounding environment is used.
+    /// - Returns: A component whose lines are each indented.
     @StringBuilder
     public func tabbed(
         _ count: Int = 1,
@@ -41,11 +47,18 @@ extension StringComponent {
 
 }
 
+/// A string component that indents every line of its content with one or more tabs.
+///
+/// Each tab is rendered according to the surrounding ``TabDefinition`` environment value. By default, this means two spaces per tab.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct Tabbed<Content>: StringComponent where Content: StringComponent {
 
     // MARK: - Initializers
 
+    /// Create an indented component.
+    /// - Parameters:
+    ///   - count: The number of tabs to insert at the start of each line. Defaults to `1`.
+    ///   - content: The content to indent.
     public init(
         _ count: Int = 1,
         @StringBuilder content: () -> Content

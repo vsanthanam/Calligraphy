@@ -23,11 +23,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/// A string component created from a `StringProtocol` value.
+///
+/// Most callers create a `RawStringComponent` implicitly: a string literal or any `StringProtocol` value passed to a ``StringBuilder`` is wrapped automatically. Use this initializer directly when you need to construct one ahead of time.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct RawStringComponent: StringComponent {
 
     // MARK: - Initializers
 
+    /// Create a raw string component
+    /// - Parameter backing: The backing string
     public init(
         _ backing: some StringProtocol
     ) {

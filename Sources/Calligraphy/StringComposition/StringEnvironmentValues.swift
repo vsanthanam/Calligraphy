@@ -25,11 +25,24 @@
 
 import Foundation
 
+/// A collection of environment values propagated through a ``StringComponent`` tree.
+///
+/// During rendering, every component receives a `StringEnvironmentValues` instance from its ancestors. Values are read using the ``StringEnvironment`` property wrapper, and written by applying an environment modifier such as ``StringComponent/environment(_:_:)-(_,Value)`` to an ancestor component.
+///
+/// To define a new environment value, extend `StringEnvironmentValues` and apply the ``StringEntry()`` macro to a stored property:
+///
+/// ```swift
+/// extension StringEnvironmentValues {
+///     @StringEntry
+///     public var separator: String = "\n"
+/// }
+/// ```
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct StringEnvironmentValues: Sendable {
 
     // MARK: - API
 
+    /// Access the value associated with a ``StringEnvironmentKey``.
     public subscript<Key>(
         _ key: Key.Type
     ) -> Key.Value where Key: StringEnvironmentKey {

@@ -26,6 +26,10 @@
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
+    /// Wrap this component in a pair of quotation marks.
+    ///
+    /// - Parameter style: An optional ``QuotationMarkStyle`` override. When `nil`, the style provided by the surrounding environment is used.
+    /// - Returns: A component that renders as the receiver, wrapped in quotation marks.
     @StringBuilder
     public func quoted(
         _ style: QuotationMarkStyle? = nil
@@ -40,9 +44,14 @@ extension StringComponent {
 
 }
 
+/// A string component that wraps content between two ``QuotationMark`` characters.
+///
+/// The style of the surrounding quotation marks is read from the current ``QuotationMarkStyle`` environment value, which can be overridden using ``StringComponent/quotationMarkStyle(_:)``.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct Quote<Quote>: StringComponent where Quote: StringComponent {
 
+    /// Create a quoted component.
+    /// - Parameter quote: The content to wrap in quotation marks.
     public init(
         @StringBuilder quote: () -> Quote
     ) {

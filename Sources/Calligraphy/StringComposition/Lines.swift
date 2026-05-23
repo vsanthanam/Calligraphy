@@ -23,11 +23,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/// A string component that joins its children together with newlines.
+///
+/// `Lines` is the standard way to assemble multi-line strings. Each child renders independently, and the children are joined by a newline. The line spacing can be customized via the `spacing:` argument or by applying ``StringComponent/lineSpacing(_:)`` to an ancestor.
+///
+/// ```swift
+/// Lines {
+///     "Hello,"
+///     "world!"
+/// }
+/// ```
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct Lines<Components>: StringComponent where Components: StringComponent {
 
     // MARK: - Initializers
 
+    /// Create a block of lines.
+    /// - Parameters:
+    ///   - spacing: The number of newlines between each line. When `nil`, the value of the surrounding ``StringEnvironmentValues/lineSpacing`` environment value is used (typically `1`).
+    ///   - components: The children to combine, one per line.
     public init(
         spacing: Int? = nil,
         @StringBuilder components: () -> Components

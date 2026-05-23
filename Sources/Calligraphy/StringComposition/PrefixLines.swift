@@ -28,6 +28,12 @@ import Foundation
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
+    /// Prepend a component to every line in this component's rendered output.
+    ///
+    /// The receiver is rendered first, then each newline-separated line in the result is prefixed with the value produced by `prefix`. This is the standard way to add gutters, comment markers, or indentation to a multi-line block.
+    ///
+    /// - Parameter prefix: A `@StringBuilder` closure producing the component to insert at the start of every line.
+    /// - Returns: A component whose lines are each prefixed.
     public func prefixLines(
         @StringBuilder with prefix: () -> some StringComponent
     ) -> some StringComponent {
@@ -37,6 +43,10 @@ extension StringComponent {
         )
     }
 
+    /// Prepend a string to every line in this component's rendered output.
+    ///
+    /// - Parameter prefix: The string to insert at the start of every line.
+    /// - Returns: A component whose lines are each prefixed.
     public func prefixLines(
         with prefix: some StringProtocol
     ) -> some StringComponent {

@@ -26,6 +26,10 @@
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
+    /// Set the number of newlines used to separate adjacent lines in this component's children.
+    ///
+    /// - Parameter count: The number of newlines used to separate lines. Use `1` for normal single-spacing, `2` for one blank line between each pair of lines, and so on.
+    /// - Returns: A component whose descendants render with the supplied line spacing.
     public func lineSpacing(
         _ count: Int
     ) -> some StringComponent {
@@ -40,6 +44,9 @@ extension StringComponent {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringEnvironmentValues {
 
+    /// The number of newlines used to separate adjacent lines.
+    ///
+    /// Defaults to `1`. ``Lines`` and components built on top of it read this value to decide how to join their children. Set it on an ancestor component using ``StringComponent/lineSpacing(_:)``.
     @StringEntry
     public var lineSpacing: Int = 1
 
