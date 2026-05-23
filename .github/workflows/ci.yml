@@ -55,14 +55,17 @@ jobs:
     name: Build Calligraphy (macOS)
     strategy:
       matrix:
-        swift: ['6.1', '6.2']
+        swift: ['6.1', '6.2', '6.3']
         include:
           - swift: '6.1'
             runner: 'macos-15'
             xcode: '16.4'
           - swift: '6.2'
             runner: 'macos-26'
-            xcode: '26.2'
+            xcode: '26.4.1'
+          - swift: '6.3'
+            runner: 'macos-26'
+            xcode: '26.4.1'
     runs-on: ${{ matrix.runner }}
     outputs:
       artifact-name: macos-build
@@ -84,14 +87,17 @@ jobs:
     name: Test Calligraphy (macOS)
     strategy:
       matrix:
-        swift: ['6.1', '6.2']
+        swift: ['6.1', '6.2', '6.3']
         include:
           - swift: '6.1'
             runner: 'macos-15'
             xcode: '16.4'
           - swift: '6.2'
             runner: 'macos-26'
-            xcode: '26.2'
+            xcode: '26.4.1'
+          - swift: '6.3'
+            runner: 'macos-26'
+            xcode: '26.4.1'
     needs: build-macos-spm
     runs-on: ${{ matrix.runner }}
     steps:
@@ -112,7 +118,7 @@ jobs:
     name: Build Calligraphy (Ubuntu)
     strategy:
       matrix:
-        swift: ['6.1', '6.2']
+        swift: ['6.1', '6.2', '6.3']
     runs-on: ubuntu-latest
     outputs:
       artifact-name: ubuntu-build
@@ -136,7 +142,7 @@ jobs:
     name: Test Calligraphy (Ubuntu)
     strategy:
       matrix:
-        swift: ['6.1', '6.2']
+        swift: ['6.1', '6.2', '6.3']
     needs: build-ubuntu-spm
     runs-on: ubuntu-latest
     container:
