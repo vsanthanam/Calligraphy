@@ -31,24 +31,26 @@ public struct AnyStringComponent: StringComponent {
 
     /// Create a type-erased string component
     /// - Parameter stringComponent: The string component to type-erase
-    public init<T: StringComponent>(
+    public init<T>(
         erasing stringComponent: T
-    ) {
-        __content = { stringComponent._content }
+    ) where T: StringComponent {
+        _render = { stringComponent.render(in: $0) }
     }
 
     // MARK: - StringComponent
 
-    public var _content: String? {
-        __content()
+    public var body: some StringComponent {
+        fatalErrorImperativeStringComponent()
     }
 
-    public var body: Never {
-        fatalErrorImperativeStringComponent()
+    public func render(
+        in environment: StringEnvironmentValues
+    ) -> String? {
+        _render(environment)
     }
 
     // MARK: - Private
 
-    private let __content: () -> String?
+    private let _render: (StringEnvironmentValues) -> String?
 
 }

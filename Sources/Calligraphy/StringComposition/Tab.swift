@@ -23,48 +23,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// A tab
+/// A string component that renders a single tab.
+///
+/// The rendered output is controlled by the surrounding ``TabDefinition`` environment value. By default, a `Tab` renders as two spaces. To render an actual tab character, or a different number of spaces, apply the ``StringComponent/tabDefinition(_:)`` modifier to an ancestor component.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct Tab: StringComponent {
 
-    // MARK: - Initializers
-
-    /// Create a tab
+    /// Create a tab component.
     public init() {}
 
-    // MARK: - StringComponent
+    @StringEnvironment(\.tabDefinition)
+    private var tabDefinition
 
     public var body: some StringComponent {
-        _Guts(StringEnvironment.activeTabDefinition)
-    }
-
-    public enum Definition: Sendable {
-        case tab
-        case spaces(Int)
-        public static let `default`: Definition = .spaces(2)
-    }
-
-    private struct _Guts: StringComponent {
-
-        init(_ definition: Tab.Definition) {
-            self.definition = definition
-        }
-
-        var body: some StringComponent {
-            switch definition {
-            case .tab:
-                "\t"
-            case let .spaces(count):
-                Line {
-                    for _ in 0 ..< count {
-                        Space()
-                    }
+        switch tabDefinition {
+        case .tab:
+            "\t"
+        case let .spaces(count):
+            Line {
+                for _ in 0..<count {
+                    Space()
                 }
             }
         }
-
-        private let definition: Tab.Definition
-
     }
 
 }

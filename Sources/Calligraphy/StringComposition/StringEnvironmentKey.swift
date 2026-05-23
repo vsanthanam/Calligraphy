@@ -1,5 +1,5 @@
 // Calligraphy
-// TripleQuote.swift
+// StringEnvironmentKey.swift
 //
 // MIT License
 //
@@ -23,19 +23,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// A single quote (`'''`)
+/// A key that identifies a value stored in ``StringEnvironmentValues``.
+///
+/// Conform a type to `StringEnvironmentKey` to define a custom environment value. The conforming type's identity acts as the key, and ``defaultValue`` is returned when no value has been set.
+///
+/// Most callers do not implement this protocol directly. Instead, declare an environment value by extending ``StringEnvironmentValues`` and applying the ``StringEntry()`` macro to a stored property.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct TripleQuote: StringComponent {
+public protocol StringEnvironmentKey<Value> {
 
-    // MARK: - Initializers
+    /// The type of value associated with this key.
+    associatedtype Value: Sendable
 
-    public init() {}
-
-    // MARK: - StringComponent
-
-    public var body: some StringComponent {
-        QuotationMark()
-            .quotationMarkStyle(.tripleSingle)
-    }
+    /// The value to return when no value has been set for this key.
+    static var defaultValue: Value { get }
 
 }

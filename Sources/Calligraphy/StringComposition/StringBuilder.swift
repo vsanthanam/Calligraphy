@@ -23,21 +23,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// A result builder to declaratively compose complex, multi-line strings
+/// A result builder to declaratively compose ``StringComponent`` values together.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @resultBuilder
 public enum StringBuilder {
 
-    public static func buildExpression<T>(
-        _ expression: T
-    ) -> T where T: StringComponent {
+    public static func buildExpression<Expression>(
+        _ expression: Expression
+    ) -> Expression where Expression: StringComponent {
         expression
     }
 
-    public static func buildExpression(
-        _ expression: some StringProtocol
-    ) -> RawStringComponent {
-        .init(expression)
+    public static func buildExpression<Expression>(
+        _ expression: Expression
+    ) -> RawStringComponent where Expression: StringProtocol {
+        RawStringComponent(expression)
     }
 
     @StringBuilder
@@ -48,29 +48,29 @@ public enum StringBuilder {
     }
 
     @StringBuilder
-    public static func buildExpression<T>(
-        _ expression: [T]
-    ) -> _List<T> where T: StringComponent {
-        for component in expression {
-            component
+    public static func buildExpression(
+        _ expression: some Collection<some StringComponent>
+    ) -> some StringComponent {
+        for element in expression {
+            element
         }
     }
 
     @StringBuilder
     public static func buildExpression(
-        _ expression: [some StringProtocol]
-    ) -> _List<RawStringComponent> {
-        for component in expression {
-            component
+        _ expression: some Collection<some StringProtocol>
+    ) -> some StringComponent {
+        for element in expression {
+            element
         }
     }
 
     @StringBuilder
     public static func buildExpression(
-        _ expression: [some RawRepresentable<some StringProtocol>]
-    ) -> _List<RawStringComponent> {
-        for component in expression {
-            component
+        _ expression: some Collection<some RawRepresentable<some StringProtocol>>
+    ) -> some StringComponent {
+        for element in expression {
+            element
         }
     }
 
@@ -78,15 +78,15 @@ public enum StringBuilder {
         .init()
     }
 
-    public static func buildBlock<T>(
-        _ component: T
-    ) -> T where T: StringComponent {
-        component
+    public static func buildBlock<Component>(
+        _ components: Component
+    ) -> Component where Component: StringComponent {
+        components
     }
 
     public static func buildBlock<each Component>(
         _ components: repeat each Component
-    ) -> _Block<repeat each Component> where repeat each Component: StringComponent {
+    ) -> _Assembled<repeat each Component> where repeat each Component: StringComponent {
         .init(components: repeat each components)
     }
 
@@ -103,9 +103,9 @@ public enum StringBuilder {
     }
 
     @StringBuilder
-    public static func buildOptional<T>(
-        _ component: T?
-    ) -> _Either<T, _Skip> where T: StringComponent {
+    public static func buildOptional<Component>(
+        _ component: Component?
+    ) -> _Either<Component, _Skip> where Component: StringComponent {
         if let component {
             component
         } else {
@@ -113,51 +113,45 @@ public enum StringBuilder {
         }
     }
 
-    public static func buildArray<T>(
-        _ components: [T]
-    ) -> _List<T> where T: StringComponent {
+    public static func buildArray<Component>(
+        _ components: [Component]
+    ) -> _List<Component> where Component: StringComponent {
         .init(components)
     }
 
-    public static func buildLimitedAvailability(
-        _ component: some StringComponent
-    ) -> AnyStringComponent {
-        AnyStringComponent(erasing: component)
+    public static func buildLimitedAvailability<Component>(
+        _ component: Component
+    ) -> AnyStringComponent where Component: StringComponent {
+        .init(erasing: component)
     }
 
-    public struct _Block<each Component>: StringComponent where repeat each Component: StringComponent {
+    public struct _Assembled<each Component>: StringComponent where repeat each Component: StringComponent {
 
         // MARK: - StringComponent
-
-        public var _content: String? {
-            var result: String? = nil
-            func append(_ component: some StringComponent) {
-                guard let content = component._content else {
-                    return
-                }
-                if let r = result {
-                    result = r + StringEnvironment.activeSeparator + content
-                } else {
-                    result = content
-                }
-            }
-            for component in repeat each components {
-                append(component)
-            }
-            return result
-        }
 
         public var body: Never {
             fatalErrorImperativeStringComponent()
         }
 
-        // MARK: - Private
-
-        fileprivate init(components: repeat each Component) {
-            self.components = (repeat (each components))
+        public func render(
+            in environment: StringEnvironmentValues
+        ) -> String? {
+            var pieces = [String?]()
+            for component in repeat each components {
+                pieces.append(component.render(in: environment))
+            }
+            return environment.draw(with: pieces)
         }
 
-        private let components: (repeat (each Component))
+        // MARK: - Private
+
+        fileprivate init(
+            components: repeat each Component
+        ) {
+            self.components = (repeat each components)
+        }
+
+        private let components: (repeat each Component)
 
     }
 
@@ -166,83 +160,76 @@ public enum StringBuilder {
         // MARK: - API
 
         case first(First)
+
         case second(Second)
 
         // MARK: - StringComponent
 
-        public var _content: String? {
+        public var body: Never {
+            fatalErrorImperativeStringComponent()
+        }
+
+        public func render(
+            in environment: StringEnvironmentValues
+        ) -> String? {
             switch self {
             case let .first(component):
-                component._content
+                component.render(in: environment)
             case let .second(component):
-                component._content
+                component.render(in: environment)
             }
         }
+
+    }
+
+    public struct _Skip: StringComponent {
+
+        // MARK: - StringComponent
 
         public var body: Never {
             fatalErrorImperativeStringComponent()
         }
+
+        public func render(
+            in environment: StringEnvironmentValues
+        ) -> String? {
+            nil
+        }
+
+        // MARK: - Private
+
+        fileprivate init() {}
+
     }
 
     public struct _List<Element>: StringComponent where Element: StringComponent {
 
         // MARK: - StringComponent
 
-        public var _content: String? {
-            list
-                .reduce(nil) { prev, component in
-                    guard let content = component._content else {
-                        return prev
-                    }
-                    if let prev {
-                        return prev + StringEnvironment.activeSeparator + content
-                    } else {
-                        return content
-                    }
-                }
-        }
-
         public var body: Never {
             fatalErrorImperativeStringComponent()
         }
 
+        public func render(
+            in environment: StringEnvironmentValues
+        ) -> String? {
+            let pieces = list
+                .map { element in
+                    element.render(in: environment)
+                }
+            return environment.draw(with: pieces)
+        }
+
         // MARK: - Private
 
-        fileprivate init(_ list: [Element]) {
+        fileprivate init(
+            _ list: [Element]
+        ) {
             self.list = list
         }
 
         private let list: [Element]
 
-    }
-
-    public struct _Skip: StringComponent {
-
-        /// Create an empty string component
-        public init() {}
-
-        // MARK: - StringComponent
-
-        public let _content: String? = nil
-
-        public var body: Never {
-            fatalErrorImperativeStringComponent()
-        }
-
-    }
-
-}
-
-extension Array {
-
-    @_disfavoredOverload
-    @StringBuilder
-    public func map<T>(
-        @StringBuilder fn: (Element) -> T
-    ) -> StringBuilder._List<T> where T: StringComponent {
-        for component in self {
-            fn(component)
-        }
     }
 
 }

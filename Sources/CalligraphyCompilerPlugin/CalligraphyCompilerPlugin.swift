@@ -33,7 +33,8 @@ struct CalligraphyCompilerPlugin: CompilerPlugin {
 
     let providingMacros: [any Macro.Type] = [
         FilePermissionsOctalMacro.self,
-        FilePermissionsStringMacro.self
+        FilePermissionsStringMacro.self,
+        StringEntryMacro.self
     ]
 
 }

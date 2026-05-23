@@ -26,59 +26,64 @@
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
-    /// Add a tab to every line in the upstream
+    /// Indent every line of this component with one or more tabs.
+    ///
     /// - Parameters:
-    ///   - numberOfTabs: The number of tabs to add
-    ///   - rule: When to apply the tabs
-    /// - Returns: A tabbed version of the upstream
+    ///   - count: The number of tabs to insert at the start of each line. Defaults to `1`.
+    ///   - definition: An optional ``TabDefinition`` override. When `nil`, the tab definition provided by the surrounding environment is used.
+    /// - Returns: A component whose lines are each indented.
+    @StringBuilder
     public func tabbed(
-        _ numberOfTabs: Int = 1,
-        when rule: MapLinesRule = .notEmpty
+        _ count: Int = 1,
+        _ definition: TabDefinition? = nil
     ) -> some StringComponent {
-        Tabbed(numberOfTabs, when: rule) { self }
+        if let definition {
+            Tabbed(count) { self }
+                .tabDefinition(definition)
+        } else {
+            Tabbed(count) { self }
+        }
     }
 
 }
 
-/// A string compoments with tabs on every line
+/// A string component that indents every line of its content with one or more tabs.
+///
+/// Each tab is rendered according to the surrounding ``TabDefinition`` environment value. By default, this means two spaces per tab.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Tabbed<T>: StringComponent where T: StringComponent {
+public struct Tabbed<Content>: StringComponent where Content: StringComponent {
 
     // MARK: - Initializers
 
-    /// Create a tabbed string component
+    /// Create an indented component.
     /// - Parameters:
-    ///   - numberOfTabs: The number of tabs to each line
-    ///   - rule: When to apply the tabs
-    ///   - components: The components to tab
+    ///   - count: The number of tabs to insert at the start of each line. Defaults to `1`.
+    ///   - content: The content to indent.
     public init(
-        _ numberOfTabs: Int = 1,
-        when rule: MapLinesRule = .notEmpty,
-        @StringBuilder components: () -> T
+        _ count: Int = 1,
+        @StringBuilder content: () -> Content
     ) {
-        assert(numberOfTabs >= 0, "Number of tabs must be non-negative")
-        self.numberOfTabs = numberOfTabs >= 0 ? numberOfTabs : 1
-        self.rule = rule
-        self.components = components()
+        self.count = count
+        self.content = content()
     }
 
     // MARK: - StringComponent
 
     public var body: some StringComponent {
-        components
-            .prefixLines(when: rule) {
+        content
+            .prefixLines {
                 Line {
-                    for _ in 0 ..< numberOfTabs {
+                    for _ in 0..<count {
                         Tab()
                     }
                 }
             }
+
     }
 
     // MARK: - Private
 
-    private let numberOfTabs: Int
-    private let rule: MapLinesRule
-    private let components: T
+    private let count: Int
+    private let content: Content
 
 }

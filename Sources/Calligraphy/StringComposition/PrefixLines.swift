@@ -23,67 +23,54 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import Foundation
+
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
-    /// Prefix every line of the upstream
-    /// - Parameters:
-    ///   - prefix: The prefix to apply to every applicable line
-    ///   - rule: The rule used to determine which lines should get prefixed
-    /// - Returns: A prefixed version of the upstream
+    /// Prepend a component to every line in this component's rendered output.
+    ///
+    /// The receiver is rendered first, then each newline-separated line in the result is prefixed with the value produced by `prefix`. This is the standard way to add gutters, comment markers, or indentation to a multi-line block.
+    ///
+    /// - Parameter prefix: A `@StringBuilder` closure producing the component to insert at the start of every line.
+    /// - Returns: A component whose lines are each prefixed.
     public func prefixLines(
-        with prefix: some StringProtocol,
-        _ rule: MapLinesRule = .all
-    ) -> some StringComponent {
-        prefixLines(when: rule) { prefix }
-    }
-
-    /// Prefix every line of the upstream, declaratively
-    /// - Parameters:
-    ///   - rule: The prefix to apply to every applicable line
-    ///   - components: The `@StringBuilder` prefix to apply to every applicable line
-    /// - Returns: A prefixed version of the upstream
-    public func prefixLines(
-        when rule: MapLinesRule = .all,
-        @StringBuilder components: () -> some StringComponent
+        @StringBuilder with prefix: () -> some StringComponent
     ) -> some StringComponent {
         PrefixLines(
-            self,
-            rule,
-            components()
+            content: self,
+            prefix: prefix()
         )
+    }
+
+    /// Prepend a string to every line in this component's rendered output.
+    ///
+    /// - Parameter prefix: The string to insert at the start of every line.
+    /// - Returns: A component whose lines are each prefixed.
+    public func prefixLines(
+        with prefix: some StringProtocol
+    ) -> some StringComponent {
+        prefixLines { prefix }
     }
 
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-private struct PrefixLines<Lines, Prefix>: StringComponent where Lines: StringComponent, Prefix: StringComponent {
+private struct PrefixLines<T, Prefix>: StringComponent where T: StringComponent, Prefix: StringComponent {
 
-    // MARK: - Initializers
+    @StringEnvironment(\.self)
+    var environment
 
-    init(
-        _ lines: Lines,
-        _ rule: MapLinesRule,
-        _ prefix: Prefix
-    ) {
-        self.lines = lines
-        self.rule = rule
-        self.prefix = prefix
-    }
+    let content: T
 
-    // MARK: - StringComponent
+    let prefix: Prefix
 
     var body: some StringComponent {
-        lines
-            .mapLines(rule) { line in
+        if let lines = content.render(in: environment) {
+            for line in lines.components(separatedBy: "\n") {
                 prefix + line
             }
+        }
     }
-
-    // MARK: - Private
-
-    private let lines: Lines
-    private let rule: MapLinesRule
-    private let prefix: Prefix
 
 }

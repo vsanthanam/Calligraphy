@@ -44,7 +44,7 @@ struct TabLengthTests {
           baz
         """
 
-        #expect(list._content == expected)
+        #expect(String(list) == expected)
     }
 
     @Test("Custom tab definition")
@@ -63,7 +63,7 @@ struct TabLengthTests {
             baz
         """
 
-        #expect(list._content == expected)
+        #expect(String(list) == expected)
     }
 
 }

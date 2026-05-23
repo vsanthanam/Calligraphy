@@ -4,13 +4,13 @@
     @DocumentationExtension(mergeBehavior: override)
 }
 
-A component of a declaratively composed string
+A type that contributes to the construction of a string.
 
 ## Overview
 
-A `StringComponent` is the basic building block of a ``StringBuilder`` DSL. Each string component represents one or more child string components or Swift strings.
+A `StringComponent` is a declarative representation of a piece of text. By composing components together inside a ``StringBuilder``, you build up a final `String` value the same way you would build a view hierarchy in SwiftUI.
 
-To create a String component, implement the ``body`` property and use the result builder to declare the child strings or components
+Typically, you will not implement ``render(in:)`` directly. Instead, implement ``body`` using an opaque type, and allow the compiler to expand the result builder and choose the correct type to satisfy the protocol.
 
 ```swift
 struct Greeting: StringComponent {
@@ -18,9 +18,7 @@ struct Greeting: StringComponent {
     let name: String
 
     var body: some StringComponent {
-        "Hello"
-        name
-        "Welcome to Calligraphy!"
+        "Hello, " + name + "!"
     }
 
 }
@@ -38,27 +36,20 @@ struct Greeting: StringComponent {
 
 ### Modifiers
 
-- ``delimited(by:)``
-- ``delimited(with:)``
-- ``frozen()``
 - ``joined(separator:)``
-- ``joined(by:)``
-- ``map(_:)``
-- ``map(with:)``
-- ``mapLines(_:_:)``
-- ``mapLines(_:with:)``
-- ``prefixLines(with:_:)``
-- ``prefixLines(when:components:)``
+- ``lineSpacing(_:)``
+- ``prefixLines(with:)-(()->StringComponent)``
+- ``prefixLines(with:)-(StringProtocol)``
+- ``tabbed(_:_:)``
+- ``quoted(_:)``
 - ``quotationMarkStyle(_:)``
-- ``separatedBy(_:)``
-- ``separatedBy(separator:)``
-- ``suffixLines(with:_:)``
-- ``suffixLines(_:components:)``
-- ``tabbed(_:when:)``
 - ``tabDefinition(_:)``
+- ``environment(_:_:)-(Key.Type,_)``
+- ``environment(_:_:)-(_,Value)``
+- ``transformEnvironment(_:)``
 
 ### Operators
 
-- ``+(_:_:)-(StringComponent,StringComponent)``
-- ``+(_:_:)-(StringProtocol,StringComponent)``
-- ``+(_:_:)-(StringComponent,StringProtocol)``
+- ``+(_:_:)->Line<StringBuilder._Assembled<LHS,RHS>>``
+- ``+(_:_:)->Line<StringBuilder._Assembled<RawStringComponent,RHS>>``
+- ``+(_:_:)->Line<StringBuilder._Assembled<LHS,RawStringComponent>>``

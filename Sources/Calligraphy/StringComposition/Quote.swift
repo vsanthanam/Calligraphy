@@ -26,53 +26,42 @@
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
-    /// Add quotation marks to the start and end of the upstream
-    /// - Returns: The quoted upstream
-    public func quoted() -> some StringComponent {
-        Quote { self }
+    /// Wrap this component in a pair of quotation marks.
+    ///
+    /// - Parameter style: An optional ``QuotationMarkStyle`` override. When `nil`, the style provided by the surrounding environment is used.
+    /// - Returns: A component that renders as the receiver, wrapped in quotation marks.
+    @StringBuilder
+    public func quoted(
+        _ style: QuotationMarkStyle? = nil
+    ) -> some StringComponent {
+        if let style {
+            Quote { self }
+                .quotationMarkStyle(style)
+        } else {
+            Quote { self }
+        }
     }
 
 }
 
-/// A string component that adds quotation marks to either side of its wrapped children.
+/// A string component that wraps content between two ``QuotationMark`` characters.
 ///
-/// Use this type to wrap a group of child components with quotation marks:
-///
-/// ```swift
-/// let component = Quote(.single) {
-///     "The quick brown fox jumps over the lazy dog"
-/// }
-/// ```
-///
-/// The above example would yield the following string:
-///
-/// ```
-/// 'The quick brown fox jumps over the lazy dog'
-/// ```
+/// The style of the surrounding quotation marks is read from the current ``QuotationMarkStyle`` environment value, which can be overridden using ``StringComponent/quotationMarkStyle(_:)``.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Quote<T>: StringComponent where T: StringComponent {
+public struct Quote<Quote>: StringComponent where Quote: StringComponent {
 
-    // MARK: - Initializers
-
-    /// Created a quoted string component
-    /// - Parameter components: The components to quote
+    /// Create a quoted component.
+    /// - Parameter quote: The content to wrap in quotation marks.
     public init(
-        @StringBuilder components: () -> T
+        @StringBuilder quote: () -> Quote
     ) {
-        self.components = components()
+        self.quote = quote()
     }
-
-    // MARK: - StringComponent
 
     public var body: some StringComponent {
-        components
-            .delimited {
-                QuotationMark()
-            }
+        QuotationMark() + quote + QuotationMark()
     }
 
-    // MARK: - Private
-
-    private let components: T
+    private let quote: Quote
 
 }

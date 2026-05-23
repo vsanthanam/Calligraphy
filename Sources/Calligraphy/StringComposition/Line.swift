@@ -23,16 +23,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// A single line of text.
+/// A string component that joins its children together with no separator.
+///
+/// `Line` is the dual of ``Lines``: where `Lines` separates its children with newlines, `Line` concatenates them edge-to-edge. Use it to group inline pieces that should render on a single line, even when used inside a newline-separated context.
+///
+/// ```swift
+/// Line {
+///     "Hello, "
+///     name
+///     "!"
+/// }
+/// ```
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Line<T>: StringComponent where T: StringComponent {
+public struct Line<Components>: StringComponent where Components: StringComponent {
 
     // MARK: - Initializers
 
-    /// Join the child components together into a single line with no separator.
-    /// - Parameter components: The components to join
+    /// Create a line by composing components together edge-to-edge.
+    /// - Parameter components: The components to combine, with no separator between them.
     public init(
-        @StringBuilder components: () -> T
+        @StringBuilder components: () -> Components
     ) {
         self.components = components()
     }
@@ -46,6 +56,6 @@ public struct Line<T>: StringComponent where T: StringComponent {
 
     // MARK: - Private
 
-    private let components: T
+    private let components: Components
 
 }

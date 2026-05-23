@@ -53,7 +53,7 @@ extension String {
     public init(
         _ component: some StringComponent
     ) {
-        self = component._content ?? ""
+        self = component.render(in: StringEnvironmentValues()) ?? ""
     }
 
     /// Build a string with a `@StringBuilder`

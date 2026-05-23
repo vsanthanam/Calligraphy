@@ -1,5 +1,5 @@
 // Calligraphy
-// SingleQuote.swift
+// ReadEnvironment.swift
 //
 // MIT License
 //
@@ -23,19 +23,46 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// A single quote (`'`)
+/// A string component that reads the surrounding ``StringEnvironmentValues`` and builds its body from them.
+///
+/// Use `ReadEnvironment` when the structure of your component depends on the current environment, not just on a single value. For reading a single value, prefer the ``StringEnvironment`` property wrapper.
+///
+/// ```swift
+/// ReadEnvironment { environment in
+///     if environment.separator == "\n" {
+///         "Multiline"
+///     } else {
+///         "Inline"
+///     }
+/// }
+/// ```
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct SingleQuote: StringComponent {
+public struct ReadEnvironment<Content>: StringComponent where Content: StringComponent {
 
     // MARK: - Initializers
 
-    public init() {}
+    /// Create a string component that reads from the environment
+    /// - Parameter build: A closure that receives the current environment and returns a component to render in its place.
+    public init(
+        @StringBuilder _ build: @escaping (StringEnvironmentValues) -> Content
+    ) {
+        self.build = build
+    }
 
     // MARK: - StringComponent
 
-    public var body: some StringComponent {
-        QuotationMark()
-            .quotationMarkStyle(.single)
+    public var body: Never {
+        fatalError()
     }
+
+    public func render(
+        in environment: StringEnvironmentValues
+    ) -> String? {
+        build(environment).render(in: environment)
+    }
+
+    // MARK: - Private
+
+    private let build: (StringEnvironmentValues) -> Content
 
 }

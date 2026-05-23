@@ -23,31 +23,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// A string component backed by a Swift string.
+/// A string component created from a `StringProtocol` value.
+///
+/// Most callers create a `RawStringComponent` implicitly: a string literal or any `StringProtocol` value passed to a ``StringBuilder`` is wrapped automatically. Use this initializer directly when you need to construct one ahead of time.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct RawStringComponent: StringComponent {
 
     // MARK: - Initializers
 
     /// Create a raw string component
-    /// - Parameter value: The value contained in the component
-    public init(_ value: some StringProtocol) {
-        self.value = String(value)
+    /// - Parameter backing: The backing string
+    public init(
+        _ backing: some StringProtocol
+    ) {
+        self.backing = String(backing)
     }
-
-    // MARK: - API
-
-    /// The raw value that the componenet represents
-    public let value: String
 
     // MARK: - StringComponent
-
-    public var _content: String? {
-        value
-    }
 
     public var body: Never {
         fatalErrorImperativeStringComponent()
     }
+
+    public func render(
+        in environment: StringEnvironmentValues
+    ) -> String? {
+        backing
+    }
+
+    // MARK: - Private
+
+    private let backing: String
 
 }

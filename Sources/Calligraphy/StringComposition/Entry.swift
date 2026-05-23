@@ -1,5 +1,5 @@
 // Calligraphy
-// Frozen.swift
+// Entry.swift
 //
 // MIT License
 //
@@ -23,37 +23,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+/// Generate the boilerplate required to expose a property on ``StringEnvironmentValues`` as a readable environment value.
+///
+/// Apply `@StringEntry` to a stored property declared inside an extension on ``StringEnvironmentValues``. The macro synthesizes a private ``StringEnvironmentKey`` type and the getter/setter accessors that read from and write to the environment storage.
+///
+/// ```swift
+/// extension StringEnvironmentValues {
+///
+///     @StringEntry
+///     public var separator: String = "\n"
+///
+/// }
+/// ```
+///
+/// The expanded property reads its default from the initializer expression you provide, and can be set on any component using ``StringComponent/environment(_:_:)-(_,Value)`` or read using ``StringEnvironment``.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-extension StringComponent {
-
-    /// Freeze the upstreams into a single component to prevent them from being modified by downstream modifiers
-    /// - Returns: The frozen upstream
-    public func frozen() -> some StringComponent {
-        Frozen { self }
-    }
-
-}
-
-/// A frozen string component.
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Frozen: StringComponent {
-
-    // MARK: - Initializers
-
-    /// Create a frozen string compnent
-    /// - Parameter components: The components to freeze
-    public init(
-        @StringBuilder components: () -> some StringComponent
-    ) {
-        _content = String.build { components() }
-    }
-
-    // MARK: - StringComponent
-
-    public let _content: String?
-
-    public var body: Never {
-        fatalErrorImperativeStringComponent()
-    }
-
-}
+@attached(accessor)
+@attached(peer, names: prefixed(__Key_))
+public macro StringEntry() = #externalMacro(
+    module: "CalligraphyCompilerPlugin",
+    type: "StringEntryMacro"
+)

@@ -45,7 +45,7 @@ struct QuoteTests {
         baz"
         """#
 
-        #expect(quote._content == expected)
+        #expect(String(quote) == expected)
     }
 
     @Test("Modifier")
@@ -63,7 +63,7 @@ struct QuoteTests {
         baz"
         """#
 
-        #expect(quoted._content == expected)
+        #expect(String(quoted) == expected)
     }
 
 }

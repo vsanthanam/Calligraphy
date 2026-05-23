@@ -26,77 +26,49 @@
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
-    /// Join the upstreams together using a separator
-    /// - Parameter separator: The separator used to join the components
-    /// - Returns: The joined string components
+    /// Join the children of this component using the given separator.
+    ///
+    /// The supplied separator becomes the ``StringEnvironmentValues/separator`` for this component and its descendants. Components that compose their children (such as ``Lines``) read this value to decide how to combine them.
+    ///
+    /// - Parameter separator: The string to insert between each child.
+    /// - Returns: A component that renders its children separated by `separator`.
     public func joined(
         separator: some StringProtocol
     ) -> some StringComponent {
         Joined(
-            separator: separator
-        ) {
-            self
-        }
-    }
-
-    /// Join the upstreams together using a declarative separator
-    /// - Parameter components: The separator used to join the components
-    /// - Returns: The joined string components
-    public func joined(
-        @StringBuilder by components: () -> some StringComponent
-    ) -> some StringComponent {
-        Joined(
-            content: { self },
-            separator: components
+            components: self,
+            separator: String(
+                separator
+            )
         )
     }
 
 }
 
-/// A joined string component
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Joined<T, Separator>: StringComponent where T: StringComponent, Separator: StringComponent {
+extension StringEnvironmentValues {
 
-    // MARK: - Initializers
+    /// The separator inserted between adjacent children of a composing component.
+    ///
+    /// Defaults to `"\n"`. Components such as ``Lines`` read this value to decide how to join their children. Set it on an ancestor component using ``StringComponent/joined(separator:)``.
+    @StringEntry
+    public var separator: String = "\n"
 
-    /// Create a joined string component
-    /// - Parameters:
-    ///   - content: The string components to join
-    ///   - separator: The separator used to join the components
-    public init(
-        @StringBuilder content: () -> T,
-        @StringBuilder separator: () -> Separator
-    ) {
-        components = content()
-        self.separator = separator()
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+private struct Joined<Components>: StringComponent where Components: StringComponent {
+
+    let components: Components
+
+    let separator: String
+
+    var body: some StringComponent {
+        components
+            .environment(
+                \.separator,
+                separator
+            )
     }
-
-    /// Create a joined string component
-    /// - Parameters:
-    ///   - separator: The separator used to join the components
-    ///   - content: The string components to join
-    public init(
-        separator: some StringProtocol,
-        @StringBuilder content: () -> T
-    ) where Separator == RawStringComponent {
-        self.init(content: content) { separator }
-    }
-
-    // MARK: - StringComponent
-
-    public var _content: String? {
-        StringEnvironment.$activeSeparator.withValue(String(separator)) {
-            components._content
-        }
-    }
-
-    public var body: Never {
-        fatalErrorImperativeStringComponent()
-    }
-
-    // MARK: - Private
-
-    private let components: T
-    private let separator: Separator
 
 }

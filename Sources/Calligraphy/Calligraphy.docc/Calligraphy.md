@@ -28,26 +28,28 @@ Calligraphy's type-safe API and builder patterns make it ideal for code generati
 
 - ``StringComponent``
 - ``StringBuilder``
-- ``Blank``
-- ``Delimited``
-- ``Frozen``
-- ``Joined``
+- ``StringComponents``
 - ``Line``
 - ``Lines``
 - ``Quote``
-- ``Tabbed``
-- ``MapLinesRule``
-- ``StringComponents``
-- ``DoubleQuote``
 - ``QuotationMark``
+- ``QuotationMarkStyle``
+- ``Tabbed``
+- ``TabDefinition``
 - ``Blank``
 - ``NewLine``
-- ``RawStringComponent``
-- ``SingleQuote``
 - ``Space``
 - ``Tab``
-- ``TripleQuote``
+- ``RawStringComponent``
 - ``AnyStringComponent``
+
+### String Composition Environment
+
+- ``ReadEnvironment``
+- ``StringEnvironment``
+- ``StringEnvironmentKey``
+- ``StringEnvironmentValues``
+- ``StringEntry()``
 
 ### Directory Composition
 

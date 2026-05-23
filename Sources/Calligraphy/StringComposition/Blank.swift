@@ -23,13 +23,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// A blank string component that produces an empty string.
+/// A string component that renders an empty string.
+///
+/// `Blank` is useful as a placeholder in conditional builders where every branch must return a component, but one branch should contribute nothing.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct Blank: StringComponent {
 
     // MARK: - Initializers
 
-    /// Create a blank string component.
+    /// Create a blank component.
     public init() {}
 
     // MARK: - StringComponent

@@ -23,28 +23,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// An entry point to the `@StringBuilder` result builder.
+/// An entry point to the ``StringBuilder`` result builder.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct StringComponents<T>: StringComponent where T: StringComponent {
+public struct StringComponents<Body>: StringComponent where Body: StringComponent {
 
     // MARK: - Initializers
 
-    /// Declaratively compose string components together.
-    /// - Parameter components: The strings to compose
+    /// Assemble string components together, declaratively
+    /// - Parameter body: The components to assemble
     public init(
-        @StringBuilder components: () -> T
+        @StringBuilder body: () -> Body
     ) {
-        self.components = components()
+        self.body = body()
     }
 
     // MARK: - StringComponent
 
-    public var body: some StringComponent {
-        components
-    }
-
-    // MARK: - Private
-
-    private let components: T
+    public let body: Body
 
 }
