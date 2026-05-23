@@ -29,31 +29,6 @@ import Testing
 @Suite("Joined Tests", .tags(.stringComposition))
 struct JoinedTests {
 
-    @Test("Component with String Separator")
-    func string() {
-        let joined = Joined(separator: ", ") {
-            "foo"
-            "bar"
-            "baz"
-        }
-        #expect(joined._content == "foo, bar, baz")
-    }
-
-    @Test("Component with Builder Separator")
-    func builder() {
-        let joined = Joined {
-            "foo"
-            "bar"
-            "baz"
-        } separator: {
-            Line {
-                ","
-                Space()
-            }
-        }
-        #expect(joined._content == "foo, bar, baz")
-    }
-
     @Test("Modifier with String Separator")
     func stringModifier() {
         let joined = StringComponents {
@@ -62,23 +37,7 @@ struct JoinedTests {
             "baz"
         }
         .joined(separator: ", ")
-        #expect(joined._content == "foo, bar, baz")
-    }
-
-    @Test("Modifier with Builder Separator")
-    func stringBuilder() {
-        let joined = StringComponents {
-            "foo"
-            "bar"
-            "baz"
-        }
-        .joined {
-            Line {
-                ","
-                Space()
-            }
-        }
-        #expect(joined._content == "foo, bar, baz")
+        #expect(String(joined) == "foo, bar, baz")
     }
 
 }

@@ -33,21 +33,21 @@ struct TabTests {
     func characterTab() {
         let tab = Tab()
             .tabDefinition(.tab)
-        #expect(tab._content == "\t")
+        #expect(String(tab) == "\t")
     }
 
     @Test("Spaces Tab Component")
     func spacesTab() {
         let tab = Tab()
             .tabDefinition(.spaces(3))
-        #expect(tab._content == "   ")
+        #expect(String(tab) == "   ")
     }
 
     @Test("Default Tab Component")
     func defaultTab() {
         let tab = Tab()
             .tabDefinition(.default)
-        #expect(tab._content == "  ")
+        #expect(String(tab) == "  ")
     }
 
 }

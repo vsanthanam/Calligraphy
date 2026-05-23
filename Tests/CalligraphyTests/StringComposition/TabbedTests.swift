@@ -43,7 +43,7 @@ struct TabbedTests {
           baz
         """#
 
-        #expect(tabbed._content == expected)
+        #expect(String(tabbed) == expected)
     }
 
     @Test("Modifier")
@@ -61,7 +61,7 @@ struct TabbedTests {
             baz
         """#
 
-        #expect(tabbed._content == expected)
+        #expect(String(tabbed) == expected)
     }
 
 }

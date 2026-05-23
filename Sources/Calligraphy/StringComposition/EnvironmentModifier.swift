@@ -1,5 +1,5 @@
 // Calligraphy
-// Separated.swift
+// EnvironmentModifier.swift
 //
 // MIT License
 //
@@ -23,50 +23,59 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
-
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
-    /// Separate the upstream components using the provided separator
-    /// - Parameter separator: The separator to use between components
-    /// - Returns: The separated components, using the provided separator
-    @StringBuilder
-    public func separatedBy<T>(
-        @StringBuilder separator: () -> T
-    ) -> some StringComponent where T: StringComponent {
-        Separated(self, separator())
+    public func environment<Key>(
+        _ key: Key.Type,
+        _ value: Key.Value
+    ) -> some StringComponent where Key: StringEnvironmentKey {
+        EnvironmentModifier(
+            upstream: self
+        ) { environment in
+            environment[key] = value
+        }
     }
 
-    /// Separate the upstream components using the provided separator
-    /// - Parameter separator: The separator to use between components
-    /// - Returns: The separated components, using the provided separator
-    public func separatedBy(
-        _ separator: some StringProtocol
+    public func environment<Value>(
+        _ keyPath: WritableKeyPath<StringEnvironmentValues, Value>,
+        _ value: Value
     ) -> some StringComponent {
-        separatedBy { separator }
+        EnvironmentModifier(
+            upstream: self
+        ) { environment in
+            environment[keyPath: keyPath] = value
+        }
+    }
+
+    public func transformEnvironment(
+        _ transform: @escaping (inout StringEnvironmentValues) -> Void
+    ) -> some StringComponent {
+        EnvironmentModifier(
+            upstream: self,
+            transform: transform
+        )
     }
 
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-private struct Separated<T, Separator>: StringComponent where T: StringComponent, Separator: StringComponent {
+private struct EnvironmentModifier<Upstream>: StringComponent where Upstream: StringComponent {
 
-    init(
-        _ content: T,
-        _ separator: Separator
-    ) {
-        self.content = content
-        self.separator = separator
+    let upstream: Upstream
+
+    let transform: (inout StringEnvironmentValues) -> Void
+
+    var body: Never {
+        fatalErrorImperativeStringComponent()
     }
 
-    var body: some StringComponent {
-        for component in String(content).components(separatedBy: String(separator)) {
-            component
-        }
+    func render(
+        in environment: StringEnvironmentValues
+    ) -> String? {
+        var copy = environment
+        transform(&copy)
+        return upstream.render(in: copy)
     }
-
-    private let content: T
-    private let separator: Separator
 
 }

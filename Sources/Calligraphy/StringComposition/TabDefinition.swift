@@ -24,38 +24,51 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public enum TabDefinition: Sendable {
+
+    case tab
+
+    case spaces(Int)
+
+    public static let `default`: TabDefinition = .spaces(2)
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
     public func tabDefinition(
-        _ definition: Tab.Definition
+        _ tabDefinition: TabDefinition
     ) -> some StringComponent {
-        TabDefinition(self, definition)
+        TabDefinitionModifier(
+            components: self,
+            tabDefinition: tabDefinition
+        )
     }
 
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-private struct TabDefinition<T>: StringComponent where T: StringComponent {
+extension StringEnvironmentValues {
 
-    init(
-        _ wrapped: T,
-        _ definition: Tab.Definition
-    ) {
-        self.wrapped = wrapped
-        self.definition = definition
+    @StringEntry
+    public var tabDefinition: TabDefinition = .default
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+private struct TabDefinitionModifier<Components>: StringComponent where Components: StringComponent {
+
+    let components: Components
+
+    let tabDefinition: TabDefinition
+
+    var body: some StringComponent {
+        components
+            .environment(
+                \.tabDefinition,
+                tabDefinition
+            )
     }
-
-    var _content: String? {
-        StringEnvironment.$activeTabDefinition.withValue(definition) {
-            wrapped._content
-        }
-    }
-
-    var body: Never {
-        fatalErrorImperativeStringComponent()
-    }
-
-    private let wrapped: T
-    private let definition: Tab.Definition
 
 }

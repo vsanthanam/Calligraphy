@@ -23,17 +23,50 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-enum StringEnvironment {
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+@propertyWrapper
+public struct StringEnvironment<Value>: StringEnvironmentPropertyWrapper {
 
-    @TaskLocal
-    static var activeSeparator = "\n"
+    // MARK: - Initializers
 
-    @TaskLocal
-    static var activeTabDefinition: Tab.Definition = .default
+    public init(
+        _ keyPath: KeyPath<StringEnvironmentValues, Value>
+    ) {
+        self.read = { $0[keyPath: keyPath] }
+    }
 
-    @TaskLocal
-    static var activeQuotationMarkStyle: QuotationMark.Style = .default
+    public init<Key>(
+        _ key: Key.Type
+    ) where Key: StringEnvironmentKey, Value == Key.Value {
+        self.read = { $0[key] }
+    }
 
-    @TaskLocal
-    static var activeLineSpacing: Int = 1
+    // MARK: - Property Wrapper
+
+    public var wrappedValue: Value {
+        read(box.values)
+    }
+
+    // MARK: - Private
+
+    func inject(
+        _ values: StringEnvironmentValues
+    ) {
+        box.values = values
+    }
+
+    private let read: (StringEnvironmentValues) -> Value
+    private let box = Box()
+
+    private final class Box {
+        var values = StringEnvironmentValues()
+    }
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+protocol StringEnvironmentPropertyWrapper {
+    func inject(
+        _ values: StringEnvironmentValues
+    )
 }

@@ -1,5 +1,5 @@
 // Calligraphy
-// SingleQuote.swift
+// ReadEnvironment.swift
 //
 // MIT License
 //
@@ -23,19 +23,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// A single quote (`'`)
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct SingleQuote: StringComponent {
+public struct ReadEnvironment<Content>: StringComponent where Content: StringComponent {
 
     // MARK: - Initializers
 
-    public init() {}
+    public init(
+        @StringBuilder _ build: @escaping (StringEnvironmentValues) -> Content
+    ) {
+        self.build = build
+    }
 
     // MARK: - StringComponent
 
-    public var body: some StringComponent {
-        QuotationMark()
-            .quotationMarkStyle(.single)
+    public var body: Never {
+        fatalError()
     }
+
+    public func render(
+        in environment: StringEnvironmentValues
+    ) -> String? {
+        build(environment).render(in: environment)
+    }
+
+    // MARK: - Private
+
+    private let build: (StringEnvironmentValues) -> Content
 
 }

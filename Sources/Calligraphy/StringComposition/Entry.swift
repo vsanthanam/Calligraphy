@@ -1,5 +1,5 @@
 // Calligraphy
-// TripleQuote.swift
+// Entry.swift
 //
 // MIT License
 //
@@ -23,19 +23,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// A single quote (`'''`)
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct TripleQuote: StringComponent {
-
-    // MARK: - Initializers
-
-    public init() {}
-
-    // MARK: - StringComponent
-
-    public var body: some StringComponent {
-        QuotationMark()
-            .quotationMarkStyle(.tripleSingle)
-    }
-
-}
+@attached(accessor)
+@attached(peer, names: prefixed(__Key_))
+public macro StringEntry() = #externalMacro(
+    module: "CalligraphyCompilerPlugin",
+    type: "StringEntryMacro"
+)

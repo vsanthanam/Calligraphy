@@ -23,19 +23,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// Multiple lines of text.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Lines<T>: StringComponent where T: StringComponent {
+public struct Lines<Components>: StringComponent where Components: StringComponent {
 
     // MARK: - Initializers
 
-    /// Create lines of text
-    /// - Parameters:
-    ///   - spacing: The spacing to use between each line
-    ///   - components: The contents of each line
     public init(
         spacing: Int? = nil,
-        @StringBuilder components: () -> T
+        @StringBuilder components: () -> Components
     ) {
         self.spacing = spacing
         self.components = components()
@@ -54,24 +49,30 @@ public struct Lines<T>: StringComponent where T: StringComponent {
 
     // MARK: - Private
 
+    private let components: Components
     private let spacing: Int?
-    private let components: T
 
-    private struct _Guts<Wrapped>: StringComponent where Wrapped: StringComponent {
+    private struct _Guts<T>: StringComponent where T: StringComponent {
 
-        let lines: Wrapped
+        let lines: T
+
+        @StringEnvironment(\.effectiveSeparator)
+        var effectiveSeparator
 
         var body: some StringComponent {
             lines
-                .joined {
-                    Line {
-                        for _ in 0 ..< StringEnvironment.activeLineSpacing {
-                            NewLine()
-                        }
-                    }
-                }
+                .joined(separator: effectiveSeparator)
         }
 
+    }
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+extension StringEnvironmentValues {
+
+    fileprivate var effectiveSeparator: String {
+        Array(repeating: "\n", count: lineSpacing).joined(separator: "")
     }
 
 }

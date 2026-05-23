@@ -26,43 +26,35 @@
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
-    /// Set the spacing between lines
-    /// - Parameter spacing: The line spacing. Must be greater than or equal to 1.
-    /// - Returns: The upstream, with the applied line spacing
     public func lineSpacing(
-        _ spacing: Int
+        _ count: Int
     ) -> some StringComponent {
         LineSpacing(
-            self,
-            spacing
+            lines: self,
+            count: count
         )
     }
 
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-private struct LineSpacing<T>: StringComponent where T: StringComponent {
+extension StringEnvironmentValues {
 
-    init(
-        _ wrapped: T,
-        _ spacing: Int
-    ) {
-        precondition(spacing > 0, "Line spacing must be greater than or equal to one")
-        self.wrapped = wrapped
-        self.spacing = spacing
+    @StringEntry
+    public var lineSpacing: Int = 1
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+private struct LineSpacing<Lines>: StringComponent where Lines: StringComponent {
+
+    let lines: Lines
+
+    let count: Int
+
+    var body: some StringComponent {
+        lines
+            .environment(\.lineSpacing, count)
     }
-
-    var _content: String? {
-        StringEnvironment.$activeLineSpacing.withValue(spacing) {
-            wrapped._content
-        }
-    }
-
-    var body: Never {
-        fatalErrorImperativeStringComponent()
-    }
-
-    private let wrapped: T
-    private let spacing: Int
 
 }

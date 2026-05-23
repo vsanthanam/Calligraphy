@@ -23,16 +23,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// A single line of text.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Line<T>: StringComponent where T: StringComponent {
+public struct Line<Components>: StringComponent where Components: StringComponent {
 
     // MARK: - Initializers
 
-    /// Join the child components together into a single line with no separator.
-    /// - Parameter components: The components to join
     public init(
-        @StringBuilder components: () -> T
+        @StringBuilder components: () -> Components
     ) {
         self.components = components()
     }
@@ -46,6 +43,6 @@ public struct Line<T>: StringComponent where T: StringComponent {
 
     // MARK: - Private
 
-    private let components: T
+    private let components: Components
 
 }

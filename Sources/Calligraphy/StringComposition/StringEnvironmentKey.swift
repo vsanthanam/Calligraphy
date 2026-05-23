@@ -1,5 +1,5 @@
 // Calligraphy
-// DoubleQuoteTests.swift
+// StringEnvironmentKey.swift
 //
 // MIT License
 //
@@ -23,12 +23,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Calligraphy
-import Testing
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public protocol StringEnvironmentKey<Value> {
 
-@Test("Double Quote Component", .tags(.stringComposition))
-func doubleQuote() {
+    associatedtype Value: Sendable
 
-    #expect(DoubleQuote()._content == "\"")
+    static var defaultValue: Value { get }
 
 }

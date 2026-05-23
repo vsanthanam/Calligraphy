@@ -26,7 +26,7 @@
 import Calligraphy
 import Testing
 
-@Test("Line Spacing Tests")
+@Test("Line Spacing Tests", .tags(.stringComposition))
 func lineSpacingTests() {
 
     let str = String.build {
@@ -35,10 +35,11 @@ func lineSpacingTests() {
                 "foo"
                 "bar"
             }
-            Lines(spacing: 1) {
+            Lines {
                 "baz"
                 "qux"
             }
+            .lineSpacing(1)
             Lines(spacing: 1) {
                 "quux"
                 "corge"

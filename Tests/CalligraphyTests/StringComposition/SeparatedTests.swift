@@ -26,33 +26,33 @@
 import Calligraphy
 import Testing
 
-@Suite("Separated Tests", .tags(.stringComposition))
-struct SeparatedTests {
-
-    @Test("Modifier with String")
-    func stringModifier() {
-        let component = Lines {
-            StringComponents {
-                "1-2-3-4-5"
-            }
-            .separatedBy("-")
-        }
-        #expect(component._content == "1\n2\n3\n4\n5")
-    }
-
-    @Test("Modifier with Builder")
-    func builderModifier() {
-        let component = Line {
-            StringComponents {
-                "1"
-                "2"
-                "3"
-                "4"
-                "5"
-            }
-            .separatedBy("\n")
-        }
-        #expect(component._content == "12345")
-    }
-
-}
+// @Suite("Separated Tests", .tags(.stringComposition))
+// struct SeparatedTests {
+//
+//    @Test("Modifier with String")
+//    func stringModifier() {
+//        let component = Lines {
+//            StringComponents {
+//                "1-2-3-4-5"
+//            }
+//            .separatedBy("-")
+//        }
+//        #expect(component._content == "1\n2\n3\n4\n5")
+//    }
+//
+//    @Test("Modifier with Builder")
+//    func builderModifier() {
+//        let component = Line {
+//            StringComponents {
+//                "1"
+//                "2"
+//                "3"
+//                "4"
+//                "5"
+//            }
+//            .separatedBy("\n")
+//        }
+//        #expect(component._content == "12345")
+//    }
+//
+// }

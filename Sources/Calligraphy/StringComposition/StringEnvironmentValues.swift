@@ -1,5 +1,5 @@
 // Calligraphy
-// Frozen.swift
+// StringEnvironmentValues.swift
 //
 // MIT License
 //
@@ -23,37 +23,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import Foundation
+
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-extension StringComponent {
+public struct StringEnvironmentValues: Sendable {
 
-    /// Freeze the upstreams into a single component to prevent them from being modified by downstream modifiers
-    /// - Returns: The frozen upstream
-    public func frozen() -> some StringComponent {
-        Frozen { self }
+    // MARK: - API
+
+    public subscript<Key>(
+        _ key: Key.Type
+    ) -> Key.Value where Key: StringEnvironmentKey {
+        get {
+            if let val = storage[ObjectIdentifier(key)] {
+                val as! Key.Value
+            } else {
+                Key.defaultValue
+            }
+        }
+        mutating set {
+            storage[ObjectIdentifier(key)] = newValue
+        }
     }
 
-}
+    // MARK: - Private
 
-/// A frozen string component.
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Frozen: StringComponent {
+    init() {}
 
-    // MARK: - Initializers
-
-    /// Create a frozen string compnent
-    /// - Parameter components: The components to freeze
-    public init(
-        @StringBuilder components: () -> some StringComponent
-    ) {
-        _content = String.build { components() }
+    func draw(with components: [String?]) -> String? {
+        let afterSkips = components.compactMap(\.self)
+        guard !afterSkips.isEmpty else {
+            return nil
+        }
+        return afterSkips.joined(separator: separator)
     }
 
-    // MARK: - StringComponent
-
-    public let _content: String?
-
-    public var body: Never {
-        fatalErrorImperativeStringComponent()
-    }
+    private var storage = [ObjectIdentifier: any Sendable]()
 
 }

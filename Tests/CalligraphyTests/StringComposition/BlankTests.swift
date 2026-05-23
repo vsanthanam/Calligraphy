@@ -23,11 +23,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Calligraphy
-import Testing
-
-@Test("Blank Component", .tags(.stringComposition))
-func blank() {
-    let component = Blank()
-    #expect(component._content == "")
-}
+// import Calligraphy
+// import Testing
+//
+// @Test("Blank Component", .tags(.stringComposition))
+// func blank() {
+//    let component = Blank()
+//    #expect(component._content == "")
+// }

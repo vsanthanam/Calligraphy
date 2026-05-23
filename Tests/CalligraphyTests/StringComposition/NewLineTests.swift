@@ -29,5 +29,5 @@ import Testing
 @Test("New Line Component", .tags(.stringComposition))
 func newLine() {
     let newLine = NewLine()
-    #expect(newLine._content == "\n")
+    #expect(String(newLine) == "\n")
 }
