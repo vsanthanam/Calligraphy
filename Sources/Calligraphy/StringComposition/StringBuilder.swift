@@ -125,6 +125,19 @@ public enum StringBuilder {
         .init(erasing: component)
     }
 
+    public static func buildFinalResult<Component>(
+        _ component: Component
+    ) -> Component where Component: StringComponent {
+        component
+    }
+
+    @_disfavoredOverload
+    public static func buildFinalResult(
+        _ component: some StringComponent
+    ) -> String {
+        String(component)
+    }
+
     public struct _Assembled<each Component>: StringComponent where repeat each Component: StringComponent {
 
         // MARK: - StringComponent
