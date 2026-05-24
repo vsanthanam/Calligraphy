@@ -10,20 +10,23 @@ A declarative library for composing strings, text, files, and folders in Swift
 
 ## Overview
 
-Calligraphy is a SwiftUI-inspired library that provides a declarative API for composing strings, text, files, and directories in Swift. Using result builders, it makes complex text manipulation and file generation more readable and maintainable.
+Calligraphy is SwiftUI for strings, files, and folders. Components conform to `StringComponent` the way views conform to `View`, `@StringBuilder` composes them like `@ViewBuilder`, and modifiers chain the same way. The same pattern extends to directory trees via `DirectoryContent` and `@DirectoryContentBuilder`.
 
-Create and manipulate strings with a declarative syntax:
+Compose a multi-line string from components:
 
 ```swift
 let message = String.build {
     Line {
-        "Hello"
+        "Hello,"
         Space()
         "World"
     }
-    "Welcome to Calligraphy!"
+    Blank()
+    "Welcome to Calligraphy."
 }
-// Result: "Hello World\nWelcome to Calligraphy!"
+// Hello, World
+//
+// Welcome to Calligraphy.
 ```
 
 Generate entire directory structures programmatically:
@@ -54,18 +57,64 @@ try await project.write(to: URL(fileURLWithPath: "/path/to/output"))
 
 Calligraphy's declarative approach offers significant advantages over traditional imperative string construction.
 
-Without Calligraphy:
+Conditional sections, without Calligraphy:
 
 ```swift
-// Creating a list of items with conditionals
-func createItemList(items: [String], includeHeader: Bool) -> String {
-    var result = ""
-    if includeHeader {
-        result += "# Item List\n\n"
+func releaseNotes(version: String, features: [String], fixes: [String]) -> String {
+    var notes = "# v\(version)\n"
+    if !features.isEmpty {
+        notes += "\n## Features\n"
+        for feature in features {
+            notes += "- \(feature)\n"
+        }
     }
-    for (index, item) in items.enumerated() {
-        result += "\(index + 1). \(item)\n"
+    if !fixes.isEmpty {
+        notes += "\n## Bug Fixes\n"
+        for fix in fixes {
+            notes += "- \(fix)\n"
+        }
     }
+    return notes.trimmingCharacters(in: .newlines)
+}
+```
+
+With Calligraphy:
+
+```swift
+@StringBuilder
+func releaseNotes(version: String, features: [String], fixes: [String]) -> String {
+    "# v\(version)"
+    if !features.isEmpty {
+        ""
+        "## Features"
+        for feature in features {
+            "- \(feature)"
+        }
+    }
+    if !fixes.isEmpty {
+        ""
+        "## Bug Fixes"
+        for fix in fixes {
+            "- \(fix)"
+        }
+    }
+}
+```
+
+Nested indentation, without Calligraphy:
+
+```swift
+func renderHandler(name: String, paths: [String]) -> String {
+    var result = "struct \(name) {\n"
+    result += "    func handle(_ path: String) {\n"
+    result += "        switch path {\n"
+    for path in paths {
+        result += "        case \"\(path)\":\n"
+        result += "            dispatch(\"\(path)\")\n"
+    }
+    result += "        }\n"
+    result += "    }\n"
+    result += "}"
     return result
 }
 ```
@@ -73,17 +122,24 @@ func createItemList(items: [String], includeHeader: Bool) -> String {
 With Calligraphy:
 
 ```swift
-// Creating the same list with Calligraphy
-func createItemList(items: [String], includeHeader: Bool) -> String {
-    String.build {
-        if includeHeader {
-            "# Item List"
-            Blank()
+@StringBuilder
+func renderHandler(name: String, paths: [String]) -> String {
+    "struct \(name) {"
+    Tabbed {
+        "func handle(_ path: String) {"
+        Tabbed {
+            "switch path {"
+            for path in paths {
+                "case \"\(path)\":"
+                Tabbed {
+                    "dispatch(\"\(path)\")"
+                }
+            }
+            "}"
         }
-        for (index, item) in items.enumerated() {
-            "\(index + 1). \(item)"
-        }
+        "}"
     }
+    "}"
 }
 ```
 
