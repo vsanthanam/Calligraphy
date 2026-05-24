@@ -1,5 +1,5 @@
 // Calligraphy
-// BlankTests.swift
+// ReadEnvironmentTests.swift
 //
 // MIT License
 //
@@ -26,8 +26,37 @@
 import Calligraphy
 import Testing
 
-@Test("Blank Component", .tags(.stringComposition))
-func blank() {
-    let component = Blank()
-    #expect(String(component) == "")
+@Suite("Read Environment Tests", .tags(.stringComposition))
+struct ReadEnvironmentTests {
+
+    @Test("Reads Default Environment")
+    func readDefault() {
+        let component = ReadEnvironment { environment in
+            environment.separator
+        }
+        #expect(String(component) == "\n")
+    }
+
+    @Test("Reads Injected Environment")
+    func readInjected() {
+        let component = ReadEnvironment { environment in
+            environment.separator
+        }
+        .environment(\.separator, ", ")
+        #expect(String(component) == ", ")
+    }
+
+    @Test("Branches on Environment Value")
+    func conditionalBody() {
+        let multiline = ReadEnvironment { environment in
+            if environment.separator == "\n" {
+                "multiline"
+            } else {
+                "inline"
+            }
+        }
+        #expect(String(multiline) == "multiline")
+        #expect(String(multiline.environment(\.separator, ", ")) == "inline")
+    }
+
 }

@@ -1,5 +1,5 @@
 // Calligraphy
-// BlankTests.swift
+// QuotationMarkStyleTests.swift
 //
 // MIT License
 //
@@ -26,8 +26,38 @@
 import Calligraphy
 import Testing
 
-@Test("Blank Component", .tags(.stringComposition))
-func blank() {
-    let component = Blank()
-    #expect(String(component) == "")
+@Suite("Quotation Mark Style Tests", .tags(.stringComposition))
+struct QuotationMarkStyleTests {
+
+    @Test("Single Raw Value")
+    func single() {
+        #expect(QuotationMarkStyle.single.rawValue == "'")
+    }
+
+    @Test("Double Raw Value")
+    func double() {
+        #expect(QuotationMarkStyle.double.rawValue == "\"")
+    }
+
+    @Test("Triple Single Raw Value")
+    func tripleSingle() {
+        #expect(QuotationMarkStyle.tripleSingle.rawValue == "'''")
+    }
+
+    @Test("Triple Double Raw Value")
+    func tripleDouble() {
+        #expect(QuotationMarkStyle.tripleDouble.rawValue == "\"\"\"")
+    }
+
+    @Test("Default Style")
+    func defaultStyle() {
+        #expect(QuotationMarkStyle.default == .double)
+    }
+
+    @Test("Environment Default")
+    func environmentDefault() {
+        let mark = QuotationMark()
+        #expect(String(mark) == QuotationMarkStyle.default.rawValue)
+    }
+
 }

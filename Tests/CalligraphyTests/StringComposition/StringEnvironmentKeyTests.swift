@@ -1,5 +1,5 @@
 // Calligraphy
-// BlankTests.swift
+// StringEnvironmentKeyTests.swift
 //
 // MIT License
 //
@@ -26,8 +26,34 @@
 import Calligraphy
 import Testing
 
-@Test("Blank Component", .tags(.stringComposition))
-func blank() {
-    let component = Blank()
-    #expect(String(component) == "")
+@Suite("String Environment Key Tests", .tags(.stringComposition))
+struct StringEnvironmentKeyTests {
+
+    private struct GreetingKey: StringEnvironmentKey {
+        static let defaultValue: String = "Hello"
+    }
+
+    private struct Reader: StringComponent {
+
+        @StringEnvironment(GreetingKey.self)
+        var greeting: String
+
+        var body: some StringComponent {
+            greeting
+        }
+
+    }
+
+    @Test("Default Value Used When Unset")
+    func defaultValue() {
+        #expect(String(Reader()) == "Hello")
+    }
+
+    @Test("Injected Value Read by Key")
+    func injectedValue() {
+        let component = Reader()
+            .environment(GreetingKey.self, "Howdy")
+        #expect(String(component) == "Howdy")
+    }
+
 }

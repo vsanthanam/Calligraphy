@@ -23,91 +23,140 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@testable import CalligraphyCompilerPlugin
+import SwiftSyntax
+import SwiftSyntaxBuilder
+import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacros
 import SwiftSyntaxMacrosGenericTestSupport
-import SwiftSyntaxMacrosTestSupport
-import XCTest
+import Testing
 
-final class FilePermissionsOctalMacroTests: XCTestCase {
+// Macro implementations build for the host, so the corresponding module is not available when cross-compiling. Cross-compiled tests may still make use of the macro itself in end-to-end tests.
+#if canImport(CalligraphyCompilerPlugin)
+    import CalligraphyCompilerPlugin
 
-    private let macros: [String: any Macro.Type] = [
-        "filePermissions": FilePermissionsOctalMacro.self
+    private let macroSpecs: [String: MacroSpec] = [
+        "filePermissions": MacroSpec(type: FilePermissionsOctalMacro.self)
     ]
+#endif
 
-    func testExpands0644() {
-        assertMacroExpansion(
-            """
-            let perms: FilePermissions = #filePermissions(0o644)
-            """,
-            expandedSource: """
-            let perms: FilePermissions = [.readUser, .writeUser, .readGroup, .readOther]
-            """,
-            macros: macros
-        )
+@Suite("#filePermissions(octal) Macro Tests")
+struct FilePermissionsOctalMacroTests {
+
+    @Test("Expands 0o644")
+    func expands0644() {
+        #if canImport(CalligraphyCompilerPlugin)
+            assertMacroExpansion(
+                """
+                let perms: FilePermissions = #filePermissions(0o644)
+                """,
+                expandedSource: """
+                let perms: FilePermissions = [.readUser, .writeUser, .readGroup, .readOther]
+                """,
+                macroSpecs: macroSpecs
+            ) { failure in
+                Issue.record("\(failure.message)")
+            }
+        #else
+            Issue.record("macros are only supported when running tests for the host platform")
+        #endif
     }
 
-    func testExpands0755() {
-        assertMacroExpansion(
-            """
-            let perms: FilePermissions = #filePermissions(0o755)
-            """,
-            expandedSource: """
-            let perms: FilePermissions = [.readUser, .writeUser, .executeUser, .readGroup, .executeGroup, .readOther, .executeOther]
-            """,
-            macros: macros
-        )
+    @Test("Expands 0o755")
+    func expands0755() {
+        #if canImport(CalligraphyCompilerPlugin)
+            assertMacroExpansion(
+                """
+                let perms: FilePermissions = #filePermissions(0o755)
+                """,
+                expandedSource: """
+                let perms: FilePermissions = [.readUser, .writeUser, .executeUser, .readGroup, .executeGroup, .readOther, .executeOther]
+                """,
+                macroSpecs: macroSpecs
+            ) { failure in
+                Issue.record("\(failure.message)")
+            }
+        #else
+            Issue.record("macros are only supported when running tests for the host platform")
+        #endif
     }
 
-    func testExpands07777_AllBits() {
-        assertMacroExpansion(
-            """
-            let perms: FilePermissions = #filePermissions(0o7777)
-            """,
-            expandedSource: """
-            let perms: FilePermissions = [.setUserID, .setGroupID, .sticky, .readUser, .writeUser, .executeUser, .readGroup, .writeGroup, .executeGroup, .readOther, .writeOther, .executeOther]
-            """,
-            macros: macros
-        )
+    @Test("Expands 0o7777 (all bits)")
+    func expands07777() {
+        #if canImport(CalligraphyCompilerPlugin)
+            assertMacroExpansion(
+                """
+                let perms: FilePermissions = #filePermissions(0o7777)
+                """,
+                expandedSource: """
+                let perms: FilePermissions = [.setUserID, .setGroupID, .sticky, .readUser, .writeUser, .executeUser, .readGroup, .writeGroup, .executeGroup, .readOther, .writeOther, .executeOther]
+                """,
+                macroSpecs: macroSpecs
+            ) { failure in
+                Issue.record("\(failure.message)")
+            }
+        #else
+            Issue.record("macros are only supported when running tests for the host platform")
+        #endif
     }
 
-    func testExpands0000_Empty() {
-        assertMacroExpansion(
-            """
-            let perms: FilePermissions = #filePermissions(0o000)
-            """,
-            expandedSource: """
-            let perms: FilePermissions = [] as FilePermissions
-            """,
-            macros: macros
-        )
+    @Test("Expands 0o000 (empty)")
+    func expands0000() {
+        #if canImport(CalligraphyCompilerPlugin)
+            assertMacroExpansion(
+                """
+                let perms: FilePermissions = #filePermissions(0o000)
+                """,
+                expandedSource: """
+                let perms: FilePermissions = [] as FilePermissions
+                """,
+                macroSpecs: macroSpecs
+            ) { failure in
+                Issue.record("\(failure.message)")
+            }
+        #else
+            Issue.record("macros are only supported when running tests for the host platform")
+        #endif
     }
 
-    func testUnderscoresAllowed() {
-        assertMacroExpansion(
-            """
-            let perms: FilePermissions = #filePermissions(0o7_5_5)
-            """,
-            expandedSource: """
-            let perms: FilePermissions = [.readUser, .writeUser, .executeUser, .readGroup, .executeGroup, .readOther, .executeOther]
-            """,
-            macros: macros
-        )
+    @Test("Underscores allowed in literal")
+    func underscoresAllowed() {
+        #if canImport(CalligraphyCompilerPlugin)
+            assertMacroExpansion(
+                """
+                let perms: FilePermissions = #filePermissions(0o7_5_5)
+                """,
+                expandedSource: """
+                let perms: FilePermissions = [.readUser, .writeUser, .executeUser, .readGroup, .executeGroup, .readOther, .executeOther]
+                """,
+                macroSpecs: macroSpecs
+            ) { failure in
+                Issue.record("\(failure.message)")
+            }
+        #else
+            Issue.record("macros are only supported when running tests for the host platform")
+        #endif
     }
 
-    func testInvalidLiteral_Diagnostic() {
-        assertMacroExpansion(
-            """
-            let perms: FilePermissions = #filePermissions(755)
-            """,
-            expandedSource: """
-            let perms: FilePermissions = #filePermissions(755)
-            """,
-            diagnostics: [
-                .init(message: "filePermissions requires an octal integer literal", line: 1, column: 30)
-            ],
-            macros: macros
-        )
+    @Test("Non-octal literal emits diagnostic")
+    func invalidLiteral() {
+        #if canImport(CalligraphyCompilerPlugin)
+            assertMacroExpansion(
+                """
+                let perms: FilePermissions = #filePermissions(755)
+                """,
+                expandedSource: """
+                let perms: FilePermissions = #filePermissions(755)
+                """,
+                diagnostics: [
+                    DiagnosticSpec(message: "filePermissions requires an octal integer literal", line: 1, column: 30)
+                ],
+                macroSpecs: macroSpecs
+            ) { failure in
+                Issue.record("\(failure.message)")
+            }
+        #else
+            Issue.record("macros are only supported when running tests for the host platform")
+        #endif
     }
 
 }

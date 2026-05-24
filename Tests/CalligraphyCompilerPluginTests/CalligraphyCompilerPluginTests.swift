@@ -23,15 +23,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@testable import CalligraphyCompilerPlugin
-import XCTest
+import Testing
 
-final class CalligraphyCompilerPluginTests: XCTestCase {
+// Macro implementations build for the host, so the corresponding module is not available when cross-compiling. Cross-compiled tests may still make use of the macro itself in end-to-end tests.
+#if canImport(CalligraphyCompilerPlugin)
+    @testable import CalligraphyCompilerPlugin
+#endif
 
-    func test_plugins() {
+@Test("Compiler plugin tests")
+func calligraphyCompilerPluginTests() {
+    #if canImport(CalligraphyCompilerPlugin)
         let plugin = CalligraphyCompilerPlugin()
-        XCTAssert(plugin.providingMacros[0] == FilePermissionsOctalMacro.self)
-        XCTAssert(plugin.providingMacros[1] == FilePermissionsStringMacro.self)
-    }
-
+        #expect(plugin.providingMacros.count == 3)
+        #expect(plugin.providingMacros[0] is FilePermissionsOctalMacro.Type)
+        #expect(plugin.providingMacros[1] is FilePermissionsStringMacro.Type)
+        #expect(plugin.providingMacros[2] is StringEntryMacro.Type)
+    #else
+        Issue.record("macros are only supported when running tests for the host platform")
+    #endif
 }

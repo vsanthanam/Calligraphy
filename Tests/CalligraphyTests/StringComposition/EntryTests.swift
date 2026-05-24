@@ -1,5 +1,5 @@
 // Calligraphy
-// BlankTests.swift
+// EntryTests.swift
 //
 // MIT License
 //
@@ -26,8 +26,37 @@
 import Calligraphy
 import Testing
 
-@Test("Blank Component", .tags(.stringComposition))
-func blank() {
-    let component = Blank()
-    #expect(String(component) == "")
+extension StringEnvironmentValues {
+
+    @StringEntry
+    var entryTestGreeting: String = "Hello"
+
+}
+
+@Suite("@StringEntry Tests", .tags(.stringComposition))
+struct EntryTests {
+
+    private struct Reader: StringComponent {
+
+        @StringEnvironment(\.entryTestGreeting)
+        var greeting: String
+
+        var body: some StringComponent {
+            greeting
+        }
+
+    }
+
+    @Test("Generated Default Value")
+    func defaultValue() {
+        #expect(String(Reader()) == "Hello")
+    }
+
+    @Test("Generated Accessors Allow Override")
+    func override() {
+        let component = Reader()
+            .environment(\.entryTestGreeting, "Howdy")
+        #expect(String(component) == "Howdy")
+    }
+
 }

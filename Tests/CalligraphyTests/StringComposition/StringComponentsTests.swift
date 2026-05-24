@@ -1,5 +1,5 @@
 // Calligraphy
-// BlankTests.swift
+// StringComponentsTests.swift
 //
 // MIT License
 //
@@ -26,8 +26,41 @@
 import Calligraphy
 import Testing
 
-@Test("Blank Component", .tags(.stringComposition))
-func blank() {
-    let component = Blank()
-    #expect(String(component) == "")
+@Suite("String Components Tests", .tags(.stringComposition))
+struct StringComponentsTests {
+
+    @Test("Single Component")
+    func single() {
+        let components = StringComponents {
+            "foo"
+        }
+        #expect(String(components) == "foo")
+    }
+
+    @Test("Multiple Components")
+    func multiple() {
+        let components = StringComponents {
+            "foo"
+            "bar"
+            "baz"
+        }
+        #expect(String(components) == "foo\nbar\nbaz")
+    }
+
+    @Test("Empty")
+    func empty() {
+        let components = StringComponents {}
+        #expect(String(components) == "")
+    }
+
+    @Test("Composable with Modifiers")
+    func composable() {
+        let components = StringComponents {
+            "foo"
+            "bar"
+        }
+        .joined(separator: ", ")
+        #expect(String(components) == "foo, bar")
+    }
+
 }
