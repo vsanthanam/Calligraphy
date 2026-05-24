@@ -384,6 +384,53 @@ struct StringBuilderTests {
         #expect(String(components) == "a\nb\nc")
     }
 
+    @Test("String Final Result")
+    func stringFinalResult() {
+
+        @StringBuilder
+        func builder() -> String {
+            "foo"
+            "bar"
+        }
+
+        #expect(builder() == "foo\nbar")
+    }
+
+    @Test("String Final Result - Single Component")
+    func stringFinalResultSingle() {
+
+        @StringBuilder
+        func builder() -> String {
+            "foo"
+        }
+
+        #expect(builder() == "foo")
+    }
+
+    @Test("String Final Result - No Components")
+    func stringFinalResultEmpty() {
+
+        @StringBuilder
+        func builder() -> String {}
+
+        #expect(builder() == "")
+    }
+
+    @Test("String Final Result - Conditional")
+    func stringFinalResultConditional() {
+
+        @StringBuilder
+        func builder(_ flag: Bool) -> String {
+            "foo"
+            if flag {
+                "bar"
+            }
+        }
+
+        #expect(builder(true) == "foo\nbar")
+        #expect(builder(false) == "foo")
+    }
+
     @Test("+ Operators")
     func operators() {
 

@@ -50,7 +50,10 @@ let package = Package(
             name: "CalligraphyTests",
             dependencies: [
                 "Calligraphy",
-                .product(name: "Collections", package: "swift-collections")
+                .product(
+                    name: "Collections",
+                    package: "swift-collections"
+                )
             ],
             swiftSettings: [
                 .enableUpcomingFeature("ExistentialAny"),
