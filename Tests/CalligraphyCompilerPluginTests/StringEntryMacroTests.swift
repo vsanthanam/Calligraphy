@@ -23,182 +23,231 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@testable import CalligraphyCompilerPlugin
+import SwiftSyntax
+import SwiftSyntaxBuilder
+import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacros
 import SwiftSyntaxMacrosGenericTestSupport
-import SwiftSyntaxMacrosTestSupport
-import XCTest
+import Testing
 
-final class StringEntryMacroTests: XCTestCase {
+// Macro implementations build for the host, so the corresponding module is not available when cross-compiling. Cross-compiled tests may still make use of the macro itself in end-to-end tests.
+#if canImport(CalligraphyCompilerPlugin)
+    import CalligraphyCompilerPlugin
 
-    private let macros: [String: any Macro.Type] = [
-        "StringEntry": StringEntryMacro.self
+    private let macroSpecs: [String: MacroSpec] = [
+        "StringEntry": MacroSpec(type: StringEntryMacro.self)
     ]
+#endif
 
-    func testExpandsStringEntry() {
-        assertMacroExpansion(
-            #"""
-            extension StringEnvironmentValues {
-                @StringEntry
-                var separator: String = "\n"
-            }
-            """#,
-            expandedSource: #"""
-            extension StringEnvironmentValues {
-                var separator: String {
-                    get {
-                        self[__Key_separator.self]
+@Suite("@StringEntry Macro Tests")
+struct StringEntryMacroTests {
+
+    @Test("String type entry expands")
+    func stringEntry() {
+        #if canImport(CalligraphyCompilerPlugin)
+            assertMacroExpansion(
+                #"""
+                extension StringEnvironmentValues {
+                    @StringEntry
+                    var separator: String = "\n"
+                }
+                """#,
+                expandedSource: #"""
+                extension StringEnvironmentValues {
+                    var separator: String {
+                        get {
+                            self[__Key_separator.self]
+                        }
+                        set {
+                            self[__Key_separator.self] = newValue
+                        }
                     }
-                    set {
-                        self[__Key_separator.self] = newValue
+
+                    private struct __Key_separator: StringEnvironmentKey {
+                        static let defaultValue: String = "\n"
                     }
                 }
-
-                private struct __Key_separator: StringEnvironmentKey {
-                    static let defaultValue: String = "\n"
-                }
+                """#,
+                macroSpecs: macroSpecs
+            ) { failure in
+                Issue.record("\(failure.message)")
             }
-            """#,
-            macros: macros
-        )
+        #else
+            Issue.record("macros are only supported when running tests for the host platform")
+        #endif
     }
 
-    func testExpandsIntEntry() {
-        assertMacroExpansion(
-            """
-            extension StringEnvironmentValues {
-                @StringEntry
-                var lineSpacing: Int = 1
-            }
-            """,
-            expandedSource: """
-            extension StringEnvironmentValues {
-                var lineSpacing: Int {
-                    get {
-                        self[__Key_lineSpacing.self]
-                    }
-                    set {
-                        self[__Key_lineSpacing.self] = newValue
-                    }
+    @Test("Int type entry expands")
+    func intEntry() {
+        #if canImport(CalligraphyCompilerPlugin)
+            assertMacroExpansion(
+                """
+                extension StringEnvironmentValues {
+                    @StringEntry
+                    var lineSpacing: Int = 1
                 }
+                """,
+                expandedSource: """
+                extension StringEnvironmentValues {
+                    var lineSpacing: Int {
+                        get {
+                            self[__Key_lineSpacing.self]
+                        }
+                        set {
+                            self[__Key_lineSpacing.self] = newValue
+                        }
+                    }
 
-                private struct __Key_lineSpacing: StringEnvironmentKey {
-                    static let defaultValue: Int = 1
+                    private struct __Key_lineSpacing: StringEnvironmentKey {
+                        static let defaultValue: Int = 1
+                    }
                 }
+                """,
+                macroSpecs: macroSpecs
+            ) { failure in
+                Issue.record("\(failure.message)")
             }
-            """,
-            macros: macros
-        )
+        #else
+            Issue.record("macros are only supported when running tests for the host platform")
+        #endif
     }
 
-    func testPreservesAccessLevel() {
-        assertMacroExpansion(
-            #"""
-            extension StringEnvironmentValues {
-                @StringEntry
-                public var separator: String = "\n"
-            }
-            """#,
-            expandedSource: #"""
-            extension StringEnvironmentValues {
-                public var separator: String {
-                    get {
-                        self[__Key_separator.self]
-                    }
-                    set {
-                        self[__Key_separator.self] = newValue
-                    }
+    @Test("Access level is preserved")
+    func preservesAccessLevel() {
+        #if canImport(CalligraphyCompilerPlugin)
+            assertMacroExpansion(
+                #"""
+                extension StringEnvironmentValues {
+                    @StringEntry
+                    public var separator: String = "\n"
                 }
+                """#,
+                expandedSource: #"""
+                extension StringEnvironmentValues {
+                    public var separator: String {
+                        get {
+                            self[__Key_separator.self]
+                        }
+                        set {
+                            self[__Key_separator.self] = newValue
+                        }
+                    }
 
-                private struct __Key_separator: StringEnvironmentKey {
-                    static let defaultValue: String = "\n"
+                    private struct __Key_separator: StringEnvironmentKey {
+                        static let defaultValue: String = "\n"
+                    }
                 }
+                """#,
+                macroSpecs: macroSpecs
+            ) { failure in
+                Issue.record("\(failure.message)")
             }
-            """#,
-            macros: macros
-        )
+        #else
+            Issue.record("macros are only supported when running tests for the host platform")
+        #endif
     }
 
-    func testExpandsCustomTypeEntry() {
-        assertMacroExpansion(
-            """
-            extension StringEnvironmentValues {
-                @StringEntry
-                var style: QuotationMarkStyle = .default
-            }
-            """,
-            expandedSource: """
-            extension StringEnvironmentValues {
-                var style: QuotationMarkStyle {
-                    get {
-                        self[__Key_style.self]
-                    }
-                    set {
-                        self[__Key_style.self] = newValue
-                    }
+    @Test("Custom type entry expands")
+    func customTypeEntry() {
+        #if canImport(CalligraphyCompilerPlugin)
+            assertMacroExpansion(
+                """
+                extension StringEnvironmentValues {
+                    @StringEntry
+                    var style: QuotationMarkStyle = .default
                 }
+                """,
+                expandedSource: """
+                extension StringEnvironmentValues {
+                    var style: QuotationMarkStyle {
+                        get {
+                            self[__Key_style.self]
+                        }
+                        set {
+                            self[__Key_style.self] = newValue
+                        }
+                    }
 
-                private struct __Key_style: StringEnvironmentKey {
-                    static let defaultValue: QuotationMarkStyle = .default
+                    private struct __Key_style: StringEnvironmentKey {
+                        static let defaultValue: QuotationMarkStyle = .default
+                    }
                 }
+                """,
+                macroSpecs: macroSpecs
+            ) { failure in
+                Issue.record("\(failure.message)")
             }
-            """,
-            macros: macros
-        )
+        #else
+            Issue.record("macros are only supported when running tests for the host platform")
+        #endif
     }
 
-    func testRequiresTypeAnnotation() {
-        assertMacroExpansion(
-            #"""
-            extension StringEnvironmentValues {
-                @StringEntry
-                var separator = "\n"
-            }
-            """#,
-            expandedSource: #"""
-            extension StringEnvironmentValues {
-                var separator {
-                    get {
-                        self[__Key_separator.self]
-                    }
-                    set {
-                        self[__Key_separator.self] = newValue
+    @Test("Missing type annotation emits diagnostic")
+    func requiresTypeAnnotation() {
+        #if canImport(CalligraphyCompilerPlugin)
+            assertMacroExpansion(
+                #"""
+                extension StringEnvironmentValues {
+                    @StringEntry
+                    var separator = "\n"
+                }
+                """#,
+                expandedSource: #"""
+                extension StringEnvironmentValues {
+                    var separator {
+                        get {
+                            self[__Key_separator.self]
+                        }
+                        set {
+                            self[__Key_separator.self] = newValue
+                        }
                     }
                 }
+                """#,
+                diagnostics: [
+                    DiagnosticSpec(message: "@StringEntry requires an explicit type annotation", line: 2, column: 5)
+                ],
+                macroSpecs: macroSpecs
+            ) { failure in
+                Issue.record("\(failure.message)")
             }
-            """#,
-            diagnostics: [
-                .init(message: "@StringEntry requires an explicit type annotation", line: 2, column: 5)
-            ],
-            macros: macros
-        )
+        #else
+            Issue.record("macros are only supported when running tests for the host platform")
+        #endif
     }
 
-    func testRequiresInitialValue() {
-        assertMacroExpansion(
-            """
-            extension StringEnvironmentValues {
-                @StringEntry
-                var separator: String
-            }
-            """,
-            expandedSource: """
-            extension StringEnvironmentValues {
-                var separator: String {
-                    get {
-                        self[__Key_separator.self]
-                    }
-                    set {
-                        self[__Key_separator.self] = newValue
+    @Test("Missing initial value emits diagnostic")
+    func requiresInitialValue() {
+        #if canImport(CalligraphyCompilerPlugin)
+            assertMacroExpansion(
+                """
+                extension StringEnvironmentValues {
+                    @StringEntry
+                    var separator: String
+                }
+                """,
+                expandedSource: """
+                extension StringEnvironmentValues {
+                    var separator: String {
+                        get {
+                            self[__Key_separator.self]
+                        }
+                        set {
+                            self[__Key_separator.self] = newValue
+                        }
                     }
                 }
+                """,
+                diagnostics: [
+                    DiagnosticSpec(message: "@StringEntry requires an initial value", line: 2, column: 5)
+                ],
+                macroSpecs: macroSpecs
+            ) { failure in
+                Issue.record("\(failure.message)")
             }
-            """,
-            diagnostics: [
-                .init(message: "@StringEntry requires an initial value", line: 2, column: 5)
-            ],
-            macros: macros
-        )
+        #else
+            Issue.record("macros are only supported when running tests for the host platform")
+        #endif
     }
 
 }
