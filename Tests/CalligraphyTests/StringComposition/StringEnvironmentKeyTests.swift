@@ -1,5 +1,5 @@
 // Calligraphy
-// CalligraphyCompilerPluginTests.swift
+// StringEnvironmentKeyTests.swift
 //
 // MIT License
 //
@@ -23,17 +23,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@testable import CalligraphyCompilerPlugin
-import XCTest
+import Calligraphy
+import Testing
 
-final class CalligraphyCompilerPluginTests: XCTestCase {
+@Suite("String Environment Key Tests", .tags(.stringComposition))
+struct StringEnvironmentKeyTests {
 
-    func test_plugins() {
-        let plugin = CalligraphyCompilerPlugin()
-        XCTAssert(plugin.providingMacros.count == 3)
-        XCTAssert(plugin.providingMacros[0] == FilePermissionsOctalMacro.self)
-        XCTAssert(plugin.providingMacros[1] == FilePermissionsStringMacro.self)
-        XCTAssert(plugin.providingMacros[2] == StringEntryMacro.self)
+    private struct GreetingKey: StringEnvironmentKey {
+        static let defaultValue: String = "Hello"
+    }
+
+    private struct Reader: StringComponent {
+
+        @StringEnvironment(GreetingKey.self)
+        var greeting: String
+
+        var body: some StringComponent {
+            greeting
+        }
+
+    }
+
+    @Test("Default Value Used When Unset")
+    func defaultValue() {
+        #expect(String(Reader()) == "Hello")
+    }
+
+    @Test("Injected Value Read by Key")
+    func injectedValue() {
+        let component = Reader()
+            .environment(GreetingKey.self, "Howdy")
+        #expect(String(component) == "Howdy")
     }
 
 }

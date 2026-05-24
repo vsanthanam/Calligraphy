@@ -1,5 +1,5 @@
 // Calligraphy
-// CalligraphyCompilerPluginTests.swift
+// StringComponentsTests.swift
 //
 // MIT License
 //
@@ -23,17 +23,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@testable import CalligraphyCompilerPlugin
-import XCTest
+import Calligraphy
+import Testing
 
-final class CalligraphyCompilerPluginTests: XCTestCase {
+@Suite("String Components Tests", .tags(.stringComposition))
+struct StringComponentsTests {
 
-    func test_plugins() {
-        let plugin = CalligraphyCompilerPlugin()
-        XCTAssert(plugin.providingMacros.count == 3)
-        XCTAssert(plugin.providingMacros[0] == FilePermissionsOctalMacro.self)
-        XCTAssert(plugin.providingMacros[1] == FilePermissionsStringMacro.self)
-        XCTAssert(plugin.providingMacros[2] == StringEntryMacro.self)
+    @Test("Single Component")
+    func single() {
+        let components = StringComponents {
+            "foo"
+        }
+        #expect(String(components) == "foo")
+    }
+
+    @Test("Multiple Components")
+    func multiple() {
+        let components = StringComponents {
+            "foo"
+            "bar"
+            "baz"
+        }
+        #expect(String(components) == "foo\nbar\nbaz")
+    }
+
+    @Test("Empty")
+    func empty() {
+        let components = StringComponents {}
+        #expect(String(components) == "")
+    }
+
+    @Test("Composable with Modifiers")
+    func composable() {
+        let components = StringComponents {
+            "foo"
+            "bar"
+        }
+        .joined(separator: ", ")
+        #expect(String(components) == "foo, bar")
     }
 
 }

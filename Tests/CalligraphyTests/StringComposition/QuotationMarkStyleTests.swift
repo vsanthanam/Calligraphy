@@ -1,5 +1,5 @@
 // Calligraphy
-// CalligraphyCompilerPluginTests.swift
+// QuotationMarkStyleTests.swift
 //
 // MIT License
 //
@@ -23,17 +23,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@testable import CalligraphyCompilerPlugin
-import XCTest
+import Calligraphy
+import Testing
 
-final class CalligraphyCompilerPluginTests: XCTestCase {
+@Suite("Quotation Mark Style Tests", .tags(.stringComposition))
+struct QuotationMarkStyleTests {
 
-    func test_plugins() {
-        let plugin = CalligraphyCompilerPlugin()
-        XCTAssert(plugin.providingMacros.count == 3)
-        XCTAssert(plugin.providingMacros[0] == FilePermissionsOctalMacro.self)
-        XCTAssert(plugin.providingMacros[1] == FilePermissionsStringMacro.self)
-        XCTAssert(plugin.providingMacros[2] == StringEntryMacro.self)
+    @Test("Single Raw Value")
+    func single() {
+        #expect(QuotationMarkStyle.single.rawValue == "'")
+    }
+
+    @Test("Double Raw Value")
+    func double() {
+        #expect(QuotationMarkStyle.double.rawValue == "\"")
+    }
+
+    @Test("Triple Single Raw Value")
+    func tripleSingle() {
+        #expect(QuotationMarkStyle.tripleSingle.rawValue == "'''")
+    }
+
+    @Test("Triple Double Raw Value")
+    func tripleDouble() {
+        #expect(QuotationMarkStyle.tripleDouble.rawValue == "\"\"\"")
+    }
+
+    @Test("Default Style")
+    func defaultStyle() {
+        #expect(QuotationMarkStyle.default == .double)
+    }
+
+    @Test("Environment Default")
+    func environmentDefault() {
+        let mark = QuotationMark()
+        #expect(String(mark) == QuotationMarkStyle.default.rawValue)
     }
 
 }

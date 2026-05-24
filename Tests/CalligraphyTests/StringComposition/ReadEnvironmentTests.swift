@@ -1,5 +1,5 @@
 // Calligraphy
-// CalligraphyCompilerPluginTests.swift
+// ReadEnvironmentTests.swift
 //
 // MIT License
 //
@@ -23,17 +23,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@testable import CalligraphyCompilerPlugin
-import XCTest
+import Calligraphy
+import Testing
 
-final class CalligraphyCompilerPluginTests: XCTestCase {
+@Suite("Read Environment Tests", .tags(.stringComposition))
+struct ReadEnvironmentTests {
 
-    func test_plugins() {
-        let plugin = CalligraphyCompilerPlugin()
-        XCTAssert(plugin.providingMacros.count == 3)
-        XCTAssert(plugin.providingMacros[0] == FilePermissionsOctalMacro.self)
-        XCTAssert(plugin.providingMacros[1] == FilePermissionsStringMacro.self)
-        XCTAssert(plugin.providingMacros[2] == StringEntryMacro.self)
+    @Test("Reads Default Environment")
+    func readDefault() {
+        let component = ReadEnvironment { environment in
+            environment.separator
+        }
+        #expect(String(component) == "\n")
+    }
+
+    @Test("Reads Injected Environment")
+    func readInjected() {
+        let component = ReadEnvironment { environment in
+            environment.separator
+        }
+        .environment(\.separator, ", ")
+        #expect(String(component) == ", ")
+    }
+
+    @Test("Branches on Environment Value")
+    func conditionalBody() {
+        let multiline = ReadEnvironment { environment in
+            if environment.separator == "\n" {
+                "multiline"
+            } else {
+                "inline"
+            }
+        }
+        #expect(String(multiline) == "multiline")
+        #expect(String(multiline.environment(\.separator, ", ")) == "inline")
     }
 
 }

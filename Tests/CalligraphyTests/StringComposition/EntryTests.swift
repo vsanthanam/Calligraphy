@@ -1,5 +1,5 @@
 // Calligraphy
-// CalligraphyCompilerPluginTests.swift
+// EntryTests.swift
 //
 // MIT License
 //
@@ -23,17 +23,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@testable import CalligraphyCompilerPlugin
-import XCTest
+import Calligraphy
+import Testing
 
-final class CalligraphyCompilerPluginTests: XCTestCase {
+extension StringEnvironmentValues {
 
-    func test_plugins() {
-        let plugin = CalligraphyCompilerPlugin()
-        XCTAssert(plugin.providingMacros.count == 3)
-        XCTAssert(plugin.providingMacros[0] == FilePermissionsOctalMacro.self)
-        XCTAssert(plugin.providingMacros[1] == FilePermissionsStringMacro.self)
-        XCTAssert(plugin.providingMacros[2] == StringEntryMacro.self)
+    @StringEntry
+    var entryTestGreeting: String = "Hello"
+
+}
+
+@Suite("@StringEntry Tests", .tags(.stringComposition))
+struct EntryTests {
+
+    private struct Reader: StringComponent {
+
+        @StringEnvironment(\.entryTestGreeting)
+        var greeting: String
+
+        var body: some StringComponent {
+            greeting
+        }
+
+    }
+
+    @Test("Generated Default Value")
+    func defaultValue() {
+        #expect(String(Reader()) == "Hello")
+    }
+
+    @Test("Generated Accessors Allow Override")
+    func override() {
+        let component = Reader()
+            .environment(\.entryTestGreeting, "Howdy")
+        #expect(String(component) == "Howdy")
     }
 
 }
