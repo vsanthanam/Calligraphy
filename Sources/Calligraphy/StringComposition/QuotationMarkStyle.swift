@@ -53,7 +53,7 @@ extension StringEnvironmentValues {
     ///
     /// Defaults to ``QuotationMarkStyle/default``. Set it on an ancestor component using ``StringComponent/quotationMarkStyle(_:)``.
     @StringEntry
-    public var quotationMarkStyle: QuotationMarkStyle = .default
+    public internal(set) var quotationMarkStyle: QuotationMarkStyle = .default
 
 }
 

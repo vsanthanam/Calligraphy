@@ -63,4 +63,17 @@ struct QuotationMarkTests {
         #expect(String(mark) == "\"\"\"")
     }
 
+    @Test("Explicit Style Initializer")
+    func explicitStyle() {
+        #expect(String(QuotationMark(.single)) == "'")
+        #expect(String(QuotationMark(.tripleDouble)) == "\"\"\"")
+    }
+
+    @Test("Explicit Style Overrides Ancestor Environment")
+    func explicitStyleOverridesEnvironment() {
+        let mark = QuotationMark(.single)
+            .quotationMarkStyle(.double)
+        #expect(String(mark) == "'")
+    }
+
 }

@@ -24,8 +24,13 @@ Calligraphy's type-safe API and builder patterns make it ideal for code generati
 
 ## Topics
 
+### Getting Started
+
+- <doc:Setup>
+
 ### String Composition
 
+- <doc:ComposingStrings>
 - ``StringComponent``
 - ``StringBuilder``
 - ``StringComponents``
@@ -42,9 +47,7 @@ Calligraphy's type-safe API and builder patterns make it ideal for code generati
 - ``Tab``
 - ``RawStringComponent``
 - ``AnyStringComponent``
-
-### String Composition Environment
-
+- <doc:EnvironmentValues>
 - ``ReadEnvironment``
 - ``StringEnvironment``
 - ``StringEnvironmentKey``
@@ -53,6 +56,7 @@ Calligraphy's type-safe API and builder patterns make it ideal for code generati
 
 ### Directory Composition
 
+- <doc:ComposingDirectories>
 - ``DirectoryContent``
 - ``DirectoryContentBuilder``
 - ``Directory``
@@ -77,8 +81,3 @@ Calligraphy's type-safe API and builder patterns make it ideal for code generati
 - ``EmptyDataComponent``
 - ``AnyDataComponent``
 
-### Articles
-
-- <doc:Setup>
-- <doc:ComposingStrings>
-- <doc:ComposingDirectories>

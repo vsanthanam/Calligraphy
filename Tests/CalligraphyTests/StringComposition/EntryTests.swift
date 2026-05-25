@@ -31,6 +31,9 @@ extension StringEnvironmentValues {
     @StringEntry
     var entryTestGreeting: String = "Hello"
 
+    @StringEntry
+    var entryTestPrefix: String?
+
 }
 
 @Suite("@StringEntry Tests", .tags(.stringComposition))
@@ -47,6 +50,17 @@ struct EntryTests {
 
     }
 
+    private struct OptionalReader: StringComponent {
+
+        @StringEnvironment(\.entryTestPrefix)
+        var prefix: String?
+
+        var body: some StringComponent {
+            prefix ?? "<unset>"
+        }
+
+    }
+
     @Test("Generated Default Value")
     func defaultValue() {
         #expect(String(Reader()) == "Hello")
@@ -57,6 +71,18 @@ struct EntryTests {
         let component = Reader()
             .environment(\.entryTestGreeting, "Howdy")
         #expect(String(component) == "Howdy")
+    }
+
+    @Test("Optional Entry Defaults to nil")
+    func optionalDefault() {
+        #expect(String(OptionalReader()) == "<unset>")
+    }
+
+    @Test("Optional Entry Accepts Value")
+    func optionalOverride() {
+        let component = OptionalReader()
+            .environment(\.entryTestPrefix, "$")
+        #expect(String(component) == "$")
     }
 
 }

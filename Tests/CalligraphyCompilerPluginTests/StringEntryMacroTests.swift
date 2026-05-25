@@ -182,6 +182,146 @@ struct StringEntryMacroTests {
         #endif
     }
 
+    @Test("Optional type without initial value defaults to nil")
+    func optionalTypeDefaultsToNil() {
+        #if canImport(CalligraphyCompilerPlugin)
+            assertMacroExpansion(
+                """
+                extension StringEnvironmentValues {
+                    @StringEntry
+                    var prefix: String?
+                }
+                """,
+                expandedSource: """
+                extension StringEnvironmentValues {
+                    var prefix: String? {
+                        get {
+                            self[__Key_prefix.self]
+                        }
+                        set {
+                            self[__Key_prefix.self] = newValue
+                        }
+                    }
+
+                    private struct __Key_prefix: StringEnvironmentKey {
+                        static let defaultValue: String? = nil
+                    }
+                }
+                """,
+                macroSpecs: macroSpecs
+            ) { failure in
+                Issue.record("\(failure.message)")
+            }
+        #else
+            Issue.record("macros are only supported when running tests for the host platform")
+        #endif
+    }
+
+    @Test("Optional<T> long form without initial value defaults to nil")
+    func optionalLongFormDefaultsToNil() {
+        #if canImport(CalligraphyCompilerPlugin)
+            assertMacroExpansion(
+                """
+                extension StringEnvironmentValues {
+                    @StringEntry
+                    var prefix: Optional<String>
+                }
+                """,
+                expandedSource: """
+                extension StringEnvironmentValues {
+                    var prefix: Optional<String> {
+                        get {
+                            self[__Key_prefix.self]
+                        }
+                        set {
+                            self[__Key_prefix.self] = newValue
+                        }
+                    }
+
+                    private struct __Key_prefix: StringEnvironmentKey {
+                        static let defaultValue: Optional<String> = nil
+                    }
+                }
+                """,
+                macroSpecs: macroSpecs
+            ) { failure in
+                Issue.record("\(failure.message)")
+            }
+        #else
+            Issue.record("macros are only supported when running tests for the host platform")
+        #endif
+    }
+
+    @Test("Implicitly unwrapped optional without initial value defaults to nil")
+    func implicitlyUnwrappedOptionalDefaultsToNil() {
+        #if canImport(CalligraphyCompilerPlugin)
+            assertMacroExpansion(
+                """
+                extension StringEnvironmentValues {
+                    @StringEntry
+                    var prefix: String!
+                }
+                """,
+                expandedSource: """
+                extension StringEnvironmentValues {
+                    var prefix: String! {
+                        get {
+                            self[__Key_prefix.self]
+                        }
+                        set {
+                            self[__Key_prefix.self] = newValue
+                        }
+                    }
+
+                    private struct __Key_prefix: StringEnvironmentKey {
+                        static let defaultValue: String! = nil
+                    }
+                }
+                """,
+                macroSpecs: macroSpecs
+            ) { failure in
+                Issue.record("\(failure.message)")
+            }
+        #else
+            Issue.record("macros are only supported when running tests for the host platform")
+        #endif
+    }
+
+    @Test("Optional type with explicit initial value is preserved")
+    func optionalTypeWithExplicitValue() {
+        #if canImport(CalligraphyCompilerPlugin)
+            assertMacroExpansion(
+                #"""
+                extension StringEnvironmentValues {
+                    @StringEntry
+                    var prefix: String? = "default"
+                }
+                """#,
+                expandedSource: #"""
+                extension StringEnvironmentValues {
+                    var prefix: String? {
+                        get {
+                            self[__Key_prefix.self]
+                        }
+                        set {
+                            self[__Key_prefix.self] = newValue
+                        }
+                    }
+
+                    private struct __Key_prefix: StringEnvironmentKey {
+                        static let defaultValue: String? = "default"
+                    }
+                }
+                """#,
+                macroSpecs: macroSpecs
+            ) { failure in
+                Issue.record("\(failure.message)")
+            }
+        #else
+            Issue.record("macros are only supported when running tests for the host platform")
+        #endif
+    }
+
     @Test("Missing type annotation emits diagnostic")
     func requiresTypeAnnotation() {
         #if canImport(CalligraphyCompilerPlugin)
@@ -239,7 +379,7 @@ struct StringEntryMacroTests {
                 }
                 """,
                 diagnostics: [
-                    DiagnosticSpec(message: "@StringEntry requires an initial value", line: 2, column: 5)
+                    DiagnosticSpec(message: "@StringEntry requires an initial value for non-optional types", line: 2, column: 5)
                 ],
                 macroSpecs: macroSpecs
             ) { failure in

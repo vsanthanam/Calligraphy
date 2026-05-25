@@ -43,7 +43,7 @@ let project = Folder("MyProject") {
         File("main.swift") {
             Line {
                 "print("
-                Quoted {
+                Quote {
                     "Hello, World!"
                 }
                 ")"

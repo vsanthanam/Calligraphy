@@ -48,7 +48,7 @@ extension StringEnvironmentValues {
     ///
     /// Defaults to `1`. ``Lines`` and components built on top of it read this value to decide how to join their children. Set it on an ancestor component using ``StringComponent/lineSpacing(_:)``.
     @StringEntry
-    public var lineSpacing: Int = 1
+    public internal(set) var lineSpacing: Int = 1
 
 }
 

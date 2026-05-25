@@ -23,7 +23,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Calligraphy
+@testable import Calligraphy
 import Testing
 
 @Suite("@StringEnvironment Tests", .tags(.stringComposition))

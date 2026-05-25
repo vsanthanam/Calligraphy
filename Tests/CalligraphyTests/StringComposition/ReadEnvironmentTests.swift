@@ -23,7 +23,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Calligraphy
+@testable import Calligraphy
 import Testing
 
 @Suite("Read Environment Tests", .tags(.stringComposition))
@@ -40,23 +40,23 @@ struct ReadEnvironmentTests {
     @Test("Reads Injected Environment")
     func readInjected() {
         let component = ReadEnvironment { environment in
-            environment.separator
+            "\(environment.lineSpacing)"
         }
-        .environment(\.separator, ", ")
-        #expect(String(component) == ", ")
+        .environment(\.lineSpacing, 5)
+        #expect(String(component) == "5")
     }
 
     @Test("Branches on Environment Value")
     func conditionalBody() {
-        let multiline = ReadEnvironment { environment in
-            if environment.separator == "\n" {
-                "multiline"
+        let component = ReadEnvironment { environment in
+            if environment.lineSpacing == 1 {
+                "default"
             } else {
-                "inline"
+                "spaced"
             }
         }
-        #expect(String(multiline) == "multiline")
-        #expect(String(multiline.environment(\.separator, ", ")) == "inline")
+        #expect(String(component) == "default")
+        #expect(String(component.environment(\.lineSpacing, 3)) == "spaced")
     }
 
 }

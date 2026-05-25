@@ -48,9 +48,9 @@ public enum StringBuilder {
     }
 
     @StringBuilder
-    public static func buildExpression(
-        _ expression: some Collection<some StringComponent>
-    ) -> some StringComponent {
+    public static func buildExpression<T>(
+        _ expression: some Collection<T>
+    ) -> _List<T> where T: StringComponent {
         for element in expression {
             element
         }
@@ -59,7 +59,7 @@ public enum StringBuilder {
     @StringBuilder
     public static func buildExpression(
         _ expression: some Collection<some StringProtocol>
-    ) -> some StringComponent {
+    ) -> _List<RawStringComponent> {
         for element in expression {
             element
         }
@@ -68,7 +68,7 @@ public enum StringBuilder {
     @StringBuilder
     public static func buildExpression(
         _ expression: some Collection<some RawRepresentable<some StringProtocol>>
-    ) -> some StringComponent {
+    ) -> _List<RawStringComponent> {
         for element in expression {
             element
         }

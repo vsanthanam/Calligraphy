@@ -52,7 +52,7 @@ extension StringEnvironmentValues {
     ///
     /// Defaults to `"\n"`. Components such as ``Lines`` read this value to decide how to join their children. Set it on an ancestor component using ``StringComponent/joined(separator:)``.
     @StringEntry
-    public var separator: String = "\n"
+    public internal(set) var separator: String = "\n"
 
 }
 
