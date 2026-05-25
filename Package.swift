@@ -25,7 +25,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/swiftlang/swift-docc-plugin",
-            from: "1.4.3"
+            from: "1.5.0"
         ),
         .package(
             url: "https://github.com/nicklockwood/SwiftFormat",
