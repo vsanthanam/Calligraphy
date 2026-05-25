@@ -23,7 +23,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Calligraphy
+@testable import Calligraphy
 import Testing
 
 @Suite("Environment Modifier Tests", .tags(.stringComposition))
@@ -79,11 +79,11 @@ struct EnvironmentModifierTests {
     @Test("Closest Modifier Wins")
     func closestWins() {
         let component = ReadEnvironment { environment in
-            environment.separator
+            "\(environment.lineSpacing)"
         }
-        .environment(\.separator, "inner")
-        .environment(\.separator, "outer")
-        #expect(String(component) == "inner")
+        .environment(\.lineSpacing, 1)
+        .environment(\.lineSpacing, 9)
+        #expect(String(component) == "1")
     }
 
 }

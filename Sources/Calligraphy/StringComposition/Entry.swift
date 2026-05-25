@@ -36,7 +36,18 @@
 /// }
 /// ```
 ///
-/// The expanded property reads its default from the initializer expression you provide, and can be set on any component using ``StringComponent/environment(_:_:)-(_,Value)`` or read using ``StringEnvironment``.
+/// Non-optional properties must provide an initial value. Optional properties may omit the initial value, in which case the default is `nil`:
+///
+/// ```swift
+/// extension StringEnvironmentValues {
+///
+///     @StringEntry
+///     public var prefix: String? // Default is `nil`, since `String?` is an optional and no default was provided.
+///
+/// }
+/// ```
+///
+/// The expanded property can be set on any component using ``StringComponent/environment(_:_:)-(_,Value)`` or read using ``StringEnvironment``.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @attached(accessor)
 @attached(peer, names: prefixed(__Key_))

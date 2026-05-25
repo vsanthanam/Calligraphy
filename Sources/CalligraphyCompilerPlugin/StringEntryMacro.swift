@@ -57,14 +57,19 @@ public struct StringEntryMacro: AccessorMacro, PeerMacro {
         let typeAnnotation = try binding.typeAnnotation
             .mustExist("@StringEntry requires an explicit type annotation")
             .type
-        let initializer = try binding.initializer
-            .mustExist("@StringEntry requires an initial value")
-            .value
+        let defaultValue: ExprSyntax
+        if let initializer = binding.initializer?.value {
+            defaultValue = initializer
+        } else if isOptional(typeAnnotation) {
+            defaultValue = "nil"
+        } else {
+            throw MacroError("@StringEntry requires an initial value for non-optional types")
+        }
         let keyName = "__Key_\(name)"
         return [
             """
             private struct \(raw: keyName): StringEnvironmentKey {
-                static let defaultValue: \(typeAnnotation.trimmed) = \(initializer.trimmed)
+                static let defaultValue: \(typeAnnotation.trimmed) = \(defaultValue.trimmed)
             }
             """
         ]
@@ -85,6 +90,19 @@ public struct StringEntryMacro: AccessorMacro, PeerMacro {
         try binding.pattern.as(IdentifierPatternSyntax.self)
             .mustExist("@StringEntry requires an identifier pattern")
             .identifier
+    }
+
+    private static func isOptional(_ type: TypeSyntax) -> Bool {
+        if type.is(OptionalTypeSyntax.self) {
+            return true
+        }
+        if type.is(ImplicitlyUnwrappedOptionalTypeSyntax.self) {
+            return true
+        }
+        if let identifier = type.as(IdentifierTypeSyntax.self), identifier.name.text == "Optional" {
+            return true
+        }
+        return false
     }
 
 }

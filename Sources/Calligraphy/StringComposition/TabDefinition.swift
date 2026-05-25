@@ -65,7 +65,7 @@ extension StringEnvironmentValues {
     ///
     /// Defaults to ``TabDefinition/default`` (two spaces). ``Tab`` and components built on top of it (such as ``Tabbed``) read this value when rendering. Set it on an ancestor component using ``StringComponent/tabDefinition(_:)``.
     @StringEntry
-    public var tabDefinition: TabDefinition = .default
+    public internal(set) var tabDefinition: TabDefinition = .default
 
 }
 

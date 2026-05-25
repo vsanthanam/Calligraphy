@@ -50,7 +50,9 @@ extension StringComponent {
     public func prefixLines(
         with prefix: some StringProtocol
     ) -> some StringComponent {
-        prefixLines { prefix }
+        prefixLines {
+            prefix
+        }
     }
 
 }

@@ -26,29 +26,29 @@
 import Calligraphy
 import Testing
 
-// @Suite("String Extensions Tests", .tags(.stringComposition))
-// struct StringExtensionsTests {
-//
-//    @Test("Initializer")
-//    func initializer() {
-//        let str = String(RawStringComponent("Foo"))
-//        #expect(str == "Foo")
-//    }
-//
-//    @Test("Initializer with Empty Component")
-//    func initializerEmpty() {
-//        let component = StringComponents {}
-//        let str = String(component)
-//        #expect(str == "")
-//    }
-//
-//    @Test("Build type method")
-//    func build() {
-//        let str = String.build {
-//            RawStringComponent("Foo")
-//            RawStringComponent("Bar")
-//        }
-//        #expect(str == "Foo\nBar")
-//    }
-//
-// }
+@Suite("String Extensions Tests", .tags(.stringComposition))
+struct StringExtensionsTests {
+
+    @Test("Initializer")
+    func initializer() {
+        let str = String(RawStringComponent("Foo"))
+        #expect(str == "Foo")
+    }
+
+    @Test("Initializer with Empty Component")
+    func initializerEmpty() {
+        let component = StringComponents {}
+        let str = String(component)
+        #expect(str == "")
+    }
+
+    @Test("Build type method")
+    func build() {
+        let str = String.build {
+            RawStringComponent("Foo")
+            RawStringComponent("Bar")
+        }
+        #expect(str == "Foo\nBar")
+    }
+
+}

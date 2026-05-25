@@ -34,34 +34,83 @@ extension StringComponent {
     public func quoted(
         _ style: QuotationMarkStyle? = nil
     ) -> some StringComponent {
-        if let style {
-            Quote { self }
-                .quotationMarkStyle(style)
-        } else {
-            Quote { self }
-        }
+        Quote(style) { self }
     }
 
 }
 
-/// A string component that wraps content between two ``QuotationMark`` characters.
+extension StringEnvironmentValues {
+
+    /// A flag indicating whether the current component is being rendered inside a ``Quote``.
+    ///
+    /// ``Quote`` sets this value to `true` on its wrapped content before rendering, allowing a descendant component to branch on whether it is being quoted — for example, to escape a nested quotation mark or to omit one entirely.
+    ///
+    /// ```swift
+    /// struct Greeting: StringComponent {
+    ///
+    ///     @StringEnvironment(\.isInQuote)
+    ///     private var isInQuote: Bool
+    ///
+    ///     var body: some StringComponent {
+    ///         if isInQuote {
+    ///             "hello"
+    ///         } else {
+    ///             "Hello!"
+    ///         }
+    ///     }
+    ///
+    /// }
+    /// ```
+    ///
+    /// The value is read-only from outside this module — its lifecycle is managed by ``Quote``. Defaults to `false`.
+    @StringEntry
+    public internal(set) var isInQuote: Bool = false
+
+}
+
+/// A string component that wraps content between two `QuotationMark` components.
 ///
-/// The style of the surrounding quotation marks is read from the current ``QuotationMarkStyle`` environment value, which can be overridden using ``StringComponent/quotationMarkStyle(_:)``.
+/// The style of the surrounding quotation marks is read from the current ``QuotationMarkStyle`` environment value, which can be overridden using ``StringComponent/quotationMarkStyle(_:)`` or by passing an explicit style to the initializer.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct Quote<Quote>: StringComponent where Quote: StringComponent {
 
     /// Create a quoted component.
-    /// - Parameter quote: The content to wrap in quotation marks.
+    /// - Parameters:
+    ///   - style: An optional ``QuotationMarkStyle`` override. When `nil` (the default), the style is read from the surrounding environment. When supplied, the style is also propagated into `quote` so nested ``QuotationMark`` and ``Quote`` components inherit it.
+    ///   - quote: The content to wrap in quotation marks.
     public init(
+        _ style: QuotationMarkStyle? = nil,
         @StringBuilder quote: () -> Quote
     ) {
+        self.style = style
         self.quote = quote()
     }
 
+    // MARK: - StringComponent
+
     public var body: some StringComponent {
-        QuotationMark() + quote + QuotationMark()
+        if let style {
+            content
+                .quotationMarkStyle(style)
+        } else {
+            content
+        }
     }
 
+    // MARK: - Private
+
+    private let style: QuotationMarkStyle?
     private let quote: Quote
+
+    private var content: some StringComponent {
+        Line {
+            QuotationMark()
+            quote.environment(
+                \.isInQuote,
+                true
+            )
+            QuotationMark()
+        }
+    }
 
 }

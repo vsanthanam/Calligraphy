@@ -82,18 +82,18 @@ struct StringComponentTests {
 
         struct Reader: StringComponent {
 
-            @StringEnvironment(\.separator)
-            var separator: String
+            @StringEnvironment(\.lineSpacing)
+            var spacing: Int
 
             var body: some StringComponent {
-                separator
+                "\(spacing)"
             }
 
         }
 
         let component = Reader()
-            .environment(\.separator, "|")
-        #expect(String(component) == "|")
+            .environment(\.lineSpacing, 5)
+        #expect(String(component) == "5")
     }
 
 }

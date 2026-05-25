@@ -66,4 +66,38 @@ struct QuoteTests {
         #expect(String(quoted) == expected)
     }
 
+    @Test("Explicit Style Initializer")
+    func explicitStyle() {
+        let quote = Quote(.single) {
+            "foo"
+        }
+        #expect(String(quote) == "'foo'")
+    }
+
+    @Test("Explicit Style Modifier Argument")
+    func explicitStyleModifier() {
+        let quoted = RawStringComponent("foo")
+            .quoted(.tripleDouble)
+        #expect(String(quoted) == "\"\"\"foo\"\"\"")
+    }
+
+    @Test("Explicit Style Propagates Into Nested Quote")
+    func explicitStylePropagates() {
+        let quote = Quote(.single) {
+            Quote {
+                "foo"
+            }
+        }
+        #expect(String(quote) == "''foo''")
+    }
+
+    @Test("Explicit Style Overrides Ancestor Environment")
+    func explicitStyleOverridesEnvironment() {
+        let quote = Quote(.single) {
+            "foo"
+        }
+        .quotationMarkStyle(.double)
+        #expect(String(quote) == "'foo'")
+    }
+
 }
