@@ -49,7 +49,7 @@ let component = ReadEnvironment { environment in
 
 ## Writing Values
 
-Use the ``StringComponent/environment(_:_:)-(_,Value)`` modifier to set an environment value on a component and its descendants. Ancestor components are unaffected.
+Use the ``StringComponent/environment(_:_:)`` modifier to set an environment value on a component and its descendants. Ancestor components are unaffected.
 
 ```swift
 let component = Lines {
@@ -60,7 +60,7 @@ let component = Lines {
 .environment(\.lineSpacing, 2)
 ```
 
-When you need to set multiple values at once, or compute the new value from the current one, use ``StringComponent/transformEnvironment(_:)``:
+When you need to set multiple values at once, or compute the new value from the current one, use ``StringComponent/transformEnvironment(_:transform:)``:
 
 ```swift
 Lines {
@@ -115,3 +115,33 @@ extension StringEnvironmentValues {
 
 }
 ```
+
+## Custom Property Wrappers
+
+The ``StringEnvironment`` property wrapper is one example of a ``StringDynamicProperty`` — a wrapper whose state is updated from the surrounding environment before the enclosing component's `body` is evaluated. Custom wrappers can participate in the same lifecycle by conforming to the protocol and implementing `update(in:)`:
+
+```swift
+@propertyWrapper
+struct Indented: StringDynamicProperty {
+
+    @StringEnvironment(\.tabDefinition)
+    private var tab: TabDefinition
+
+    private let box = Box()
+
+    var wrappedValue: String {
+        box.value
+    }
+
+    func update(in environment: StringEnvironmentValues) {
+        box.value = tab.value
+    }
+
+    private final class Box {
+        var value: String = ""
+    }
+
+}
+```
+
+Nested dynamic properties are updated recursively, in post-order — the inner ``StringEnvironment`` above is updated before the enclosing `Indented` wrapper's `update(in:)` runs, so reading `tab` inside `update(in:)` returns the current value.

@@ -33,15 +33,6 @@ struct EnvironmentModifierTests {
         static let defaultValue: Int = 0
     }
 
-    @Test("Set by Key")
-    func setByKey() {
-        let component = ReadEnvironment { environment in
-            "\(environment[CountKey.self])"
-        }
-        .environment(CountKey.self, 5)
-        #expect(String(component) == "5")
-    }
-
     @Test("Set by Key Path")
     func setByKeyPath() {
         let component = ReadEnvironment { environment in
@@ -56,8 +47,8 @@ struct EnvironmentModifierTests {
         let component = ReadEnvironment { environment in
             "\(environment.lineSpacing)"
         }
-        .transformEnvironment { environment in
-            environment.lineSpacing = 3
+        .transformEnvironment(\.lineSpacing) { lineSpacing in
+            lineSpacing = 3
         }
         #expect(String(component) == "3")
     }

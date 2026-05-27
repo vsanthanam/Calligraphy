@@ -90,7 +90,7 @@ struct DataBuilderTests {
         func builder() -> some DataComponent {}
 
         let components = builder()
-        #expect(components is EmptyDataComponent)
+        #expect(components is DataBuilder._Skip)
         #expect(components._data == nil)
     }
 
@@ -222,82 +222,8 @@ struct DataBuilderTests {
         }
 
         let components = builder()
-        #expect(components is DataBuilder._Block<DataBuilder._Either<Foo, EmptyDataComponent>, Bar>)
+        #expect(components is DataBuilder._Block<DataBuilder._Either<Foo, DataBuilder._Skip>, Bar>)
         #expect(components._data == result)
     }
-//
-//    @Test("For Loop Support")
-//    func forLoop() {
-//        @StringBuilder
-//        func builder() -> some StringComponent {
-//            for i in 0 ..< 8 {
-//                if i % 2 == 0 {
-//                    "\(i + 1)"
-//                }
-//            }
-//        }
-//
-//        let components = builder()
-//        #expect(components is StringBuilder._List<StringBuilder._Either<RawStringComponent, EmptyStringComponent>>)
-//
-//        let expected = #"""
-//        1
-//        3
-//        5
-//        7
-//        """#
-//        #expect(components._content == expected)
-//    }
-//
-//    @Test("Availablility Check Support")
-//    func availabilityCheck() {
-//        @StringBuilder
-//        func builder() -> some StringComponent {
-//            if #available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *) {
-//                "foo"
-//            }
-//        }
-//
-//        let components = builder()
-//        #expect(components is StringBuilder._Either<AnyStringComponent, EmptyStringComponent>)
-//        #expect(components._content == "foo")
-//    }
-//
-//    @Test("+ Operators")
-//    func operators() {
-//
-//        struct Foo: StringComponent {
-//
-//            var body: some StringComponent {
-//                "foo"
-//            }
-//
-//        }
-//
-//        struct Bar: StringComponent {
-//
-//            var body: some StringComponent {
-//                "bar"
-//            }
-//
-//        }
-//
-//        struct Empty: StringComponent {
-//
-//            var body: some StringComponent {}
-//
-//        }
-//
-//        let foo = Foo()
-//        let bar = Bar()
-//        let empty = Empty()
-//
-//        #expect((foo + bar)._content == "foobar")
-//        #expect(("foo" + bar)._content == "foobar")
-//        #expect((foo + "bar")._content == "foobar")
-//        #expect((foo + empty)._content == "foo")
-//        #expect((empty + bar)._content == "bar")
-//        #expect((empty + empty)._content == nil)
-//    }
 
 }

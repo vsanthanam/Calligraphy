@@ -65,13 +65,6 @@ struct StringEnvironmentTests {
         #expect(String(ReaderByKeyPath()) == "\n")
     }
 
-    @Test("Reads Injected Value via Key")
-    func readInjectedByKey() {
-        let component = ReaderByKey()
-            .environment(GreetingKey.self, "Howdy")
-        #expect(String(component) == "Howdy")
-    }
-
     @Test("Reads Injected Value via Key Path")
     func readInjectedByKeyPath() {
         let component = ReaderByKeyPath()

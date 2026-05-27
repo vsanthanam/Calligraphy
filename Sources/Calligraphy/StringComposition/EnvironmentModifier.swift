@@ -26,25 +26,6 @@
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
-    /// Set an environment value identified by a ``StringEnvironmentKey``.
-    ///
-    /// The new value is visible to this component and all of its descendants. Ancestor components are unaffected.
-    ///
-    /// - Parameters:
-    ///   - key: The environment key to set.
-    ///   - value: The new value for the key.
-    /// - Returns: A component that injects the new value into the environment of its descendants.
-    public func environment<Key>(
-        _ key: Key.Type,
-        _ value: Key.Value
-    ) -> some StringComponent where Key: StringEnvironmentKey {
-        EnvironmentModifier(
-            upstream: self
-        ) { environment in
-            environment[key] = value
-        }
-    }
-
     /// Set an environment value identified by a key path on ``StringEnvironmentValues``.
     ///
     /// The new value is visible to this component and all of its descendants. Ancestor components are unaffected.
@@ -64,19 +45,20 @@ extension StringComponent {
         }
     }
 
-    /// Apply an arbitrary transformation to the environment.
-    ///
-    /// Use this modifier when you need to set multiple values at once, or when the new value depends on the current value.
-    ///
-    /// - Parameter transform: A closure that mutates the environment in place.
-    /// - Returns: A component whose descendants render with the transformed environment.
-    public func transformEnvironment(
-        _ transform: @escaping (inout StringEnvironmentValues) -> Void
+    /// Transforms the environment value of the specified key path on ``StringEnvironmentValues`` with the given function.
+    /// - Parameters:
+    ///   - keyPath: The key path identifying the value to transform
+    ///   - transform: The function used transform the value
+    /// - Returns: A component that transforms the value before providing it to its descendants.
+    public func transformEnvironment<V>(
+        _ keyPath: WritableKeyPath<StringEnvironmentValues, V>,
+        transform: @escaping (inout V) -> Void
     ) -> some StringComponent {
-        EnvironmentModifier(
-            upstream: self,
-            transform: transform
-        )
+        EnvironmentModifier(upstream: self) { environment in
+            var value = environment[keyPath: keyPath]
+            transform(&value)
+            environment[keyPath: keyPath] = value
+        }
     }
 
 }

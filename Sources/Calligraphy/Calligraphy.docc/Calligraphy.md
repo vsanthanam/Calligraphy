@@ -52,6 +52,7 @@ Calligraphy's type-safe API and builder patterns make it ideal for code generati
 - ``StringEnvironment``
 - ``StringEnvironmentKey``
 - ``StringEnvironmentValues``
+- ``StringDynamicProperty``
 - ``StringEntry()``
 
 ### Directory Composition
@@ -78,6 +79,5 @@ Calligraphy's type-safe API and builder patterns make it ideal for code generati
 - ``DataBuilder``
 - ``DataComponents``
 - ``RawDataComponent``
-- ``EmptyDataComponent``
 - ``AnyDataComponent``
 

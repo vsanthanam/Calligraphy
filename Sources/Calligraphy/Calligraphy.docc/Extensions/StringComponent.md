@@ -44,9 +44,8 @@ struct Greeting: StringComponent {
 - ``quoted(_:)``
 - ``quotationMarkStyle(_:)``
 - ``tabDefinition(_:)``
-- ``environment(_:_:)-(Key.Type,_)``
-- ``environment(_:_:)-(_,Value)``
-- ``transformEnvironment(_:)``
+- ``environment(_:_:)``
+- ``transformEnvironment(_:transform:)``
 
 ### Operators
 

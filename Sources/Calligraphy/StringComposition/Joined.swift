@@ -52,7 +52,7 @@ extension StringEnvironmentValues {
     ///
     /// Defaults to `"\n"`. Components such as ``Lines`` read this value to decide how to join their children. Set it on an ancestor component using ``StringComponent/joined(separator:)``.
     @StringEntry
-    public internal(set) var separator: String = "\n"
+    var separator: String = "\n"
 
 }
 
@@ -70,5 +70,22 @@ private struct Joined<Components>: StringComponent where Components: StringCompo
                 separator
             )
     }
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+@propertyWrapper
+public struct Separator: StringDynamicProperty {
+
+    public init() {}
+
+    public var wrappedValue: String {
+        separator
+    }
+
+    // MARK: - Private
+
+    @StringEnvironment(\.separator)
+    private var separator
 
 }
