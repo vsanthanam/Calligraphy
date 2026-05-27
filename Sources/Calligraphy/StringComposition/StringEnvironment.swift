@@ -41,7 +41,7 @@
 /// ```
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @propertyWrapper
-public struct StringEnvironment<Value>: StringEnvironmentPropertyWrapper {
+public struct StringEnvironment<Value>: StringDynamicProperty {
 
     // MARK: - Initializers
 
@@ -68,13 +68,13 @@ public struct StringEnvironment<Value>: StringEnvironmentPropertyWrapper {
         read(box.values)
     }
 
-    // MARK: - Private
+    // MARK: - StringDynamicProperty
 
-    func inject(
-        _ values: StringEnvironmentValues
-    ) {
-        box.values = values
+    public func update(in environment: StringEnvironmentValues) {
+        box.values = environment
     }
+
+    // MARK: - Private
 
     private let read: (StringEnvironmentValues) -> Value
     private let box = Box()
@@ -83,11 +83,4 @@ public struct StringEnvironment<Value>: StringEnvironmentPropertyWrapper {
         var values = StringEnvironmentValues()
     }
 
-}
-
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-protocol StringEnvironmentPropertyWrapper {
-    func inject(
-        _ values: StringEnvironmentValues
-    )
 }

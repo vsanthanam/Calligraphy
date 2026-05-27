@@ -72,9 +72,7 @@ extension StringComponent {
     public func render(
         in environment: StringEnvironmentValues
     ) -> String? {
-        for child in Mirror(reflecting: self).children {
-            (child.value as? (any StringEnvironmentPropertyWrapper))?.inject(environment)
-        }
+        updateDynamicProperties(of: self, in: environment)
         return body.render(in: environment)
     }
 
@@ -89,6 +87,22 @@ extension StringComponent {
             file: file,
             line: line
         )
+    }
+}
+
+/// Post-order so a wrapper's `update(in:)` can read state from its nested dynamic properties.
+///
+/// Wrappers are expected to be value types; reference cycles via class-backed storage are the caller's responsibility.
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+private func updateDynamicProperties(
+    of subject: Any,
+    in environment: StringEnvironmentValues
+) {
+    for child in Mirror(reflecting: subject).children {
+        if let property = child.value as? any StringDynamicProperty {
+            updateDynamicProperties(of: property, in: environment)
+            property.update(in: environment)
+        }
     }
 }
 

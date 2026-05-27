@@ -320,45 +320,45 @@ struct StringBuilderTests {
         #expect(String(components) == "bar\nbaz")
     }
 
-//    @Test("Array.map Support")
-//    func arrayMap() {
-//
-//        // Demonstrates builder syntax (if/else) inside the @StringBuilder closure,
-//        // which requires the custom @StringBuilder map overload since the two branches
-//        // return different StringComponent types.
-//        struct Foo: StringComponent {
-//
-//            var body: some StringComponent {
-//                "foo"
-//            }
-//
-//        }
-//
-//        struct Bar: StringComponent {
-//
-//            var body: some StringComponent {
-//                "bar"
-//            }
-//
-//        }
-//
-//        let flags = [true, false, true]
-//
-//        @StringBuilder
-//        func builder() -> some StringComponent {
-//            flags.map { flag in
-//                if flag {
-//                    Foo()
-//                } else {
-//                    Bar()
-//                }
-//            }
-//        }
-//
-//        let components = builder()
-//        let expected = "foo\nbar\nfoo"
-//        #expect(String(components) == expected)
-//    }
+    @Test("Array.map Support")
+    func arrayMap() {
+
+        // Demonstrates builder syntax (if/else) inside the @StringBuilder closure,
+        // which requires the custom @StringBuilder map overload since the two branches
+        // return different StringComponent types.
+        struct Foo: StringComponent {
+
+            var body: some StringComponent {
+                "foo"
+            }
+
+        }
+
+        struct Bar: StringComponent {
+
+            var body: some StringComponent {
+                "bar"
+            }
+
+        }
+
+        let flags = [true, false, true]
+
+        @StringBuilder
+        func builder() -> some StringComponent {
+            flags.map { flag in
+                if flag {
+                    Foo()
+                } else {
+                    Bar()
+                }
+            }
+        }
+
+        let components = builder()
+        let expected = "foo\nbar\nfoo"
+        #expect(String(components) == expected)
+    }
 
     @Test("Array.map as @StringBuilder Expression")
     func arrayMapExpression() {

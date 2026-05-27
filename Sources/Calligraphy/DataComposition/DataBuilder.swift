@@ -70,8 +70,8 @@ public enum DataBuilder {
         Array(expression)
     }
 
-    public static func buildBlock() -> EmptyDataComponent {
-        EmptyDataComponent()
+    public static func buildBlock() -> _Skip {
+        _Skip()
     }
 
     public static func buildBlock<T>(
@@ -101,11 +101,11 @@ public enum DataBuilder {
     @DataBuilder
     public static func buildOptional<T>(
         _ component: T?
-    ) -> _Either<T, EmptyDataComponent> where T: DataComponent {
+    ) -> _Either<T, _Skip> where T: DataComponent {
         if let component {
             component
         } else {
-            EmptyDataComponent()
+            _Skip()
         }
     }
 
@@ -212,4 +212,22 @@ public enum DataBuilder {
         private let list: [Element]
 
     }
+
+    public struct _Skip: DataComponent {
+
+        // MARK: - Initializers
+
+        /// Create an empty data component
+        public init() {}
+
+        // MARK: - DataComponent
+
+        public let _data: Data? = nil
+
+        public var body: Never {
+            fatalErrorImperativeDataComponent()
+        }
+
+    }
+
 }

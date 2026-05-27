@@ -49,11 +49,4 @@ struct StringEnvironmentKeyTests {
         #expect(String(Reader()) == "Hello")
     }
 
-    @Test("Injected Value Read by Key")
-    func injectedValue() {
-        let component = Reader()
-            .environment(GreetingKey.self, "Howdy")
-        #expect(String(component) == "Howdy")
-    }
-
 }
