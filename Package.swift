@@ -37,7 +37,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/swiftlang/swift-syntax",
-            exact: "603.0.1"
+            exact: "603.0.2"
         )
     ],
     targets: [
