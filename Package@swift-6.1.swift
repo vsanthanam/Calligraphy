@@ -4,6 +4,11 @@
 import CompilerPluginSupport
 import PackageDescription
 
+let swiftSettings: [SwiftSetting] = [
+    .enableUpcomingFeature("ExistentialAny"),
+    .enableUpcomingFeature("MemberImportVisibility")
+]
+
 let package = Package(
     name: "Calligraphy",
     platforms: [
@@ -41,10 +46,7 @@ let package = Package(
             resources: [
                 .process("PrivacyInfo.xcprivacy")
             ],
-            swiftSettings: [
-                .enableUpcomingFeature("ExistentialAny"),
-                .enableUpcomingFeature("MemberImportVisibility"),
-            ]
+            swiftSettings: swiftSettings
         ),
         .testTarget(
             name: "CalligraphyTests",
@@ -55,10 +57,7 @@ let package = Package(
                     package: "swift-collections"
                 )
             ],
-            swiftSettings: [
-                .enableUpcomingFeature("ExistentialAny"),
-                .enableUpcomingFeature("MemberImportVisibility"),
-            ]
+            swiftSettings: swiftSettings
         ),
         .macro(
             name: "CalligraphyCompilerPlugin",
@@ -72,10 +71,7 @@ let package = Package(
                     package: "swift-syntax"
                 )
             ],
-            swiftSettings: [
-                .enableUpcomingFeature("ExistentialAny"),
-                .enableUpcomingFeature("MemberImportVisibility"),
-            ]
+            swiftSettings: swiftSettings
         ),
         .testTarget(
             name: "CalligraphyCompilerPluginTests",
@@ -90,10 +86,7 @@ let package = Package(
                     package: "swift-syntax"
                 )
             ],
-            swiftSettings: [
-                .enableUpcomingFeature("ExistentialAny"),
-                .enableUpcomingFeature("MemberImportVisibility"),
-            ]
+            swiftSettings: swiftSettings
         )
     ],
     swiftLanguageModes: [.v6]

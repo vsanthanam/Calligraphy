@@ -3,8 +3,8 @@
 [![MIT License](https://img.shields.io/github/license/vsanthanam/Calligraphy)](https://github.com/vsanthanam/Calligraphy/blob/main/LICENSE)
 [![GitHub Release](https://img.shields.io/github/v/release/vsanthanam/Calligraphy?include_prereleases)](https://github.com/vsanthanam/Calligraphy/releases)
 [![Build Status](https://img.shields.io/github/check-runs/vsanthanam/Calligraphy/main)](https://github.com/vsanthanam/Calligraphy/actions)
-[![Swift Version](https://img.shields.io/badge/swift-6.1%20%7C%206.2%20%7C%206.3-critical)](https://swift.org)
-[![Xcode](https://img.shields.io/badge/xcode-26.5-blue)](https://developer.apple.com/xcode/)
+[![Swift Version](https://img.shields.io/badge/swift-6.1%20%7C%206.2%20%7C%206.3%20%7C%206.4-critical)](https://swift.org)
+[![Xcode](https://img.shields.io/badge/xcode-27.0-blue)](https://developer.apple.com/xcode/)
 [![Documentation](https://img.shields.io/badge/Documentation-GitHub-8A2BE2)](https://usecalligraphy.com/docs/documentation/calligraphy)
 
 A declarative library for composing strings, text, files, and folders in Swift
@@ -156,7 +156,7 @@ To add Calligraphy as a dependency to an existing Swift package, add the followi
 dependencies: [
     .package(
         url: "https://github.com/vsanthanam/Calligraphy.git",
-        from: "2.0.3"
+        from: "2.0.4"
     )
 ]
 ```
