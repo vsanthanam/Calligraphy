@@ -154,3 +154,9 @@ let project = Files {
 }
 try await project.write(to: URL(fileURLWithPath: "/path/to/project"))
 ```
+
+#### Platform Considerations
+
+Before anything is written, the names of sibling files and folders are validated. Names are compared case-insensitively, so a tree containing both `README.md` and `readme.md` is rejected on every platform. Case-insensitive file systems such as APFS would otherwise treat the two as the same file, and the result would depend on which one happened to be written last.
+
+Text files are encoded using the `encoding` supplied to ``File`` or ``TextFile``. Unicode encodings such as `.utf8` and `.utf16` are supported everywhere. Legacy encodings such as `.macOSRoman` or `.shiftJIS` depend on platform support and may cause the write to fail on Linux.

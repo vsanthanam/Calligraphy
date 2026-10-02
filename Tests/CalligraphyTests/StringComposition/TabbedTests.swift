@@ -29,13 +29,15 @@ import Testing
 @Suite("Tabbed Tests", .tags(.stringComposition))
 struct TabbedTests {
 
-    @Test("Component")
+    @available(*, deprecated)
+    @Test("Modifier with default count")
     func standard() {
-        let tabbed = Tabbed {
+        let tabbed = StringGroup {
             "foo"
             "bar"
             "baz"
         }
+        .tabbed()
 
         let expected = #"""
           foo
@@ -46,7 +48,7 @@ struct TabbedTests {
         #expect(String(tabbed) == expected)
     }
 
-    @Test("Modifier")
+    @Test("Modifier with explicit count")
     func modifier() {
         let tabbed = Lines {
             "foo"
@@ -62,6 +64,72 @@ struct TabbedTests {
         """#
 
         #expect(String(tabbed) == expected)
+    }
+
+    @available(*, deprecated)
+    @Test("Blank lines are not indented")
+    func blankLines() {
+        let tabbed = StringGroup {
+            "foo"
+            Blank()
+            "bar"
+        }
+        .tabbed()
+
+        #expect(String(tabbed) == "  foo\n\n  bar")
+    }
+
+    @available(*, deprecated)
+    @Test("Nested inside a line prefix")
+    func nestedInsidePrefix() {
+        let component = Lines {
+            "foo"
+            StringGroup {
+                "bar"
+                Blank()
+                "baz"
+            }
+            .tabbed()
+        }
+        .prefixLines(with: "// ")
+
+        #expect(String(component) == "// foo\n//   bar\n// \n//   baz")
+    }
+
+    @available(*, deprecated)
+    @Test("Line prefix nested inside")
+    func prefixNestedInside() {
+        let component = Lines {
+            "foo"
+            Blank()
+            "bar"
+        }
+        .prefixLines(with: "// ")
+        .tabbed()
+
+        #expect(String(component) == "  // foo\n  // \n  // bar")
+    }
+
+    @Test("Deprecated: Tabbed component")
+    @available(*, deprecated)
+    func deprecatedComponent() {
+        let tabbed = Tabbed {
+            "foo"
+            Blank()
+            "bar"
+        }
+        #expect(String(tabbed) == "  foo\n\n  bar")
+    }
+
+    @Test("Deprecated: Modifier with explicit tab definition")
+    @available(*, deprecated)
+    func deprecatedModifierWithDefinition() {
+        let tabbed = Lines {
+            "foo"
+            "bar"
+        }
+        .tabbed(1, .spaces(4))
+        #expect(String(tabbed) == "    foo\n    bar")
     }
 
 }

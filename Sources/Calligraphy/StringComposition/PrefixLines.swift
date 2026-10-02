@@ -32,25 +32,32 @@ extension StringComponent {
     ///
     /// The receiver is rendered first, then each newline-separated line in the result is prefixed with the value produced by `prefix`. This is the standard way to add gutters, comment markers, or indentation to a multi-line block.
     ///
-    /// - Parameter prefix: A `@StringBuilder` closure producing the component to insert at the start of every line.
+    /// - Parameters:
+    ///   - predicate: A closure that receives each rendered line and returns whether it should be prefixed. Lines for which it returns `false` are emitted unchanged. Defaults to prefixing every line.
+    ///   - prefix: A `@StringBuilder` closure producing the component to insert at the start of each matching line.
     /// - Returns: A component whose lines are each prefixed.
     public func prefixLines(
+        when predicate: @escaping (String) -> Bool = { _ in true },
         @StringBuilder with prefix: () -> some StringComponent
     ) -> some StringComponent {
         PrefixLines(
             content: self,
-            prefix: prefix()
+            prefix: prefix(),
+            predicate: predicate
         )
     }
 
     /// Prepend a string to every line in this component's rendered output.
     ///
-    /// - Parameter prefix: The string to insert at the start of every line.
+    /// - Parameters:
+    ///   - predicate: A closure that receives each rendered line and returns whether it should be prefixed. Lines for which it returns `false` are emitted unchanged. Defaults to prefixing every line.
+    ///   - prefix: The string to insert at the start of each matching line.
     /// - Returns: A component whose lines are each prefixed.
     public func prefixLines(
+        when predicate: @escaping (String) -> Bool = { _ in true },
         with prefix: some StringProtocol
     ) -> some StringComponent {
-        prefixLines {
+        prefixLines(when: predicate) {
             prefix
         }
     }
@@ -67,10 +74,16 @@ private struct PrefixLines<T, Prefix>: StringComponent where T: StringComponent,
 
     let prefix: Prefix
 
+    let predicate: (String) -> Bool
+
     var body: some StringComponent {
         if let lines = content.render(in: environment) {
             for line in lines.components(separatedBy: "\n") {
-                prefix + line
+                if predicate(line) {
+                    prefix + line
+                } else {
+                    line
+                }
             }
         }
     }

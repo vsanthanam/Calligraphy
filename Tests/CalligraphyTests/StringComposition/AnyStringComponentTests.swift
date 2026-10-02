@@ -29,7 +29,7 @@ import Testing
 @Test("String Component Type Eraser", .tags(.stringComposition))
 func anyStringComponent() {
 
-    let standard = StringComponents {
+    let standard = StringGroup {
         "foo"
         "bar"
         "baz"

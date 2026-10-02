@@ -35,7 +35,10 @@ public protocol TextFile: StringComponent, DirectoryContent {
     /// The permissions of the file
     var permissions: FilePermissions { get }
 
-    /// The encoding to use when the file is written to disk
+    /// The encoding to use when the file is written to disk.
+    ///
+    /// The file's encoding. Defaults to `.utf8`. Unicode encodings are supported on every platform.
+    /// Legacy encodings such as `.macOSRoman` or `.shiftJIS` depend on platform support and may cause the write to fail on Linux.
     var encoding: String.Encoding { get }
 
 }

@@ -25,7 +25,7 @@
 
 /// A string component that renders a quotation mark.
 ///
-/// The character (or characters) rendered are controlled by the surrounding ``QuotationMarkStyle`` environment value. By default, a `QuotationMark` renders as a single double-quote character (`"`). To use a different style, apply the ``StringComponent/quotationMarkStyle(_:)`` modifier to an ancestor component, or pass an explicit style to the initializer to bypass the environment.
+/// The character (or characters) rendered are controlled by the surrounding ``QuotationMarkStyle`` environment value. By default, a `QuotationMark` renders as a single double-quote character (`"`). To use a different style, apply the ``StringComponent/quotationMarkStyle(_:)`` modifier to this component or an ancestor.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct QuotationMark: StringComponent {
 
@@ -33,8 +33,16 @@ public struct QuotationMark: StringComponent {
 
     /// Create a quotation mark component.
     /// - Parameter style: An optional ``QuotationMarkStyle`` override. When `nil` (the default), the style is read from the surrounding ``StringEnvironmentValues/quotationMarkStyle`` environment value.
-    public init(_ style: QuotationMarkStyle? = nil) {
+    @available(*, deprecated, message: "Use the quotationMarkStyle(_:) modifier instead.")
+    public init(_ style: QuotationMarkStyle?) {
         self.style = style
+    }
+
+    /// Create a quotation mark component.
+    ///
+    /// The character rendered is read from the surrounding ``StringEnvironmentValues/quotationMarkStyle`` environment value.
+    public init() {
+        self.style = nil
     }
 
     // MARK: - StringComponent

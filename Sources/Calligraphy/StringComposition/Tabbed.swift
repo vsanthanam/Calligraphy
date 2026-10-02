@@ -32,17 +32,31 @@ extension StringComponent {
     ///   - count: The number of tabs to insert at the start of each line. Defaults to `1`.
     ///   - definition: An optional ``TabDefinition`` override. When `nil`, the tab definition provided by the surrounding environment is used.
     /// - Returns: A component whose lines are each indented.
+    @available(*, deprecated, message: "Use tabbed(_:) and apply the tabDefinition(_:) modifier instead")
     @StringBuilder
     public func tabbed(
         _ count: Int = 1,
-        _ definition: TabDefinition? = nil
+        _ definition: TabDefinition?
     ) -> some StringComponent {
         if let definition {
-            Tabbed(count) { self }
+            _Tabbed(count) { self }
                 .tabDefinition(definition)
         } else {
-            Tabbed(count) { self }
+            _Tabbed(count) { self }
         }
+    }
+
+    /// Indent every line of this component with one or more tabs.
+    ///
+    /// Each tab is rendered according to the surrounding ``StringEnvironmentValues/tabDefinition`` environment value. By default, this means two spaces per tab. Use the ``StringComponent/tabDefinition(_:)`` modifier to change it. Blank lines are left empty rather than indented.
+    ///
+    /// - Parameter count: The number of tabs to insert at the start of each line. Defaults to `1`.
+    /// - Returns: A component whose lines are each indented.
+    @StringBuilder
+    public func tabbed(
+        _ count: Int = 1,
+    ) -> some StringComponent {
+        _Tabbed(count) { self }
     }
 
 }
@@ -51,6 +65,7 @@ extension StringComponent {
 ///
 /// Each tab is rendered according to the surrounding ``TabDefinition`` environment value. By default, this means two spaces per tab.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+@available(*, deprecated, message: "Wrap the content in a StringGroup and apply the tabbed(_:) modifier instead")
 public struct Tabbed<Content>: StringComponent where Content: StringComponent {
 
     // MARK: - Initializers
@@ -71,14 +86,41 @@ public struct Tabbed<Content>: StringComponent where Content: StringComponent {
 
     public var body: some StringComponent {
         content
-            .prefixLines {
+            .tabbed(count)
+    }
+
+    // MARK: - Private
+
+    private let count: Int
+    private let content: Content
+
+}
+
+private struct _Tabbed<Content>: StringComponent where Content: StringComponent {
+
+    // MARK: - Initializers
+
+    init(
+        _ count: Int = 1,
+        @StringBuilder content: () -> Content
+    ) {
+        self.count = count
+        self.content = content()
+    }
+
+    // MARK: - StringComponent
+
+    var body: some StringComponent {
+        content
+            .prefixLines { line in
+                !line.isEmpty
+            } with: {
                 Line {
                     for _ in 0..<count {
                         Tab()
                     }
                 }
             }
-
     }
 
     // MARK: - Private

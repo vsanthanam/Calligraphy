@@ -1,5 +1,5 @@
 // Calligraphy
-// SeparatedTests.swift
+// TextFileTests.swift
 //
 // MIT License
 //
@@ -24,35 +24,27 @@
 // SOFTWARE.
 
 import Calligraphy
+import Foundation
 import Testing
 
-// @Suite("Separated Tests", .tags(.stringComposition))
-// struct SeparatedTests {
-//
-//    @Test("Modifier with String")
-//    func stringModifier() {
-//        let component = Lines {
-//            StringComponents {
-//                "1-2-3-4-5"
-//            }
-//            .separatedBy("-")
-//        }
-//        #expect(component._content == "1\n2\n3\n4\n5")
-//    }
-//
-//    @Test("Modifier with Builder")
-//    func builderModifier() {
-//        let component = Line {
-//            StringComponents {
-//                "1"
-//                "2"
-//                "3"
-//                "4"
-//                "5"
-//            }
-//            .separatedBy("\n")
-//        }
-//        #expect(component._content == "12345")
-//    }
-//
-// }
+struct FooTextFile: TextFile {
+
+    let name = "foo"
+
+    var body: some StringComponent {
+        "Hello, World!"
+    }
+
+}
+
+@Test("Text File Protocol Serialize", .tags(.directoryComposition))
+func textFileDefaultSerialization() {
+
+    let fooTextFile = FooTextFile()
+    let serialized = fooTextFile._serialize()
+    let expected = [
+        SerializedDirectoryContent.text("foo", permissions: .defaultFile, text: "Hello, World!", encoding: .utf8)
+    ]
+    #expect(serialized == expected)
+
+}

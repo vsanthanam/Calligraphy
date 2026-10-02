@@ -8,7 +8,7 @@ Calligraphy provides a powerful and intuitive way to compose complex text struct
 
 The library is organized into three main areas:
 
-- **String Composition**: Create and manipulate strings with components like `Line`, `Lines`, and `Tabbed`. Build and compose your own `StringComponent` types and compose them into complex string structures using `@StringBuilder` with advanced delimiter and formatting options.
+- **String Composition**: Create and manipulate strings with components like `StringGroup`, `Line`, and `Lines`, and modifiers like `tabbed(_:)` and `quotationMarkStyle(_:)`. Build and compose your own `StringComponent` types and compose them into complex string structures using `@StringBuilder` with advanced delimiter and formatting options.
 
 - **Directory Composition**: Generate entire directory structures programmatically using `Directory`, `Folder`, and `File`. Build and compose your own `TextFile` and `DataFile` types,and compose them into complex, nested directory structures using `@DirectoryContentBuilder`
 
@@ -33,13 +33,12 @@ Calligraphy's type-safe API and builder patterns make it ideal for code generati
 - <doc:ComposingStrings>
 - ``StringComponent``
 - ``StringBuilder``
-- ``StringComponents``
+- ``StringGroup``
 - ``Line``
 - ``Lines``
 - ``Quote``
 - ``QuotationMark``
 - ``QuotationMarkStyle``
-- ``Tabbed``
 - ``TabDefinition``
 - ``Blank``
 - ``NewLine``
