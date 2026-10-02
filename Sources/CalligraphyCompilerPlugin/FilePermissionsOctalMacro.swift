@@ -88,7 +88,9 @@ public struct FilePermissionsOctalMacro: ExpressionMacro {
 
         var parts: [String] = []
         for (mask, name) in mapping {
-            if (value & mask) != 0 { parts.append(name) }
+            if (value & mask) != 0 {
+                parts.append(name)
+            }
         }
 
         let arrayLiteral = if parts.isEmpty {
