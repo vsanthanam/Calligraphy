@@ -9,7 +9,7 @@ hero_accents:
   - "declarative"
   - "Swift"
 metadata:
-  - "V2.0.3"
+  - "V2.0.4"
   - "MIT"
-  - "Swift 6.3"
+  - "Swift 6.4"
 EOF
