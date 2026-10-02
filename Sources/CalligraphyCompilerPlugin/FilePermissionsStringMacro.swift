@@ -98,28 +98,52 @@ public struct FilePermissionsStringMacro: ExpressionMacro {
 
         // Special bits first for readability
         let ux = char(at: 2)
-        if ux == "s" || ux == "S" { parts.append(".setUserID") }
+        if ux == "s" || ux == "S" {
+            parts.append(".setUserID")
+        }
 
         let gx = char(at: 5)
-        if gx == "s" || gx == "S" { parts.append(".setGroupID") }
+        if gx == "s" || gx == "S" {
+            parts.append(".setGroupID")
+        }
 
         let ox = char(at: 8)
-        if ox == "t" || ox == "T" { parts.append(".sticky") }
+        if ox == "t" || ox == "T" {
+            parts.append(".sticky")
+        }
 
         // User bits
-        if char(at: 0) == "r" { parts.append(".readUser") }
-        if char(at: 1) == "w" { parts.append(".writeUser") }
-        if ux == "x" || ux == "s" { parts.append(".executeUser") }
+        if char(at: 0) == "r" {
+            parts.append(".readUser")
+        }
+        if char(at: 1) == "w" {
+            parts.append(".writeUser")
+        }
+        if ux == "x" || ux == "s" {
+            parts.append(".executeUser")
+        }
 
         // Group bits
-        if char(at: 3) == "r" { parts.append(".readGroup") }
-        if char(at: 4) == "w" { parts.append(".writeGroup") }
-        if gx == "x" || gx == "s" { parts.append(".executeGroup") }
+        if char(at: 3) == "r" {
+            parts.append(".readGroup")
+        }
+        if char(at: 4) == "w" {
+            parts.append(".writeGroup")
+        }
+        if gx == "x" || gx == "s" {
+            parts.append(".executeGroup")
+        }
 
         // Other bits
-        if char(at: 6) == "r" { parts.append(".readOther") }
-        if char(at: 7) == "w" { parts.append(".writeOther") }
-        if ox == "x" || ox == "t" { parts.append(".executeOther") }
+        if char(at: 6) == "r" {
+            parts.append(".readOther")
+        }
+        if char(at: 7) == "w" {
+            parts.append(".writeOther")
+        }
+        if ox == "x" || ox == "t" {
+            parts.append(".executeOther")
+        }
 
         let arrayLiteral = if parts.isEmpty {
             "[] as FilePermissions"

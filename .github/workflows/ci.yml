@@ -15,47 +15,25 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  build-xcode:
-    strategy:
-      matrix:
-        platform: ['macos', 'maccatalyst', 'ios', 'watchos', 'tvos', 'visionos']
-        include:
-          - platform: 'macos'
-            name: 'macOS'
-          - platform: 'maccatalyst'
-            name: 'Mac Catalyst'
-          - platform: 'ios'
-            name: 'iOS'
-          - platform: 'watchos'
-            name: 'watchOS'
-          - platform: 'tvos'
-            name: 'tvOS'
-          - platform: 'visionos'
-            name: 'visionOS'
-    name: Build with Xcode (${{ matrix.name }})
-    runs-on: macos-26
+  lint:
+    name: Lint Sources
+    runs-on: xcode-27
     steps:
     - name: Checkout
       uses: actions/checkout@v6
-    - name: Select Xcode Version
-      run: ./.scripts/xcode-select
-    - name: Build Calligraphy for ${{ matrix.name }}
-      run: ./.scripts/build-${{ matrix.platform }}-xcode Calligraphy
-  swiftformat:
-    name: Run SwiftFormat 
-    runs-on: macos-26
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v6
+    - name: Install Toolchain
+      uses: jdx/mise-action@v4
+      with:
+        version: 2026.8.15
     - name: Select Xcode Version
       run: ./.scripts/xcode-select
     - name: Lint with SwiftFormat
-      run: ./.scripts/lint-swiftformat
+      run: mise lint
   build-macos-spm:
     name: Build Calligraphy (macOS)
     strategy:
       matrix:
-        swift: ['6.1', '6.2', '6.3']
+        swift: ['6.1', '6.2', '6.3', '6.4']
         include:
           - swift: '6.1'
             runner: 'macos-15'
@@ -66,6 +44,9 @@ jobs:
           - swift: '6.3'
             runner: 'macos-26'
             xcode: '26.5'
+          - swift: '6.4'
+            runner: 'xcode-27'
+            xcode: '27.0'
     runs-on: ${{ matrix.runner }}
     outputs:
       artifact-name: macos-build
@@ -87,7 +68,7 @@ jobs:
     name: Test Calligraphy (macOS)
     strategy:
       matrix:
-        swift: ['6.1', '6.2', '6.3']
+        swift: ['6.1', '6.2', '6.3', '6.4']
         include:
           - swift: '6.1'
             runner: 'macos-15'
@@ -98,6 +79,9 @@ jobs:
           - swift: '6.3'
             runner: 'macos-26'
             xcode: '26.5'
+          - swift: '6.4'
+            runner: 'xcode-27'
+            xcode: '27.0'
     needs: build-macos-spm
     runs-on: ${{ matrix.runner }}
     steps:
@@ -118,7 +102,7 @@ jobs:
     name: Build Calligraphy (Ubuntu)
     strategy:
       matrix:
-        swift: ['6.1', '6.2', '6.3']
+        swift: ['6.1', '6.2', '6.3', '6.4']
     runs-on: ubuntu-latest
     outputs:
       artifact-name: ubuntu-build
@@ -142,7 +126,7 @@ jobs:
     name: Test Calligraphy (Ubuntu)
     strategy:
       matrix:
-        swift: ['6.1', '6.2', '6.3']
+        swift: ['6.1', '6.2', '6.3', '6.4']
     needs: build-ubuntu-spm
     runs-on: ubuntu-latest
     container:
@@ -163,7 +147,7 @@ jobs:
         run: swift test --skip-build
   lint-docc:
     name: Validate Documentation
-    runs-on: macos-26
+    runs-on: xcode-27
     steps:
     - name: Checkout
       uses: actions/checkout@v6
@@ -175,24 +159,22 @@ jobs:
     name: Validate Pull Request
     if: ${{ always() && github.event_name == 'pull_request' }}
     needs:
-      - build-xcode
       - build-macos-spm
       - test-macos-spm
       - build-ubuntu-spm
       - test-ubuntu-spm
-      - swiftformat
+      - lint
       - lint-docc
     runs-on: ubuntu-latest
     steps:
       - name: Check upstream jobs
         run: |
           # If any job failed, this status will not be 'success'
-          if [[ "${{ needs.build-xcode.result }}" == "failure" ]] || \
-             [[ "${{ needs.build-macos-spm.result }}" == "failure" ]] || \
+          if [[ "${{ needs.build-macos-spm.result }}" == "failure" ]] || \
              [[ "${{ needs.test-macos-spm.result }}" == "failure" ]] || \
              [[ "${{ needs.build-ubuntu-spm.result }}" == "failure" ]] || \
              [[ "${{ needs.test-ubuntu-spm.result }}" == "failure" ]] || \
-             [[ "${{ needs.swiftformat.result }}" == "failure" ]] || \
+             [[ "${{ needs.lint.result }}" == "failure" ]] || \
              [[ "${{ needs.lint-docc.result }}" == "failure" ]]; then
             echo "❌ Upstream job failed."
             exit 1
