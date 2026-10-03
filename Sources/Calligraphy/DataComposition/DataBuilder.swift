@@ -44,7 +44,7 @@ public enum DataBuilder {
 
     @DataBuilder
     public static func buildExpression(
-        _ expression: [UInt8]
+        _ expression: some Collection<UInt8>
     ) -> RawDataComponent {
         Data(expression)
     }
@@ -54,20 +54,6 @@ public enum DataBuilder {
         _ expression: UInt8
     ) -> RawDataComponent {
         [expression]
-    }
-
-    @DataBuilder
-    public static func buildExpression(
-        _ expression: some Collection<Data>
-    ) -> RawDataComponent {
-        expression.reduce(Data(), +)
-    }
-
-    @DataBuilder
-    public static func buildExpression(
-        _ expression: some Collection<UInt8>
-    ) -> RawDataComponent {
-        Array(expression)
     }
 
     public static func buildBlock() -> EmptyDataComponent {
@@ -82,7 +68,7 @@ public enum DataBuilder {
 
     public static func buildBlock<each Component>(
         _ components: repeat each Component
-    ) -> _Block<repeat each Component> where repeat each Component: DataComponent {
+    ) -> _Assembled<repeat each Component> where repeat each Component: DataComponent {
         .init(components: repeat each components)
     }
 
@@ -94,7 +80,7 @@ public enum DataBuilder {
 
     public static func buildEither<First, Second>(
         second component: Second
-    ) -> _Either<First, Second> {
+    ) -> _Either<First, Second> where First: DataComponent, Second: DataComponent {
         .second(component)
     }
 
@@ -121,7 +107,7 @@ public enum DataBuilder {
         AnyDataComponent(erasing: component)
     }
 
-    public struct _Block<each Component>: DataComponent where repeat each Component: DataComponent {
+    public struct _Assembled<each Component>: DataComponent where repeat each Component: DataComponent {
 
         // MARK: - DataComponent
 
