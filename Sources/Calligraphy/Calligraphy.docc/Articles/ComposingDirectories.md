@@ -5,7 +5,7 @@
     @PageKind(article)
 }
 
-Use @`DirectoryContentBuilder` to compose complex, nested directory structures and write them to disk.
+Use `@DirectoryContentBuilder` to compose complex, nested directory structures and write them to disk.
 
 ## Overview
 
@@ -42,7 +42,7 @@ let project = Folder("MyProject") {
         File("main.swift") {
             Line {
                 "print("
-                Quoted {
+                Quote {
                     "Hello, World!"
                 }
                 ")"
@@ -54,14 +54,14 @@ let project = Folder("MyProject") {
 
 ### Custom Directory Content Types
 
-You can create reusabe file and folder types that represent higher level concepts, such as a particular kind of file template or an asset bundle. To do this, you can create types that conform to the `TextFile`, `DataFile`, or `Directory` protocols.
+You can create reusable file and folder types that represent higher level concepts, such as a particular kind of file template or an asset bundle. To do this, you can create types that conform to the `TextFile`, `DataFile`, or `Directory` protocols.
 
 #### Custom Text Files
 
 For text files, conform to the ``TextFile`` protocol:
 
 ```swift
-struct ReadmeFile: DataFile {
+struct ReadmeFile: TextFile {
 
     let name = "README.md"
     

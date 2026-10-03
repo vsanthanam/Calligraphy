@@ -177,6 +177,18 @@ struct DirectoryContentTests {
     #endif
 
     #if !os(Windows)
+        @Test("Writes into a destination reached through a symbolic link")
+        func symbolicLinkDestination() async throws {
+            let directory = try makeTemporaryDirectory()
+            defer { try? FileManager.default.removeItem(at: directory) }
+            let target = directory.appending(path: "target", directoryHint: .isDirectory)
+            let link = directory.appending(path: "link", directoryHint: .isDirectory)
+            try FileManager.default.createDirectory(at: target, withIntermediateDirectories: true)
+            try FileManager.default.createSymbolicLink(at: link, withDestinationURL: target)
+            try await File("hello.txt", text: "hi").write(to: link)
+            #expect(FileManager.default.fileExists(atPath: target.appending(path: "hello.txt").path()))
+        }
+
         @Test("Permissions are applied to written files and directories")
         func permissionsApplied() async throws {
             let directory = try makeTemporaryDirectory()

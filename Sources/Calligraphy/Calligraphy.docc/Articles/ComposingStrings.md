@@ -116,14 +116,15 @@ foobarbaz
 
 #### The Lines component
 
-You can also use the ``Lines`` component, which can add one or more new lines when joining its children:
+You can also use the ``Lines`` component, which joins its children with newlines. Combine it with the ``StringComponent/lineSpacing(_:)`` modifier to put more than one newline between them:
 
 ```swift
-Lines(spacing: 2) {
+Lines {
     "foo"
     "bar"
     "baz"
 }
+.lineSpacing(2)
 ```
 
 This example would yield the following string:

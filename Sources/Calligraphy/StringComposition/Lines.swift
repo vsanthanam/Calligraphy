@@ -42,11 +42,24 @@ public struct Lines<Components>: StringComponent where Components: StringCompone
     /// - Parameters:
     ///   - spacing: The number of newlines between each line. When `nil`, the value of the surrounding ``StringEnvironmentValues/lineSpacing`` environment value is used (typically `1`).
     ///   - components: The children to combine, one per line.
+    @available(*, deprecated, message: "Use the lineSpacing(_:) modifier instead.")
     public init(
-        spacing: Int? = nil,
+        spacing: Int?,
         @StringBuilder components: () -> Components
     ) {
         self.spacing = spacing
+        self.components = components()
+    }
+
+    /// Create a block of lines.
+    ///
+    /// The number of newlines between each line is read from the surrounding ``StringEnvironmentValues/lineSpacing`` environment value (typically `1`). Use the ``StringComponent/lineSpacing(_:)`` modifier to change it.
+    ///
+    /// - Parameter components: The children to combine, one per line.
+    public init(
+        @StringBuilder components: () -> Components
+    ) {
+        self.spacing = nil
         self.components = components()
     }
 
