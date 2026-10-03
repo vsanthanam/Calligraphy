@@ -32,7 +32,7 @@ struct TabbedTests {
     @available(*, deprecated)
     @Test("Modifier with default count")
     func standard() {
-        let tabbed = StringGroup {
+        let tabbed = Lines {
             "foo"
             "bar"
             "baz"
@@ -69,7 +69,7 @@ struct TabbedTests {
     @available(*, deprecated)
     @Test("Blank lines are not indented")
     func blankLines() {
-        let tabbed = StringGroup {
+        let tabbed = Lines {
             "foo"
             Blank()
             "bar"
@@ -84,7 +84,7 @@ struct TabbedTests {
     func nestedInsidePrefix() {
         let component = Lines {
             "foo"
-            StringGroup {
+            Lines {
                 "bar"
                 Blank()
                 "baz"
