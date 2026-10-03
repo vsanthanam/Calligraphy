@@ -70,4 +70,16 @@ struct PrefixLinesTests {
         #expect(String(prefixLines) == expected)
     }
 
+    @Test("Predicate")
+    func predicate() {
+        let prefixLines = Lines {
+            "foo"
+            Blank()
+            "bar"
+        }
+        .prefixLines(when: { !$0.isEmpty }, with: "- ")
+
+        #expect(String(prefixLines) == "- foo\n\n- bar")
+    }
+
 }

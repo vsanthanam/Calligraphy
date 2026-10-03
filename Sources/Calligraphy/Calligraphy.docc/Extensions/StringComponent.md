@@ -38,9 +38,9 @@ struct Greeting: StringComponent {
 
 - ``joined(separator:)``
 - ``lineSpacing(_:)``
-- ``prefixLines(with:)-(()->StringComponent)``
-- ``prefixLines(with:)-(StringProtocol)``
-- ``tabbed(_:_:)``
+- ``prefixLines(when:with:)-(_,()->StringComponent)``
+- ``prefixLines(when:with:)-(_,StringProtocol)``
+- ``tabbed(_:)``
 - ``quoted(_:)``
 - ``quotationMarkStyle(_:)``
 - ``tabDefinition(_:)``

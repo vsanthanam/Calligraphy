@@ -48,6 +48,7 @@ extension DirectoryContent {
             ///   - directoryURL: The a file URL to a directory where the content should be written to.
             ///   - shouldOverwrite: Whether or not existing content with the same name or structure should be overwritten with new content.
             /// - Returns: A list of every file URL that was created during the process.
+            /// - Important: Sibling names are validated case-insensitively before anything is written. A tree containing both `README.md` and `readme.md` is rejected on every platform, because case-insensitive file systems such as APFS would treat them as the same file.
             @discardableResult
             public func write(
                 to directoryURL: URL,
@@ -72,6 +73,7 @@ extension DirectoryContent {
             ///   - directoryURL: The a file URL to a directory where the content should be written to.
             ///   - shouldOverwrite: Whether or not existing content with the same name or structure should be overwritten with new content.
             /// - Returns: A list of every file URL that was created during the process.
+            /// - Important: Sibling names are validated case-insensitively before anything is written. A tree containing both `README.md` and `readme.md` is rejected on every platform, because case-insensitive file systems such as APFS would treat them as the same file.
             @discardableResult
             public nonisolated(nonsending) func write(
                 to directoryURL: URL,
@@ -98,6 +100,7 @@ extension DirectoryContent {
         ///   - shouldOverwrite: Whether or not existing content with the same name or structure should be overwritten with new content.
         ///   - isolation: The actor where the work should begin
         /// - Returns: A list of every file URL that was created during the process.
+        /// - Important: Sibling names are validated case-insensitively before anything is written. A tree containing both `README.md` and `readme.md` is rejected on every platform, because case-insensitive file systems such as APFS would treat them as the same file.
         /// - Note: The creating of files and directories is parllelized with a task group. The `isolation` argument is only responsible for controling the region where the setup work happens. You should usually not population this argument, it really only exists to prevent an extra actor hop. This argument is removed when you compile for Swift 6.2 and newer.
         @discardableResult
         public func write(
@@ -283,20 +286,45 @@ extension [SerializedDirectoryContent] {
             }
 
             #if os(Windows)
-                let reservedNames = ["CON", "PRN", "AUX", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"]
-                guard !reservedNames.contains(name.uppercased()) else {
-                    throw DiskOperationError("Invalid directory content - file or directory name '\(name)' is a reserved name in parent '\(parent.path())'")
+                // Windows reserves device names regardless of extension, so `CON`, `con.txt`, and `CON.tar.gz` are all
+                // uncreatable. The superscript digit variants are reserved alongside the ASCII ones.
+                let reservedNames: Set = [
+                    "CON", "PRN", "AUX", "NUL",
+                    "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
+                    "COM¹", "COM²", "COM³",
+                    "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9",
+                    "LPT¹", "LPT²", "LPT³"
+                ]
+                let stem = name.split(separator: ".", maxSplits: 1, omittingEmptySubsequences: false)[0]
+                guard !reservedNames.contains(stem.uppercased()) else {
+                    throw DiskOperationError(
+                        """
+                        Invalid directory content - file or directory name '\(name)' is a reserved name in parent '\(parent.path())'
+                        """
+                    )
                 }
-
-                guard !name.hasSuffix("."), !name.hasSuffix(" ") else {
-                    throw DiskOperationError("Invalid directory content - file or directory name '\(name)' ends with a period or space in parent '\(parent.path())'")
+                guard !name.hasSuffix("."),
+                      !name.hasSuffix(" ") else {
+                    throw DiskOperationError(
+                        """
+                        Invalid directory content - file or directory name '\(name)' ends with a period or space in parent '\(parent.path())'
+                        """
+                    )
+                }
+                guard name.unicodeScalars.allSatisfy({ $0.value >= 32 }) else {
+                    throw DiskOperationError(
+                        """
+                        Invalid directory content - file or directory name '\(name)' contains control characters in parent '\(parent.path())'
+                        """
+                    )
                 }
             #endif
 
-            guard !uniqueNames.contains(name) else {
-                throw DiskOperationError("Invalid directory content - duplicate files or directories named '\(content.name)' found in parent '\(parent.path())'")
+            let caseFoldedName = name.lowercased()
+            guard !uniqueNames.contains(caseFoldedName) else {
+                throw DiskOperationError("Invalid directory content - duplicate file or directory name '\(name)' found in parent '\(parent.path())'. Names are compared case-insensitively because some file systems, such as APFS, do not distinguish between names that differ only by case.")
             }
-            uniqueNames.insert(content.name)
+            uniqueNames.insert(caseFoldedName)
             try content.validate(in: parent)
         }
     }
@@ -392,25 +420,73 @@ private struct DiskOperationError: Error, CustomStringConvertible {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 private enum DiskOperation {
 
-    static func start<T>(
-        with rootURL: URL,
-        fn: () async throws -> T
-    ) async rethrows -> T {
-        try await $rootURL.withValue(
-            rootURL,
-            operation: fn
-        )
-    }
+    #if compiler(>=6.4)
+        #if hasFeature(NonisolatedNonsendingByDefault)
+            static func start<T>(
+                with rootURL: URL,
+                fn: () async throws -> T
+            ) async rethrows -> T {
+                try await $rootURL.withValue(
+                    rootURL,
+                    operation: fn
+                )
+            }
 
-    static func push<T>(
-        path newPath: String,
-        fn: () async throws -> T
-    ) async rethrows -> T {
-        try await $path.withValue(
-            path + [newPath],
-            operation: fn
-        )
-    }
+            static func push<T>(
+                path newPath: String,
+                fn: () async throws -> T
+            ) async rethrows -> T {
+                try await $path.withValue(
+                    path + [newPath],
+                    operation: fn
+                )
+            }
+        #else
+            nonisolated(nonsending) static func start<T>(
+                with rootURL: URL,
+                fn: () async throws -> T
+            ) async rethrows -> T {
+                try await $rootURL.withValue(
+                    rootURL,
+                    operation: fn
+                )
+            }
+
+            nonisolated(nonsending) static func push<T>(
+                path newPath: String,
+                fn: () async throws -> T
+            ) async rethrows -> T {
+                try await $path.withValue(
+                    path + [newPath],
+                    operation: fn
+                )
+            }
+        #endif
+    #else
+        static func start<T>(
+            with rootURL: URL,
+            fn: () async throws -> T,
+            isolation: isolated (any Actor)? = #isolation
+        ) async rethrows -> T {
+            try await $rootURL.withValue(
+                rootURL,
+                operation: fn,
+                isolation: isolation
+            )
+        }
+
+        static func push<T>(
+            path newPath: String,
+            fn: () async throws -> T,
+            isolation: isolated (any Actor)? = #isolation
+        ) async rethrows -> T {
+            try await $path.withValue(
+                path + [newPath],
+                operation: fn,
+                isolation: isolation
+            )
+        }
+    #endif
 
     static var currentURL: URL {
         get throws {

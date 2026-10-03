@@ -143,8 +143,85 @@ jobs:
         run: apt-get update && apt-get install -y unzip
       - name: Decompress Build
         run: unzip build.zip
+      - name: Create Unprivileged User
+        # The container runs as root, and root bypasses file permission checks.
+        # Running the tests as a regular user keeps permission-related tests meaningful.
+        run: useradd --create-home tester && chown -R tester:tester "$PWD"
       - name: Test Calligraphy
-        run: swift test --skip-build
+        run: su tester --command "cd '$PWD' && swift test --skip-build"
+  build-windows-spm:
+    name: Build Calligraphy (Windows)
+    strategy:
+      fail-fast: false
+      # Swift 6.1 on Windows links the macro plugin's `main` into the test runner and fails with a
+      # duplicate symbol, so the Windows matrix starts at 6.2.
+      matrix:
+        swift: ['6.2', '6.3', '6.4']
+        include:
+          - swift: '6.2'
+            toolchain: '6.2.4'
+          - swift: '6.3'
+            toolchain: '6.3.3'
+          - swift: '6.4'
+            toolchain: '6.4.0'
+            # The 6.4 build engine touches resource bundles while their contents are still being
+            # written. Compiling swift-syntax from source instead of using the prebuilt keeps the
+            # two tasks apart. See https://github.com/vsanthanam/JBird/issues/436.
+            extra-flags: '--disable-experimental-prebuilts'
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Setup Swift
+        uses: compnerd/gha-setup-swift@main
+        with:
+          swift-version: swift-${{ matrix.toolchain }}-release
+          swift-build: ${{ matrix.toolchain }}-RELEASE
+      - name: Build Calligraphy
+        run: swift build -v --build-tests --disable-xctest --build-path .build -c debug -Xlinker /INCREMENTAL:NO ${{ matrix.extra-flags }}
+      - name: Compress Build
+        shell: pwsh
+        run: |
+          Compress-Archive -Path ".build" -DestinationPath "build.zip" -Force
+      - name: Upload Build
+        uses: actions/upload-artifact@v7
+        with:
+          name: windows-build-${{ matrix.swift }}
+          path: build.zip
+  test-windows-spm:
+    name: Test Calligraphy (Windows)
+    strategy:
+      fail-fast: false
+      matrix:
+        swift: ['6.2', '6.3', '6.4']
+        include:
+          - swift: '6.2'
+            toolchain: '6.2.4'
+          - swift: '6.3'
+            toolchain: '6.3.3'
+          - swift: '6.4'
+            toolchain: '6.4.0'
+    needs: build-windows-spm
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Setup Swift
+        uses: compnerd/gha-setup-swift@main
+        with:
+          swift-version: swift-${{ matrix.toolchain }}-release
+          swift-build: ${{ matrix.toolchain }}-RELEASE
+      - name: Download Build
+        uses: actions/download-artifact@v8
+        with:
+          name: windows-build-${{ matrix.swift }}
+          path: .
+      - name: Decompress Build
+        shell: pwsh
+        run: |
+          Expand-Archive -Path "build.zip" -DestinationPath "." -Force
+      - name: Test Calligraphy
+        run: swift test --disable-xctest --skip-build
   lint-docc:
     name: Validate Documentation
     runs-on: xcode-27
@@ -163,6 +240,8 @@ jobs:
       - test-macos-spm
       - build-ubuntu-spm
       - test-ubuntu-spm
+      - build-windows-spm
+      - test-windows-spm
       - lint
       - lint-docc
     runs-on: ubuntu-latest
@@ -174,6 +253,8 @@ jobs:
              [[ "${{ needs.test-macos-spm.result }}" == "failure" ]] || \
              [[ "${{ needs.build-ubuntu-spm.result }}" == "failure" ]] || \
              [[ "${{ needs.test-ubuntu-spm.result }}" == "failure" ]] || \
+             [[ "${{ needs.build-windows-spm.result }}" == "failure" ]] || \
+             [[ "${{ needs.test-windows-spm.result }}" == "failure" ]] || \
              [[ "${{ needs.lint.result }}" == "failure" ]] || \
              [[ "${{ needs.lint-docc.result }}" == "failure" ]]; then
             echo "❌ Upstream job failed."

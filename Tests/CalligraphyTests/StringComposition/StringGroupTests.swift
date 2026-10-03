@@ -1,5 +1,5 @@
 // Calligraphy
-// StringComponents.swift
+// StringGroupTests.swift
 //
 // MIT License
 //
@@ -23,22 +23,44 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// An entry point to the ``StringBuilder`` result builder.
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct StringComponents<Body>: StringComponent where Body: StringComponent {
+import Calligraphy
+import Testing
 
-    // MARK: - Initializers
+@Suite("String Group Tests", .tags(.stringComposition))
+struct StringGroupTests {
 
-    /// Assemble string components together, declaratively
-    /// - Parameter body: The components to assemble
-    public init(
-        @StringBuilder body: () -> Body
-    ) {
-        self.body = body()
+    @Test("Single Component")
+    func single() {
+        let components = StringGroup {
+            "foo"
+        }
+        #expect(String(components) == "foo")
     }
 
-    // MARK: - StringComponent
+    @Test("Multiple Components")
+    func multiple() {
+        let components = StringGroup {
+            "foo"
+            "bar"
+            "baz"
+        }
+        #expect(String(components) == "foo\nbar\nbaz")
+    }
 
-    public let body: Body
+    @Test("Empty")
+    func empty() {
+        let components = StringGroup {}
+        #expect(String(components) == "")
+    }
+
+    @Test("Composable with Modifiers")
+    func composable() {
+        let components = StringGroup {
+            "foo"
+            "bar"
+        }
+        .joined(separator: ", ")
+        #expect(String(components) == "foo, bar")
+    }
 
 }

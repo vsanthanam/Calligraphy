@@ -35,7 +35,7 @@ public struct File: DirectoryContent {
     /// - Parameters:
     ///   - name: The name of the file
     ///   - permissions: The permissions of the file
-    ///   - encoding: The file's encoding
+    ///   - encoding: The file's encoding. Defaults to `.utf8`. Unicode encodings are supported on every platform. Legacy encodings such as `.macOSRoman` or `.shiftJIS` depend on platform support and may cause the write to fail on Linux.
     ///   - text: The contents of the file
     public init(
         _ name: String,
@@ -56,7 +56,7 @@ public struct File: DirectoryContent {
     ///   - name: The name of the file
     ///   - fileExtension: The file extension
     ///   - permissions: The permissions of the file
-    ///   - encoding: The file's encoding
+    ///   - encoding: The file's encoding. Defaults to `.utf8`. Unicode encodings are supported on every platform. Legacy encodings such as `.macOSRoman` or `.shiftJIS` depend on platform support and may cause the write to fail on Linux.
     ///   - text: The contents of the file
     public init(
         _ name: String,
@@ -79,7 +79,7 @@ public struct File: DirectoryContent {
     ///   - name: The name of the file
     ///   - permissions: The permissions of the file
     ///   - text: The contents of the file
-    ///   - encoding: The file's encoding
+    ///   - encoding: The file's encoding. Defaults to `.utf8`. Unicode encodings are supported on every platform. Legacy encodings such as `.macOSRoman` or `.shiftJIS` depend on platform support and may cause the write to fail on Linux.
     public init(
         _ name: String,
         permissions: FilePermissions = .defaultFile,
@@ -101,7 +101,7 @@ public struct File: DirectoryContent {
     ///   - fileExtension: The file extension
     ///   - permissions: The permissions of the file
     ///   - text: The contents of the file
-    ///   - encoding: The file's encoding
+    ///   - encoding: The file's encoding. Defaults to `.utf8`. Unicode encodings are supported on every platform. Legacy encodings such as `.macOSRoman` or `.shiftJIS` depend on platform support and may cause the write to fail on Linux.
     public init(
         _ name: String,
         fileExtension: String,

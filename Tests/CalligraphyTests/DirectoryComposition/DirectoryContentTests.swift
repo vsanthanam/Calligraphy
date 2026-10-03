@@ -66,4 +66,138 @@ struct DirectoryContentTests {
         #expect(quuzString == "corge\ngrault")
     }
 
+    @Test("Sibling names that differ only by case are rejected")
+    func caseInsensitiveDuplicateNames() async throws {
+        let directory = try makeTemporaryDirectory()
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let content = Folder("out") {
+            File("README.md", text: "upper")
+            File("readme.md", text: "lower")
+        }
+        await #expect(throws: (any Error).self) {
+            try await content.write(to: directory)
+        }
+        let outURL = directory.appending(path: "out", directoryHint: .isDirectory)
+        #expect(!FileManager.default.fileExists(atPath: outURL.path()))
+    }
+
+    @Test("Empty names are rejected")
+    func emptyName() async throws {
+        let directory = try makeTemporaryDirectory()
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let content = Folder("out") {
+            File("", text: "nameless")
+        }
+        await #expect(throws: (any Error).self) {
+            try await content.write(to: directory)
+        }
+        #expect(!FileManager.default.fileExists(atPath: directory.appending(path: "out").path()))
+    }
+
+    @Test("Names containing illegal characters are rejected", arguments: ["a/b", "a\\b", "a:b", "a?b", "a*b", "a\"b", "a<b", "a>b", "a|b"])
+    func illegalCharacters(name: String) async throws {
+        let directory = try makeTemporaryDirectory()
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let content = Folder("out") {
+            File(name, text: "illegal")
+        }
+        await #expect(throws: (any Error).self) {
+            try await content.write(to: directory)
+        }
+        #expect(!FileManager.default.fileExists(atPath: directory.appending(path: "out").path()))
+    }
+
+    @Test("Validation applies to nested folders")
+    func nestedValidation() async throws {
+        let directory = try makeTemporaryDirectory()
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let content = Folder("out") {
+            File("ok.txt", text: "fine")
+            Folder("nested") {
+                File("dup.txt", text: "one")
+                File("DUP.txt", text: "two")
+            }
+        }
+        await #expect(throws: (any Error).self) {
+            try await content.write(to: directory)
+        }
+        #expect(!FileManager.default.fileExists(atPath: directory.appending(path: "out").path()))
+    }
+
+    #if os(Windows)
+        @Test("Windows reserved device names are rejected", arguments: ["CON", "con", "con.txt", "CON.tar.gz", "NUL", "COM1", "lpt9", "AUX.swift", "nul.ls.txt.bak"])
+        func windowsReservedNames(name: String) async throws {
+            let directory = try makeTemporaryDirectory()
+            defer { try? FileManager.default.removeItem(at: directory) }
+            let content = Folder("out") {
+                File(name, text: "reserved")
+            }
+            await #expect(throws: (any Error).self) {
+                try await content.write(to: directory)
+            }
+            #expect(!FileManager.default.fileExists(atPath: directory.appending(path: "out").path()))
+        }
+
+        @Test("Windows names that merely contain a reserved word are allowed", arguments: ["CONSOLE", "console.txt", "mycon", "COM10", "LPT0", "nullable.txt"])
+        func windowsNonReservedNames(name: String) async throws {
+            let directory = try makeTemporaryDirectory()
+            defer { try? FileManager.default.removeItem(at: directory) }
+            let content = Folder("out") {
+                File(name, text: "fine")
+            }
+            try await content.write(to: directory)
+            #expect(FileManager.default.fileExists(atPath: directory.appending(path: "out").appending(path: name).path()))
+        }
+
+        @Test("Windows names ending in a period or space are rejected", arguments: ["trailing.", "trailing ", "folder. "])
+        func windowsTrailingPeriodOrSpace(name: String) async throws {
+            let directory = try makeTemporaryDirectory()
+            defer { try? FileManager.default.removeItem(at: directory) }
+            let content = Folder("out") {
+                File(name, text: "trailing")
+            }
+            await #expect(throws: (any Error).self) {
+                try await content.write(to: directory)
+            }
+            #expect(!FileManager.default.fileExists(atPath: directory.appending(path: "out").path()))
+        }
+
+        @Test("Windows names containing control characters are rejected")
+        func windowsControlCharacters() async throws {
+            let directory = try makeTemporaryDirectory()
+            defer { try? FileManager.default.removeItem(at: directory) }
+            let content = Folder("out") {
+                File("a\u{01}b.txt", text: "control")
+            }
+            await #expect(throws: (any Error).self) {
+                try await content.write(to: directory)
+            }
+            #expect(!FileManager.default.fileExists(atPath: directory.appending(path: "out").path()))
+        }
+    #endif
+
+    #if !os(Windows)
+        @Test("Permissions are applied to written files and directories")
+        func permissionsApplied() async throws {
+            let directory = try makeTemporaryDirectory()
+            defer { try? FileManager.default.removeItem(at: directory) }
+            let content = Folder("out", permissions: [.readUser, .writeUser, .executeUser]) {
+                File("script.sh", permissions: .executableFile, text: "#!/bin/sh")
+            }
+            try await content.write(to: directory)
+            let outURL = directory.appending(path: "out", directoryHint: .isDirectory)
+            let scriptURL = outURL.appending(path: "script.sh", directoryHint: .notDirectory)
+            let outMode = try #require(FileManager.default.attributesOfItem(atPath: outURL.path())[.posixPermissions] as? Int)
+            let scriptMode = try #require(FileManager.default.attributesOfItem(atPath: scriptURL.path())[.posixPermissions] as? Int)
+            #expect(outMode == 0o700)
+            #expect(scriptMode == 0o755)
+        }
+    #endif
+
+    private func makeTemporaryDirectory() throws -> URL {
+        let url = FileManager.default.temporaryDirectory.appending(path: "calligraphy-\(UUID().uuidString)", directoryHint: .isDirectory)
+        try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+        return url
+    }
+
 }

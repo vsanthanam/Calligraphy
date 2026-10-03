@@ -126,20 +126,23 @@ With Calligraphy:
 @StringBuilder
 func renderHandler(name: String, paths: [String]) -> String {
     "struct \(name) {"
-    Tabbed {
+    Lines {
         "func handle(_ path: String) {"
-        Tabbed {
+        Lines {
             "switch path {"
             for path in paths {
                 "case \"\(path)\":"
-                Tabbed {
+                Lines {
                     "dispatch(\"\(path)\")"
                 }
+                .tabbed()
             }
             "}"
         }
+        .tabbed()
         "}"
     }
+    .tabbed()
     "}"
 }
 ```
@@ -148,7 +151,7 @@ The declarative approach more closely resembles the final output structure, maki
 
 ## Installation
 
-Calligraphy currently distributed exclusively through the [Swift Package Manager](https://www.swift.org/package-manager/). 
+Calligraphy currently distributed exclusively through the [Swift Package Manager](https://www.swift.org/package-manager/). It is built and tested in CI on macOS, Linux, and Windows.
 
 To add Calligraphy as a dependency to an existing Swift package, add the following line of code to the `dependencies` parameter of your `Package.swift` file:
 

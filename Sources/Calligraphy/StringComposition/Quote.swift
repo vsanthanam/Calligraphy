@@ -30,9 +30,10 @@ extension StringComponent {
     ///
     /// - Parameter style: An optional ``QuotationMarkStyle`` override. When `nil`, the style provided by the surrounding environment is used.
     /// - Returns: A component that renders as the receiver, wrapped in quotation marks.
+    @available(*, deprecated, message: "Use the Quote component with the quotationMarkStyle(_:) modifier instead.")
     @StringBuilder
     public func quoted(
-        _ style: QuotationMarkStyle? = nil
+        _ style: QuotationMarkStyle?
     ) -> some StringComponent {
         Quote(style) { self }
     }
@@ -70,7 +71,7 @@ extension StringEnvironmentValues {
 
 /// A string component that wraps content between two `QuotationMark` components.
 ///
-/// The style of the surrounding quotation marks is read from the current ``QuotationMarkStyle`` environment value, which can be overridden using ``StringComponent/quotationMarkStyle(_:)`` or by passing an explicit style to the initializer.
+/// The style of the surrounding quotation marks is read from the current ``QuotationMarkStyle`` environment value, which can be overridden using ``StringComponent/quotationMarkStyle(_:)``.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct Quote<Quote>: StringComponent where Quote: StringComponent {
 
@@ -78,11 +79,24 @@ public struct Quote<Quote>: StringComponent where Quote: StringComponent {
     /// - Parameters:
     ///   - style: An optional ``QuotationMarkStyle`` override. When `nil` (the default), the style is read from the surrounding environment. When supplied, the style is also propagated into `quote` so nested ``QuotationMark`` and ``Quote`` components inherit it.
     ///   - quote: The content to wrap in quotation marks.
+    @available(*, deprecated, message: "Use the quotationMarkStyle(_:) modifier instead.")
     public init(
-        _ style: QuotationMarkStyle? = nil,
+        _ style: QuotationMarkStyle?,
         @StringBuilder quote: () -> Quote
     ) {
         self.style = style
+        self.quote = quote()
+    }
+
+    /// Create a quoted component.
+    ///
+    /// The style of the quotation marks is read from the surrounding ``StringEnvironmentValues/quotationMarkStyle`` environment value. Use ``StringComponent/quotationMarkStyle(_:)`` on this component or an ancestor to change it.
+    ///
+    /// - Parameter quote: The content to wrap in quotation marks.
+    public init(
+        @StringBuilder quote: () -> Quote
+    ) {
+        self.style = nil
         self.quote = quote()
     }
 

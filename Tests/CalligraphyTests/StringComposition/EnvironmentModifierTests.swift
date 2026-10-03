@@ -64,7 +64,7 @@ struct EnvironmentModifierTests {
 
     @Test("Override Only Applies to Descendants")
     func scope() {
-        let component = StringComponents {
+        let component = StringGroup {
             ReadEnvironment { environment in
                 "first:\(environment.lineSpacing)"
             }

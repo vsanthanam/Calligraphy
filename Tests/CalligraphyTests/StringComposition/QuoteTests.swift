@@ -48,14 +48,15 @@ struct QuoteTests {
         #expect(String(quote) == expected)
     }
 
-    @Test("Modifier")
-    func modifier() {
+    @Test("Deprecated: Modifier")
+    @available(*, deprecated)
+    func deprecatedModifier() {
         let quoted = Lines {
             "foo"
             "bar"
             "baz"
         }
-        .quoted()
+        .quoted(nil)
 
         let expected = #"""
         "foo
@@ -66,23 +67,55 @@ struct QuoteTests {
         #expect(String(quoted) == expected)
     }
 
-    @Test("Explicit Style Initializer")
-    func explicitStyle() {
+    @Test("Style Modifier")
+    func styleModifier() {
+        let quote = Quote {
+            "foo"
+        }
+        .quotationMarkStyle(.single)
+        #expect(String(quote) == "'foo'")
+    }
+
+    @Test("Style Modifier with Triple Quotes")
+    func styleModifierTripleQuotes() {
+        let quote = Quote {
+            RawStringComponent("foo")
+        }
+        .quotationMarkStyle(.tripleDouble)
+        #expect(String(quote) == "\"\"\"foo\"\"\"")
+    }
+
+    @Test("Style Modifier Propagates Into Nested Quote")
+    func styleModifierPropagates() {
+        let quote = Quote {
+            Quote {
+                "foo"
+            }
+        }
+        .quotationMarkStyle(.single)
+        #expect(String(quote) == "''foo''")
+    }
+
+    @Test("Deprecated: Explicit Style Initializer")
+    @available(*, deprecated)
+    func deprecatedExplicitStyle() {
         let quote = Quote(.single) {
             "foo"
         }
         #expect(String(quote) == "'foo'")
     }
 
-    @Test("Explicit Style Modifier Argument")
-    func explicitStyleModifier() {
+    @Test("Deprecated: Explicit Style Modifier Argument")
+    @available(*, deprecated)
+    func deprecatedExplicitStyleModifier() {
         let quoted = RawStringComponent("foo")
             .quoted(.tripleDouble)
         #expect(String(quoted) == "\"\"\"foo\"\"\"")
     }
 
-    @Test("Explicit Style Propagates Into Nested Quote")
-    func explicitStylePropagates() {
+    @Test("Deprecated: Explicit Style Propagates Into Nested Quote")
+    @available(*, deprecated)
+    func deprecatedExplicitStylePropagates() {
         let quote = Quote(.single) {
             Quote {
                 "foo"
@@ -91,8 +124,9 @@ struct QuoteTests {
         #expect(String(quote) == "''foo''")
     }
 
-    @Test("Explicit Style Overrides Ancestor Environment")
-    func explicitStyleOverridesEnvironment() {
+    @Test("Deprecated: Explicit Style Overrides Ancestor Environment")
+    @available(*, deprecated)
+    func deprecatedExplicitStyleOverridesEnvironment() {
         let quote = Quote(.single) {
             "foo"
         }
