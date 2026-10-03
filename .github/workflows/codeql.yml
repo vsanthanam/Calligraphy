@@ -94,7 +94,7 @@ jobs:
       name: Build Calligraphy
       shell: bash
       run: |
-        /usr/bin/swift build -v --package-path /Users/runner/work/Calligraphy/Calligraphy/
+        /usr/bin/swift build -v --disable-sandbox --package-path /Users/runner/work/Calligraphy/Calligraphy/
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v4
       with:

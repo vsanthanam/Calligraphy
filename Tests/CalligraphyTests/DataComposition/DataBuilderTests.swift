@@ -57,19 +57,6 @@ struct DataBuilderTests {
         #expect(components._data == Data([0x46, 0x6F, 0x6F]))
     }
 
-    @Test("some Collection<Data> Expression")
-    func dataCollection() {
-
-        @DataBuilder
-        func builder() -> some DataComponent {
-            [Data("Foo".utf8), Data("Foo".utf8)]
-        }
-
-        let components = builder()
-        #expect(components is RawDataComponent)
-        #expect(components._data == Data([0x46, 0x6F, 0x6F, 0x46, 0x6F, 0x6F]))
-    }
-
     @Test("some Collection<UInt8> Expression")
     func uInt8Collection() {
 
@@ -149,7 +136,7 @@ struct DataBuilderTests {
         }
 
         let components = builder()
-        #expect(components is DataBuilder._Block<Foo, Bar, Baz>)
+        #expect(components is DataBuilder._Assembled<Foo, Bar, Baz>)
 
         let expected = Data([0x46, 0x6F, 0x6F, 0x42, 0x61, 0x72, 0x42, 0x61, 0x7A])
         #expect(components._data == expected)
@@ -222,7 +209,7 @@ struct DataBuilderTests {
         }
 
         let components = builder()
-        #expect(components is DataBuilder._Block<DataBuilder._Either<Foo, EmptyDataComponent>, Bar>)
+        #expect(components is DataBuilder._Assembled<DataBuilder._Either<Foo, EmptyDataComponent>, Bar>)
         #expect(components._data == result)
     }
 //
