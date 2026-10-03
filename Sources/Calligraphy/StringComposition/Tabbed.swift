@@ -32,7 +32,7 @@ extension StringComponent {
     ///   - count: The number of tabs to insert at the start of each line. Defaults to `1`.
     ///   - definition: An optional ``TabDefinition`` override. When `nil`, the tab definition provided by the surrounding environment is used.
     /// - Returns: A component whose lines are each indented.
-    @available(*, deprecated, message: "Use tabbed(_:) and apply the tabDefinition(_:) modifier instead")
+    @available(*, deprecated, message: "Use tabbed(_:) and tabDefinition(_:) modifiers instead")
     @StringBuilder
     public func tabbed(
         _ count: Int = 1,
