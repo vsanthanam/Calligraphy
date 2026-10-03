@@ -46,8 +46,29 @@ struct LinesTests {
         #expect(String(lines) == expected)
     }
 
-    @Test("With Spacing Argument")
+    @Test("With Line Spacing Modifier")
     func multiple() {
+        let lines = Lines {
+            "foo"
+            "bar"
+            "baz"
+        }
+        .lineSpacing(2)
+
+        let expected = #"""
+        foo
+
+        bar
+
+        baz
+        """#
+
+        #expect(String(lines) == expected)
+    }
+
+    @Test("Deprecated: With Spacing Argument")
+    @available(*, deprecated)
+    func deprecatedSpacingArgument() {
         let lines = Lines(spacing: 2) {
             "foo"
             "bar"

@@ -51,26 +51,32 @@ let component = ReadEnvironment { environment in
 
 Use the ``StringComponent/environment(_:_:)-(_,Value)`` modifier to set an environment value on a component and its descendants. Ancestor components are unaffected.
 
+The built-in values are read-only outside of Calligraphy, so each of them has a dedicated modifier: ``StringComponent/lineSpacing(_:)``, ``StringComponent/tabDefinition(_:)``, ``StringComponent/quotationMarkStyle(_:)``, and ``StringComponent/joined(separator:)``.
+
 ```swift
 let component = Lines {
     "foo"
     "bar"
     "baz"
 }
-.environment(\.lineSpacing, 2)
+.lineSpacing(2)
+```
+
+Values you define yourself, such as the `prefix` entry in the next section, can be set with `environment(_:_:)` directly:
+
+```swift
+let component = ListItem(text: "foo")
+    .environment(\.prefix, "→")
 ```
 
 When you need to set multiple values at once, or compute the new value from the current one, use ``StringComponent/transformEnvironment(_:)``:
 
 ```swift
-Lines {
-    "foo"
-    "bar"
-}
-.transformEnvironment { environment in
-    environment.lineSpacing = 2
-    environment.tabDefinition = .spaces(4)
-}
+ListItem(text: "foo")
+    .transformEnvironment { environment in
+        environment.prefix = "→"
+        environment.caption = "Important"
+    }
 ```
 
 If two modifiers in the same chain write the same value, the one closest to the descendants wins, because it transforms the environment last.

@@ -56,8 +56,9 @@ extension DirectoryContent {
             guard directoryURL.isFileURL else {
                 throw DiskOperationError("Provided URL is not a file URL")
             }
-            guard let isDirectory = try directoryURL.resourceValues(forKeys: [.isDirectoryKey]).isDirectory,
-                  isDirectory else {
+            var isDirectory: ObjCBool = false
+            guard FileManager.default.fileExists(atPath: directoryURL.path(percentEncoded: false), isDirectory: &isDirectory),
+                  isDirectory.boolValue else {
                 throw DiskOperationError("Provided URL does not point to a directory")
             }
             let contents = _serialize()
@@ -81,8 +82,9 @@ extension DirectoryContent {
             guard directoryURL.isFileURL else {
                 throw DiskOperationError("Provided URL is not a file URL")
             }
-            guard let isDirectory = try directoryURL.resourceValues(forKeys: [.isDirectoryKey]).isDirectory,
-                  isDirectory else {
+            var isDirectory: ObjCBool = false
+            guard FileManager.default.fileExists(atPath: directoryURL.path(percentEncoded: false), isDirectory: &isDirectory),
+                  isDirectory.boolValue else {
                 throw DiskOperationError("Provided URL does not point to a directory")
             }
             let contents = _serialize()

@@ -31,19 +31,21 @@ func lineSpacingTests() {
 
     let str = String.build {
         Lines {
-            Lines(spacing: 1) {
+            Lines {
                 "foo"
                 "bar"
             }
+            .lineSpacing(1)
             Lines {
                 "baz"
                 "qux"
             }
             .lineSpacing(1)
-            Lines(spacing: 1) {
+            Lines {
                 "quux"
                 "corge"
             }
+            .lineSpacing(1)
         }
         .lineSpacing(2)
     }
