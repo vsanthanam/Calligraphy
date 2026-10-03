@@ -41,16 +41,14 @@ struct AnyDataComponentTests {
 
     }
 
-    #if swift(>=6.2)
-        @Test("Imperative Body")
-        func body() async {
-            await #expect(processExitsWith: .failure) {
-                let standard = DataComponents {
-                    Data()
-                }
-                AnyDataComponent(erasing: standard).body
+    @Test("Imperative Body")
+    func body() async {
+        await #expect(processExitsWith: .failure) {
+            let standard = DataComponents {
+                Data()
             }
+            AnyDataComponent(erasing: standard).body
         }
-    #endif
+    }
 
 }

@@ -33,11 +33,8 @@ jobs:
     name: Build Calligraphy (macOS)
     strategy:
       matrix:
-        swift: ['6.1', '6.2', '6.3', '6.4']
+        swift: ['6.2', '6.3', '6.4']
         include:
-          - swift: '6.1'
-            runner: 'macos-15'
-            xcode: '16.4'
           - swift: '6.2'
             runner: 'macos-26'
             xcode: '26.5'
@@ -68,11 +65,8 @@ jobs:
     name: Test Calligraphy (macOS)
     strategy:
       matrix:
-        swift: ['6.1', '6.2', '6.3', '6.4']
+        swift: ['6.2', '6.3', '6.4']
         include:
-          - swift: '6.1'
-            runner: 'macos-15'
-            xcode: '16.4'
           - swift: '6.2'
             runner: 'macos-26'
             xcode: '26.5'
@@ -102,7 +96,7 @@ jobs:
     name: Build Calligraphy (Ubuntu)
     strategy:
       matrix:
-        swift: ['6.1', '6.2', '6.3', '6.4']
+        swift: ['6.2', '6.3', '6.4']
     runs-on: ubuntu-latest
     outputs:
       artifact-name: ubuntu-build
@@ -126,7 +120,7 @@ jobs:
     name: Test Calligraphy (Ubuntu)
     strategy:
       matrix:
-        swift: ['6.1', '6.2', '6.3', '6.4']
+        swift: ['6.2', '6.3', '6.4']
     needs: build-ubuntu-spm
     runs-on: ubuntu-latest
     container:
@@ -153,8 +147,6 @@ jobs:
     name: Build Calligraphy (Windows)
     strategy:
       fail-fast: false
-      # Swift 6.1 on Windows links the macro plugin's `main` into the test runner and fails with a
-      # duplicate symbol, so the Windows matrix starts at 6.2.
       matrix:
         swift: ['6.2', '6.3', '6.4']
         include:
