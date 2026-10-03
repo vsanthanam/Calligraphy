@@ -65,7 +65,7 @@ extension StringComponent {
 ///
 /// Each tab is rendered according to the surrounding ``TabDefinition`` environment value. By default, this means two spaces per tab.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-@available(*, deprecated, message: "Wrap the content in a StringGroup and apply the tabbed(_:) modifier instead")
+@available(*, deprecated, message: "Use the tabbed(_:) modifier instead")
 public struct Tabbed<Content>: StringComponent where Content: StringComponent {
 
     // MARK: - Initializers
