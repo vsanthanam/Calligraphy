@@ -41,72 +41,42 @@ public protocol DirectoryContent {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension DirectoryContent {
 
-    #if compiler(>=6.2)
-        #if hasFeature(NonisolatedNonsendingByDefault)
-            /// Write the contents of a directory to a file URL, in parallel
-            /// - Parameters:
-            ///   - directoryURL: The a file URL to a directory where the content should be written to.
-            ///   - shouldOverwrite: Whether or not existing content with the same name or structure should be overwritten with new content.
-            /// - Returns: A list of every file URL that was created during the process.
-            /// - Important: Sibling names are validated case-insensitively before anything is written. A tree containing both `README.md` and `readme.md` is rejected on every platform, because case-insensitive file systems such as APFS would treat them as the same file.
-            @discardableResult
-            public func write(
-                to directoryURL: URL,
-                shouldOverwrite: Bool = false
-            ) async throws -> [URL] {
-                guard directoryURL.isFileURL else {
-                    throw DiskOperationError("Provided URL is not a file URL")
-                }
-                guard let isDirectory = try directoryURL.resourceValues(forKeys: [.isDirectoryKey]).isDirectory,
-                      isDirectory else {
-                    throw DiskOperationError("Provided URL does not point to a directory")
-                }
-                let contents = _serialize()
-                try contents.validate(in: directoryURL)
-                return try await DiskOperation.start(with: directoryURL) {
-                    try await contents.performWriteOperations(shouldOverwrite: shouldOverwrite)
-                }
+    #if hasFeature(NonisolatedNonsendingByDefault)
+        /// Write the contents of a directory to a file URL, in parallel
+        /// - Parameters:
+        ///   - directoryURL: The a file URL to a directory where the content should be written to.
+        ///   - shouldOverwrite: Whether or not existing content with the same name or structure should be overwritten with new content.
+        /// - Returns: A list of every file URL that was created during the process.
+        /// - Important: Sibling names are validated case-insensitively before anything is written. A tree containing both `README.md` and `readme.md` is rejected on every platform, because case-insensitive file systems such as APFS would treat them as the same file.
+        @discardableResult
+        public func write(
+            to directoryURL: URL,
+            shouldOverwrite: Bool = false
+        ) async throws -> [URL] {
+            guard directoryURL.isFileURL else {
+                throw DiskOperationError("Provided URL is not a file URL")
             }
-        #else
-            /// Write the contents of a directory to a file URL, in parallel
-            /// - Parameters:
-            ///   - directoryURL: The a file URL to a directory where the content should be written to.
-            ///   - shouldOverwrite: Whether or not existing content with the same name or structure should be overwritten with new content.
-            /// - Returns: A list of every file URL that was created during the process.
-            /// - Important: Sibling names are validated case-insensitively before anything is written. A tree containing both `README.md` and `readme.md` is rejected on every platform, because case-insensitive file systems such as APFS would treat them as the same file.
-            @discardableResult
-            public nonisolated(nonsending) func write(
-                to directoryURL: URL,
-                shouldOverwrite: Bool = false
-            ) async throws -> [URL] {
-                guard directoryURL.isFileURL else {
-                    throw DiskOperationError("Provided URL is not a file URL")
-                }
-                guard let isDirectory = try directoryURL.resourceValues(forKeys: [.isDirectoryKey]).isDirectory,
-                      isDirectory else {
-                    throw DiskOperationError("Provided URL does not point to a directory")
-                }
-                let contents = _serialize()
-                try contents.validate(in: directoryURL)
-                return try await DiskOperation.start(with: directoryURL) {
-                    try await contents.performWriteOperations(shouldOverwrite: shouldOverwrite)
-                }
+            guard let isDirectory = try directoryURL.resourceValues(forKeys: [.isDirectoryKey]).isDirectory,
+                  isDirectory else {
+                throw DiskOperationError("Provided URL does not point to a directory")
             }
-        #endif
+            let contents = _serialize()
+            try contents.validate(in: directoryURL)
+            return try await DiskOperation.start(with: directoryURL) {
+                try await contents.performWriteOperations(shouldOverwrite: shouldOverwrite)
+            }
+        }
     #else
         /// Write the contents of a directory to a file URL, in parallel
         /// - Parameters:
         ///   - directoryURL: The a file URL to a directory where the content should be written to.
         ///   - shouldOverwrite: Whether or not existing content with the same name or structure should be overwritten with new content.
-        ///   - isolation: The actor where the work should begin
         /// - Returns: A list of every file URL that was created during the process.
         /// - Important: Sibling names are validated case-insensitively before anything is written. A tree containing both `README.md` and `readme.md` is rejected on every platform, because case-insensitive file systems such as APFS would treat them as the same file.
-        /// - Note: The creating of files and directories is parllelized with a task group. The `isolation` argument is only responsible for controling the region where the setup work happens. You should usually not population this argument, it really only exists to prevent an extra actor hop. This argument is removed when you compile for Swift 6.2 and newer.
         @discardableResult
-        public func write(
+        public nonisolated(nonsending) func write(
             to directoryURL: URL,
-            shouldOverwrite: Bool = false,
-            isolation: isolated (any Actor)? = #isolation
+            shouldOverwrite: Bool = false
         ) async throws -> [URL] {
             guard directoryURL.isFileURL else {
                 throw DiskOperationError("Provided URL is not a file URL")
@@ -128,81 +98,44 @@ extension DirectoryContent {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension SerializedDirectoryContent {
 
-    #if swift(>=6.2)
-        #if hasFeature(NonisolatedNonsendingByDefault)
-            fileprivate func performWriteOperation(
-                shouldOverwrite: Bool
-            ) async throws -> [URL] {
-                switch content {
-                case let .directory(directory):
-                    let url = try DiskOperation.currentURL.appending(directory: name)
-                    try FileManager.default.findExisting(
-                        at: url,
-                        shouldOverwrite: shouldOverwrite
-                    )
-                    try FileManager.default.createDirectory(at: url)
-                    try FileManager.default.setPermissions(
-                        permissions,
-                        at: url
-                    )
-                    let urls = try await DiskOperation.push(path: name) {
-                        try await directory.performWriteOperations(shouldOverwrite: shouldOverwrite)
-                    }
-                    return [url] + urls
-                case let .file(file):
-                    let url = try DiskOperation.currentURL.appending(file: name)
-                    try FileManager.default.findExisting(
-                        at: url,
-                        shouldOverwrite: shouldOverwrite
-                    )
-                    try file.serialize().write(toURL: url)
-                    try FileManager.default.setPermissions(
-                        permissions,
-                        at: url
-                    )
-                    try Task.checkCancellation()
-                    return [url]
-                }
-            }
-        #else
-            fileprivate nonisolated(nonsending) func performWriteOperation(
-                shouldOverwrite: Bool
-            ) async throws -> [URL] {
-                switch content {
-                case let .directory(directory):
-                    let url = try DiskOperation.currentURL.appending(directory: name)
-                    try FileManager.default.findExisting(
-                        at: url,
-                        shouldOverwrite: shouldOverwrite
-                    )
-                    try FileManager.default.createDirectory(at: url)
-                    try FileManager.default.setPermissions(
-                        permissions,
-                        at: url
-                    )
-                    let urls = try await DiskOperation.push(path: name) {
-                        try await directory.performWriteOperations(shouldOverwrite: shouldOverwrite)
-                    }
-                    return [url] + urls
-                case let .file(file):
-                    let url = try DiskOperation.currentURL.appending(file: name)
-                    try FileManager.default.findExisting(
-                        at: url,
-                        shouldOverwrite: shouldOverwrite
-                    )
-                    try file.serialize().write(toURL: url)
-                    try FileManager.default.setPermissions(
-                        permissions,
-                        at: url
-                    )
-                    return [url]
-                }
-            }
-        #endif
-    #else
+    #if hasFeature(NonisolatedNonsendingByDefault)
         fileprivate func performWriteOperation(
-            shouldOverwrite: Bool,
-            isolation: isolated (any Actor)? = #isolation
+            shouldOverwrite: Bool
+        ) async throws -> [URL] {
+            switch content {
+            case let .directory(directory):
+                let url = try DiskOperation.currentURL.appending(directory: name)
+                try FileManager.default.findExisting(
+                    at: url,
+                    shouldOverwrite: shouldOverwrite
+                )
+                try FileManager.default.createDirectory(at: url)
+                try FileManager.default.setPermissions(
+                    permissions,
+                    at: url
+                )
+                let urls = try await DiskOperation.push(path: name) {
+                    try await directory.performWriteOperations(shouldOverwrite: shouldOverwrite)
+                }
+                return [url] + urls
+            case let .file(file):
+                let url = try DiskOperation.currentURL.appending(file: name)
+                try FileManager.default.findExisting(
+                    at: url,
+                    shouldOverwrite: shouldOverwrite
+                )
+                try file.serialize().write(toURL: url)
+                try FileManager.default.setPermissions(
+                    permissions,
+                    at: url
+                )
+                try Task.checkCancellation()
+                return [url]
+            }
+        }
+    #else
+        fileprivate nonisolated(nonsending) func performWriteOperation(
+            shouldOverwrite: Bool
         ) async throws -> [URL] {
             switch content {
             case let .directory(directory):
@@ -329,56 +262,31 @@ extension [SerializedDirectoryContent] {
         }
     }
 
-    #if compiler(>=6.2)
-        #if hasFeature(NonisolatedNonsendingByDefault)
-            fileprivate func performWriteOperations(
-                shouldOverwrite: Bool
-            ) async throws -> [URL] {
-                try await withThrowingTaskGroup { group in
-                    for content in self {
-                        group.addTask {
-                            try await content.performWriteOperation(shouldOverwrite: shouldOverwrite)
-                        }
-                    }
-                    do {
-                        var result = [URL]()
-                        for try await urls in group {
-                            result += urls
-                        }
-                        return result
-                    } catch {
-                        group.cancelAll()
-                        throw error
-                    }
-                }
-            }
-        #else
-            fileprivate nonisolated(nonsending) func performWriteOperations(
-                shouldOverwrite: Bool
-            ) async throws -> [URL] {
-                try await withThrowingTaskGroup { group in
-                    for content in self {
-                        group.addTask {
-                            try await content.performWriteOperation(shouldOverwrite: shouldOverwrite)
-                        }
-                    }
-                    do {
-                        var result = [URL]()
-                        for try await urls in group {
-                            result += urls
-                        }
-                        return result
-                    } catch {
-                        group.cancelAll()
-                        throw error
-                    }
-                }
-            }
-        #endif
-    #else
+    #if hasFeature(NonisolatedNonsendingByDefault)
         fileprivate func performWriteOperations(
-            shouldOverwrite: Bool,
-            isolation: isolated (any Actor)? = #isolation
+            shouldOverwrite: Bool
+        ) async throws -> [URL] {
+            try await withThrowingTaskGroup { group in
+                for content in self {
+                    group.addTask {
+                        try await content.performWriteOperation(shouldOverwrite: shouldOverwrite)
+                    }
+                }
+                do {
+                    var result = [URL]()
+                    for try await urls in group {
+                        result += urls
+                    }
+                    return result
+                } catch {
+                    group.cancelAll()
+                    throw error
+                }
+            }
+        }
+    #else
+        fileprivate nonisolated(nonsending) func performWriteOperations(
+            shouldOverwrite: Bool
         ) async throws -> [URL] {
             try await withThrowingTaskGroup { group in
                 for content in self {
