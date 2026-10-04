@@ -1,0 +1,147 @@
+// Calligraphy
+// StringModifier.swift
+//
+// MIT License
+//
+// Copyright (c) 2026 Varun Santhanam
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the  Software), to deal
+//
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED  AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+/// A modifier that you apply to a string component, producing a different version of the original component.
+///
+/// Adopt `StringModifier` to package a reusable transformation, the same way you adopt `ViewModifier` in SwiftUI. Implement ``body(content:)`` to describe the result, using `content` as a placeholder for whichever component the modifier is eventually applied to:
+///
+/// ```swift
+/// struct Commented: StringModifier {
+///
+///     func body(content: Content) -> some StringComponent {
+///         content
+///             .prefixLines(with: "// ")
+///     }
+///
+/// }
+/// ```
+///
+/// Apply a modifier with ``StringComponent/modifier(_:)``. To make a modifier read like the built-in ones, wrap that call in an extension on ``StringComponent``:
+///
+/// ```swift
+/// extension StringComponent {
+///
+///     func commented() -> some StringComponent {
+///         modifier(Commented())
+///     }
+///
+/// }
+/// ```
+///
+/// A modifier can read the surrounding environment with the ``StringEnvironment`` property wrapper, just like a component can.
+///
+/// Most modifiers only need ``body(content:)``. A modifier that must work with the rendered text itself, or change the environment the content renders in, can instead implement ``render(content:in:)`` and declare `Never` as its ``Body``, the same way a primitive ``StringComponent`` implements ``StringComponent/render(in:)`` instead of ``StringComponent/body``.
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public protocol StringModifier {
+
+    /// The type of string component produced by this modifier.
+    ///
+    /// Typically, you do not need to explicitly spell out this type. Instead, implement ``body(content:)`` using an opaque type, and allow the compiler to expand the result builder and choose the correct type to satisfy the protocol.
+    associatedtype Body: StringComponent
+
+    /// The type of the component passed to ``body(content:)``.
+    ///
+    /// This type is a placeholder for the component the modifier is applied to. You never create a value of this type yourself; one is supplied each time the modifier is applied.
+    typealias Content = _StringModifier_Content<Self>
+
+    /// Describe the component produced by applying this modifier.
+    ///
+    /// - Parameter content: A placeholder for the component the modifier is applied to.
+    /// - Returns: The modified component.
+    @StringBuilder
+    func body(content: Self.Content) -> Body
+
+    /// Render the modified content into a `String` using the supplied environment.
+    ///
+    /// The default implementation renders ``body(content:)``. Implement this method directly, and declare `Never` as the ``Body``, when the modifier needs the rendered text of its content or must render the content in a different environment. Any ``StringEnvironment`` properties on the modifier are resolved before this method is called.
+    ///
+    /// - Parameters:
+    ///   - content: A placeholder for the component the modifier is applied to.
+    ///   - environment: The environment values to read during rendering.
+    /// - Returns: The rendered string, or `nil` if the modified component contributes nothing.
+    func render(
+        content: Self.Content,
+        in environment: StringEnvironmentValues
+    ) -> String?
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+extension StringModifier {
+
+    public func render(
+        content: Self.Content,
+        in environment: StringEnvironmentValues
+    ) -> String? {
+        body(content: content)
+            .render(in: environment)
+    }
+
+    func fatalErrorImperativeStringModifier(
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> Never {
+        fatalError(
+            """
+            StringModifier \(Self.self) does not have a body. Do not invoke this method directly.
+            """,
+            file: file,
+            line: line
+        )
+    }
+
+}
+
+/// A placeholder for the component a ``StringModifier`` is applied to.
+///
+/// You never create this type directly. ``ModifiedStringComponent`` creates it and passes it to ``StringModifier/body(content:)``, where you refer to it as ``StringModifier/Content`` and compose around it as you would any other component. When rendered, the placeholder renders the original component in whatever environment the modifier's body provides.
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+public struct _StringModifier_Content<Modifier>: StringComponent where Modifier: StringModifier {
+
+    // MARK: - Initializers
+
+    init<Component>(
+        erasing component: Component
+    ) where Component: StringComponent {
+        self.component = AnyStringComponent(erasing: component)
+    }
+
+    // MARK: - StringComponent
+
+    public var body: Never {
+        fatalErrorImperativeStringComponent()
+    }
+
+    public func render(
+        in environment: StringEnvironmentValues
+    ) -> String? {
+        component.render(in: environment)
+    }
+
+    // MARK: - Private
+
+    private let component: AnyStringComponent
+
+}

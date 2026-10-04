@@ -26,16 +26,33 @@
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
-    /// Set the number of newlines used to separate adjacent lines in this component's children.
+    /// Set the number of newlines that ``Lines`` uses to separate adjacent children.
+    ///
+    /// Line spacing is an environment value, so it is inherited the way SwiftUI's environment-backed modifiers are: it applies to every ``Lines`` beneath this component, however deeply nested. Apply the modifier again to a nested ``Lines`` to give it a different spacing.
+    ///
+    /// ```swift
+    /// Lines {
+    ///     "foo"
+    ///     Lines {
+    ///         "bar"
+    ///         "baz"
+    ///     }
+    ///     .lineSpacing(1)
+    /// }
+    /// .lineSpacing(2)
+    /// ```
+    ///
+    /// The example above renders `foo`, a blank line, and then `bar` and `baz` on adjacent lines. Without the inner modifier, `bar` and `baz` would also be separated by a blank line.
     ///
     /// - Parameter count: The number of newlines used to separate lines. Use `1` for normal single-spacing, `2` for one blank line between each pair of lines, and so on.
     /// - Returns: A component whose descendants render with the supplied line spacing.
     public func lineSpacing(
         _ count: Int
     ) -> some StringComponent {
-        LineSpacing(
-            lines: self,
-            count: count
+        modifier(
+            LineSpacingModifier(
+                count: count
+            )
         )
     }
 
@@ -46,22 +63,23 @@ extension StringEnvironmentValues {
 
     /// The number of newlines used to separate adjacent lines.
     ///
-    /// Defaults to `1`. ``Lines`` and components built on top of it read this value to decide how to join their children. Set it on an ancestor component using ``StringComponent/lineSpacing(_:)``.
+    /// Defaults to `1`. ``Lines`` reads this value to decide how to join its children. Like every environment value it is inherited by all descendants. Set it on an ancestor component using ``StringComponent/lineSpacing(_:)``.
     @StringEntry
     public internal(set) var lineSpacing: Int = 1
 
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-private struct LineSpacing<Lines>: StringComponent where Lines: StringComponent {
-
-    let lines: Lines
+private struct LineSpacingModifier: StringModifier {
 
     let count: Int
 
-    var body: some StringComponent {
-        lines
-            .environment(\.lineSpacing, count)
+    func body(content: Content) -> some StringComponent {
+        content
+            .environment(
+                \.lineSpacing,
+                count
+            )
     }
 
 }

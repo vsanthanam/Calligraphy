@@ -88,14 +88,14 @@ func releaseNotes(version: String, features: [String], fixes: [String]) -> Strin
     if !features.isEmpty {
         ""
         "## Features"
-        for feature in features {
+        ForEach(features) { feature in
             "- \(feature)"
         }
     }
     if !fixes.isEmpty {
         ""
         "## Bug Fixes"
-        for fix in fixes {
+        ForEach(fixes) { fix in
             "- \(fix)"
         }
     }
@@ -130,7 +130,7 @@ func renderHandler(name: String, paths: [String]) -> String {
         "func handle(_ path: String) {"
         Lines {
             "switch path {"
-            for path in paths {
+            ForEach(paths) { path in
                 "case \"\(path)\":"
                 Lines {
                     "dispatch(\"\(path)\")"

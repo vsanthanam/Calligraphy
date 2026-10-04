@@ -26,39 +26,114 @@
 import Calligraphy
 import Testing
 
-@Test("Line Spacing Tests", .tags(.stringComposition))
-func lineSpacingTests() {
+@Suite("Line Spacing Tests", .tags(.stringComposition))
+struct LineSpacingTests {
 
-    let str = String.build {
-        Lines {
+    @Test("Modifier")
+    func modifier() {
+        let str = String.build {
             Lines {
-                "foo"
+                Lines {
+                    "foo"
+                    "bar"
+                }
+                .lineSpacing(1)
+                Lines {
+                    "baz"
+                    "qux"
+                }
+                .lineSpacing(1)
+                Lines {
+                    "quux"
+                    "corge"
+                }
+                .lineSpacing(1)
+            }
+            .lineSpacing(2)
+        }
+
+        #expect(str == """
+        foo
+        bar
+
+        baz
+        qux
+
+        quux
+        corge
+        """)
+    }
+
+    @Test("Nested Lines Inherit the Spacing")
+    func nestedLinesInherit() {
+        let component = Lines {
+            "foo"
+            Lines {
                 "bar"
-            }
-            .lineSpacing(1)
-            Lines {
                 "baz"
-                "qux"
             }
-            .lineSpacing(1)
+        }
+        .lineSpacing(2)
+        #expect(String(component) == """
+        foo
+
+        bar
+
+        baz
+        """)
+    }
+
+    @Test("Nested Lines Can Override the Spacing")
+    func nestedLinesOverride() {
+        let component = Lines {
+            "foo"
             Lines {
-                "quux"
-                "corge"
+                "bar"
+                "baz"
             }
             .lineSpacing(1)
         }
         .lineSpacing(2)
+        #expect(String(component) == """
+        foo
+
+        bar
+        baz
+        """)
     }
 
-    #expect(str == """
-    foo
-    bar
+    @Test("Spacing Passes Through Transparent Components")
+    func passesThroughGroups() {
+        let direct = StringGroup {
+            Lines {
+                "foo"
+                "bar"
+            }
+        }
+        .lineSpacing(2)
+        #expect(String(direct) == """
+        foo
 
-    baz
-    qux
+        bar
+        """)
 
-    quux
-    corge
-    """)
+        let nested = Lines {
+            "foo"
+            StringGroup {
+                Lines {
+                    "bar"
+                    "baz"
+                }
+            }
+        }
+        .lineSpacing(2)
+        #expect(String(nested) == """
+        foo
+
+        bar
+
+        baz
+        """)
+    }
 
 }

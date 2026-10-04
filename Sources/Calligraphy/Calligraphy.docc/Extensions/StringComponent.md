@@ -36,6 +36,7 @@ struct Greeting: StringComponent {
 
 ### Modifiers
 
+- ``modifier(_:)``
 - ``joined(separator:)``
 - ``lineSpacing(_:)``
 - ``prefixLines(when:with:)-(_,()->StringComponent)``

@@ -44,7 +44,11 @@ struct StringGroupTests {
             "bar"
             "baz"
         }
-        #expect(String(components) == "foo\nbar\nbaz")
+        #expect(String(components) == """
+        foo
+        bar
+        baz
+        """)
     }
 
     @Test("Empty")

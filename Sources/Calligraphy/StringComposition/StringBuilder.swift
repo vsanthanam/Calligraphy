@@ -48,30 +48,24 @@ public enum StringBuilder {
     }
 
     @StringBuilder
-    public static func buildExpression<T>(
-        _ expression: some Collection<T>
-    ) -> _List<T> where T: StringComponent {
-        for element in expression {
-            element
-        }
+    public static func buildExpression<Data, Content>(
+        _ expression: Data
+    ) -> ForEach<Data, Content> where Data: Collection<Content>, Content: StringComponent {
+        ForEach(expression) { $0 }
     }
 
     @StringBuilder
-    public static func buildExpression(
-        _ expression: some Collection<some StringProtocol>
-    ) -> _List<RawStringComponent> {
-        for element in expression {
-            element
-        }
+    public static func buildExpression<Data, Content>(
+        _ expression: Data
+    ) -> ForEach<Data, RawStringComponent> where Data: Collection<Content>, Content: StringProtocol {
+        ForEach(expression) { $0 }
     }
 
     @StringBuilder
-    public static func buildExpression(
-        _ expression: some Collection<some RawRepresentable<some StringProtocol>>
-    ) -> _List<RawStringComponent> {
-        for element in expression {
-            element
-        }
+    public static func buildExpression<Data, Content>(
+        _ expression: Data
+    ) -> ForEach<Data, RawStringComponent> where Data: Collection<Content>, Content: RawRepresentable, Content.RawValue: StringProtocol {
+        ForEach(expression) { $0 }
     }
 
     public static func buildBlock() -> _Skip {
@@ -113,6 +107,7 @@ public enum StringBuilder {
         }
     }
 
+    @available(*, deprecated, message: "Use ForEach instead")
     public static func buildArray<Component>(
         _ components: [Component]
     ) -> _List<Component> where Component: StringComponent {

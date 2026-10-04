@@ -76,7 +76,11 @@ struct TabbedTests {
         }
         .tabbed()
 
-        #expect(String(tabbed) == "  foo\n\n  bar")
+        #expect(String(tabbed) == """
+          foo
+
+          bar
+        """)
     }
 
     @available(*, deprecated)
@@ -93,7 +97,12 @@ struct TabbedTests {
         }
         .prefixLines(with: "// ")
 
-        #expect(String(component) == "// foo\n//   bar\n// \n//   baz")
+        #expect(String(component) == """
+        // foo
+        //   bar
+        //\u{20}
+        //   baz
+        """)
     }
 
     @available(*, deprecated)
@@ -107,7 +116,11 @@ struct TabbedTests {
         .prefixLines(with: "// ")
         .tabbed()
 
-        #expect(String(component) == "  // foo\n  // \n  // bar")
+        #expect(String(component) == """
+          // foo
+          //\u{20}
+          // bar
+        """)
     }
 
     @Test("Deprecated: Tabbed component")
@@ -118,7 +131,11 @@ struct TabbedTests {
             Blank()
             "bar"
         }
-        #expect(String(tabbed) == "  foo\n\n  bar")
+        #expect(String(tabbed) == """
+          foo
+
+          bar
+        """)
     }
 
     @Test("Deprecated: Modifier with explicit tab definition")
@@ -129,7 +146,10 @@ struct TabbedTests {
             "bar"
         }
         .tabbed(1, .spaces(4))
-        #expect(String(tabbed) == "    foo\n    bar")
+        #expect(String(tabbed) == """
+            foo
+            bar
+        """)
     }
 
 }

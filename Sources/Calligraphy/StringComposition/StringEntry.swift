@@ -1,5 +1,5 @@
 // Calligraphy
-// Entry.swift
+// StringEntry.swift
 //
 // MIT License
 //

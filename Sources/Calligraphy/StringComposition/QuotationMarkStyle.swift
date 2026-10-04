@@ -69,23 +69,22 @@ extension StringComponent {
     public func quotationMarkStyle(
         _ style: QuotationMarkStyle
     ) -> some StringComponent {
-        QuotationMarkStyleModifier(
-            wrapped: self,
-            style: style
+        modifier(
+            QuotationMarkStyleModifier(
+                style: style
+            )
         )
     }
 
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-private struct QuotationMarkStyleModifier<T>: StringComponent where T: StringComponent {
-
-    let wrapped: T
+private struct QuotationMarkStyleModifier: StringModifier {
 
     let style: QuotationMarkStyle
 
-    var body: some StringComponent {
-        wrapped
+    func body(content: Content) -> some StringComponent {
+        content
             .environment(
                 \.quotationMarkStyle,
                 style

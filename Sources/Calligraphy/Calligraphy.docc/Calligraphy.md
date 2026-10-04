@@ -36,6 +36,7 @@ Calligraphy's type-safe API and builder patterns make it ideal for code generati
 - ``StringGroup``
 - ``Line``
 - ``Lines``
+- ``ForEach``
 - ``Quote``
 - ``QuotationMark``
 - ``QuotationMarkStyle``
@@ -46,6 +47,8 @@ Calligraphy's type-safe API and builder patterns make it ideal for code generati
 - ``Tab``
 - ``RawStringComponent``
 - ``AnyStringComponent``
+- ``StringModifier``
+- ``ModifiedStringComponent``
 - <doc:EnvironmentValues>
 - ``ReadEnvironment``
 - ``StringEnvironment``

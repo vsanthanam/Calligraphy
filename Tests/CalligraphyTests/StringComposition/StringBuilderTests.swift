@@ -219,8 +219,10 @@ struct StringBuilderTests {
         #expect(String(components) == result)
     }
 
-    @Test("For Loop Support")
+    @available(*, deprecated)
+    @Test("Deprecated: For Loop Support")
     func forLoop() {
+        @available(*, deprecated)
         @StringBuilder
         func builder() -> some StringComponent {
             for i in 0 ..< 8 {
@@ -273,7 +275,7 @@ struct StringBuilderTests {
         }
 
         let components = builder()
-        #expect(components is StringBuilder._List<Foo>)
+        #expect(components is ForEach<[Foo], Foo>)
 
         let expected = #"""
         foo
@@ -292,7 +294,7 @@ struct StringBuilderTests {
         }
 
         let components = builder()
-        #expect(components is StringBuilder._List<RawStringComponent>)
+        #expect(components is ForEach<[String], RawStringComponent>)
 
         let expected = #"""
         foo
@@ -316,49 +318,56 @@ struct StringBuilderTests {
         }
 
         let components = builder()
-        #expect(components is StringBuilder._List<RawStringComponent>)
-        #expect(String(components) == "bar\nbaz")
+        #expect(components is ForEach<[Foo], RawStringComponent>)
+        #expect(String(components) == """
+        bar
+        baz
+        """)
     }
 
-//    @Test("Array.map Support")
-//    func arrayMap() {
-//
-//        // Demonstrates builder syntax (if/else) inside the @StringBuilder closure,
-//        // which requires the custom @StringBuilder map overload since the two branches
-//        // return different StringComponent types.
-//        struct Foo: StringComponent {
-//
-//            var body: some StringComponent {
-//                "foo"
-//            }
-//
-//        }
-//
-//        struct Bar: StringComponent {
-//
-//            var body: some StringComponent {
-//                "bar"
-//            }
-//
-//        }
-//
-//        let flags = [true, false, true]
-//
-//        @StringBuilder
-//        func builder() -> some StringComponent {
-//            flags.map { flag in
-//                if flag {
-//                    Foo()
-//                } else {
-//                    Bar()
-//                }
-//            }
-//        }
-//
-//        let components = builder()
-//        let expected = "foo\nbar\nfoo"
-//        #expect(String(components) == expected)
-//    }
+    @Test("Array.map Support")
+    func arrayMap() {
+
+        // Demonstrates builder syntax (if/else) inside the @StringBuilder closure,
+        // which requires the custom @StringBuilder map overload since the two branches
+        // return different StringComponent types.
+        struct Foo: StringComponent {
+
+            var body: some StringComponent {
+                "foo"
+            }
+
+        }
+
+        struct Bar: StringComponent {
+
+            var body: some StringComponent {
+                "bar"
+            }
+
+        }
+
+        let flags = [true, false, true]
+
+        @StringBuilder
+        func builder() -> some StringComponent {
+            flags.map { flag in
+                if flag {
+                    Foo()
+                } else {
+                    Bar()
+                }
+            }
+        }
+
+        let components = builder()
+        let expected = """
+        foo
+        bar
+        foo
+        """
+        #expect(String(components) == expected)
+    }
 
     @Test("Array.map as @StringBuilder Expression")
     func arrayMapExpression() {
@@ -381,7 +390,11 @@ struct StringBuilderTests {
         }
 
         let components = builder()
-        #expect(String(components) == "a\nb\nc")
+        #expect(String(components) == """
+        a
+        b
+        c
+        """)
     }
 
     @Test("String Final Result")
@@ -393,7 +406,10 @@ struct StringBuilderTests {
             "bar"
         }
 
-        #expect(builder() == "foo\nbar")
+        #expect(builder() == """
+        foo
+        bar
+        """)
     }
 
     @Test("String Final Result - Single Component")
@@ -427,7 +443,10 @@ struct StringBuilderTests {
             }
         }
 
-        #expect(builder(true) == "foo\nbar")
+        #expect(builder(true) == """
+        foo
+        bar
+        """)
         #expect(builder(false) == "foo")
     }
 

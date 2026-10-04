@@ -73,7 +73,10 @@ struct EnvironmentModifierTests {
                 "second:\(environment.lineSpacing)"
             }
         }
-        #expect(String(component) == "first:3\nsecond:1")
+        #expect(String(component) == """
+        first:3
+        second:1
+        """)
     }
 
     @Test("Closest Modifier Wins")

@@ -53,17 +53,26 @@ struct DirectoryContentTests {
         let fooURL = directory.appending(path: "foo.txt", directoryHint: .notDirectory)
         let fooData = try Data(contentsOf: fooURL)
         let fooString = try #require(String(data: fooData, encoding: .utf8))
-        #expect(fooString == "bar\nbaz")
+        #expect(fooString == """
+        bar
+        baz
+        """)
         let barURL = directory.appending(path: "bar", directoryHint: .isDirectory)
         #expect(FileManager.default.fileExists(atPath: barURL.path()))
         let bazURL = barURL.appending(path: "baz.txt", directoryHint: .notDirectory)
         let bazData = try Data(contentsOf: bazURL)
         let bazString = try #require(String(data: bazData, encoding: .utf8))
-        #expect(bazString == "qux\nquux")
+        #expect(bazString == """
+        qux
+        quux
+        """)
         let quuzURL = barURL.appending(path: "quuz.txt", directoryHint: .notDirectory)
         let quuzData = try Data(contentsOf: quuzURL)
         let quuzString = try #require(String(data: quuzData, encoding: .utf8))
-        #expect(quuzString == "corge\ngrault")
+        #expect(quuzString == """
+        corge
+        grault
+        """)
     }
 
     @Test("Sibling names that differ only by case are rejected")
