@@ -16,3 +16,7 @@ run = "swift build"
 [tasks.test]
 description = "Test Calligraphy"
 run = "swift test"
+
+[tasks.preview-docs]
+description = "Preview Documentation"
+run = "swift package --disable-sandbox preview-documentation --product Calligraphy"

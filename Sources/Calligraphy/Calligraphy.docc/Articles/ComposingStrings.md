@@ -17,16 +17,7 @@ The Calligraphy library introduces a domain-specific language (DSL) for string c
 The DSL supports `StringComponent` conforming types, as well as regular Swift strings, for example:
 
 
-```swift
-let declarativeString = String.build {
-    Line {
-        "Hello"
-        Space()
-        "World"
-    }
-    "Welcome to Calligraphy!"
-}
-```
+@Snippet(path: "Calligraphy/Snippets/ComposingStrings/DeclarativeString", slice: "string-build")
 
 ## Making String Components
 
@@ -34,32 +25,11 @@ A ``StringComponent`` is the basic building block of the Calligraphy DSL. Each s
 
 For example, here's a simple string component that returns a hard-coded string:
 
-```swift
-struct Greeting: StringComponent {
-    
-    var body: some StringComponent {
-        "Hello, World!"
-    }
-    
-}
-```
+@Snippet(path: "Calligraphy/Snippets/ComposingStrings/MakingStringComponents", slice: "greeting")
 
 And here's a more complex component that composes multiple child components:
 
-```swift
-struct WelcomeMessage: StringComponent {
-
-    var body: some StringComponent {
-        Lines {
-            "Welcome to Calligraphy!"
-            "This is a multi-line message."
-            "Each line is a separate component."
-            Greeting()
-        }
-    }
-
-}
-```
+@Snippet(path: "Calligraphy/Snippets/ComposingStrings/MakingStringComponents", slice: "welcome-message")
 
 ## Combining String Components
 
@@ -67,23 +37,7 @@ The ``StringBuilder`` result builder provides a declarative syntax for composing
 
 Here's an example that demonstrates some of these features:
 
-```swift
-@StringBuilder
-func generateMessage(for user: User?) -> some StringComponent {
-    if let user = user {
-        "Hello, \(user.name)!"
-        if user.isNew {
-            "Welcome to our platform!"
-        }
-    } else {
-        "Hello, Guest!"
-    }
-    
-    ForEach(availableFeatures) { feature in
-        "• \(feature.name)"
-    }
-}
-```
+@Snippet(path: "Calligraphy/Snippets/ComposingStrings/BuilderControlFlow", slice: "generate-message")
 
 Use ``ForEach`` to repeat content for every element of a collection. A `for`-`in` loop is also accepted inside a builder, but it is deprecated in favor of ``ForEach``, which additionally allows modifiers inside the repeated content.
 
@@ -102,13 +56,7 @@ Unless explicitly specified by an upstream parent, `@StringBuilder` uses a newli
 
 You can wrap components using the ``Line`` component, which which will join its children together without a new line:
 
-```swift
-Line {
-    "foo"
-    "bar"
-    "baz"
-}
-```
+@Snippet(path: "Calligraphy/Snippets/ComposingStrings/ComponentSeparators", slice: "line")
 
 This example would yield the following string:
 
@@ -120,14 +68,7 @@ foobarbaz
 
 You can also use the ``Lines`` component, which joins its children with newlines. Combine it with the ``StringComponent/lineSpacing(_:)`` modifier to put more than one newline between them:
 
-```swift
-Lines {
-    "foo"
-    "bar"
-    "baz"
-}
-.lineSpacing(2)
-```
+@Snippet(path: "Calligraphy/Snippets/ComposingStrings/ComponentSeparators", slice: "lines")
 
 This example would yield the following string:
 
@@ -143,14 +84,7 @@ baz
 
 You can also define your own separator, using other strings or components of your choosing, using the ``StringComponent/joined(separator:)`` modifier:
 
-```swift
-StringGroup {
-    "Apple"
-    "Banana"
-    "Pear"
-}
-.joined(separator: ", ")
-```
+@Snippet(path: "Calligraphy/Snippets/ComposingStrings/ComponentSeparators", slice: "joined")
 
 This example would yield the following string:
 
