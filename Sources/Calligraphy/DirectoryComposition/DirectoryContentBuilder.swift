@@ -86,12 +86,6 @@ public enum DirectoryContentBuilder {
         }
     }
 
-    public static func buildArray<T>(
-        _ components: [T]
-    ) -> _List<T> where T: DirectoryContent {
-        .init(components)
-    }
-
     public static func buildLimitedAvailability(
         _ component: some DirectoryContent
     ) -> AnyDirectoryContent {
@@ -168,28 +162,4 @@ public enum DirectoryContentBuilder {
         }
     }
 
-    public struct _List<Element>: DirectoryContent where Element: DirectoryContent {
-
-        // MARK: - DirectoryContent
-
-        public func _serialize(
-            in environment: EnvironmentValues
-        ) -> [SerializedDirectoryContent] {
-            list
-                .flatMap { component in
-                    component._serialize(in: environment)
-                }
-        }
-
-        // MARK: - Private
-
-        fileprivate init(
-            _ list: [Element]
-        ) {
-            self.list = list
-        }
-
-        private let list: [Element]
-
-    }
 }

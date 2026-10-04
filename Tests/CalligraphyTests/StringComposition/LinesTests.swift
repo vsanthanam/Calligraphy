@@ -66,24 +66,4 @@ struct LinesTests {
         #expect(String(lines) == expected)
     }
 
-    @Test("Deprecated: With Spacing Argument")
-    @available(*, deprecated)
-    func deprecatedSpacingArgument() {
-        let lines = Lines(spacing: 2) {
-            "foo"
-            "bar"
-            "baz"
-        }
-
-        let expected = #"""
-        foo
-
-        bar
-
-        baz
-        """#
-
-        #expect(String(lines) == expected)
-    }
-
 }

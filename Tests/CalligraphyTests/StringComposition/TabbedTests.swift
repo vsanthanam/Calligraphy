@@ -29,7 +29,6 @@ import Testing
 @Suite("Tabbed Tests", .tags(.stringComposition))
 struct TabbedTests {
 
-    @available(*, deprecated)
     @Test("Modifier with default count")
     func standard() {
         let tabbed = Lines {
@@ -66,7 +65,6 @@ struct TabbedTests {
         #expect(String(tabbed) == expected)
     }
 
-    @available(*, deprecated)
     @Test("Blank lines are not indented")
     func blankLines() {
         let tabbed = Lines {
@@ -83,7 +81,6 @@ struct TabbedTests {
         """)
     }
 
-    @available(*, deprecated)
     @Test("Nested inside a line prefix")
     func nestedInsidePrefix() {
         let component = Lines {
@@ -105,7 +102,6 @@ struct TabbedTests {
         """)
     }
 
-    @available(*, deprecated)
     @Test("Line prefix nested inside")
     func prefixNestedInside() {
         let component = Lines {
@@ -120,35 +116,6 @@ struct TabbedTests {
           // foo
           //\u{20}
           // bar
-        """)
-    }
-
-    @Test("Deprecated: Tabbed component")
-    @available(*, deprecated)
-    func deprecatedComponent() {
-        let tabbed = Tabbed {
-            "foo"
-            Blank()
-            "bar"
-        }
-        #expect(String(tabbed) == """
-          foo
-
-          bar
-        """)
-    }
-
-    @Test("Deprecated: Modifier with explicit tab definition")
-    @available(*, deprecated)
-    func deprecatedModifierWithDefinition() {
-        let tabbed = Lines {
-            "foo"
-            "bar"
-        }
-        .tabbed(1, .spaces(4))
-        #expect(String(tabbed) == """
-            foo
-            bar
         """)
     }
 

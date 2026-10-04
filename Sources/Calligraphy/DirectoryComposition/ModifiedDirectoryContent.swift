@@ -1,5 +1,5 @@
 // Calligraphy
-// ModifiedStringComponent.swift
+// ModifiedDirectoryContent.swift
 //
 // MIT License
 //
@@ -24,20 +24,20 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-extension StringComponent {
+extension DirectoryContent {
 
-    /// Apply a ``StringModifier`` to this component.
+    /// Apply a ``DirectoryContentModifier`` to this content.
     ///
-    /// Use this method to apply a custom modifier, or wrap it in an extension on ``StringComponent`` so the modifier reads like a built-in one:
+    /// Use this method to apply a custom modifier, or wrap it in an extension on ``DirectoryContent`` so the modifier reads like a built-in one:
     ///
-    /// @Snippet(path: "Calligraphy/Snippets/StringModifier/CustomModifier", slice: "extension")
+    /// @Snippet(path: "Calligraphy/Snippets/DirectoryContentModifier/CustomDirectoryContentModifier", slice: "extension")
     ///
     /// - Parameter modifier: The modifier to apply.
-    /// - Returns: This component with the modifier applied.
+    /// - Returns: This content with the modifier applied.
     public func modifier<Modifier>(
         _ modifier: Modifier
-    ) -> ModifiedStringComponent<Self, Modifier> where Modifier: StringModifier {
-        ModifiedStringComponent(
+    ) -> ModifiedDirectoryContent<Self, Modifier> where Modifier: DirectoryContentModifier {
+        ModifiedDirectoryContent(
             content: self,
             modifier: modifier
         )
@@ -45,20 +45,20 @@ extension StringComponent {
 
 }
 
-/// A string component with a ``StringModifier`` applied to it.
+/// ``Directory`` content with a ``DirectoryContentModifier`` applied to it.
 ///
-/// You rarely create this type directly. It is the return type of ``StringComponent/modifier(_:)``, which pairs a component with a modifier. When the pair is rendered, the modifier's ``StringModifier/body(content:)`` is expanded with a placeholder standing in for `content`, and the result is rendered in the current environment. Any ``Environment`` properties declared by the modifier are resolved first, so a modifier can read the environment just like a component can.
+/// You rarely create this type directly. It is the return type of ``DirectoryContent/modifier(_:)``, which pairs content with a modifier. When the pair is serialized, the modifier's ``DirectoryContentModifier/body(content:)`` is expanded with a placeholder standing in for `content`, and the result is serialized in the current environment. Any ``Environment`` properties declared by the modifier are resolved first, so a modifier can read the environment just like a ``Directory`` can.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct ModifiedStringComponent<Content, Modifier>: StringComponent where Content: StringComponent, Modifier: StringModifier {
+public struct ModifiedDirectoryContent<Content, Modifier>: DirectoryContent where Content: DirectoryContent, Modifier: DirectoryContentModifier {
 
     // MARK: - Initializers
 
-    /// Create a string component with a modifier applied to it.
+    /// Create directory content with a modifier applied to it.
     ///
-    /// Prefer ``StringComponent/modifier(_:)`` over calling this initializer directly.
+    /// Prefer ``DirectoryContent/modifier(_:)`` over calling this initializer directly.
     ///
     /// - Parameters:
-    ///   - content: The component to modify.
+    ///   - content: The content to modify.
     ///   - modifier: The modifier to apply.
     public init(
         content: Content,
@@ -68,18 +68,14 @@ public struct ModifiedStringComponent<Content, Modifier>: StringComponent where 
         self.modifier = modifier
     }
 
-    // MARK: - StringComponent
+    // MARK: - DirectoryContent
 
-    public var body: Never {
-        fatalErrorImperativeStringComponent()
-    }
-
-    public func render(
+    public func _serialize(
         in environment: EnvironmentValues
-    ) -> String? {
+    ) -> [SerializedDirectoryContent] {
         environment.inject(into: modifier)
         return modifier
-            .render(
+            ._serialize(
                 content: .init(erasing: content),
                 in: environment
             )

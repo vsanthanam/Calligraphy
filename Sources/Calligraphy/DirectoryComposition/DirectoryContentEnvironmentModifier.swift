@@ -69,18 +69,28 @@ extension DirectoryContent {
     public func transformEnvironment(
         _ transform: @escaping (inout EnvironmentValues) -> Void
     ) -> some DirectoryContent {
-        DirectoryEnvironmentContent(content: self, transform: transform)
+        modifier(
+            DirectoryEnvironmentModifier(
+                transform: transform
+            )
+        )
     }
 
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-private struct DirectoryEnvironmentContent<Content>: DirectoryContent where Content: DirectoryContent {
+private struct DirectoryEnvironmentModifier: DirectoryContentModifier {
 
-    let content: Content
     let transform: (inout EnvironmentValues) -> Void
 
+    func body(
+        content: Content
+    ) -> Never {
+        fatalErrorImperativeDirectoryContentModifier()
+    }
+
     func _serialize(
+        content: Content,
         in environment: EnvironmentValues
     ) -> [SerializedDirectoryContent] {
         var copy = environment

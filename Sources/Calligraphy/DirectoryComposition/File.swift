@@ -198,11 +198,20 @@ public struct File: DirectoryContent {
         switch backing {
         case let .text(component, encoding):
             [
-                .text(name, permissions: permissions, text: component.render(in: environment) ?? "", encoding: encoding)
+                .text(
+                    name,
+                    permissions: permissions,
+                    text: component.render(in: environment) ?? "",
+                    encoding: encoding
+                )
             ]
         case let .data(component):
             [
-                .data(name, permissions: permissions, data: component.render(in: environment) ?? Data())
+                .data(
+                    name,
+                    permissions: permissions,
+                    data: component.render(in: environment) ?? Data()
+                )
             ]
         }
     }

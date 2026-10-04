@@ -51,7 +51,7 @@ Calligraphy's type-safe API and builder patterns make it ideal for code generati
 - ``RawStringComponent``
 - ``AnyStringComponent``
 - ``StringModifier``
-- ``ModifiedStringComponent``
+- ``ModifiedString``
 
 ### Directory Composition
 
@@ -70,6 +70,8 @@ Calligraphy's type-safe API and builder patterns make it ideal for code generati
 - ``EmptyDirectoryContent``
 - ``AnyDirectoryContent``
 - ``SerializedDirectoryContent``
+- ``DirectoryContentModifier``
+- ``ModifiedDirectoryContent``
 
 ### Data Composition
 
@@ -79,6 +81,8 @@ Calligraphy's type-safe API and builder patterns make it ideal for code generati
 - ``RawDataComponent``
 - ``EmptyDataComponent``
 - ``AnyDataComponent``
+- ``DataModifier``
+- ``ModifiedData``
 
 ### Environment
 
@@ -88,11 +92,4 @@ Calligraphy's type-safe API and builder patterns make it ideal for code generati
 - ``EnvironmentKey``
 - ``Entry()``
 - ``ReadEnvironment``
-
-### Deprecated
-
-- ``StringEnvironmentValues``
-- ``StringEnvironment``
-- ``StringEnvironmentKey``
-- ``StringEntry()``
 

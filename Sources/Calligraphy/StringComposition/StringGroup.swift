@@ -25,27 +25,6 @@
 
 /// An entry point to the ``StringBuilder`` result builder.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-@available(*, deprecated, renamed: "StringGroup", message: "Use StringGroup instead")
-public struct StringComponents<Body>: StringComponent where Body: StringComponent {
-
-    // MARK: - Initializers
-
-    /// Assemble string components together, declaratively
-    /// - Parameter body: The components to assemble
-    public init(
-        @StringBuilder body: () -> Body
-    ) {
-        self.body = body()
-    }
-
-    // MARK: - StringComponent
-
-    public let body: Body
-
-}
-
-/// An entry point to the ``StringBuilder`` result builder.
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct StringGroup<Body>: StringComponent where Body: StringComponent {
 
     // MARK: - Initializers

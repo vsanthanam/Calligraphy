@@ -63,19 +63,4 @@ struct QuotationMarkTests {
         #expect(String(mark) == "\"\"\"")
     }
 
-    @Test("Deprecated: Explicit Style Initializer")
-    @available(*, deprecated)
-    func deprecatedExplicitStyle() {
-        #expect(String(QuotationMark(.single)) == "'")
-        #expect(String(QuotationMark(.tripleDouble)) == "\"\"\"")
-    }
-
-    @Test("Deprecated: Explicit Style Overrides Ancestor Environment")
-    @available(*, deprecated)
-    func deprecatedExplicitStyleOverridesEnvironment() {
-        let mark = QuotationMark(.single)
-            .quotationMarkStyle(.double)
-        #expect(String(mark) == "'")
-    }
-
 }

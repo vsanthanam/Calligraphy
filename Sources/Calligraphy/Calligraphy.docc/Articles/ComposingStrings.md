@@ -33,13 +33,13 @@ And here's a more complex component that composes multiple child components:
 
 ## Combining String Components
 
-The ``StringBuilder`` result builder provides a declarative syntax for composing multiple string components. It supports all the standard control flow statements you'd expect: if-else, optional binding, switch statements, and for loops.
+The ``StringBuilder`` result builder provides a declarative syntax for composing multiple string components. It supports all the standard control flow statements you'd expect: if-else, optional binding, and switch statements.
 
 Here's an example that demonstrates some of these features:
 
 @Snippet(path: "Calligraphy/Snippets/ComposingStrings/BuilderControlFlow", slice: "generate-message")
 
-Use ``ForEach`` to repeat content for every element of a collection. A `for`-`in` loop is also accepted inside a builder, but it is deprecated in favor of ``ForEach``, which additionally allows modifiers inside the repeated content.
+Use ``ForEach`` to repeat content for every element of a collection. Result builders do not accept `for`-`in` loops; ``ForEach`` fills that role and additionally allows modifiers inside the repeated content.
 
 You can use the @StringBuilder result builder in several different ways:
 
