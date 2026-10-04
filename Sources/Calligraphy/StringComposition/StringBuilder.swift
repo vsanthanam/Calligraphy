@@ -107,13 +107,6 @@ public enum StringBuilder {
         }
     }
 
-    @available(*, deprecated, message: "Use ForEach instead")
-    public static func buildArray<Component>(
-        _ components: [Component]
-    ) -> _List<Component> where Component: StringComponent {
-        .init(components)
-    }
-
     public static func buildLimitedAvailability<Component>(
         _ component: Component
     ) -> AnyStringComponent where Component: StringComponent {
@@ -207,36 +200,6 @@ public enum StringBuilder {
         // MARK: - Private
 
         fileprivate init() {}
-
-    }
-
-    public struct _List<Element>: StringComponent where Element: StringComponent {
-
-        // MARK: - StringComponent
-
-        public var body: Never {
-            fatalErrorImperativeStringComponent()
-        }
-
-        public func render(
-            in environment: EnvironmentValues
-        ) -> String? {
-            let pieces = list
-                .map { element in
-                    element.render(in: environment)
-                }
-            return environment.draw(with: pieces)
-        }
-
-        // MARK: - Private
-
-        fileprivate init(
-            _ list: [Element]
-        ) {
-            self.list = list
-        }
-
-        private let list: [Element]
 
     }
 

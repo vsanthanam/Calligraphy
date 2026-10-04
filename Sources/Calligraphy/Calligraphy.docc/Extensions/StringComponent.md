@@ -32,7 +32,6 @@ Typically, you will not implement ``render(in:)`` directly. Instead, implement `
 - ``prefixLines(when:with:)-(_,()->StringComponent)``
 - ``prefixLines(when:with:)-(_,StringProtocol)``
 - ``tabbed(_:)``
-- ``quoted(_:)``
 - ``quotationMarkStyle(_:)``
 - ``tabDefinition(_:)``
 - ``environment(_:_:)-(Key.Type,_)``

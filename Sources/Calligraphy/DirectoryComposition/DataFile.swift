@@ -61,7 +61,11 @@ extension DataFile {
     ) -> [SerializedDirectoryContent] {
         environment.inject(into: self)
         return [
-            .data(name, permissions: permissions, data: body.render(in: environment) ?? Data())
+            .data(
+                name,
+                permissions: permissions,
+                data: body.render(in: environment) ?? Data()
+            )
         ]
     }
 

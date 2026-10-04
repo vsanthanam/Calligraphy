@@ -71,25 +71,28 @@ extension DataComponent {
     public func transformEnvironment(
         _ transform: @escaping (inout EnvironmentValues) -> Void
     ) -> some DataComponent {
-        DataEnvironmentComponent(
-            content: self,
-            transform: transform
+        modifier(
+            DataEnvironmentModifier(
+                transform: transform
+            )
         )
     }
 
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-private struct DataEnvironmentComponent<Content>: DataComponent where Content: DataComponent {
+private struct DataEnvironmentModifier: DataModifier {
 
-    let content: Content
     let transform: (inout EnvironmentValues) -> Void
 
-    var body: Never {
-        fatalErrorImperativeDataComponent()
+    func body(
+        content: Content
+    ) -> Never {
+        fatalErrorImperativeDataModifier()
     }
 
     func render(
+        content: Content,
         in environment: EnvironmentValues
     ) -> Data? {
         var copy = environment

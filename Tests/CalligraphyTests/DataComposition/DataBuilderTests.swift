@@ -213,29 +213,6 @@ struct DataBuilderTests {
         #expect(components.render(in: EnvironmentValues()) == result)
     }
 //
-//    @Test("For Loop Support")
-//    func forLoop() {
-//        @StringBuilder
-//        func builder() -> some StringComponent {
-//            for i in 0 ..< 8 {
-//                if i % 2 == 0 {
-//                    "\(i + 1)"
-//                }
-//            }
-//        }
-//
-//        let components = builder()
-//        #expect(components is StringBuilder._List<StringBuilder._Either<RawStringComponent, EmptyStringComponent>>)
-//
-//        let expected = #"""
-//        1
-//        3
-//        5
-//        7
-//        """#
-//        #expect(components._content == expected)
-//    }
-//
 //    @Test("Availablility Check Support")
 //    func availabilityCheck() {
 //        @StringBuilder

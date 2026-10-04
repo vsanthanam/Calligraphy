@@ -210,19 +210,19 @@ struct DirectoryContentBuilderTests {
         #expect(components._serialize() == result)
     }
 
-    @Test("For Loop Support")
-    func forLoop() {
+    @Test("ForEach Support")
+    func forEach() {
         @DirectoryContentBuilder
         func builder() -> some DirectoryContent {
-            for i in 0 ..< 8 {
+            ForEach(0 ..< 8) { i in
                 if i % 2 == 0 {
-                    File("\(i+1)", fileExtension: "txt") { "\(i)-bar" }
+                    File("\(i + 1)", fileExtension: "txt") { "\(i)-bar" }
                 }
             }
         }
 
         let components = builder()
-        #expect(components is DirectoryContentBuilder._List<DirectoryContentBuilder._Either<File, EmptyDirectoryContent>>)
+        #expect(components is ForEach<Range<Int>, DirectoryContentBuilder._Either<File, EmptyDirectoryContent>>)
 
         let expected = [
             SerializedDirectoryContent.text("1.txt", permissions: .defaultFile, text: "0-bar", encoding: .utf8),

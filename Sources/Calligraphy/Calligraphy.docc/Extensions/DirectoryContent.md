@@ -8,6 +8,7 @@
 
 ### Modifiers
 
+- ``modifier(_:)``
 - ``environment(_:_:)-(Key.Type,_)``
 - ``environment(_:_:)-(_,Value)``
 - ``transformEnvironment(_:)``

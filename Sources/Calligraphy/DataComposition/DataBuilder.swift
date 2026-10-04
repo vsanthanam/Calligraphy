@@ -95,12 +95,6 @@ public enum DataBuilder {
         }
     }
 
-    public static func buildArray<T>(
-        _ components: [T]
-    ) -> _List<T> where T: DataComponent {
-        .init(components)
-    }
-
     public static func buildLimitedAvailability(
         _ component: some DataComponent
     ) -> AnyDataComponent {
@@ -171,37 +165,4 @@ public enum DataBuilder {
 
     }
 
-    public struct _List<Element>: DataComponent where Element: DataComponent {
-
-        // MARK: - DataComponent
-
-        public func render(
-            in environment: EnvironmentValues
-        ) -> Data? {
-            list
-                .reduce(nil) { prev, component in
-                    guard let data = component.render(in: environment) else {
-                        return prev
-                    }
-                    if let prev {
-                        return prev + data
-                    } else {
-                        return data
-                    }
-                }
-        }
-
-        public var body: Never {
-            fatalErrorImperativeDataComponent()
-        }
-
-        // MARK: - Private
-
-        fileprivate init(_ list: [Element]) {
-            self.list = list
-        }
-
-        private let list: [Element]
-
-    }
 }

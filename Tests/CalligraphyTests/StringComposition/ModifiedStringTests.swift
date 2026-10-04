@@ -1,5 +1,5 @@
 // Calligraphy
-// ModifiedStringComponentTests.swift
+// ModifiedStringTests.swift
 //
 // MIT License
 //
@@ -26,8 +26,8 @@
 import Calligraphy
 import Testing
 
-@Suite("ModifiedStringComponent Tests", .tags(.stringComposition))
-struct ModifiedStringComponentTests {
+@Suite("ModifiedString Tests", .tags(.stringComposition))
+struct ModifiedStringTests {
 
     @Test("Modifier body composes around the content")
     func composes() {
@@ -49,7 +49,7 @@ struct ModifiedStringComponentTests {
             "foo"
             "bar"
         }
-        let component = ModifiedStringComponent(
+        let component = ModifiedString(
             content: content,
             modifier: Commented()
         )
@@ -171,7 +171,9 @@ private struct Commented: StringModifier {
 
     var prefix = "// "
 
-    func body(content: Content) -> some StringComponent {
+    func body(
+        content: Content
+    ) -> some StringComponent {
         content
             .prefixLines(with: prefix)
     }
@@ -183,7 +185,9 @@ private struct LineSpacingReport: StringModifier {
     @Environment(\.lineSpacing)
     private var lineSpacing
 
-    func body(content: Content) -> some StringComponent {
+    func body(
+        content: Content
+    ) -> some StringComponent {
         Lines {
             content
             "spacing: \(lineSpacing)"
@@ -195,7 +199,9 @@ private struct LineSpacingReport: StringModifier {
 
 private struct FourSpaceTabs: StringModifier {
 
-    func body(content: Content) -> some StringComponent {
+    func body(
+        content: Content
+    ) -> some StringComponent {
         content
             .tabDefinition(.spaces(4))
     }
@@ -204,7 +210,9 @@ private struct FourSpaceTabs: StringModifier {
 
 private struct Hidden: StringModifier {
 
-    func body(content: Content) -> some StringComponent {
+    func body(
+        content: Content
+    ) -> some StringComponent {
         if false {
             content
         }
@@ -214,11 +222,16 @@ private struct Hidden: StringModifier {
 
 private struct Uppercased: StringModifier {
 
-    func body(content: Content) -> Never {
+    func body(
+        content: Content
+    ) -> Never {
         fatalError()
     }
 
-    func render(content: Content, in environment: EnvironmentValues) -> String? {
+    func render(
+        content: Content,
+        in environment: EnvironmentValues
+    ) -> String? {
         content.render(in: environment)?.uppercased()
     }
 
@@ -229,11 +242,16 @@ private struct SpacingSuffix: StringModifier {
     @Environment(\.lineSpacing)
     private var lineSpacing
 
-    func body(content: Content) -> Never {
+    func body(
+        content: Content
+    ) -> Never {
         fatalError()
     }
 
-    func render(content: Content, in environment: EnvironmentValues) -> String? {
+    func render(
+        content: Content,
+        in environment: EnvironmentValues
+    ) -> String? {
         (content.render(in: environment) ?? "") + " (spacing \(lineSpacing))"
     }
 

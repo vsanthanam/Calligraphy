@@ -219,31 +219,6 @@ struct StringBuilderTests {
         #expect(String(components) == result)
     }
 
-    @available(*, deprecated)
-    @Test("Deprecated: For Loop Support")
-    func forLoop() {
-        @available(*, deprecated)
-        @StringBuilder
-        func builder() -> some StringComponent {
-            for i in 0 ..< 8 {
-                if i % 2 == 0 {
-                    "\(i + 1)"
-                }
-            }
-        }
-
-        let components = builder()
-        #expect(components is StringBuilder._List<StringBuilder._Either<RawStringComponent, StringBuilder._Skip>>)
-
-        let expected = #"""
-        1
-        3
-        5
-        7
-        """#
-        #expect(String(components) == expected)
-    }
-
     @Test("Availablility Check Support")
     func availabilityCheck() {
         @StringBuilder

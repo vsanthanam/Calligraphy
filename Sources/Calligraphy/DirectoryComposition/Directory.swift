@@ -62,12 +62,6 @@ extension Directory {
         .defaultDirectory
     }
 
-    /// The serialized contents of the directory, rendered in a fresh environment.
-    @available(*, deprecated, message: "Use _serialize(in:) instead")
-    public var _contents: [SerializedDirectoryContent] {
-        body._serialize(in: EnvironmentValues())
-    }
-
     public func _serialize(
         in environment: EnvironmentValues
     ) -> [SerializedDirectoryContent] {

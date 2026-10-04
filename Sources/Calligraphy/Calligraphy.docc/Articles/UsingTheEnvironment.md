@@ -62,6 +62,3 @@ Optional types do not need an initial value — when omitted, the default is `ni
 
 @Snippet(path: "Calligraphy/Snippets/EnvironmentValues/CustomEnvironmentValues", slice: "optional-entry")
 
-## Migrating from the String Environment
-
-Earlier releases exposed the environment only to string components, under the names `StringEnvironmentValues`, `StringEnvironment`, `StringEnvironmentKey`, and `StringEntry`. Those names remain available as deprecated aliases of ``EnvironmentValues``, ``Environment``, ``EnvironmentKey``, and ``Entry()``, and behave identically.

@@ -38,19 +38,6 @@ public struct Lines<Components>: StringComponent where Components: StringCompone
     // MARK: - Initializers
 
     /// Create a block of lines.
-    /// - Parameters:
-    ///   - spacing: The number of newlines between each line. When `nil`, the value of the surrounding ``EnvironmentValues/lineSpacing`` environment value is used (typically `1`).
-    ///   - components: The children to combine, one per line.
-    @available(*, deprecated, message: "Use the lineSpacing(_:) modifier instead.")
-    public init(
-        spacing: Int?,
-        @StringBuilder components: () -> Components
-    ) {
-        self.spacing = spacing
-        self.components = components()
-    }
-
-    /// Create a block of lines.
     ///
     /// The number of newlines between each line is read from the surrounding ``EnvironmentValues/lineSpacing`` environment value (typically `1`). Use the ``StringComponent/lineSpacing(_:)`` modifier to change it. The value is inherited by nested `Lines`.
     ///
@@ -58,25 +45,18 @@ public struct Lines<Components>: StringComponent where Components: StringCompone
     public init(
         @StringBuilder components: () -> Components
     ) {
-        self.spacing = nil
         self.components = components()
     }
 
     // MARK: - StringComponent
 
     public var body: some StringComponent {
-        if let spacing {
-            _Guts(lines: components)
-                .lineSpacing(spacing)
-        } else {
-            _Guts(lines: components)
-        }
+        _Guts(lines: components)
     }
 
     // MARK: - Private
 
     private let components: Components
-    private let spacing: Int?
 
     private struct _Guts<T>: StringComponent where T: StringComponent {
 

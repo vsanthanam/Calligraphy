@@ -23,23 +23,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-extension StringComponent {
-
-    /// Wrap this component in a pair of quotation marks.
-    ///
-    /// - Parameter style: An optional ``QuotationMarkStyle`` override. When `nil`, the style provided by the surrounding environment is used.
-    /// - Returns: A component that renders as the receiver, wrapped in quotation marks.
-    @available(*, deprecated, message: "Use the Quote component with the quotationMarkStyle(_:) modifier instead.")
-    @StringBuilder
-    public func quoted(
-        _ style: QuotationMarkStyle?
-    ) -> some StringComponent {
-        Quote(style) { self }
-    }
-
-}
-
 extension EnvironmentValues {
 
     /// A flag indicating whether the current component is being rendered inside a ``Quote``.
@@ -61,19 +44,6 @@ extension EnvironmentValues {
 public struct Quote<Quote>: StringComponent where Quote: StringComponent {
 
     /// Create a quoted component.
-    /// - Parameters:
-    ///   - style: An optional ``QuotationMarkStyle`` override. When `nil` (the default), the style is read from the surrounding environment. When supplied, the style is also propagated into `quote` so nested ``QuotationMark`` and ``Quote`` components inherit it.
-    ///   - quote: The content to wrap in quotation marks.
-    @available(*, deprecated, message: "Use the quotationMarkStyle(_:) modifier instead.")
-    public init(
-        _ style: QuotationMarkStyle?,
-        @StringBuilder quote: () -> Quote
-    ) {
-        self.style = style
-        self.quote = quote()
-    }
-
-    /// Create a quoted component.
     ///
     /// The style of the quotation marks is read from the surrounding ``EnvironmentValues/quotationMarkStyle`` environment value. Use ``StringComponent/quotationMarkStyle(_:)`` on this component or an ancestor to change it.
     ///
@@ -81,24 +51,17 @@ public struct Quote<Quote>: StringComponent where Quote: StringComponent {
     public init(
         @StringBuilder quote: () -> Quote
     ) {
-        self.style = nil
         self.quote = quote()
     }
 
     // MARK: - StringComponent
 
     public var body: some StringComponent {
-        if let style {
-            content
-                .quotationMarkStyle(style)
-        } else {
-            content
-        }
+        content
     }
 
     // MARK: - Private
 
-    private let style: QuotationMarkStyle?
     private let quote: Quote
 
     private var content: some StringComponent {

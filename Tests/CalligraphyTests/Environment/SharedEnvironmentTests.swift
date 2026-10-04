@@ -264,18 +264,4 @@ struct SharedEnvironmentTests {
         #expect(counter.count == 2)
     }
 
-    @Test("Deprecated entry points still render")
-    @available(*, deprecated)
-    func deprecatedEntryPoints() {
-        struct Dir: Directory {
-            let name = "d"
-            var body: some DirectoryContent {
-                File("f.txt", text: "x")
-            }
-        }
-        #expect(Dir()._contents == [.text("f.txt", permissions: .defaultFile, text: "x", encoding: .utf8)])
-        #expect(RawDataComponent(Data([1, 2]))._data == Data([1, 2]))
-        #expect(EmptyDataComponent()._data == nil)
-    }
-
 }
