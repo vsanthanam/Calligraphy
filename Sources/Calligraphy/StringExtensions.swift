@@ -29,20 +29,11 @@
 ///
 /// You can pass in a component directly using ``Swift/String/init(_:)``:
 ///
-/// ```swift
-/// let component = MyStringComponent()
-/// let string = String(component)
-/// ```
+/// @Snippet(path: "Calligraphy/Snippets/String/CreatingStrings", slice: "component")
 ///
 /// You can also pass in multiple combined components using ``Swift/String/build(_:)``:
 ///
-/// ```swift
-/// let string = String.build {
-///     "Hello, World!"
-///     "This is a declarative, multi-line string"
-///     "Created with Calligraphy!"
-/// }
-/// ```
+/// @Snippet(path: "Calligraphy/Snippets/String/CreatingStrings", slice: "build")
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension String {
 

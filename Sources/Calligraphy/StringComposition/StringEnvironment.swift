@@ -27,18 +27,7 @@
 ///
 /// Use `StringEnvironment` inside a ``StringComponent`` to read values that have been injected by ancestor components. The wrapper resolves its value lazily, at the moment the component is rendered.
 ///
-/// ```swift
-/// struct Greeting: StringComponent {
-///
-///     @StringEnvironment(\.separator)
-///     private var separator
-///
-///     var body: some StringComponent {
-///         // ...
-///     }
-///
-/// }
-/// ```
+/// @Snippet(path: "Calligraphy/Snippets/EnvironmentValues/ReadingEnvironmentValues", slice: "property-wrapper")
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @propertyWrapper
 public struct StringEnvironment<Value>: StringEnvironmentPropertyWrapper {

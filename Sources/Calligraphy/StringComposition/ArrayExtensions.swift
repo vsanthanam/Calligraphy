@@ -30,18 +30,7 @@ extension Array {
     ///
     /// Use this overload to embed an array directly into a `@StringBuilder` block. Because the closure is itself a `@StringBuilder`, the full DSL — including conditionals and nested control flow — is available when shaping each element's contribution.
     ///
-    /// ```swift
-    /// let items = ["apple", "banana", "cherry"]
-    ///
-    /// let list = String.build {
-    ///     items.map { item in
-    ///         "- \(item)"
-    ///     }
-    /// }
-    /// // - apple
-    /// // - banana
-    /// // - cherry
-    /// ```
+    /// @Snippet(path: "Calligraphy/Snippets/Array/MappingElements", slice: "map")
     ///
     /// - Parameter mapper: A `@StringBuilder` closure that transforms each element into a ``StringComponent``.
     /// - Returns: A component that renders `mapper` applied to each element in order.

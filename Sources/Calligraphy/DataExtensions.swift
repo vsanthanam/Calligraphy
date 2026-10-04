@@ -31,18 +31,11 @@ import Foundation
 ///
 /// You can pass in a component directly using ``Foundation/Data/init(_:)``:
 ///
-/// ```swift
-/// let component = MyDataComponent()
-/// let data = Data(component)
-/// ```
+/// @Snippet(path: "Calligraphy/Snippets/Data/CreatingData", slice: "component")
 ///
 /// You can also pass in multiple combined components using ``Foundation/Data/build(_:)``:
 ///
-/// ```swift
-/// let data = Data.build {
-///     ...
-/// }
-/// ```
+/// @Snippet(path: "Calligraphy/Snippets/Data/CreatingData", slice: "build")
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension Data {
 
