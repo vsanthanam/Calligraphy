@@ -49,11 +49,12 @@ extension Array {
     @StringBuilder
     @_disfavoredOverload
     public func map(
-        @StringBuilder mapper: (Element) -> some StringComponent
+        @StringBuilder mapper: @escaping (Element) -> some StringComponent
     ) -> some StringComponent {
-        for value in self {
-            mapper(value)
-        }
+        ForEach(
+            self,
+            content: mapper
+        )
     }
 
 }

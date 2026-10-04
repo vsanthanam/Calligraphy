@@ -28,17 +28,16 @@ extension StringComponent {
 
     /// Join the children of this component using the given separator.
     ///
-    /// The supplied separator becomes the ``StringEnvironmentValues/separator`` for this component and its descendants. Components that compose their children (such as ``Lines``) read this value to decide how to combine them.
+    /// The supplied separator becomes the ``StringEnvironmentValues/separator`` for this component and its descendants. Components that are transparent to layout, such as ``StringGroup``, ``ForEach``, and the children of a builder block, read this value to decide how to combine their children. ``Lines`` and ``Line`` set their own separators and are unaffected.
     ///
     /// - Parameter separator: The string to insert between each child.
     /// - Returns: A component that renders its children separated by `separator`.
     public func joined(
         separator: some StringProtocol
     ) -> some StringComponent {
-        Joined(
-            components: self,
-            separator: String(
-                separator
+        modifier(
+            JoinedModifier(
+                separator: String(separator)
             )
         )
     }
@@ -50,21 +49,19 @@ extension StringEnvironmentValues {
 
     /// The separator inserted between adjacent children of a composing component.
     ///
-    /// Defaults to `"\n"`. Components such as ``Lines`` read this value to decide how to join their children. Set it on an ancestor component using ``StringComponent/joined(separator:)``.
+    /// Defaults to `"\n"`. Layout-transparent components such as ``StringGroup`` and ``ForEach`` read this value to decide how to join their children, while ``Lines`` and ``Line`` set their own. Set it on an ancestor component using ``StringComponent/joined(separator:)``.
     @StringEntry
     public internal(set) var separator: String = "\n"
 
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-private struct Joined<Components>: StringComponent where Components: StringComponent {
-
-    let components: Components
+private struct JoinedModifier: StringModifier {
 
     let separator: String
 
-    var body: some StringComponent {
-        components
+    func body(content: Content) -> some StringComponent {
+        content
             .environment(
                 \.separator,
                 separator

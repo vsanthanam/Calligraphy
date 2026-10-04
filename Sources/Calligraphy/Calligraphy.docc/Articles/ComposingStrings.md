@@ -79,11 +79,13 @@ func generateMessage(for user: User?) -> some StringComponent {
         "Hello, Guest!"
     }
     
-    for feature in availableFeatures {
+    ForEach(availableFeatures) { feature in
         "• \(feature.name)"
     }
 }
 ```
+
+Use ``ForEach`` to repeat content for every element of a collection. A `for`-`in` loop is also accepted inside a builder, but it is deprecated in favor of ``ForEach``, which additionally allows modifiers inside the repeated content.
 
 You can use the @StringBuilder result builder in several different ways:
 

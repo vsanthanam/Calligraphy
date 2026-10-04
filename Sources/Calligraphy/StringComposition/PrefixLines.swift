@@ -40,10 +40,11 @@ extension StringComponent {
         when predicate: @escaping (String) -> Bool = { _ in true },
         @StringBuilder with prefix: () -> some StringComponent
     ) -> some StringComponent {
-        PrefixLines(
-            content: self,
-            prefix: prefix(),
-            predicate: predicate
+        modifier(
+            PrefixLinesModifier(
+                prefix: prefix(),
+                predicate: predicate
+            )
         )
     }
 
@@ -65,27 +66,34 @@ extension StringComponent {
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-private struct PrefixLines<T, Prefix>: StringComponent where T: StringComponent, Prefix: StringComponent {
-
-    @StringEnvironment(\.self)
-    var environment
-
-    let content: T
+private struct PrefixLinesModifier<Prefix>: StringModifier where Prefix: StringComponent {
 
     let prefix: Prefix
 
     let predicate: (String) -> Bool
 
-    var body: some StringComponent {
-        if let lines = content.render(in: environment) {
-            for line in lines.components(separatedBy: "\n") {
-                if predicate(line) {
-                    prefix + line
-                } else {
-                    line
-                }
-            }
+    func body(
+        content: Content
+    ) -> Never {
+        fatalErrorImperativeStringModifier()
+    }
+
+    func render(
+        content: Content,
+        in environment: StringEnvironmentValues
+    ) -> String? {
+        guard let rendered = content.render(in: environment) else {
+            return nil
         }
+        return rendered
+            .components(separatedBy: "\n")
+            .map { line in
+                guard predicate(line) else {
+                    return line
+                }
+                return (prefix + line).render(in: environment) ?? line
+            }
+            .joined(separator: "\n")
     }
 
 }

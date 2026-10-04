@@ -38,9 +38,7 @@ extension StringComponent {
         _ key: Key.Type,
         _ value: Key.Value
     ) -> some StringComponent where Key: StringEnvironmentKey {
-        EnvironmentModifier(
-            upstream: self
-        ) { environment in
+        transformEnvironment { environment in
             environment[key] = value
         }
     }
@@ -57,9 +55,7 @@ extension StringComponent {
         _ keyPath: WritableKeyPath<StringEnvironmentValues, Value>,
         _ value: Value
     ) -> some StringComponent {
-        EnvironmentModifier(
-            upstream: self
-        ) { environment in
+        transformEnvironment { environment in
             environment[keyPath: keyPath] = value
         }
     }
@@ -73,31 +69,33 @@ extension StringComponent {
     public func transformEnvironment(
         _ transform: @escaping (inout StringEnvironmentValues) -> Void
     ) -> some StringComponent {
-        EnvironmentModifier(
-            upstream: self,
-            transform: transform
+        modifier(
+            EnvironmentModifier(
+                transform: transform
+            )
         )
     }
 
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-private struct EnvironmentModifier<Upstream>: StringComponent where Upstream: StringComponent {
-
-    let upstream: Upstream
+private struct EnvironmentModifier: StringModifier {
 
     let transform: (inout StringEnvironmentValues) -> Void
 
-    var body: Never {
-        fatalErrorImperativeStringComponent()
+    func body(
+        content: Content
+    ) -> Never {
+        fatalErrorImperativeStringModifier()
     }
 
     func render(
+        content: Content,
         in environment: StringEnvironmentValues
     ) -> String? {
         var copy = environment
         transform(&copy)
-        return upstream.render(in: copy)
+        return content.render(in: copy)
     }
 
 }

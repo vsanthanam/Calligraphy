@@ -40,4 +40,17 @@ struct JoinedTests {
         #expect(String(joined) == "foo, bar, baz")
     }
 
+    @Test("Lines Ignores an Inherited Separator")
+    func linesIgnoresSeparator() {
+        let joined = Lines {
+            "foo"
+            "bar"
+        }
+        .joined(separator: ", ")
+        #expect(String(joined) == """
+        foo
+        bar
+        """)
+    }
+
 }

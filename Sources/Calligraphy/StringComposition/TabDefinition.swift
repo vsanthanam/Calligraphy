@@ -50,9 +50,10 @@ extension StringComponent {
     public func tabDefinition(
         _ tabDefinition: TabDefinition
     ) -> some StringComponent {
-        TabDefinitionModifier(
-            components: self,
-            tabDefinition: tabDefinition
+        modifier(
+            TabDefinitionModifier(
+                tabDefinition: tabDefinition
+            )
         )
     }
 
@@ -70,14 +71,12 @@ extension StringEnvironmentValues {
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-private struct TabDefinitionModifier<Components>: StringComponent where Components: StringComponent {
-
-    let components: Components
+private struct TabDefinitionModifier: StringModifier {
 
     let tabDefinition: TabDefinition
 
-    var body: some StringComponent {
-        components
+    func body(content: Content) -> some StringComponent {
+        content
             .environment(
                 \.tabDefinition,
                 tabDefinition

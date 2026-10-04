@@ -41,7 +41,7 @@ public struct Tab: StringComponent {
             "\t"
         case let .spaces(count):
             Line {
-                for _ in 0..<count {
+                ForEach(0..<count) { _ in
                     Space()
                 }
             }

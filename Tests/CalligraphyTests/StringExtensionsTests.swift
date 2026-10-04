@@ -48,7 +48,10 @@ struct StringExtensionsTests {
             RawStringComponent("Foo")
             RawStringComponent("Bar")
         }
-        #expect(str == "Foo\nBar")
+        #expect(str == """
+        Foo
+        Bar
+        """)
     }
 
 }

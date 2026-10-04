@@ -25,7 +25,11 @@
 
 /// A string component that joins its children together with newlines.
 ///
-/// `Lines` is the standard way to assemble multi-line strings. Each child renders independently, and the children are joined by a newline. The line spacing can be customized via the `spacing:` argument or by applying ``StringComponent/lineSpacing(_:)`` to an ancestor.
+/// `Lines` is the standard way to assemble multi-line strings. Each child renders independently, and the children are joined by a newline.
+/// Apply ``StringComponent/lineSpacing(_:)`` to put more than one newline between them.
+///
+/// Like every environment-backed modifier, line spacing is inherited: it applies to this `Lines` and to every `Lines` nested anywhere beneath it.
+/// Apply ``StringComponent/lineSpacing(_:)`` to a nested `Lines` to give it a different spacing.
 ///
 /// ```swift
 /// Lines {
@@ -53,7 +57,7 @@ public struct Lines<Components>: StringComponent where Components: StringCompone
 
     /// Create a block of lines.
     ///
-    /// The number of newlines between each line is read from the surrounding ``StringEnvironmentValues/lineSpacing`` environment value (typically `1`). Use the ``StringComponent/lineSpacing(_:)`` modifier to change it.
+    /// The number of newlines between each line is read from the surrounding ``StringEnvironmentValues/lineSpacing`` environment value (typically `1`). Use the ``StringComponent/lineSpacing(_:)`` modifier to change it. The value is inherited by nested `Lines`.
     ///
     /// - Parameter components: The children to combine, one per line.
     public init(

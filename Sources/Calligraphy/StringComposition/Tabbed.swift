@@ -39,10 +39,10 @@ extension StringComponent {
         _ definition: TabDefinition?
     ) -> some StringComponent {
         if let definition {
-            _Tabbed(count) { self }
+            tabbed(count)
                 .tabDefinition(definition)
         } else {
-            _Tabbed(count) { self }
+            tabbed(count)
         }
     }
 
@@ -56,7 +56,11 @@ extension StringComponent {
     public func tabbed(
         _ count: Int = 1,
     ) -> some StringComponent {
-        _Tabbed(count) { self }
+        modifier(
+            TabbedModifier(
+                count
+            )
+        )
     }
 
 }
@@ -96,27 +100,21 @@ public struct Tabbed<Content>: StringComponent where Content: StringComponent {
 
 }
 
-private struct _Tabbed<Content>: StringComponent where Content: StringComponent {
-
-    // MARK: - Initializers
+private struct TabbedModifier: StringModifier {
 
     init(
-        _ count: Int = 1,
-        @StringBuilder content: () -> Content
+        _ count: Int = 1
     ) {
         self.count = count
-        self.content = content()
     }
 
-    // MARK: - StringComponent
-
-    var body: some StringComponent {
+    func body(content: Content) -> some StringComponent {
         content
             .prefixLines { line in
                 !line.isEmpty
             } with: {
                 Line {
-                    for _ in 0..<count {
+                    ForEach(0..<count) { _ in
                         Tab()
                     }
                 }
@@ -126,6 +124,5 @@ private struct _Tabbed<Content>: StringComponent where Content: StringComponent 
     // MARK: - Private
 
     private let count: Int
-    private let content: Content
 
 }

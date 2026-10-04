@@ -79,7 +79,41 @@ struct PrefixLinesTests {
         }
         .prefixLines(when: { !$0.isEmpty }, with: "- ")
 
-        #expect(String(prefixLines) == "- foo\n\n- bar")
+        #expect(String(prefixLines) == """
+        - foo
+
+        - bar
+        """)
+    }
+
+    @Test("Lines Survive a Concatenating Parent")
+    func insideLine() {
+        let component = Line {
+            Lines {
+                "foo"
+                "bar"
+            }
+            .prefixLines(with: "# ")
+        }
+        #expect(String(component) == """
+        # foo
+        # bar
+        """)
+    }
+
+    @Test("Inherited Line Spacing Applies to the Content, Not the Output")
+    func underLineSpacing() {
+        let component = Lines {
+            "foo"
+            "bar"
+        }
+        .prefixLines(with: "# ")
+        .lineSpacing(2)
+        #expect(String(component) == """
+        # foo
+        #\u{20}
+        # bar
+        """)
     }
 
 }
