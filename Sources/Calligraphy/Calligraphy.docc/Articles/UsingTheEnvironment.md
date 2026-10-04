@@ -24,9 +24,15 @@ Inside a component, use the ``Environment`` property wrapper to read a value fro
 
 The property wrapper works the same way in a ``DataComponent``, and in types that conform to ``TextFile``, ``DataFile``, or ``Directory``.
 
-The property wrapper is populated by reflection on the enclosing type, so it only works as a stored property. When you need to read the environment outside of that context — in a free `@StringBuilder` function, inside a `String.build { ... }` closure, or anywhere else — reach for ``ReadEnvironment`` instead:
+The property wrapper is populated by reflection on the enclosing type, so it only works as a stored property of a component. When you need an environment value somewhere else, such as a free `@StringBuilder` function or a `String.build { ... }` closure, move that piece of content into a small component type and read the value there, the same way you would introduce a `View` in SwiftUI.
 
-@Snippet(path: "Calligraphy/Snippets/EnvironmentValues/ReadingEnvironmentValues", slice: "read-environment")
+## Reading the File Name
+
+``File``, ``TextFile``, and ``DataFile`` set the name of the file, including its extension, before rendering their contents. Read it with the ``FileName`` property wrapper from any string or data component inside a file, and adapt the output to where it is being written:
+
+@Snippet(path: "Calligraphy/Snippets/EnvironmentValues/ReadingFileName", slice: "header")
+
+The value is `nil` outside of any file, and on a file type itself, which already knows its own name.
 
 ## Writing Values
 

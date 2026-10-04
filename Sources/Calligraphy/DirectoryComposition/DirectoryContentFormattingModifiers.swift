@@ -28,44 +28,50 @@ extension DirectoryContent {
 
     /// Set the number of newlines that ``Lines`` uses to separate adjacent children, for every file inside this content.
     ///
-    /// This is the directory counterpart of ``StringComponent/lineSpacing(_:)``. The value flows through the environment into every text file beneath this content, however deeply nested. Apply the modifier again to a nested component to give it a different spacing.
+    /// This is the directory counterpart of ``StringComponent/lineSpacing(_:)``.
+    /// The value flows through the environment into every text file beneath this content, however deeply nested. Apply the modifier again to a nested component to give it a different spacing.
     ///
     /// - Parameter count: The number of newlines used to separate lines. Use `1` for normal single-spacing, `2` for one blank line between each pair of lines, and so on.
     /// - Returns: Directory content whose files render with the supplied line spacing.
     public func lineSpacing(
         _ count: Int
     ) -> some DirectoryContent {
-        transformEnvironment { environment in
-            environment.lineSpacing = count
-        }
+        environment(
+            \.lineSpacing,
+            count
+        )
     }
 
     /// Apply a ``TabDefinition`` to every file inside this content.
     ///
-    /// This is the directory counterpart of ``StringComponent/tabDefinition(_:)``. The supplied tab definition becomes the ``EnvironmentValues/tabDefinition`` for every component rendered inside this content.
+    /// This is the directory counterpart of ``StringComponent/tabDefinition(_:)``.
+    /// The supplied tab definition becomes the ``EnvironmentValues/tabDefinition`` for every component rendered inside this content.
     ///
     /// - Parameter tabDefinition: The tab definition to use.
     /// - Returns: Directory content whose files render tabs using the supplied definition.
     public func tabDefinition(
         _ tabDefinition: TabDefinition
     ) -> some DirectoryContent {
-        transformEnvironment { environment in
-            environment.tabDefinition = tabDefinition
-        }
+        environment(
+            \.tabDefinition,
+            tabDefinition
+        )
     }
 
     /// Apply a ``QuotationMarkStyle`` to every file inside this content.
     ///
-    /// This is the directory counterpart of ``StringComponent/quotationMarkStyle(_:)``. The supplied style becomes the ``EnvironmentValues/quotationMarkStyle`` for every component rendered inside this content.
+    /// This is the directory counterpart of ``StringComponent/quotationMarkStyle(_:)``.
+    /// The supplied style becomes the ``EnvironmentValues/quotationMarkStyle`` for every component rendered inside this content.
     ///
     /// - Parameter style: The style of quotation mark to use.
     /// - Returns: Directory content whose files render quotation marks with the supplied style.
     public func quotationMarkStyle(
         _ style: QuotationMarkStyle
     ) -> some DirectoryContent {
-        transformEnvironment { environment in
-            environment.quotationMarkStyle = style
-        }
+        environment(
+            \.quotationMarkStyle,
+            style
+        )
     }
 
 }
