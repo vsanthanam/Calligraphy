@@ -201,7 +201,7 @@ public struct File: DirectoryContent {
                 .text(
                     name,
                     permissions: permissions,
-                    text: component.render(in: environment) ?? "",
+                    text: component.fileName(name).render(in: environment) ?? "",
                     encoding: encoding
                 )
             ]
@@ -210,7 +210,7 @@ public struct File: DirectoryContent {
                 .data(
                     name,
                     permissions: permissions,
-                    data: component.render(in: environment) ?? Data()
+                    data: component.fileName(name).render(in: environment) ?? Data()
                 )
             ]
         }

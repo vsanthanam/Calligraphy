@@ -33,45 +33,70 @@ struct EnvironmentModifierTests {
         static let defaultValue: Int = 0
     }
 
+    private struct CountReader: StringComponent {
+
+        @Environment(CountKey.self)
+        private var count
+
+        var body: some StringComponent {
+            "\(count)"
+        }
+
+    }
+
+    private struct SeparatorReader: StringComponent {
+
+        @Environment(\.separator)
+        private var separator
+
+        var body: some StringComponent {
+            separator
+        }
+
+    }
+
+    private struct LineSpacingReader: StringComponent {
+
+        var label = ""
+
+        @Environment(\.lineSpacing)
+        private var lineSpacing
+
+        var body: some StringComponent {
+            label + "\(lineSpacing)"
+        }
+
+    }
+
     @Test("Set by Key")
     func setByKey() {
-        let component = ReadEnvironment { environment in
-            "\(environment[CountKey.self])"
-        }
-        .environment(CountKey.self, 5)
+        let component = CountReader()
+            .environment(CountKey.self, 5)
         #expect(String(component) == "5")
     }
 
     @Test("Set by Key Path")
     func setByKeyPath() {
-        let component = ReadEnvironment { environment in
-            environment.separator
-        }
-        .environment(\.separator, "|")
+        let component = SeparatorReader()
+            .environment(\.separator, "|")
         #expect(String(component) == "|")
     }
 
     @Test("Transform Environment")
     func transform() {
-        let component = ReadEnvironment { environment in
-            "\(environment.lineSpacing)"
-        }
-        .transformEnvironment { environment in
-            environment.lineSpacing = 3
-        }
+        let component = LineSpacingReader()
+            .transformEnvironment { environment in
+                environment.lineSpacing = 3
+            }
         #expect(String(component) == "3")
     }
 
     @Test("Override Only Applies to Descendants")
     func scope() {
         let component = StringGroup {
-            ReadEnvironment { environment in
-                "first:\(environment.lineSpacing)"
-            }
-            .environment(\.lineSpacing, 3)
-            ReadEnvironment { environment in
-                "second:\(environment.lineSpacing)"
-            }
+            LineSpacingReader(label: "first:")
+                .environment(\.lineSpacing, 3)
+            LineSpacingReader(label: "second:")
         }
         #expect(String(component) == """
         first:3
@@ -81,11 +106,9 @@ struct EnvironmentModifierTests {
 
     @Test("Closest Modifier Wins")
     func closestWins() {
-        let component = ReadEnvironment { environment in
-            "\(environment.lineSpacing)"
-        }
-        .environment(\.lineSpacing, 1)
-        .environment(\.lineSpacing, 9)
+        let component = LineSpacingReader()
+            .environment(\.lineSpacing, 1)
+            .environment(\.lineSpacing, 9)
         #expect(String(component) == "1")
     }
 

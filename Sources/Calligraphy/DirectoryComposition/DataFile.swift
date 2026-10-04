@@ -64,7 +64,7 @@ extension DataFile {
             .data(
                 name,
                 permissions: permissions,
-                data: body.render(in: environment) ?? Data()
+                data: body.fileName(name).render(in: environment) ?? Data()
             )
         ]
     }

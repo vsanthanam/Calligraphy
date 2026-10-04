@@ -1,4 +1,4 @@
-// Read values from the environment with `@Environment` and `ReadEnvironment`.
+// Read values from the environment with `@Environment`.
 
 // snippet.hide
 import Calligraphy
@@ -23,18 +23,6 @@ struct ListItem: StringComponent {
 }
 // snippet.end
 
-// snippet.read-environment
-let component = ReadEnvironment { environment in
-    if environment.lineSpacing > 1 {
-        "spaced"
-    } else {
-        "tight"
-    }
-}
-// snippet.end
-
 // snippet.hide
 print(String(ListItem(text: "foo")))
 print(String(ListItem(text: "foo").lineSpacing(2)))
-print(String(component))
-print(String(component.lineSpacing(2)))

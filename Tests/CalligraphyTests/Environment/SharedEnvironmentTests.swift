@@ -199,10 +199,15 @@ struct SharedEnvironmentTests {
 
     @Test("Key-based and transform modifiers on directory content")
     func directoryKeyAndTransform() {
-        let byKey = File("k.txt") {
-            ReadEnvironment { environment in
-                environment[SharedKey.self]
+        struct KeyReader: StringComponent {
+            @Environment(SharedKey.self)
+            var value: String
+            var body: some StringComponent {
+                value
             }
+        }
+        let byKey = File("k.txt") {
+            KeyReader()
         }
         .environment(SharedKey.self, "keyed")
         #expect(text(of: byKey._serialize(), at: ["k.txt"]) == "keyed")

@@ -71,7 +71,12 @@ extension TextFile {
     ) -> [SerializedDirectoryContent] {
         environment.inject(into: self)
         return [
-            .text(name, permissions: permissions, text: body.render(in: environment) ?? "", encoding: encoding)
+            .text(
+                name,
+                permissions: permissions,
+                text: body.fileName(name).render(in: environment) ?? "",
+                encoding: encoding
+            )
         ]
     }
 
