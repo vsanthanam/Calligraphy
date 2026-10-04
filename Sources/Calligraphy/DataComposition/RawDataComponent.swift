@@ -46,12 +46,14 @@ public struct RawDataComponent: DataComponent {
 
     // MARK: - DataComponent
 
-    public var _data: Data? {
-        value
-    }
-
     public var body: Never {
         fatalErrorImperativeDataComponent()
+    }
+
+    public func render(
+        in environment: EnvironmentValues
+    ) -> Data? {
+        value
     }
 
 }

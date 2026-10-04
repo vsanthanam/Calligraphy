@@ -29,7 +29,7 @@
 ///
 /// @Snippet(path: "Calligraphy/Snippets/ForEach/RepeatingContent", slice: "for-each")
 ///
-/// `ForEach` is transparent to layout, like ``StringGroup``: the results are joined using the surrounding ``StringEnvironmentValues/separator``, so inside ``Lines`` each element starts on a new line and inside ``Line`` the elements are concatenated. Elements whose content renders nothing are skipped.
+/// `ForEach` is transparent to layout, like ``StringGroup``: the results are joined using the surrounding ``EnvironmentValues/separator``, so inside ``Lines`` each element starts on a new line and inside ``Line`` the elements are concatenated. Elements whose content renders nothing are skipped.
 ///
 /// Prefer `ForEach` to a `for`-`in` loop inside a builder. Loops are supported for compatibility, but they are deprecated and cannot contain expressions whose type is opaque, such as the result of a modifier.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
@@ -57,7 +57,7 @@ public struct ForEach<Data, Content>: StringComponent where Data: Collection, Co
     }
 
     public func render(
-        in environment: StringEnvironmentValues
+        in environment: EnvironmentValues
     ) -> String? {
         let pieces = data
             .map { element in

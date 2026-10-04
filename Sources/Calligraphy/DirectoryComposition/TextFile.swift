@@ -26,8 +26,10 @@
 import Foundation
 
 /// A file containing a `String`
+///
+/// A `TextFile` renders its ``body`` in the environment it was placed in, so values set on an enclosing ``Folder`` with ``DirectoryContent/environment(_:_:)-(_,Value)`` are visible to the components inside the file. Any ``Environment`` properties declared on the file itself are resolved against that same environment, the same way a SwiftUI view reads the environment set by its parent.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public protocol TextFile: StringComponent, DirectoryContent {
+public protocol TextFile: DirectoryContent {
 
     /// The name of the file
     var name: String { get }
@@ -40,6 +42,16 @@ public protocol TextFile: StringComponent, DirectoryContent {
     /// The file's encoding. Defaults to `.utf8`. Unicode encodings are supported on every platform.
     /// Legacy encodings such as `.macOSRoman` or `.shiftJIS` depend on platform support and may cause the write to fail on Linux.
     var encoding: String.Encoding { get }
+
+    /// The type of string component representing the contents of this file.
+    ///
+    /// Typically, you do not need to explicitly spell out this type.
+    /// Instead, implement ``body`` using an opaque type, and allow the compiler to expand the result builder and choose the correct type to satisfy the protocol.
+    associatedtype Body: StringComponent
+
+    /// The string components used to build the contents of this file.
+    @StringBuilder
+    var body: Body { get }
 
 }
 
@@ -54,9 +66,12 @@ extension TextFile {
         .utf8
     }
 
-    public func _serialize() -> [SerializedDirectoryContent] {
-        [
-            .text(name, permissions: permissions, text: String(body), encoding: encoding)
+    public func _serialize(
+        in environment: EnvironmentValues
+    ) -> [SerializedDirectoryContent] {
+        environment.inject(into: self)
+        return [
+            .text(name, permissions: permissions, text: body.render(in: environment) ?? "", encoding: encoding)
         ]
     }
 

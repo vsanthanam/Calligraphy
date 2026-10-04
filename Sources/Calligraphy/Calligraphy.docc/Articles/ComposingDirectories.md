@@ -57,6 +57,14 @@ This allows you to compose complex directory structures with rich content:
 
 @Snippet(path: "Calligraphy/Snippets/ComposingDirectories/CustomDirectoryContent", slice: "combining-builders")
 
+### Setting Environment Values on Folders
+
+Files and folders are rendered lazily, when the tree is serialized or written, and the same environment flows through folders, files, and the components inside them. A value set on a folder with ``DirectoryContent/environment(_:_:)-(_,Value)``, or with a convenience such as ``DirectoryContent/lineSpacing(_:)``, is visible to every file beneath it:
+
+@Snippet(path: "Calligraphy/Snippets/ComposingDirectories/FolderEnvironment", slice: "folder-environment")
+
+See <doc:UsingTheEnvironment> for details.
+
 ### Writing to Disk
 
 All directory content types can be written to disk using the ``DirectoryContent/write(to:shouldOverwrite:)`` method:

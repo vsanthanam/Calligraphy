@@ -23,11 +23,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Calligraphy
+@testable import Calligraphy
 import Testing
 
 @Test("Empty Data Component", .tags(.dataComposition))
 func emptyDataComponent() {
     let component = EmptyDataComponent()
-    #expect(component._data == nil)
+    #expect(component.render(in: EnvironmentValues()) == nil)
 }

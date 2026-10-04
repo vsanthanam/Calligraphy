@@ -23,7 +23,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Calligraphy
+@testable import Calligraphy
 import Foundation
 import Testing
 
@@ -37,7 +37,7 @@ struct AnyDataComponentTests {
             Data()
         }
         let typeErased = AnyDataComponent(erasing: standard)
-        #expect(standard._data == typeErased._data)
+        #expect(standard.render(in: EnvironmentValues()) == typeErased.render(in: EnvironmentValues()))
 
     }
 

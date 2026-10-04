@@ -1,5 +1,5 @@
 // Calligraphy
-// StringEnvironmentValues.swift
+// EnvironmentValues.swift
 //
 // MIT License
 //
@@ -25,22 +25,24 @@
 
 import Foundation
 
-/// A collection of environment values propagated through a ``StringComponent`` tree.
+/// A collection of environment values propagated through a component tree.
 ///
-/// During rendering, every component receives a `StringEnvironmentValues` instance from its ancestors. Values are read using the ``StringEnvironment`` property wrapper, and written by applying an environment modifier such as ``StringComponent/environment(_:_:)-(_,Value)`` to an ancestor component.
+/// The same environment flows through all three of Calligraphy's builders. During rendering, every ``StringComponent``, ``DataComponent``, and ``DirectoryContent`` receives an `EnvironmentValues` instance from its ancestors. Values are read using the ``Environment`` property wrapper, and written by applying an environment modifier such as ``StringComponent/environment(_:_:)-(_,Value)`` or ``DirectoryContent/environment(_:_:)-(_,Value)`` to an ancestor.
 ///
-/// To define a new environment value, extend `StringEnvironmentValues` and apply the ``StringEntry()`` macro to a stored property:
+/// Because a ``Directory`` passes its environment down to the files it contains, and a file passes its environment down to the components that render its contents, a value set on a folder is visible to every string or data component inside it.
+///
+/// To define a new environment value, extend `EnvironmentValues` and apply the ``Entry()`` macro to a stored property:
 ///
 /// @Snippet(path: "Calligraphy/Snippets/EnvironmentValues/CustomEnvironmentValues", slice: "entry")
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct StringEnvironmentValues: Sendable {
+public struct EnvironmentValues: Sendable {
 
     // MARK: - API
 
-    /// Access the value associated with a ``StringEnvironmentKey``.
+    /// Access the value associated with an ``EnvironmentKey``.
     public subscript<Key>(
         _ key: Key.Type
-    ) -> Key.Value where Key: StringEnvironmentKey {
+    ) -> Key.Value where Key: EnvironmentKey {
         get {
             if let val = storage[ObjectIdentifier(key)] {
                 val as! Key.Value
@@ -56,14 +58,6 @@ public struct StringEnvironmentValues: Sendable {
     // MARK: - Private
 
     init() {}
-
-    func draw(with components: [String?]) -> String? {
-        let afterSkips = components.compactMap(\.self)
-        guard !afterSkips.isEmpty else {
-            return nil
-        }
-        return afterSkips.joined(separator: separator)
-    }
 
     private var storage = [ObjectIdentifier: any Sendable]()
 

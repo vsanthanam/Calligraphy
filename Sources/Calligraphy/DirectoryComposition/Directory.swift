@@ -26,6 +26,8 @@
 import Foundation
 
 /// A directory
+///
+/// A `Directory` passes its environment down to its ``body``, so values set on the directory or any ancestor with ``DirectoryContent/environment(_:_:)-(_,Value)`` are visible to every file inside it. Any ``Environment`` properties declared on the directory itself are resolved against the environment the directory was placed in, the same way a SwiftUI view reads the environment set by its parent.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public protocol Directory: DirectoryContent {
 
@@ -40,14 +42,14 @@ public protocol Directory: DirectoryContent {
     @DirectoryContentBuilder
     var body: Body { get }
 
-    var _contents: [SerializedDirectoryContent] { get }
-
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension Never: DirectoryContent {
 
-    public func _serialize() -> [SerializedDirectoryContent] {
+    public func _serialize(
+        in environment: EnvironmentValues
+    ) -> [SerializedDirectoryContent] {
         fatalError()
     }
 
@@ -60,16 +62,21 @@ extension Directory {
         .defaultDirectory
     }
 
+    /// The serialized contents of the directory, rendered in a fresh environment.
+    @available(*, deprecated, message: "Use _serialize(in:) instead")
     public var _contents: [SerializedDirectoryContent] {
-        body._serialize()
+        body._serialize(in: EnvironmentValues())
     }
 
-    public func _serialize() -> [SerializedDirectoryContent] {
-        [
+    public func _serialize(
+        in environment: EnvironmentValues
+    ) -> [SerializedDirectoryContent] {
+        environment.inject(into: self)
+        return [
             .directory(
                 name,
                 permissions: permissions,
-                content: _contents
+                content: body._serialize(in: environment)
             )
         ]
     }

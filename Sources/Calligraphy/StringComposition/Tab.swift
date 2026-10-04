@@ -32,7 +32,7 @@ public struct Tab: StringComponent {
     /// Create a tab component.
     public init() {}
 
-    @StringEnvironment(\.tabDefinition)
+    @Environment(\.tabDefinition)
     private var tabDefinition
 
     public var body: some StringComponent {

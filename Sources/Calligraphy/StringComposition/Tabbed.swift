@@ -48,7 +48,8 @@ extension StringComponent {
 
     /// Indent every line of this component with one or more tabs.
     ///
-    /// Each tab is rendered according to the surrounding ``StringEnvironmentValues/tabDefinition`` environment value. By default, this means two spaces per tab. Use the ``StringComponent/tabDefinition(_:)`` modifier to change it. Blank lines are left empty rather than indented.
+    /// Each tab is rendered according to the surrounding ``EnvironmentValues/tabDefinition`` environment value.
+    /// By default, this means two spaces per tab. Use the ``StringComponent/tabDefinition(_:)`` modifier to change it. Blank lines are left empty rather than indented.
     ///
     /// - Parameter count: The number of tabs to insert at the start of each line. Defaults to `1`.
     /// - Returns: A component whose lines are each indented.

@@ -34,7 +34,26 @@ import Foundation
 @_typeEraser(AnyDirectoryContent)
 public protocol DirectoryContent {
 
-    func _serialize() -> [SerializedDirectoryContent]
+    /// Serialize this content into a tree of files and directories using the supplied environment.
+    ///
+    /// You rarely need to call this method directly. Instead, write the content to disk using ``write(to:shouldOverwrite:)``, which serializes the content in a fresh environment.
+    ///
+    /// - Parameter environment: The environment values to read during serialization.
+    /// - Returns: The serialized files and directories represented by this content.
+    func _serialize(
+        in environment: EnvironmentValues
+    ) -> [SerializedDirectoryContent]
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+extension DirectoryContent {
+
+    /// Serialize this content into a tree of files and directories using a fresh environment.
+    /// - Returns: The serialized files and directories represented by this content.
+    public func _serialize() -> [SerializedDirectoryContent] {
+        _serialize(in: EnvironmentValues())
+    }
 
 }
 
@@ -61,7 +80,7 @@ extension DirectoryContent {
                   isDirectory.boolValue else {
                 throw DiskOperationError("Provided URL does not point to a directory")
             }
-            let contents = _serialize()
+            let contents = _serialize(in: EnvironmentValues())
             try contents.validate(in: directoryURL)
             return try await DiskOperation.start(with: directoryURL) {
                 try await contents.performWriteOperations(shouldOverwrite: shouldOverwrite)
@@ -87,7 +106,7 @@ extension DirectoryContent {
                   isDirectory.boolValue else {
                 throw DiskOperationError("Provided URL does not point to a directory")
             }
-            let contents = _serialize()
+            let contents = _serialize(in: EnvironmentValues())
             try contents.validate(in: directoryURL)
             return try await DiskOperation.start(with: directoryURL) {
                 try await contents.performWriteOperations(shouldOverwrite: shouldOverwrite)

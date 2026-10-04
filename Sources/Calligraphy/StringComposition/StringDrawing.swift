@@ -1,5 +1,5 @@
 // Calligraphy
-// Files.swift
+// StringDrawing.swift
 //
 // MIT License
 //
@@ -23,28 +23,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// An entrypoint for the ``DirectoryContentBuilder`` result builder
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct Files<T>: DirectoryContent where T: DirectoryContent {
+extension EnvironmentValues {
 
-    /// Create a list of directory content
-    /// - Parameter files: The directory content
-    public init(
-        @DirectoryContentBuilder files: () -> T
-    ) {
-        self.files = files()
+    func draw(with components: [String?]) -> String? {
+        let afterSkips = components.compactMap(\.self)
+        guard !afterSkips.isEmpty else {
+            return nil
+        }
+        return afterSkips.joined(separator: separator)
     }
-
-    // MARK: - DirectoryContent
-
-    public func _serialize(
-        in environment: EnvironmentValues
-    ) -> [SerializedDirectoryContent] {
-        files._serialize(in: environment)
-    }
-
-    // MARK: - Private
-
-    private let files: T
 
 }

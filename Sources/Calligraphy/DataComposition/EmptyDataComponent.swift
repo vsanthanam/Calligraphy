@@ -31,15 +31,18 @@ public struct EmptyDataComponent: DataComponent {
 
     // MARK: - Initializers
 
-    /// Create an empty data component
     public init() {}
 
     // MARK: - DataComponent
 
-    public let _data: Data? = nil
-
     public var body: Never {
         fatalErrorImperativeDataComponent()
+    }
+
+    public func render(
+        in environment: EnvironmentValues
+    ) -> Data? {
+        nil
     }
 
 }

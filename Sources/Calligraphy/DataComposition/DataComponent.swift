@@ -25,7 +25,13 @@
 
 import Foundation
 
-/// A data component
+/// A type that contributes to the construction of binary data.
+///
+/// A `DataComponent` is a declarative representation of a sequence of bytes.
+/// By composing components together inside a DataBuilder, you build up a final `Data` value the same way you would build a `String` with StringComponent.
+///
+/// Typically, you will not implement render(in:) directly. Instead, implement body using an opaque type, and allow the compiler to expand the result builder and choose the correct type to satisfy the protocol.
+/// A data component can read the surrounding environment with the ``Environment`` property wrapper.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @_typeEraser(AnyDataComponent)
 public protocol DataComponent {
@@ -33,22 +39,31 @@ public protocol DataComponent {
     /// The type of data component representing the body of this data component.
     ///
     /// Typically, you do not need to explicitly spell out this type.
-    /// Instead. implement ``body`` using an opaque type, and allow the compiler to expand the result builder and choose the correct type to satisfy the protocol
+    /// Instead. implement body using an opaque type, and allow the compiler to expand the result builder and choose the correct type to satisfy the protocol
     associatedtype Body: DataComponent
-
-    /// The data contained in the coponent
-    var _data: Data? { get }
 
     /// The sub components used to build this data component.
     @DataBuilder
     var body: Body { get }
+
+    /// Render this component into `Data` using the supplied environment.
+    ///
+    /// You rarely need to call this method directly. Instead, convert a component to `Data` using Foundation/Data/init(_:), which evaluates the component in a fresh environment.
+    ///
+    /// - Parameter environment: The environment values to read during rendering.
+    /// - Returns: The rendered data, or `nil` if the component contributes nothing.
+    func render(
+        in environment: EnvironmentValues
+    ) -> Data?
 
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension Never: DataComponent {
 
-    public var _data: Data? {
+    public func render(
+        in environment: EnvironmentValues
+    ) -> Data? {
         fatalError()
     }
 
@@ -57,8 +72,17 @@ extension Never: DataComponent {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension DataComponent {
 
+    public func render(
+        in environment: EnvironmentValues
+    ) -> Data? {
+        environment.inject(into: self)
+        return body.render(in: environment)
+    }
+
+    /// The data contained in the component, rendered in a fresh environment.
+    @available(*, deprecated, renamed: "render(in:)", message: "Use render(in:) or Data(_:) instead")
     public var _data: Data? {
-        body._data
+        render(in: EnvironmentValues())
     }
 
 }
@@ -101,6 +125,7 @@ public func + (
     rhs
 }
 
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @DataBuilder
 public func + (
     _ lhs: Data,

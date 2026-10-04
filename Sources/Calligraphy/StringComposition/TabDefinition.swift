@@ -43,7 +43,7 @@ extension StringComponent {
 
     /// Apply a ``TabDefinition`` to this component.
     ///
-    /// The supplied tab definition becomes the ``StringEnvironmentValues/tabDefinition`` for this component and its descendants. ``Tab`` and modifiers built on top of it (such as ``StringComponent/tabbed(_:)``) read this value when rendering.
+    /// The supplied tab definition becomes the ``EnvironmentValues/tabDefinition`` for this component and its descendants. ``Tab`` and modifiers built on top of it (such as ``StringComponent/tabbed(_:)``) read this value when rendering.
     ///
     /// - Parameter tabDefinition: The tab definition to use.
     /// - Returns: A component whose descendants render tabs using the supplied definition.
@@ -60,12 +60,12 @@ extension StringComponent {
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-extension StringEnvironmentValues {
+extension EnvironmentValues {
 
     /// The current tab definition.
     ///
     /// Defaults to ``TabDefinition/default`` (two spaces). ``Tab`` and modifiers built on top of it (such as ``StringComponent/tabbed(_:)``) read this value when rendering. Set it on an ancestor component using ``StringComponent/tabDefinition(_:)``.
-    @StringEntry
+    @Entry
     public internal(set) var tabDefinition: TabDefinition = .default
 
 }

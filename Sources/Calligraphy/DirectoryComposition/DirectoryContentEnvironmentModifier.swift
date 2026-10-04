@@ -1,5 +1,5 @@
 // Calligraphy
-// EnvironmentModifier.swift
+// DirectoryContentEnvironmentModifier.swift
 //
 // MIT License
 //
@@ -24,20 +24,20 @@
 // SOFTWARE.
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-extension StringComponent {
+extension DirectoryContent {
 
-    /// Set an environment value identified by a ``EnvironmentKey``.
+    /// Set an environment value identified by an ``EnvironmentKey``.
     ///
-    /// The new value is visible to this component and all of its descendants. Ancestor components are unaffected.
+    /// The new value is visible to this content, every file and directory inside it, and every ``StringComponent`` or ``DataComponent`` rendered inside those files. Ancestors are unaffected.
     ///
     /// - Parameters:
     ///   - key: The environment key to set.
     ///   - value: The new value for the key.
-    /// - Returns: A component that injects the new value into the environment of its descendants.
+    /// - Returns: Directory content that injects the new value into the environment of its descendants.
     public func environment<Key>(
         _ key: Key.Type,
         _ value: Key.Value
-    ) -> some StringComponent where Key: EnvironmentKey {
+    ) -> some DirectoryContent where Key: EnvironmentKey {
         transformEnvironment { environment in
             environment[key] = value
         }
@@ -45,16 +45,16 @@ extension StringComponent {
 
     /// Set an environment value identified by a key path on ``EnvironmentValues``.
     ///
-    /// The new value is visible to this component and all of its descendants. Ancestor components are unaffected.
+    /// The new value is visible to this content, every file and directory inside it, and every ``StringComponent`` or ``DataComponent`` rendered inside those files. Ancestors are unaffected.
     ///
     /// - Parameters:
     ///   - keyPath: The key path identifying the value to write.
     ///   - value: The new value to write.
-    /// - Returns: A component that injects the new value into the environment of its descendants.
+    /// - Returns: Directory content that injects the new value into the environment of its descendants.
     public func environment<Value>(
         _ keyPath: WritableKeyPath<EnvironmentValues, Value>,
         _ value: Value
-    ) -> some StringComponent {
+    ) -> some DirectoryContent {
         transformEnvironment { environment in
             environment[keyPath: keyPath] = value
         }
@@ -65,37 +65,27 @@ extension StringComponent {
     /// Use this modifier when you need to set multiple values at once, or when the new value depends on the current value.
     ///
     /// - Parameter transform: A closure that mutates the environment in place.
-    /// - Returns: A component whose descendants render with the transformed environment.
+    /// - Returns: Directory content whose descendants are serialized with the transformed environment.
     public func transformEnvironment(
         _ transform: @escaping (inout EnvironmentValues) -> Void
-    ) -> some StringComponent {
-        modifier(
-            EnvironmentModifier(
-                transform: transform
-            )
-        )
+    ) -> some DirectoryContent {
+        DirectoryEnvironmentContent(content: self, transform: transform)
     }
 
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-private struct EnvironmentModifier: StringModifier {
+private struct DirectoryEnvironmentContent<Content>: DirectoryContent where Content: DirectoryContent {
 
+    let content: Content
     let transform: (inout EnvironmentValues) -> Void
 
-    func body(
-        content: Content
-    ) -> Never {
-        fatalErrorImperativeStringModifier()
-    }
-
-    func render(
-        content: Content,
+    func _serialize(
         in environment: EnvironmentValues
-    ) -> String? {
+    ) -> [SerializedDirectoryContent] {
         var copy = environment
         transform(&copy)
-        return content.render(in: copy)
+        return content._serialize(in: copy)
     }
 
 }

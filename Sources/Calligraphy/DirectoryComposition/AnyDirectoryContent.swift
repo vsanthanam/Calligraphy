@@ -34,17 +34,19 @@ public struct AnyDirectoryContent: DirectoryContent {
     public init<T>(
         erasing directoryContent: T
     ) where T: DirectoryContent {
-        __serialize = directoryContent._serialize
+        __serialize = { directoryContent._serialize(in: $0) }
     }
 
     // MARK: - DirectoryContent
 
-    public func _serialize() -> [SerializedDirectoryContent] {
-        __serialize()
+    public func _serialize(
+        in environment: EnvironmentValues
+    ) -> [SerializedDirectoryContent] {
+        __serialize(environment)
     }
 
     // MARK: - Private
 
-    private let __serialize: () -> [SerializedDirectoryContent]
+    private let __serialize: (EnvironmentValues) -> [SerializedDirectoryContent]
 
 }

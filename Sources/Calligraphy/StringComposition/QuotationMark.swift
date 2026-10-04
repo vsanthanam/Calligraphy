@@ -32,7 +32,7 @@ public struct QuotationMark: StringComponent {
     // MARK: - Initializers
 
     /// Create a quotation mark component.
-    /// - Parameter style: An optional ``QuotationMarkStyle`` override. When `nil` (the default), the style is read from the surrounding ``StringEnvironmentValues/quotationMarkStyle`` environment value.
+    /// - Parameter style: An optional ``QuotationMarkStyle`` override. When `nil` (the default), the style is read from the surrounding ``EnvironmentValues/quotationMarkStyle`` environment value.
     @available(*, deprecated, message: "Use the quotationMarkStyle(_:) modifier instead.")
     public init(_ style: QuotationMarkStyle?) {
         self.style = style
@@ -40,7 +40,7 @@ public struct QuotationMark: StringComponent {
 
     /// Create a quotation mark component.
     ///
-    /// The character rendered is read from the surrounding ``StringEnvironmentValues/quotationMarkStyle`` environment value.
+    /// The character rendered is read from the surrounding ``EnvironmentValues/quotationMarkStyle`` environment value.
     public init() {
         self.style = nil
     }
@@ -59,7 +59,7 @@ public struct QuotationMark: StringComponent {
 
     private let style: QuotationMarkStyle?
 
-    @StringEnvironment(\.quotationMarkStyle)
+    @Environment(\.quotationMarkStyle)
     private var quotationMarkStyle
 
 }

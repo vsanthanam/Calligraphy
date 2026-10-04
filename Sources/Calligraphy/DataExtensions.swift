@@ -46,9 +46,12 @@ extension Data {
     public init(
         _ component: some DataComponent
     ) {
-        self = component._data ?? .init()
+        self = component.render(in: EnvironmentValues()) ?? .init()
     }
 
+    /// Create data from multiple data components
+    /// - Parameter components: The data components
+    /// - Returns: The rendered data
     public static func build(
         @DataBuilder _ components: () -> some DataComponent
     ) -> Data {

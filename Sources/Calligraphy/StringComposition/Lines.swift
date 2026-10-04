@@ -39,7 +39,7 @@ public struct Lines<Components>: StringComponent where Components: StringCompone
 
     /// Create a block of lines.
     /// - Parameters:
-    ///   - spacing: The number of newlines between each line. When `nil`, the value of the surrounding ``StringEnvironmentValues/lineSpacing`` environment value is used (typically `1`).
+    ///   - spacing: The number of newlines between each line. When `nil`, the value of the surrounding ``EnvironmentValues/lineSpacing`` environment value is used (typically `1`).
     ///   - components: The children to combine, one per line.
     @available(*, deprecated, message: "Use the lineSpacing(_:) modifier instead.")
     public init(
@@ -52,7 +52,7 @@ public struct Lines<Components>: StringComponent where Components: StringCompone
 
     /// Create a block of lines.
     ///
-    /// The number of newlines between each line is read from the surrounding ``StringEnvironmentValues/lineSpacing`` environment value (typically `1`). Use the ``StringComponent/lineSpacing(_:)`` modifier to change it. The value is inherited by nested `Lines`.
+    /// The number of newlines between each line is read from the surrounding ``EnvironmentValues/lineSpacing`` environment value (typically `1`). Use the ``StringComponent/lineSpacing(_:)`` modifier to change it. The value is inherited by nested `Lines`.
     ///
     /// - Parameter components: The children to combine, one per line.
     public init(
@@ -82,7 +82,7 @@ public struct Lines<Components>: StringComponent where Components: StringCompone
 
         let lines: T
 
-        @StringEnvironment(\.effectiveSeparator)
+        @Environment(\.effectiveSeparator)
         var effectiveSeparator
 
         var body: some StringComponent {
@@ -95,7 +95,7 @@ public struct Lines<Components>: StringComponent where Components: StringCompone
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-extension StringEnvironmentValues {
+extension EnvironmentValues {
 
     fileprivate var effectiveSeparator: String {
         Array(repeating: "\n", count: lineSpacing).joined(separator: "")

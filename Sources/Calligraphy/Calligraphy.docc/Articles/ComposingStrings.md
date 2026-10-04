@@ -92,3 +92,7 @@ This example would yield the following string:
 Apple, Banana, Pear
 ```
 
+## Reading and Writing the Environment
+
+Modifiers such as ``StringComponent/lineSpacing(_:)`` and ``StringComponent/joined(separator:)`` work by writing to an environment that flows from each component to its descendants, and your own components can read from and write to the same environment. The environment is shared with directory and data composition, so a value set on a ``Folder`` reaches the string components inside its files. See <doc:UsingTheEnvironment>.
+

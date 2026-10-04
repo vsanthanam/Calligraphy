@@ -1,5 +1,5 @@
 // Calligraphy
-// StringEntryMacro.swift
+// EntryMacro.swift
 //
 // MIT License
 //
@@ -27,15 +27,16 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
-public struct StringEntryMacro: AccessorMacro, PeerMacro {
+public struct EntryMacro: AccessorMacro, PeerMacro {
 
     public static func expansion(
         of node: AttributeSyntax,
         providingAccessorsOf declaration: some DeclSyntaxProtocol,
         in context: some MacroExpansionContext
     ) throws -> [AccessorDeclSyntax] {
-        let binding = try binding(from: declaration)
-        let name = try identifier(from: binding).text
+        let attribute = attributeName(of: node)
+        let binding = try binding(from: declaration, attribute: attribute)
+        let name = try identifier(from: binding, attribute: attribute).text
         let keyName = "__Key_\(name)"
         return [
             """
@@ -52,10 +53,11 @@ public struct StringEntryMacro: AccessorMacro, PeerMacro {
         providingPeersOf declaration: some DeclSyntaxProtocol,
         in context: some MacroExpansionContext
     ) throws -> [DeclSyntax] {
-        let binding = try binding(from: declaration)
-        let name = try identifier(from: binding).text
+        let attribute = attributeName(of: node)
+        let binding = try binding(from: declaration, attribute: attribute)
+        let name = try identifier(from: binding, attribute: attribute).text
         let typeAnnotation = try binding.typeAnnotation
-            .mustExist("@StringEntry requires an explicit type annotation")
+            .mustExist("\(attribute) requires an explicit type annotation")
             .type
         let defaultValue: ExprSyntax
         if let initializer = binding.initializer?.value {
@@ -63,32 +65,40 @@ public struct StringEntryMacro: AccessorMacro, PeerMacro {
         } else if isOptional(typeAnnotation) {
             defaultValue = "nil"
         } else {
-            throw MacroError("@StringEntry requires an initial value for non-optional types")
+            throw MacroError("\(attribute) requires an initial value for non-optional types")
         }
         let keyName = "__Key_\(name)"
         return [
             """
-            private struct \(raw: keyName): StringEnvironmentKey {
+            private struct \(raw: keyName): EnvironmentKey {
                 static let defaultValue: \(typeAnnotation.trimmed) = \(defaultValue.trimmed)
             }
             """
         ]
     }
 
+    private static func attributeName(
+        of node: AttributeSyntax
+    ) -> String {
+        "@" + node.attributeName.trimmedDescription
+    }
+
     private static func binding(
-        from decl: some DeclSyntaxProtocol
+        from decl: some DeclSyntaxProtocol,
+        attribute: String
     ) throws -> PatternBindingSyntax {
         try decl.as(VariableDeclSyntax.self)
-            .mustExist("@StringEntry must be applied to a variable declaration")
+            .mustExist("\(attribute) must be applied to a variable declaration")
             .bindings.first
-            .mustExist("@StringEntry requires a single binding")
+            .mustExist("\(attribute) requires a single binding")
     }
 
     private static func identifier(
-        from binding: PatternBindingSyntax
+        from binding: PatternBindingSyntax,
+        attribute: String
     ) throws -> TokenSyntax {
         try binding.pattern.as(IdentifierPatternSyntax.self)
-            .mustExist("@StringEntry requires an identifier pattern")
+            .mustExist("\(attribute) requires an identifier pattern")
             .identifier
     }
 

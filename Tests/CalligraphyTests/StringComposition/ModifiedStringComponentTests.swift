@@ -180,7 +180,7 @@ private struct Commented: StringModifier {
 
 private struct LineSpacingReport: StringModifier {
 
-    @StringEnvironment(\.lineSpacing)
+    @Environment(\.lineSpacing)
     private var lineSpacing
 
     func body(content: Content) -> some StringComponent {
@@ -218,7 +218,7 @@ private struct Uppercased: StringModifier {
         fatalError()
     }
 
-    func render(content: Content, in environment: StringEnvironmentValues) -> String? {
+    func render(content: Content, in environment: EnvironmentValues) -> String? {
         content.render(in: environment)?.uppercased()
     }
 
@@ -226,14 +226,14 @@ private struct Uppercased: StringModifier {
 
 private struct SpacingSuffix: StringModifier {
 
-    @StringEnvironment(\.lineSpacing)
+    @Environment(\.lineSpacing)
     private var lineSpacing
 
     func body(content: Content) -> Never {
         fatalError()
     }
 
-    func render(content: Content, in environment: StringEnvironmentValues) -> String? {
+    func render(content: Content, in environment: EnvironmentValues) -> String? {
         (content.render(in: environment) ?? "") + " (spacing \(lineSpacing))"
     }
 

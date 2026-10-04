@@ -1,5 +1,5 @@
 // Calligraphy
-// StringEnvironmentValuesTests.swift
+// EnvironmentValuesTests.swift
 //
 // MIT License
 //
@@ -26,33 +26,33 @@
 @testable import Calligraphy
 import Testing
 
-@Suite("String Environment Values Tests", .tags(.stringComposition))
-struct StringEnvironmentValuesTests {
+@Suite("String Environment Values Tests", .tags(.environment))
+struct EnvironmentValuesTests {
 
-    private struct CounterKey: StringEnvironmentKey {
+    private struct CounterKey: EnvironmentKey {
         static let defaultValue: Int = 0
     }
 
-    private struct LabelKey: StringEnvironmentKey {
+    private struct LabelKey: EnvironmentKey {
         static let defaultValue: String = ""
     }
 
     @Test("Subscript Returns Default")
     func subscriptDefault() {
-        let values = StringEnvironmentValues()
+        let values = EnvironmentValues()
         #expect(values[CounterKey.self] == 0)
     }
 
     @Test("Subscript Returns Set Value")
     func subscriptSet() {
-        var values = StringEnvironmentValues()
+        var values = EnvironmentValues()
         values[CounterKey.self] = 42
         #expect(values[CounterKey.self] == 42)
     }
 
     @Test("Distinct Keys Are Independent")
     func distinctKeys() {
-        var values = StringEnvironmentValues()
+        var values = EnvironmentValues()
         values[CounterKey.self] = 7
         values[LabelKey.self] = "hello"
         #expect(values[CounterKey.self] == 7)
@@ -61,7 +61,7 @@ struct StringEnvironmentValuesTests {
 
     @Test("Values Are Copy-on-Write")
     func copyOnWrite() {
-        var original = StringEnvironmentValues()
+        var original = EnvironmentValues()
         original[CounterKey.self] = 1
         var copy = original
         copy[CounterKey.self] = 2

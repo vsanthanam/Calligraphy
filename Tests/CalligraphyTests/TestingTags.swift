@@ -36,4 +36,7 @@ extension Tag {
     @Tag
     static var dataComposition: Self
 
+    @Tag
+    static var environment: Self
+
 }

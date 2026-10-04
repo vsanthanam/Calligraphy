@@ -1,5 +1,5 @@
 // Calligraphy
-// StringEnvironment.swift
+// Environment.swift
 //
 // MIT License
 //
@@ -23,30 +23,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// A property wrapper that reads a value from the surrounding ``StringEnvironmentValues``.
+/// A property wrapper that reads a value from the surrounding ``EnvironmentValues``.
 ///
-/// Use `StringEnvironment` inside a ``StringComponent`` to read values that have been injected by ancestor components. The wrapper resolves its value lazily, at the moment the component is rendered.
+/// Use `Environment` inside a ``StringComponent``, ``DataComponent``, ``TextFile``, ``DataFile``, or ``Directory`` to read values that have been injected by ancestor components. The wrapper resolves its value lazily, at the moment the component is rendered.
 ///
 /// @Snippet(path: "Calligraphy/Snippets/EnvironmentValues/ReadingEnvironmentValues", slice: "property-wrapper")
+///
+/// - Note: SwiftUI declares a property wrapper with the same name. In a file that imports both modules, write `@Calligraphy.Environment` to disambiguate.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @propertyWrapper
-public struct StringEnvironment<Value>: StringEnvironmentPropertyWrapper {
+public struct Environment<Value>: EnvironmentPropertyWrapper {
 
     // MARK: - Initializers
 
-    /// Read a value from ``StringEnvironmentValues`` by key path.
+    /// Read a value from ``EnvironmentValues`` by key path.
     /// - Parameter keyPath: The key path identifying the value to read.
     public init(
-        _ keyPath: KeyPath<StringEnvironmentValues, Value>
+        _ keyPath: KeyPath<EnvironmentValues, Value>
     ) {
         self.read = { $0[keyPath: keyPath] }
     }
 
-    /// Read a value from ``StringEnvironmentValues`` by ``StringEnvironmentKey``.
+    /// Read a value from ``EnvironmentValues`` by ``EnvironmentKey``.
     /// - Parameter key: The key type identifying the value to read.
     public init<Key>(
         _ key: Key.Type
-    ) where Key: StringEnvironmentKey, Value == Key.Value {
+    ) where Key: EnvironmentKey, Value == Key.Value {
         self.read = { $0[key] }
     }
 
@@ -60,23 +62,36 @@ public struct StringEnvironment<Value>: StringEnvironmentPropertyWrapper {
     // MARK: - Private
 
     func inject(
-        _ values: StringEnvironmentValues
+        _ values: EnvironmentValues
     ) {
         box.values = values
     }
 
-    private let read: (StringEnvironmentValues) -> Value
+    private let read: (EnvironmentValues) -> Value
     private let box = Box()
 
     private final class Box {
-        var values = StringEnvironmentValues()
+        var values = EnvironmentValues()
     }
 
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-protocol StringEnvironmentPropertyWrapper {
+protocol EnvironmentPropertyWrapper {
     func inject(
-        _ values: StringEnvironmentValues
+        _ values: EnvironmentValues
     )
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+extension EnvironmentValues {
+
+    /// Resolve every ``Environment`` property declared by `subject` against this environment.
+    /// - Parameter subject: The component, modifier, file, or directory whose wrappers should be injected.
+    func inject(into subject: Any) {
+        for child in Mirror(reflecting: subject).children {
+            (child.value as? (any EnvironmentPropertyWrapper))?.inject(self)
+        }
+    }
+
 }

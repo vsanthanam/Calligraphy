@@ -26,13 +26,26 @@
 import Foundation
 
 /// A file containing raw `Data`
+///
+/// A `DataFile` renders its ``body`` in the environment it was placed in, so values set on an enclosing ``Folder`` with ``DirectoryContent/environment(_:_:)-(_,Value)`` are visible to the components inside the file. Any ``Environment`` properties declared on the file itself are resolved against that same environment, the same way a SwiftUI view reads the environment set by its parent.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public protocol DataFile: DataComponent, DirectoryContent {
+public protocol DataFile: DirectoryContent {
 
     /// The name of the data file
     var name: String { get }
 
+    /// The permissions of the file
     var permissions: FilePermissions { get }
+
+    /// The type of data component representing the contents of this file.
+    ///
+    /// Typically, you do not need to explicitly spell out this type.
+    /// Instead, implement ``body`` using an opaque type, and allow the compiler to expand the result builder and choose the correct type to satisfy the protocol.
+    associatedtype Body: DataComponent
+
+    /// The data components used to build the contents of this file.
+    @DataBuilder
+    var body: Body { get }
 
 }
 
@@ -43,9 +56,12 @@ extension DataFile {
         .defaultFile
     }
 
-    public func _serialize() -> [SerializedDirectoryContent] {
-        [
-            .data(name, permissions: permissions, data: Data(self))
+    public func _serialize(
+        in environment: EnvironmentValues
+    ) -> [SerializedDirectoryContent] {
+        environment.inject(into: self)
+        return [
+            .data(name, permissions: permissions, data: body.render(in: environment) ?? Data())
         ]
     }
 

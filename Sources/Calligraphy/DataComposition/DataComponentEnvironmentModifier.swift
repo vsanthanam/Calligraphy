@@ -1,5 +1,5 @@
 // Calligraphy
-// EnvironmentModifier.swift
+// DataComponentEnvironmentModifier.swift
 //
 // MIT License
 //
@@ -23,10 +23,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-extension StringComponent {
+import Foundation
 
-    /// Set an environment value identified by a ``EnvironmentKey``.
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+extension DataComponent {
+
+    /// Set an environment value identified by an ``EnvironmentKey``.
     ///
     /// The new value is visible to this component and all of its descendants. Ancestor components are unaffected.
     ///
@@ -37,7 +39,7 @@ extension StringComponent {
     public func environment<Key>(
         _ key: Key.Type,
         _ value: Key.Value
-    ) -> some StringComponent where Key: EnvironmentKey {
+    ) -> some DataComponent where Key: EnvironmentKey {
         transformEnvironment { environment in
             environment[key] = value
         }
@@ -54,7 +56,7 @@ extension StringComponent {
     public func environment<Value>(
         _ keyPath: WritableKeyPath<EnvironmentValues, Value>,
         _ value: Value
-    ) -> some StringComponent {
+    ) -> some DataComponent {
         transformEnvironment { environment in
             environment[keyPath: keyPath] = value
         }
@@ -68,31 +70,28 @@ extension StringComponent {
     /// - Returns: A component whose descendants render with the transformed environment.
     public func transformEnvironment(
         _ transform: @escaping (inout EnvironmentValues) -> Void
-    ) -> some StringComponent {
-        modifier(
-            EnvironmentModifier(
-                transform: transform
-            )
+    ) -> some DataComponent {
+        DataEnvironmentComponent(
+            content: self,
+            transform: transform
         )
     }
 
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-private struct EnvironmentModifier: StringModifier {
+private struct DataEnvironmentComponent<Content>: DataComponent where Content: DataComponent {
 
+    let content: Content
     let transform: (inout EnvironmentValues) -> Void
 
-    func body(
-        content: Content
-    ) -> Never {
-        fatalErrorImperativeStringModifier()
+    var body: Never {
+        fatalErrorImperativeDataComponent()
     }
 
     func render(
-        content: Content,
         in environment: EnvironmentValues
-    ) -> String? {
+    ) -> Data? {
         var copy = environment
         transform(&copy)
         return content.render(in: copy)
