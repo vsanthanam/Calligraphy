@@ -10,10 +10,6 @@
 
 - ``body``
 
-### Rendering
-
-- ``render(in:)``
-
 ### Modifiers
 
 - ``modifier(_:)``

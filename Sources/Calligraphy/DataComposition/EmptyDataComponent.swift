@@ -39,8 +39,8 @@ public struct EmptyDataComponent: DataComponent {
         fatalErrorImperativeDataComponent()
     }
 
-    public func render(
-        in environment: EnvironmentValues
+    public func _render(
+        in environment: borrowing EnvironmentValues
     ) -> Data? {
         nil
     }

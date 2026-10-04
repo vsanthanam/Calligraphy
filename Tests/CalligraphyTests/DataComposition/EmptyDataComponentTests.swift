@@ -29,5 +29,5 @@ import Testing
 @Test("Empty Data Component", .tags(.dataComposition))
 func emptyDataComponent() {
     let component = EmptyDataComponent()
-    #expect(component.render(in: EnvironmentValues()) == nil)
+    #expect(component._render(in: EnvironmentValues()) == nil)
 }

@@ -35,7 +35,7 @@
 ///
 /// A modifier can read the surrounding environment with the ``Environment`` property wrapper, just like a component can.
 ///
-/// Most modifiers only need ``body(content:)``. A modifier that must work with the rendered text itself, or change the environment the content renders in, can instead implement ``render(content:in:)`` and declare `Never` as its ``Body``, the same way a primitive ``StringComponent`` implements ``StringComponent/render(in:)`` instead of ``StringComponent/body``.
+/// Most modifiers only need ``body(content:)``. A modifier that must work with the rendered text itself, or change the environment the content renders in, can instead implement ``render(content:in:)`` and declare `Never` as its ``Body``.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public protocol StringModifier {
 
@@ -66,7 +66,7 @@ public protocol StringModifier {
     /// - Returns: The rendered string, or `nil` if the modified component contributes nothing.
     func render(
         content: Self.Content,
-        in environment: EnvironmentValues
+        in environment: borrowing EnvironmentValues
     ) -> String?
 
 }
@@ -75,11 +75,11 @@ public protocol StringModifier {
 extension StringModifier {
 
     public func render(
-        content: Self.Content,
-        in environment: EnvironmentValues
+        content: Content,
+        in environment: borrowing EnvironmentValues
     ) -> String? {
         body(content: content)
-            .render(in: environment)
+            ._render(in: environment)
     }
 
     func fatalErrorImperativeStringModifier(
@@ -117,10 +117,10 @@ public struct _StringModifier_Content<Modifier>: StringComponent where Modifier:
         fatalErrorImperativeStringComponent()
     }
 
-    public func render(
-        in environment: EnvironmentValues
+    public func _render(
+        in environment: borrowing EnvironmentValues
     ) -> String? {
-        component.render(in: environment)
+        component._render(in: environment)
     }
 
     // MARK: - Private

@@ -50,7 +50,9 @@ struct StringComponentTests {
                 fatalErrorImperativeStringComponent()
             }
 
-            func render(in environment: EnvironmentValues) -> String? {
+            func _render(
+                in environment: borrowing EnvironmentValues
+            ) -> String? {
                 "rendered"
             }
 
@@ -68,7 +70,9 @@ struct StringComponentTests {
                 fatalErrorImperativeStringComponent()
             }
 
-            func render(in environment: EnvironmentValues) -> String? {
+            func _render(
+                in environment: borrowing EnvironmentValues
+            ) -> String? {
                 nil
             }
 

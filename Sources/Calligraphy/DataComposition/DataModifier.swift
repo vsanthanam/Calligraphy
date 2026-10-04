@@ -38,7 +38,7 @@ import Foundation
 ///
 /// A modifier can read the surrounding environment with the ``Environment`` property wrapper, just like a component can.
 ///
-/// Most modifiers only need ``body(content:)``. A modifier that must work with the rendered bytes themselves, or change the environment the content renders in, can instead implement ``render(content:in:)`` and declare `Never` as its ``Body``, the same way a primitive ``DataComponent`` implements ``DataComponent/render(in:)`` instead of ``DataComponent/body``.
+/// Most modifiers only need ``body(content:)``. A modifier that must work with the rendered bytes themselves, or change the environment the content renders in, can instead implement ``render(content:in:)`` and declare `Never` as its ``Body``.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public protocol DataModifier {
 
@@ -69,7 +69,7 @@ public protocol DataModifier {
     /// - Returns: The rendered data, or `nil` if the modified component contributes nothing.
     func render(
         content: Self.Content,
-        in environment: EnvironmentValues
+        in environment: borrowing EnvironmentValues
     ) -> Data?
 
 }
@@ -79,10 +79,10 @@ extension DataModifier {
 
     public func render(
         content: Self.Content,
-        in environment: EnvironmentValues
+        in environment: borrowing EnvironmentValues
     ) -> Data? {
         body(content: content)
-            .render(in: environment)
+            ._render(in: environment)
     }
 
     func fatalErrorImperativeDataModifier(
@@ -120,10 +120,10 @@ public struct _DataModifier_Content<Modifier>: DataComponent where Modifier: Dat
         fatalErrorImperativeDataComponent()
     }
 
-    public func render(
-        in environment: EnvironmentValues
+    public func _render(
+        in environment: borrowing EnvironmentValues
     ) -> Data? {
-        component.render(in: environment)
+        component._render(in: environment)
     }
 
     // MARK: - Private

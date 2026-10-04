@@ -27,7 +27,7 @@
 ///
 /// A `StringComponent` is a declarative representation of a piece of text. By composing components together inside a ``StringBuilder``, you build up a final `String` value the same way you would build a view hierarchy in SwiftUI.
 ///
-/// Typically, you will not implement ``render(in:)`` directly. Instead, implement ``body`` using an opaque type, and allow the compiler to expand the result builder and choose the correct type to satisfy the protocol.
+/// Implement ``body`` using an opaque type, and allow the compiler to expand the result builder and choose the correct type to satisfy the protocol.
 ///
 /// @Snippet(path: "Calligraphy/Snippets/StringComponent/ImplementingBody", slice: "greeting")
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
@@ -50,8 +50,8 @@ public protocol StringComponent {
     ///
     /// - Parameter environment: The environment values to read during rendering.
     /// - Returns: The rendered string, or `nil` if the component contributes nothing.
-    func render(
-        in environment: EnvironmentValues
+    func _render(
+        in environment: borrowing EnvironmentValues
     ) -> String?
 
 }
@@ -59,11 +59,11 @@ public protocol StringComponent {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension StringComponent {
 
-    public func render(
-        in environment: EnvironmentValues
+    public func _render(
+        in environment: borrowing EnvironmentValues
     ) -> String? {
         environment.inject(into: self)
-        return body.render(in: environment)
+        return body._render(in: environment)
     }
 
     func fatalErrorImperativeStringComponent(
@@ -83,8 +83,8 @@ extension StringComponent {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension Never: StringComponent {
 
-    public func render(
-        in environment: EnvironmentValues
+    public func _render(
+        in environment: borrowing EnvironmentValues
     ) -> String? {
         fatalError()
     }

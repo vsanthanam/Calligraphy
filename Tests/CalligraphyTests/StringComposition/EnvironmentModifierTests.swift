@@ -104,6 +104,29 @@ struct EnvironmentModifierTests {
         """)
     }
 
+    @Test("Modifier value survives repeated rendering")
+    func repeatedRendering() {
+        let component = Lines {
+            ForEach(0 ..< 3) { _ in
+                LineSpacingReader()
+                    .environment(\.lineSpacing, 4)
+            }
+        }
+        #expect(String(component) == "4\n4\n4")
+        #expect(String(component) == "4\n4\n4")
+
+        let transformed = Lines {
+            ForEach(0 ..< 2) { _ in
+                LineSpacingReader()
+                    .transformEnvironment { environment in
+                        environment.lineSpacing += 1
+                    }
+            }
+        }
+        #expect(String(transformed) == "2\n2")
+        #expect(String(transformed) == "2\n2")
+    }
+
     @Test("Closest Modifier Wins")
     func closestWins() {
         let component = LineSpacingReader()

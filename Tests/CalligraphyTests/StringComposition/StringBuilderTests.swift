@@ -116,7 +116,7 @@ struct StringBuilderTests {
 
         struct Bar: StringComponent {
 
-            func render(in environment: EnvironmentValues) -> String? {
+            func _render(in environment: borrowing EnvironmentValues) -> String? {
                 nil
             }
 

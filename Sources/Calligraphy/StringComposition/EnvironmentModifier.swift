@@ -36,10 +36,10 @@ extension StringComponent {
     /// - Returns: A component that injects the new value into the environment of its descendants.
     public func environment<Key>(
         _ key: Key.Type,
-        _ value: Key.Value
+        _ value: consuming Key.Value
     ) -> some StringComponent where Key: EnvironmentKey {
         transformEnvironment { environment in
-            environment[key] = value
+            environment[key] = copy value
         }
     }
 
@@ -53,10 +53,10 @@ extension StringComponent {
     /// - Returns: A component that injects the new value into the environment of its descendants.
     public func environment<Value>(
         _ keyPath: WritableKeyPath<EnvironmentValues, Value>,
-        _ value: Value
+        _ value: consuming Value
     ) -> some StringComponent {
         transformEnvironment { environment in
-            environment[keyPath: keyPath] = value
+            environment[keyPath: keyPath] = copy value
         }
     }
 
@@ -67,7 +67,7 @@ extension StringComponent {
     /// - Parameter transform: A closure that mutates the environment in place.
     /// - Returns: A component whose descendants render with the transformed environment.
     public func transformEnvironment(
-        _ transform: @escaping (inout EnvironmentValues) -> Void
+        _ transform: consuming @escaping (inout EnvironmentValues) -> Void
     ) -> some StringComponent {
         modifier(
             EnvironmentModifier(
@@ -91,11 +91,11 @@ private struct EnvironmentModifier: StringModifier {
 
     func render(
         content: Content,
-        in environment: EnvironmentValues
+        in environment: borrowing EnvironmentValues
     ) -> String? {
-        var copy = environment
+        var copy = copy environment
         transform(&copy)
-        return content.render(in: copy)
+        return content._render(in: copy)
     }
 
 }

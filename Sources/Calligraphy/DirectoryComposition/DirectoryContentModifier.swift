@@ -35,7 +35,7 @@
 ///
 /// A modifier can read the surrounding environment with the ``Environment`` property wrapper, just like a ``Directory`` can.
 ///
-/// Most modifiers only need ``body(content:)``. A modifier that must work with the serialized files and folders themselves, or serialize the content in a different environment, can instead implement `_serialize(content:in:)` and declare `Never` as its ``Body``.
+/// Most modifiers only need ``body(content:)``. A modifier that must work with the serialized files and folders themselves, or serialize the content in a different environment, can instead implement ``serialize(content:in:)`` and declare `Never` as its ``Body``.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public protocol DirectoryContentModifier {
 
@@ -64,9 +64,9 @@ public protocol DirectoryContentModifier {
     ///   - content: A placeholder for the content the modifier is applied to.
     ///   - environment: The environment values to read during serialization.
     /// - Returns: The serialized files and directories represented by the modified content.
-    func _serialize(
+    func serialize(
         content: Self.Content,
-        in environment: EnvironmentValues
+        in environment: borrowing EnvironmentValues
     ) -> [SerializedDirectoryContent]
 
 }
@@ -74,9 +74,9 @@ public protocol DirectoryContentModifier {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension DirectoryContentModifier {
 
-    public func _serialize(
+    public func serialize(
         content: Self.Content,
-        in environment: EnvironmentValues
+        in environment: borrowing EnvironmentValues
     ) -> [SerializedDirectoryContent] {
         body(content: content)
             ._serialize(in: environment)
@@ -114,7 +114,7 @@ public struct _DirectoryContentModifier_Content<Modifier>: DirectoryContent wher
     // MARK: - DirectoryContent
 
     public func _serialize(
-        in environment: EnvironmentValues
+        in environment: borrowing EnvironmentValues
     ) -> [SerializedDirectoryContent] {
         content._serialize(in: environment)
     }

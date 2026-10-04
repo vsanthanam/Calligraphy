@@ -36,7 +36,7 @@ public struct AnyDataComponent: DataComponent {
     public init<T>(
         erasing dataComponent: T
     ) where T: DataComponent {
-        _render = { dataComponent.render(in: $0) }
+        _render = { dataComponent._render(in: $0) }
     }
 
     // MARK: - DataComponent
@@ -45,8 +45,8 @@ public struct AnyDataComponent: DataComponent {
         fatalErrorImperativeDataComponent()
     }
 
-    public func render(
-        in environment: EnvironmentValues
+    public func _render(
+        in environment: borrowing EnvironmentValues
     ) -> Data? {
         _render(environment)
     }
