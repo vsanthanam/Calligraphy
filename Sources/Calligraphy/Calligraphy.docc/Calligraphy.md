@@ -6,7 +6,7 @@ A declarative API for composing multi-line strings, files, and folders in Swift
 
 Calligraphy provides a powerful and intuitive way to compose complex text structures in Swift. Drawing inspiration from SwiftUI's declarative approach, Calligraphy offers a familiar API design that will feel natural to SwiftUI developers. Whether you're building multi-line strings, generating code, or creating entire directory structures, Calligraphy's declarative API makes your code more readable and maintainable than comparative strategies, such as a templating language.
 
-The library is organized into three main areas:
+The library is organized into three main areas, which share a single environment:
 
 - **String Composition**: Create and manipulate strings with components like `StringGroup`, `Line`, and `Lines`, and modifiers like `tabbed(_:)` and `quotationMarkStyle(_:)`. Build and compose your own `StringComponent` types and compose them into complex string structures using `@StringBuilder` with advanced delimiter and formatting options.
 
@@ -14,12 +14,15 @@ The library is organized into three main areas:
 
 - **Data Composition**: Work with raw data using `DataComponent` and `DataBuilder`, allowing you to compose binary data structures in a declarative way.
 
+All three areas share one ``EnvironmentValues`` instance that flows from ancestors to descendants, so a value set on a folder is visible to every file and every string or data component inside it.
+
 Calligraphy's type-safe API and builder patterns make it ideal for code generation, configuration file creation, and any scenario where you need to programmatically generate complex text or file structures.
 
 @Links(visualStyle: detailedGrid) {
     - <doc:Setup>
     - <doc:ComposingStrings>
     - <doc:ComposingDirectories>
+    - <doc:UsingTheEnvironment>
 }
 
 ## Topics
@@ -49,12 +52,6 @@ Calligraphy's type-safe API and builder patterns make it ideal for code generati
 - ``AnyStringComponent``
 - ``StringModifier``
 - ``ModifiedStringComponent``
-- <doc:EnvironmentValues>
-- ``ReadEnvironment``
-- ``StringEnvironment``
-- ``StringEnvironmentKey``
-- ``StringEnvironmentValues``
-- ``StringEntry()``
 
 ### Directory Composition
 
@@ -82,4 +79,20 @@ Calligraphy's type-safe API and builder patterns make it ideal for code generati
 - ``RawDataComponent``
 - ``EmptyDataComponent``
 - ``AnyDataComponent``
+
+### Environment
+
+- <doc:UsingTheEnvironment>
+- ``EnvironmentValues``
+- ``Environment``
+- ``EnvironmentKey``
+- ``Entry()``
+- ``ReadEnvironment``
+
+### Deprecated
+
+- ``StringEnvironmentValues``
+- ``StringEnvironment``
+- ``StringEnvironmentKey``
+- ``StringEntry()``
 

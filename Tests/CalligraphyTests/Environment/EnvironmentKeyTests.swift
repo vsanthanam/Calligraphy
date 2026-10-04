@@ -1,5 +1,5 @@
 // Calligraphy
-// StringEnvironmentTests.swift
+// EnvironmentKeyTests.swift
 //
 // MIT License
 //
@@ -23,19 +23,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-@testable import Calligraphy
+import Calligraphy
 import Testing
 
-@Suite("@StringEnvironment Tests", .tags(.stringComposition))
-struct StringEnvironmentTests {
+@Suite("String Environment Key Tests", .tags(.environment))
+struct EnvironmentKeyTests {
 
-    private struct GreetingKey: StringEnvironmentKey {
+    private struct GreetingKey: EnvironmentKey {
         static let defaultValue: String = "Hello"
     }
 
-    private struct ReaderByKey: StringComponent {
+    private struct Reader: StringComponent {
 
-        @StringEnvironment(GreetingKey.self)
+        @Environment(GreetingKey.self)
         var greeting: String
 
         var body: some StringComponent {
@@ -44,39 +44,16 @@ struct StringEnvironmentTests {
 
     }
 
-    private struct ReaderByKeyPath: StringComponent {
-
-        @StringEnvironment(\.separator)
-        var separator: String
-
-        var body: some StringComponent {
-            separator
-        }
-
+    @Test("Default Value Used When Unset")
+    func defaultValue() {
+        #expect(String(Reader()) == "Hello")
     }
 
-    @Test("Reads Default via Key")
-    func readDefaultByKey() {
-        #expect(String(ReaderByKey()) == "Hello")
-    }
-
-    @Test("Reads Default via Key Path")
-    func readDefaultByKeyPath() {
-        #expect(String(ReaderByKeyPath()) == "\n")
-    }
-
-    @Test("Reads Injected Value via Key")
-    func readInjectedByKey() {
-        let component = ReaderByKey()
+    @Test("Injected Value Read by Key")
+    func injectedValue() {
+        let component = Reader()
             .environment(GreetingKey.self, "Howdy")
         #expect(String(component) == "Howdy")
-    }
-
-    @Test("Reads Injected Value via Key Path")
-    func readInjectedByKeyPath() {
-        let component = ReaderByKeyPath()
-            .environment(\.separator, "|")
-        #expect(String(component) == "|")
     }
 
 }

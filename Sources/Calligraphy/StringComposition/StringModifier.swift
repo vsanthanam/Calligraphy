@@ -33,7 +33,7 @@
 ///
 /// @Snippet(path: "Calligraphy/Snippets/StringModifier/CustomModifier", slice: "extension")
 ///
-/// A modifier can read the surrounding environment with the ``StringEnvironment`` property wrapper, just like a component can.
+/// A modifier can read the surrounding environment with the ``Environment`` property wrapper, just like a component can.
 ///
 /// Most modifiers only need ``body(content:)``. A modifier that must work with the rendered text itself, or change the environment the content renders in, can instead implement ``render(content:in:)`` and declare `Never` as its ``Body``, the same way a primitive ``StringComponent`` implements ``StringComponent/render(in:)`` instead of ``StringComponent/body``.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
@@ -58,7 +58,7 @@ public protocol StringModifier {
 
     /// Render the modified content into a `String` using the supplied environment.
     ///
-    /// The default implementation renders ``body(content:)``. Implement this method directly, and declare `Never` as the ``Body``, when the modifier needs the rendered text of its content or must render the content in a different environment. Any ``StringEnvironment`` properties on the modifier are resolved before this method is called.
+    /// The default implementation renders ``body(content:)``. Implement this method directly, and declare `Never` as the ``Body``, when the modifier needs the rendered text of its content or must render the content in a different environment. Any ``Environment`` properties on the modifier are resolved before this method is called.
     ///
     /// - Parameters:
     ///   - content: A placeholder for the component the modifier is applied to.
@@ -66,7 +66,7 @@ public protocol StringModifier {
     /// - Returns: The rendered string, or `nil` if the modified component contributes nothing.
     func render(
         content: Self.Content,
-        in environment: StringEnvironmentValues
+        in environment: EnvironmentValues
     ) -> String?
 
 }
@@ -76,7 +76,7 @@ extension StringModifier {
 
     public func render(
         content: Self.Content,
-        in environment: StringEnvironmentValues
+        in environment: EnvironmentValues
     ) -> String? {
         body(content: content)
             .render(in: environment)
@@ -118,7 +118,7 @@ public struct _StringModifier_Content<Modifier>: StringComponent where Modifier:
     }
 
     public func render(
-        in environment: StringEnvironmentValues
+        in environment: EnvironmentValues
     ) -> String? {
         component.render(in: environment)
     }

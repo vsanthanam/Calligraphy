@@ -1,5 +1,5 @@
 // Calligraphy
-// StringEnvironmentKeyTests.swift
+// DeprecatedEnvironmentNamesTests.swift
 //
 // MIT License
 //
@@ -26,34 +26,47 @@
 import Calligraphy
 import Testing
 
-@Suite("String Environment Key Tests", .tags(.stringComposition))
-struct StringEnvironmentKeyTests {
+// This file intentionally uses the deprecated spellings to verify they still compile and behave.
 
-    private struct GreetingKey: StringEnvironmentKey {
-        static let defaultValue: String = "Hello"
+@available(*, deprecated)
+private struct LegacyKey: StringEnvironmentKey {
+    static let defaultValue: String = "legacy"
+}
+
+@available(*, deprecated)
+extension StringEnvironmentValues {
+
+    @StringEntry
+    var legacyEntry: Int = 7
+
+}
+
+@available(*, deprecated)
+private struct LegacyReader: StringComponent {
+
+    @StringEnvironment(LegacyKey.self)
+    var keyed: String
+
+    @StringEnvironment(\.legacyEntry)
+    var entry: Int
+
+    var body: some StringComponent {
+        keyed + ":" + String(entry)
     }
 
-    private struct Reader: StringComponent {
+}
 
-        @StringEnvironment(GreetingKey.self)
-        var greeting: String
+@Suite("Deprecated Environment Names", .tags(.environment))
+struct DeprecatedEnvironmentNamesTests {
 
-        var body: some StringComponent {
-            greeting
-        }
-
-    }
-
-    @Test("Default Value Used When Unset")
-    func defaultValue() {
-        #expect(String(Reader()) == "Hello")
-    }
-
-    @Test("Injected Value Read by Key")
-    func injectedValue() {
-        let component = Reader()
-            .environment(GreetingKey.self, "Howdy")
-        #expect(String(component) == "Howdy")
+    @Test("Deprecated names compile and resolve")
+    @available(*, deprecated)
+    func deprecatedNames() {
+        #expect(String(LegacyReader()) == "legacy:7")
+        let modified = LegacyReader()
+            .environment(LegacyKey.self, "new")
+            .environment(\.legacyEntry, 8)
+        #expect(String(modified) == "new:8")
     }
 
 }

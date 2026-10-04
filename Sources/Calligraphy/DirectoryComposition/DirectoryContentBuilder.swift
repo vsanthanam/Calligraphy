@@ -102,7 +102,9 @@ public enum DirectoryContentBuilder {
 
         // MARK: - DirectoryContent
 
-        public func _serialize() -> [SerializedDirectoryContent] {
+        public func _serialize(
+            in environment: EnvironmentValues
+        ) -> [SerializedDirectoryContent] {
             content
         }
 
@@ -122,10 +124,12 @@ public enum DirectoryContentBuilder {
 
         // MARK: - DirectoryContent
 
-        public func _serialize() -> [SerializedDirectoryContent] {
+        public func _serialize(
+            in environment: EnvironmentValues
+        ) -> [SerializedDirectoryContent] {
             var result = [SerializedDirectoryContent]()
             for component in repeat each components {
-                result += component._serialize()
+                result += component._serialize(in: environment)
             }
             return result
         }
@@ -152,12 +156,14 @@ public enum DirectoryContentBuilder {
 
         // MARK: - DirectoryContent
 
-        public func _serialize() -> [SerializedDirectoryContent] {
+        public func _serialize(
+            in environment: EnvironmentValues
+        ) -> [SerializedDirectoryContent] {
             switch self {
             case let .first(component):
-                component._serialize()
+                component._serialize(in: environment)
             case let .second(component):
-                component._serialize()
+                component._serialize(in: environment)
             }
         }
     }
@@ -166,10 +172,12 @@ public enum DirectoryContentBuilder {
 
         // MARK: - DirectoryContent
 
-        public func _serialize() -> [SerializedDirectoryContent] {
+        public func _serialize(
+            in environment: EnvironmentValues
+        ) -> [SerializedDirectoryContent] {
             list
                 .flatMap { component in
-                    component._serialize()
+                    component._serialize(in: environment)
                 }
         }
 

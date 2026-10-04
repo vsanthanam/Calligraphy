@@ -10,6 +10,16 @@
 
 - ``body``
 
+### Rendering
+
+- ``render(in:)``
+
+### Modifiers
+
+- ``environment(_:_:)-(Key.Type,_)``
+- ``environment(_:_:)-(_,Value)``
+- ``transformEnvironment(_:)``
+
 ### Operators
 
 - ``+(_:_:)-(DataComponent,DataComponent)``

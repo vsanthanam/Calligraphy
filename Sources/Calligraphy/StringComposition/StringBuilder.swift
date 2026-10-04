@@ -142,7 +142,7 @@ public enum StringBuilder {
         }
 
         public func render(
-            in environment: StringEnvironmentValues
+            in environment: EnvironmentValues
         ) -> String? {
             var pieces = [String?]()
             for component in repeat each components {
@@ -178,7 +178,7 @@ public enum StringBuilder {
         }
 
         public func render(
-            in environment: StringEnvironmentValues
+            in environment: EnvironmentValues
         ) -> String? {
             switch self {
             case let .first(component):
@@ -199,7 +199,7 @@ public enum StringBuilder {
         }
 
         public func render(
-            in environment: StringEnvironmentValues
+            in environment: EnvironmentValues
         ) -> String? {
             nil
         }
@@ -219,7 +219,7 @@ public enum StringBuilder {
         }
 
         public func render(
-            in environment: StringEnvironmentValues
+            in environment: EnvironmentValues
         ) -> String? {
             let pieces = list
                 .map { element in

@@ -1,4 +1,4 @@
-// Read values from the string environment with `@StringEnvironment` and `ReadEnvironment`.
+// Read values from the environment with `@Environment` and `ReadEnvironment`.
 
 // snippet.hide
 import Calligraphy
@@ -7,7 +7,7 @@ import Calligraphy
 // snippet.property-wrapper
 struct ListItem: StringComponent {
 
-    @StringEnvironment(\.lineSpacing)
+    @Environment(\.lineSpacing)
     private var spacing: Int
 
     let text: String

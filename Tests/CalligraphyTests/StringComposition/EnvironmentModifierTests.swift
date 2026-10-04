@@ -29,7 +29,7 @@ import Testing
 @Suite("Environment Modifier Tests", .tags(.stringComposition))
 struct EnvironmentModifierTests {
 
-    private struct CountKey: StringEnvironmentKey {
+    private struct CountKey: EnvironmentKey {
         static let defaultValue: Int = 0
     }
 

@@ -40,7 +40,7 @@ extension StringComponent {
 
 }
 
-extension StringEnvironmentValues {
+extension EnvironmentValues {
 
     /// A flag indicating whether the current component is being rendered inside a ``Quote``.
     ///
@@ -49,7 +49,7 @@ extension StringEnvironmentValues {
     /// @Snippet(path: "Calligraphy/Snippets/Quote/DetectingQuotes", slice: "is-in-quote")
     ///
     /// The value is read-only from outside this module — its lifecycle is managed by ``Quote``. Defaults to `false`.
-    @StringEntry
+    @Entry
     public internal(set) var isInQuote: Bool = false
 
 }
@@ -75,7 +75,7 @@ public struct Quote<Quote>: StringComponent where Quote: StringComponent {
 
     /// Create a quoted component.
     ///
-    /// The style of the quotation marks is read from the surrounding ``StringEnvironmentValues/quotationMarkStyle`` environment value. Use ``StringComponent/quotationMarkStyle(_:)`` on this component or an ancestor to change it.
+    /// The style of the quotation marks is read from the surrounding ``EnvironmentValues/quotationMarkStyle`` environment value. Use ``StringComponent/quotationMarkStyle(_:)`` on this component or an ancestor to change it.
     ///
     /// - Parameter quote: The content to wrap in quotation marks.
     public init(

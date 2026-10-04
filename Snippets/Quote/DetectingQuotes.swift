@@ -8,7 +8,7 @@ import Calligraphy
 // snippet.is-in-quote
 struct Greeting: StringComponent {
 
-    @StringEnvironment(\.isInQuote)
+    @Environment(\.isInQuote)
     private var isInQuote: Bool
 
     var body: some StringComponent {

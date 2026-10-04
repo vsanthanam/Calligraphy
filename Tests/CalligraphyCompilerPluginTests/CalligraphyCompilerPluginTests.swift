@@ -37,7 +37,7 @@ func calligraphyCompilerPluginTests() {
         #expect(plugin.providingMacros.count == 3)
         #expect(plugin.providingMacros[0] is FilePermissionsOctalMacro.Type)
         #expect(plugin.providingMacros[1] is FilePermissionsStringMacro.Type)
-        #expect(plugin.providingMacros[2] is StringEntryMacro.Type)
+        #expect(plugin.providingMacros[2] is EntryMacro.Type)
     #else
         Issue.record("macros are only supported when running tests for the host platform")
     #endif

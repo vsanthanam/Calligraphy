@@ -47,7 +47,7 @@ extension StringComponent {
 
 /// A string component with a ``StringModifier`` applied to it.
 ///
-/// You rarely create this type directly. It is the return type of ``StringComponent/modifier(_:)``, which pairs a component with a modifier. When the pair is rendered, the modifier's ``StringModifier/body(content:)`` is expanded with a placeholder standing in for `content`, and the result is rendered in the current environment. Any ``StringEnvironment`` properties declared by the modifier are resolved first, so a modifier can read the environment just like a component can.
+/// You rarely create this type directly. It is the return type of ``StringComponent/modifier(_:)``, which pairs a component with a modifier. When the pair is rendered, the modifier's ``StringModifier/body(content:)`` is expanded with a placeholder standing in for `content`, and the result is rendered in the current environment. Any ``Environment`` properties declared by the modifier are resolved first, so a modifier can read the environment just like a component can.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct ModifiedStringComponent<Content, Modifier>: StringComponent where Content: StringComponent, Modifier: StringModifier {
 
@@ -75,11 +75,9 @@ public struct ModifiedStringComponent<Content, Modifier>: StringComponent where 
     }
 
     public func render(
-        in environment: StringEnvironmentValues
+        in environment: EnvironmentValues
     ) -> String? {
-        for child in Mirror(reflecting: modifier).children {
-            (child.value as? (any StringEnvironmentPropertyWrapper))?.inject(environment)
-        }
+        environment.inject(into: modifier)
         return modifier
             .render(
                 content: .init(erasing: content),

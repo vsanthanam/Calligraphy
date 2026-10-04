@@ -1,5 +1,5 @@
 // Calligraphy
-// StringEntryMacroTests.swift
+// EntryMacroTests.swift
 //
 // MIT License
 //
@@ -35,25 +35,25 @@ import Testing
     import CalligraphyCompilerPlugin
 
     private let macroSpecs: [String: MacroSpec] = [
-        "StringEntry": MacroSpec(type: StringEntryMacro.self)
+        "Entry": MacroSpec(type: EntryMacro.self)
     ]
 #endif
 
-@Suite("@StringEntry Macro Tests")
-struct StringEntryMacroTests {
+@Suite("@Entry Macro Tests")
+struct EntryMacroTests {
 
     @Test("String type entry expands")
     func stringEntry() {
         #if canImport(CalligraphyCompilerPlugin)
             assertMacroExpansion(
                 #"""
-                extension StringEnvironmentValues {
-                    @StringEntry
+                extension EnvironmentValues {
+                    @Entry
                     var separator: String = "\n"
                 }
                 """#,
                 expandedSource: #"""
-                extension StringEnvironmentValues {
+                extension EnvironmentValues {
                     var separator: String {
                         get {
                             self[__Key_separator.self]
@@ -63,7 +63,7 @@ struct StringEntryMacroTests {
                         }
                     }
 
-                    private struct __Key_separator: StringEnvironmentKey {
+                    private struct __Key_separator: EnvironmentKey {
                         static let defaultValue: String = "\n"
                     }
                 }
@@ -82,13 +82,13 @@ struct StringEntryMacroTests {
         #if canImport(CalligraphyCompilerPlugin)
             assertMacroExpansion(
                 """
-                extension StringEnvironmentValues {
-                    @StringEntry
+                extension EnvironmentValues {
+                    @Entry
                     var lineSpacing: Int = 1
                 }
                 """,
                 expandedSource: """
-                extension StringEnvironmentValues {
+                extension EnvironmentValues {
                     var lineSpacing: Int {
                         get {
                             self[__Key_lineSpacing.self]
@@ -98,7 +98,7 @@ struct StringEntryMacroTests {
                         }
                     }
 
-                    private struct __Key_lineSpacing: StringEnvironmentKey {
+                    private struct __Key_lineSpacing: EnvironmentKey {
                         static let defaultValue: Int = 1
                     }
                 }
@@ -117,13 +117,13 @@ struct StringEntryMacroTests {
         #if canImport(CalligraphyCompilerPlugin)
             assertMacroExpansion(
                 #"""
-                extension StringEnvironmentValues {
-                    @StringEntry
+                extension EnvironmentValues {
+                    @Entry
                     public var separator: String = "\n"
                 }
                 """#,
                 expandedSource: #"""
-                extension StringEnvironmentValues {
+                extension EnvironmentValues {
                     public var separator: String {
                         get {
                             self[__Key_separator.self]
@@ -133,7 +133,7 @@ struct StringEntryMacroTests {
                         }
                     }
 
-                    private struct __Key_separator: StringEnvironmentKey {
+                    private struct __Key_separator: EnvironmentKey {
                         static let defaultValue: String = "\n"
                     }
                 }
@@ -152,13 +152,13 @@ struct StringEntryMacroTests {
         #if canImport(CalligraphyCompilerPlugin)
             assertMacroExpansion(
                 """
-                extension StringEnvironmentValues {
-                    @StringEntry
+                extension EnvironmentValues {
+                    @Entry
                     var style: QuotationMarkStyle = .default
                 }
                 """,
                 expandedSource: """
-                extension StringEnvironmentValues {
+                extension EnvironmentValues {
                     var style: QuotationMarkStyle {
                         get {
                             self[__Key_style.self]
@@ -168,7 +168,7 @@ struct StringEntryMacroTests {
                         }
                     }
 
-                    private struct __Key_style: StringEnvironmentKey {
+                    private struct __Key_style: EnvironmentKey {
                         static let defaultValue: QuotationMarkStyle = .default
                     }
                 }
@@ -187,13 +187,13 @@ struct StringEntryMacroTests {
         #if canImport(CalligraphyCompilerPlugin)
             assertMacroExpansion(
                 """
-                extension StringEnvironmentValues {
-                    @StringEntry
+                extension EnvironmentValues {
+                    @Entry
                     var prefix: String?
                 }
                 """,
                 expandedSource: """
-                extension StringEnvironmentValues {
+                extension EnvironmentValues {
                     var prefix: String? {
                         get {
                             self[__Key_prefix.self]
@@ -203,7 +203,7 @@ struct StringEntryMacroTests {
                         }
                     }
 
-                    private struct __Key_prefix: StringEnvironmentKey {
+                    private struct __Key_prefix: EnvironmentKey {
                         static let defaultValue: String? = nil
                     }
                 }
@@ -222,13 +222,13 @@ struct StringEntryMacroTests {
         #if canImport(CalligraphyCompilerPlugin)
             assertMacroExpansion(
                 """
-                extension StringEnvironmentValues {
-                    @StringEntry
+                extension EnvironmentValues {
+                    @Entry
                     var prefix: Optional<String>
                 }
                 """,
                 expandedSource: """
-                extension StringEnvironmentValues {
+                extension EnvironmentValues {
                     var prefix: Optional<String> {
                         get {
                             self[__Key_prefix.self]
@@ -238,7 +238,7 @@ struct StringEntryMacroTests {
                         }
                     }
 
-                    private struct __Key_prefix: StringEnvironmentKey {
+                    private struct __Key_prefix: EnvironmentKey {
                         static let defaultValue: Optional<String> = nil
                     }
                 }
@@ -257,13 +257,13 @@ struct StringEntryMacroTests {
         #if canImport(CalligraphyCompilerPlugin)
             assertMacroExpansion(
                 """
-                extension StringEnvironmentValues {
-                    @StringEntry
+                extension EnvironmentValues {
+                    @Entry
                     var prefix: String!
                 }
                 """,
                 expandedSource: """
-                extension StringEnvironmentValues {
+                extension EnvironmentValues {
                     var prefix: String! {
                         get {
                             self[__Key_prefix.self]
@@ -273,7 +273,7 @@ struct StringEntryMacroTests {
                         }
                     }
 
-                    private struct __Key_prefix: StringEnvironmentKey {
+                    private struct __Key_prefix: EnvironmentKey {
                         static let defaultValue: String! = nil
                     }
                 }
@@ -292,13 +292,13 @@ struct StringEntryMacroTests {
         #if canImport(CalligraphyCompilerPlugin)
             assertMacroExpansion(
                 #"""
-                extension StringEnvironmentValues {
-                    @StringEntry
+                extension EnvironmentValues {
+                    @Entry
                     var prefix: String? = "default"
                 }
                 """#,
                 expandedSource: #"""
-                extension StringEnvironmentValues {
+                extension EnvironmentValues {
                     var prefix: String? {
                         get {
                             self[__Key_prefix.self]
@@ -308,7 +308,7 @@ struct StringEntryMacroTests {
                         }
                     }
 
-                    private struct __Key_prefix: StringEnvironmentKey {
+                    private struct __Key_prefix: EnvironmentKey {
                         static let defaultValue: String? = "default"
                     }
                 }
@@ -327,13 +327,13 @@ struct StringEntryMacroTests {
         #if canImport(CalligraphyCompilerPlugin)
             assertMacroExpansion(
                 #"""
-                extension StringEnvironmentValues {
-                    @StringEntry
+                extension EnvironmentValues {
+                    @Entry
                     var separator = "\n"
                 }
                 """#,
                 expandedSource: #"""
-                extension StringEnvironmentValues {
+                extension EnvironmentValues {
                     var separator {
                         get {
                             self[__Key_separator.self]
@@ -345,7 +345,7 @@ struct StringEntryMacroTests {
                 }
                 """#,
                 diagnostics: [
-                    DiagnosticSpec(message: "@StringEntry requires an explicit type annotation", line: 2, column: 5)
+                    DiagnosticSpec(message: "@Entry requires an explicit type annotation", line: 2, column: 5)
                 ],
                 macroSpecs: macroSpecs
             ) { failure in
@@ -361,13 +361,13 @@ struct StringEntryMacroTests {
         #if canImport(CalligraphyCompilerPlugin)
             assertMacroExpansion(
                 """
-                extension StringEnvironmentValues {
-                    @StringEntry
+                extension EnvironmentValues {
+                    @Entry
                     var separator: String
                 }
                 """,
                 expandedSource: """
-                extension StringEnvironmentValues {
+                extension EnvironmentValues {
                     var separator: String {
                         get {
                             self[__Key_separator.self]
@@ -379,9 +379,83 @@ struct StringEntryMacroTests {
                 }
                 """,
                 diagnostics: [
-                    DiagnosticSpec(message: "@StringEntry requires an initial value for non-optional types", line: 2, column: 5)
+                    DiagnosticSpec(message: "@Entry requires an initial value for non-optional types", line: 2, column: 5)
                 ],
                 macroSpecs: macroSpecs
+            ) { failure in
+                Issue.record("\(failure.message)")
+            }
+        #else
+            Issue.record("macros are only supported when running tests for the host platform")
+        #endif
+    }
+
+}
+
+@Suite("@StringEntry Legacy Macro Tests")
+struct StringEntryLegacyMacroTests {
+
+    @Test("Deprecated @StringEntry spelling expands to EnvironmentKey")
+    func legacySpelling() {
+        #if canImport(CalligraphyCompilerPlugin)
+            assertMacroExpansion(
+                """
+                extension EnvironmentValues {
+                    @StringEntry
+                    var lineSpacing: Int = 1
+                }
+                """,
+                expandedSource: """
+                extension EnvironmentValues {
+                    var lineSpacing: Int {
+                        get {
+                            self[__Key_lineSpacing.self]
+                        }
+                        set {
+                            self[__Key_lineSpacing.self] = newValue
+                        }
+                    }
+
+                    private struct __Key_lineSpacing: EnvironmentKey {
+                        static let defaultValue: Int = 1
+                    }
+                }
+                """,
+                macroSpecs: ["StringEntry": MacroSpec(type: EntryMacro.self)]
+            ) { failure in
+                Issue.record("\(failure.message)")
+            }
+        #else
+            Issue.record("macros are only supported when running tests for the host platform")
+        #endif
+    }
+
+    @Test("Deprecated spelling is used in diagnostics")
+    func legacyDiagnostic() {
+        #if canImport(CalligraphyCompilerPlugin)
+            assertMacroExpansion(
+                """
+                extension EnvironmentValues {
+                    @StringEntry
+                    var lineSpacing = 1
+                }
+                """,
+                expandedSource: """
+                extension EnvironmentValues {
+                    var lineSpacing {
+                        get {
+                            self[__Key_lineSpacing.self]
+                        }
+                        set {
+                            self[__Key_lineSpacing.self] = newValue
+                        }
+                    }
+                }
+                """,
+                diagnostics: [
+                    DiagnosticSpec(message: "@StringEntry requires an explicit type annotation", line: 2, column: 5)
+                ],
+                macroSpecs: ["StringEntry": MacroSpec(type: EntryMacro.self)]
             ) { failure in
                 Issue.record("\(failure.message)")
             }

@@ -56,6 +56,26 @@ let project = Folder("MyProject") {
 try await project.write(to: URL(fileURLWithPath: "/path/to/output"))
 ```
 
+One environment flows through folders, files, and the components inside them, so a value set on a folder reaches every file beneath it:
+
+```swift
+let sources = Folder("Sources") {
+    File("A.swift") {
+        Lines {
+            "import Foundation"
+            "struct A {}"
+        }
+    }
+    File("B.swift") {
+        Lines {
+            "import Foundation"
+            "struct B {}"
+        }
+    }
+}
+.lineSpacing(2)   // every file in the folder renders with a blank line between lines
+```
+
 Calligraphy's declarative approach offers significant advantages over traditional imperative string construction.
 
 Conditional sections, without Calligraphy:

@@ -44,7 +44,7 @@ extension String {
     public init(
         _ component: some StringComponent
     ) {
-        self = component.render(in: StringEnvironmentValues()) ?? ""
+        self = component.render(in: EnvironmentValues()) ?? ""
     }
 
     /// Build a string with a `@StringBuilder`

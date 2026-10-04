@@ -26,22 +26,22 @@
 import Calligraphy
 import Testing
 
-extension StringEnvironmentValues {
+extension EnvironmentValues {
 
-    @StringEntry
+    @Entry
     var entryTestGreeting: String = "Hello"
 
-    @StringEntry
+    @Entry
     var entryTestPrefix: String?
 
 }
 
-@Suite("@StringEntry Tests", .tags(.stringComposition))
+@Suite("@Entry Tests", .tags(.environment))
 struct EntryTests {
 
     private struct Reader: StringComponent {
 
-        @StringEnvironment(\.entryTestGreeting)
+        @Environment(\.entryTestGreeting)
         var greeting: String
 
         var body: some StringComponent {
@@ -52,7 +52,7 @@ struct EntryTests {
 
     private struct OptionalReader: StringComponent {
 
-        @StringEnvironment(\.entryTestPrefix)
+        @Environment(\.entryTestPrefix)
         var prefix: String?
 
         var body: some StringComponent {

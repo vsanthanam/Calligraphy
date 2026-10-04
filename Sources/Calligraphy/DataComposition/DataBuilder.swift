@@ -111,10 +111,12 @@ public enum DataBuilder {
 
         // MARK: - DataComponent
 
-        public var _data: Data? {
+        public func render(
+            in environment: EnvironmentValues
+        ) -> Data? {
             var result: Data? = nil
             func append(_ component: some DataComponent) {
-                guard let data = component._data else {
+                guard let data = component.render(in: environment) else {
                     return
                 }
                 if let r = result {
@@ -152,12 +154,14 @@ public enum DataBuilder {
 
         // MARK: - DataComponent
 
-        public var _data: Data? {
+        public func render(
+            in environment: EnvironmentValues
+        ) -> Data? {
             switch self {
             case let .first(component):
-                component._data
+                component.render(in: environment)
             case let .second(component):
-                component._data
+                component.render(in: environment)
             }
         }
 
@@ -171,10 +175,12 @@ public enum DataBuilder {
 
         // MARK: - DataComponent
 
-        public var _data: Data? {
+        public func render(
+            in environment: EnvironmentValues
+        ) -> Data? {
             list
                 .reduce(nil) { prev, component in
-                    guard let data = component._data else {
+                    guard let data = component.render(in: environment) else {
                         return prev
                     }
                     if let prev {

@@ -1,5 +1,5 @@
 // Calligraphy
-// StringEntry.swift
+// Entry.swift
 //
 // MIT License
 //
@@ -23,9 +23,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// Generate the boilerplate required to expose a property on ``StringEnvironmentValues`` as a readable environment value.
+/// Generate the boilerplate required to expose a property on ``EnvironmentValues`` as a readable environment value.
 ///
-/// Apply `@StringEntry` to a stored property declared inside an extension on ``StringEnvironmentValues``. The macro synthesizes a private ``StringEnvironmentKey`` type and the getter/setter accessors that read from and write to the environment storage.
+/// Apply `@Entry` to a stored property declared inside an extension on ``EnvironmentValues``. The macro synthesizes a private ``EnvironmentKey`` type and the getter/setter accessors that read from and write to the environment storage.
 ///
 /// @Snippet(path: "Calligraphy/Snippets/EnvironmentValues/CustomEnvironmentValues", slice: "entry")
 ///
@@ -33,11 +33,13 @@
 ///
 /// @Snippet(path: "Calligraphy/Snippets/EnvironmentValues/CustomEnvironmentValues", slice: "optional-entry")
 ///
-/// The expanded property can be set on any component using ``StringComponent/environment(_:_:)-(_,Value)`` or read using ``StringEnvironment``.
+/// The expanded property can be set on any component using ``StringComponent/environment(_:_:)-(_,Value)``, ``DataComponent/environment(_:_:)-(_,Value)``, or ``DirectoryContent/environment(_:_:)-(_,Value)``, and read using ``Environment``.
+///
+/// - Note: SwiftUI declares a macro with the same name. In a file that imports both modules, write `@Calligraphy.Entry` to disambiguate.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @attached(accessor)
 @attached(peer, names: prefixed(__Key_))
-public macro StringEntry() = #externalMacro(
+public macro Entry() = #externalMacro(
     module: "CalligraphyCompilerPlugin",
-    type: "StringEntryMacro"
+    type: "EntryMacro"
 )

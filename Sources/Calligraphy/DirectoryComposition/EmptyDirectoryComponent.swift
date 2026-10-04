@@ -34,7 +34,9 @@ public struct EmptyDirectoryContent: DirectoryContent {
 
     // MARK: - DirectoryContent
 
-    public func _serialize() -> [SerializedDirectoryContent] {
+    public func _serialize(
+        in environment: EnvironmentValues
+    ) -> [SerializedDirectoryContent] {
         []
     }
 

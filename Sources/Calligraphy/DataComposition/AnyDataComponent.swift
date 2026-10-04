@@ -36,21 +36,23 @@ public struct AnyDataComponent: DataComponent {
     public init<T>(
         erasing dataComponent: T
     ) where T: DataComponent {
-        __data = { dataComponent._data }
+        _render = { dataComponent.render(in: $0) }
     }
 
     // MARK: - DataComponent
-
-    public var _data: Data? {
-        __data()
-    }
 
     public var body: Never {
         fatalErrorImperativeDataComponent()
     }
 
+    public func render(
+        in environment: EnvironmentValues
+    ) -> Data? {
+        _render(environment)
+    }
+
     // MARK: - Private
 
-    private let __data: () -> Data?
+    private let _render: (EnvironmentValues) -> Data?
 
 }

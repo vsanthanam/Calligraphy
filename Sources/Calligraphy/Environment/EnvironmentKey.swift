@@ -1,5 +1,5 @@
 // Calligraphy
-// StringEnvironmentKey.swift
+// EnvironmentKey.swift
 //
 // MIT License
 //
@@ -23,18 +23,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// A key that identifies a value stored in ``StringEnvironmentValues``.
+/// A key for reading and writing a value in ``EnvironmentValues``.
 ///
-/// Conform a type to `StringEnvironmentKey` to define a custom environment value. The conforming type's identity acts as the key, and ``defaultValue`` is returned when no value has been set.
+/// You rarely conform to this protocol by hand. Instead, apply the ``Entry()`` macro to a stored property in an extension on ``EnvironmentValues``, which synthesizes a private key type for you. Conform to `EnvironmentKey` directly when you want to use the key type itself with ``Environment/init(_:)-(Key.Type)`` or ``StringComponent/environment(_:_:)-(Key.Type,_)``.
 ///
-/// Most callers do not implement this protocol directly. Instead, declare an environment value by extending ``StringEnvironmentValues`` and applying the ``StringEntry()`` macro to a stored property.
+/// @Snippet(path: "Calligraphy/Snippets/EnvironmentValues/CustomEnvironmentKey", slice: "key")
+///
+/// Read the value with ``Environment/init(_:)-(Key.Type)`` and set it with ``StringComponent/environment(_:_:)-(Key.Type,_)``:
+///
+/// @Snippet(path: "Calligraphy/Snippets/EnvironmentValues/CustomEnvironmentKey", slice: "read-key")
+///
+/// @Snippet(path: "Calligraphy/Snippets/EnvironmentValues/CustomEnvironmentKey", slice: "set-key")
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public protocol StringEnvironmentKey<Value> {
+public protocol EnvironmentKey<Value> {
 
-    /// The type of value associated with this key.
+    /// The type of value stored under this key.
     associatedtype Value: Sendable
 
-    /// The value to return when no value has been set for this key.
+    /// The value returned when no ancestor has set one.
     static var defaultValue: Value { get }
 
 }

@@ -26,6 +26,8 @@
 import Foundation
 
 /// A re-usable, composable file
+///
+/// The contents of a `File` are rendered lazily, when the file is serialized or written to disk, in the environment the file was placed in. Values set on an enclosing ``Folder`` with ``DirectoryContent/environment(_:_:)-(_,Value)`` are therefore visible to the components inside the file.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct File: DirectoryContent {
 
@@ -43,12 +45,9 @@ public struct File: DirectoryContent {
         encoding: String.Encoding = .utf8,
         @StringBuilder text: () -> some StringComponent
     ) {
-        backing = .text(
-            name,
-            permissions: permissions,
-            text: String.build(text),
-            encoding: encoding
-        )
+        self.name = name
+        self.permissions = permissions
+        backing = .text(AnyStringComponent(erasing: text()), encoding)
     }
 
     /// Create a text file with a file extension using a `@StringBuilder`
@@ -65,12 +64,11 @@ public struct File: DirectoryContent {
         encoding: String.Encoding = .utf8,
         @StringBuilder text: () -> some StringComponent
     ) {
-        backing = .text(
-            name,
-            fileExtension: fileExtension,
+        self.init(
+            name + "." + fileExtension,
             permissions: permissions,
-            text: String.build(text),
-            encoding: encoding
+            encoding: encoding,
+            text: text
         )
     }
 
@@ -129,11 +127,9 @@ public struct File: DirectoryContent {
         permissions: FilePermissions = .defaultFile,
         @DataBuilder data: () -> some DataComponent
     ) {
-        backing = .data(
-            name,
-            permissions: permissions,
-            data: Data.build(data)
-        )
+        self.name = name
+        self.permissions = permissions
+        backing = .data(AnyDataComponent(erasing: data()))
     }
 
     /// Create a data file with a file extension using a `@DataBuilder`
@@ -148,11 +144,10 @@ public struct File: DirectoryContent {
         permissions: FilePermissions = .defaultFile,
         @DataBuilder data: () -> some DataComponent
     ) {
-        backing = .data(
-            name,
-            fileExtension: fileExtension,
+        self.init(
+            name + "." + fileExtension,
             permissions: permissions,
-            data: Data.build(data)
+            data: data
         )
     }
 
@@ -197,12 +192,30 @@ public struct File: DirectoryContent {
 
     // MARK: - DirectoryContent
 
-    public func _serialize() -> [SerializedDirectoryContent] {
-        [backing]
+    public func _serialize(
+        in environment: EnvironmentValues
+    ) -> [SerializedDirectoryContent] {
+        switch backing {
+        case let .text(component, encoding):
+            [
+                .text(name, permissions: permissions, text: component.render(in: environment) ?? "", encoding: encoding)
+            ]
+        case let .data(component):
+            [
+                .data(name, permissions: permissions, data: component.render(in: environment) ?? Data())
+            ]
+        }
     }
 
     // MARK: - Private
 
-    private let backing: SerializedDirectoryContent
+    private enum Backing {
+        case text(AnyStringComponent, String.Encoding)
+        case data(AnyDataComponent)
+    }
+
+    private let name: String
+    private let permissions: FilePermissions
+    private let backing: Backing
 
 }

@@ -80,7 +80,7 @@ private struct PrefixLinesModifier<Prefix>: StringModifier where Prefix: StringC
 
     func render(
         content: Content,
-        in environment: StringEnvironmentValues
+        in environment: EnvironmentValues
     ) -> String? {
         guard let rendered = content.render(in: environment) else {
             return nil

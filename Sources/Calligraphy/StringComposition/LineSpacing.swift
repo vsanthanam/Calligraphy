@@ -49,12 +49,12 @@ extension StringComponent {
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-extension StringEnvironmentValues {
+extension EnvironmentValues {
 
     /// The number of newlines used to separate adjacent lines.
     ///
     /// Defaults to `1`. ``Lines`` reads this value to decide how to join its children. Like every environment value it is inherited by all descendants. Set it on an ancestor component using ``StringComponent/lineSpacing(_:)``.
-    @StringEntry
+    @Entry
     public internal(set) var lineSpacing: Int = 1
 
 }

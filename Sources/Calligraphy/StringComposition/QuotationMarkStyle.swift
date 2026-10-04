@@ -47,12 +47,12 @@ public enum QuotationMarkStyle: String, Sendable {
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-extension StringEnvironmentValues {
+extension EnvironmentValues {
 
     /// The style of quotation mark used by ``QuotationMark`` and ``Quote``.
     ///
     /// Defaults to ``QuotationMarkStyle/default``. Set it on an ancestor component using ``StringComponent/quotationMarkStyle(_:)``.
-    @StringEntry
+    @Entry
     public internal(set) var quotationMarkStyle: QuotationMarkStyle = .default
 
 }
@@ -62,7 +62,7 @@ extension StringComponent {
 
     /// Apply a ``QuotationMarkStyle`` to this component.
     ///
-    /// The supplied style becomes the ``StringEnvironmentValues/quotationMarkStyle`` for this component and its descendants. ``QuotationMark`` and ``Quote`` read this value when rendering.
+    /// The supplied style becomes the ``EnvironmentValues/quotationMarkStyle`` for this component and its descendants. ``QuotationMark`` and ``Quote`` read this value when rendering.
     ///
     /// - Parameter style: The style of quotation mark to use.
     /// - Returns: A component whose descendants render quotation marks with the supplied style.

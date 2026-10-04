@@ -50,7 +50,7 @@ struct StringComponentTests {
                 fatalErrorImperativeStringComponent()
             }
 
-            func render(in environment: StringEnvironmentValues) -> String? {
+            func render(in environment: EnvironmentValues) -> String? {
                 "rendered"
             }
 
@@ -68,7 +68,7 @@ struct StringComponentTests {
                 fatalErrorImperativeStringComponent()
             }
 
-            func render(in environment: StringEnvironmentValues) -> String? {
+            func render(in environment: EnvironmentValues) -> String? {
                 nil
             }
 
@@ -82,7 +82,7 @@ struct StringComponentTests {
 
         struct Reader: StringComponent {
 
-            @StringEnvironment(\.lineSpacing)
+            @Environment(\.lineSpacing)
             var spacing: Int
 
             var body: some StringComponent {

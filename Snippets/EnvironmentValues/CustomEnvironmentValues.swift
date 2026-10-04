@@ -1,4 +1,4 @@
-// Define custom string environment values with `@StringEntry`, and set them with
+// Define custom environment values with `@Entry`, and set them with
 // `environment(_:_:)` and `transformEnvironment(_:)`.
 
 // snippet.hide
@@ -6,18 +6,18 @@ import Calligraphy
 
 // snippet.show
 // snippet.entry
-extension StringEnvironmentValues {
+extension EnvironmentValues {
 
-    @StringEntry
+    @Entry
     public var prefix: String = "•"
 
 }
 // snippet.end
 
 // snippet.optional-entry
-extension StringEnvironmentValues {
+extension EnvironmentValues {
 
-    @StringEntry
+    @Entry
     public var caption: String?
 
 }
@@ -26,7 +26,7 @@ extension StringEnvironmentValues {
 // snippet.read-entry
 struct ListItem: StringComponent {
 
-    @StringEnvironment(\.prefix)
+    @Environment(\.prefix)
     private var prefix: String
 
     let text: String
