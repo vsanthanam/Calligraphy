@@ -52,7 +52,7 @@ struct DataForEachTests {
         let component = ForEach([] as [UInt8]) { byte in
             byte
         }
-        #expect(component.render(in: EnvironmentValues()) == nil)
+        #expect(component._render(in: EnvironmentValues()) == nil)
     }
 
     @Test("Skipped elements contribute nothing")

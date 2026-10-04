@@ -57,14 +57,14 @@ extension DataFile {
     }
 
     public func _serialize(
-        in environment: EnvironmentValues
+        in environment: borrowing EnvironmentValues
     ) -> [SerializedDirectoryContent] {
         environment.inject(into: self)
         return [
             .data(
                 name,
                 permissions: permissions,
-                data: body.fileName(name).render(in: environment) ?? Data()
+                data: body.fileName(name)._render(in: environment) ?? Data()
             )
         ]
     }

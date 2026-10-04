@@ -82,12 +82,12 @@ extension ForEach: StringComponent where Content: StringComponent {
         self.init(data: data, content: content)
     }
 
-    public func render(
-        in environment: EnvironmentValues
+    public func _render(
+        in environment: borrowing EnvironmentValues
     ) -> String? {
         let pieces = data
             .map { element in
-                content(element).render(in: environment)
+                content(element)._render(in: environment)
             }
         return environment.draw(with: pieces)
     }
@@ -109,12 +109,12 @@ extension ForEach: DataComponent where Content: DataComponent {
         self.init(data: data, content: content)
     }
 
-    public func render(
-        in environment: EnvironmentValues
+    public func _render(
+        in environment: borrowing EnvironmentValues
     ) -> Foundation.Data? {
         data
             .reduce(nil) { result, element in
-                guard let piece = content(element).render(in: environment) else {
+                guard let piece = content(element)._render(in: environment) else {
                     return result
                 }
                 if let result {
@@ -143,7 +143,7 @@ extension ForEach: DirectoryContent where Content: DirectoryContent {
     }
 
     public func _serialize(
-        in environment: EnvironmentValues
+        in environment: borrowing EnvironmentValues
     ) -> [SerializedDirectoryContent] {
         data
             .flatMap { element in

@@ -34,7 +34,7 @@ public struct AnyStringComponent: StringComponent {
     public init<T>(
         erasing stringComponent: T
     ) where T: StringComponent {
-        _render = { stringComponent.render(in: $0) }
+        __render = { environment in stringComponent._render(in: environment) }
     }
 
     // MARK: - StringComponent
@@ -43,14 +43,14 @@ public struct AnyStringComponent: StringComponent {
         fatalErrorImperativeStringComponent()
     }
 
-    public func render(
-        in environment: EnvironmentValues
+    public func _render(
+        in environment: borrowing EnvironmentValues
     ) -> String? {
-        _render(environment)
+        __render(environment)
     }
 
     // MARK: - Private
 
-    private let _render: (EnvironmentValues) -> String?
+    private let __render: (borrowing EnvironmentValues) -> String?
 
 }

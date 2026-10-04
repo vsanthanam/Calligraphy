@@ -29,13 +29,13 @@
 public enum StringBuilder {
 
     public static func buildExpression<Expression>(
-        _ expression: Expression
+        _ expression: consuming Expression
     ) -> Expression where Expression: StringComponent {
         expression
     }
 
     public static func buildExpression<Expression>(
-        _ expression: Expression
+        _ expression: consuming Expression
     ) -> RawStringComponent where Expression: StringProtocol {
         RawStringComponent(expression)
     }
@@ -49,21 +49,21 @@ public enum StringBuilder {
 
     @StringBuilder
     public static func buildExpression<Data, Content>(
-        _ expression: Data
+        _ expression: consuming Data
     ) -> ForEach<Data, Content> where Data: Collection<Content>, Content: StringComponent {
         ForEach(expression) { $0 }
     }
 
     @StringBuilder
     public static func buildExpression<Data, Content>(
-        _ expression: Data
+        _ expression: consuming Data
     ) -> ForEach<Data, RawStringComponent> where Data: Collection<Content>, Content: StringProtocol {
         ForEach(expression) { $0 }
     }
 
     @StringBuilder
     public static func buildExpression<Data, Content>(
-        _ expression: Data
+        _ expression: consuming Data
     ) -> ForEach<Data, RawStringComponent> where Data: Collection<Content>, Content: RawRepresentable, Content.RawValue: StringProtocol {
         ForEach(expression) { $0 }
     }
@@ -73,7 +73,7 @@ public enum StringBuilder {
     }
 
     public static func buildBlock<Component>(
-        _ components: Component
+        _ components: consuming Component
     ) -> Component where Component: StringComponent {
         components
     }
@@ -85,20 +85,20 @@ public enum StringBuilder {
     }
 
     public static func buildEither<First, Second>(
-        first component: First
+        first component: consuming First
     ) -> _Either<First, Second> where First: StringComponent, Second: StringComponent {
         .first(component)
     }
 
     public static func buildEither<First, Second>(
-        second component: Second
+        second component: consuming Second
     ) -> _Either<First, Second> where First: StringComponent, Second: StringComponent {
         .second(component)
     }
 
     @StringBuilder
     public static func buildOptional<Component>(
-        _ component: Component?
+        _ component: consuming Component?
     ) -> _Either<Component, _Skip> where Component: StringComponent {
         if let component {
             component
@@ -108,20 +108,20 @@ public enum StringBuilder {
     }
 
     public static func buildLimitedAvailability<Component>(
-        _ component: Component
+        _ component: consuming Component
     ) -> AnyStringComponent where Component: StringComponent {
         .init(erasing: component)
     }
 
     public static func buildFinalResult<Component>(
-        _ component: Component
+        _ component: consuming Component
     ) -> Component where Component: StringComponent {
         component
     }
 
     @_disfavoredOverload
     public static func buildFinalResult(
-        _ component: some StringComponent
+        _ component: consuming some StringComponent
     ) -> String {
         String(component)
     }
@@ -134,12 +134,12 @@ public enum StringBuilder {
             fatalErrorImperativeStringComponent()
         }
 
-        public func render(
-            in environment: EnvironmentValues
+        public func _render(
+            in environment: borrowing EnvironmentValues
         ) -> String? {
             var pieces = [String?]()
             for component in repeat each components {
-                pieces.append(component.render(in: environment))
+                pieces.append(component._render(in: environment))
             }
             return environment.draw(with: pieces)
         }
@@ -170,14 +170,14 @@ public enum StringBuilder {
             fatalErrorImperativeStringComponent()
         }
 
-        public func render(
-            in environment: EnvironmentValues
+        public func _render(
+            in environment: borrowing EnvironmentValues
         ) -> String? {
             switch self {
             case let .first(component):
-                component.render(in: environment)
+                component._render(in: environment)
             case let .second(component):
-                component.render(in: environment)
+                component._render(in: environment)
             }
         }
 
@@ -191,8 +191,8 @@ public enum StringBuilder {
             fatalErrorImperativeStringComponent()
         }
 
-        public func render(
-            in environment: EnvironmentValues
+        public func _render(
+            in environment: borrowing EnvironmentValues
         ) -> String? {
             nil
         }

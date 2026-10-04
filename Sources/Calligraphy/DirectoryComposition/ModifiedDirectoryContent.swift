@@ -35,7 +35,7 @@ extension DirectoryContent {
     /// - Parameter modifier: The modifier to apply.
     /// - Returns: This content with the modifier applied.
     public func modifier<Modifier>(
-        _ modifier: Modifier
+        _ modifier: consuming Modifier
     ) -> ModifiedDirectoryContent<Self, Modifier> where Modifier: DirectoryContentModifier {
         ModifiedDirectoryContent(
             content: self,
@@ -71,11 +71,11 @@ public struct ModifiedDirectoryContent<Content, Modifier>: DirectoryContent wher
     // MARK: - DirectoryContent
 
     public func _serialize(
-        in environment: EnvironmentValues
+        in environment: borrowing EnvironmentValues
     ) -> [SerializedDirectoryContent] {
         environment.inject(into: modifier)
         return modifier
-            ._serialize(
+            .serialize(
                 content: .init(erasing: content),
                 in: environment
             )

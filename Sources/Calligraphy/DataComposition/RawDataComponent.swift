@@ -50,8 +50,8 @@ public struct RawDataComponent: DataComponent {
         fatalErrorImperativeDataComponent()
     }
 
-    public func render(
-        in environment: EnvironmentValues
+    public func _render(
+        in environment: borrowing EnvironmentValues
     ) -> Data? {
         value
     }

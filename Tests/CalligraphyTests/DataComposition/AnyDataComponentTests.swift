@@ -37,7 +37,7 @@ struct AnyDataComponentTests {
             Data()
         }
         let typeErased = AnyDataComponent(erasing: standard)
-        #expect(standard.render(in: EnvironmentValues()) == typeErased.render(in: EnvironmentValues()))
+        #expect(standard._render(in: EnvironmentValues()) == typeErased._render(in: EnvironmentValues()))
 
     }
 

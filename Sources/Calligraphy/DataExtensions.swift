@@ -46,7 +46,7 @@ extension Data {
     public init(
         _ component: some DataComponent
     ) {
-        self = component.render(in: EnvironmentValues()) ?? .init()
+        self = component._render(in: EnvironmentValues()) ?? .init()
     }
 
     /// Create data from multiple data components

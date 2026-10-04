@@ -40,7 +40,7 @@ public struct AnyDirectoryContent: DirectoryContent {
     // MARK: - DirectoryContent
 
     public func _serialize(
-        in environment: EnvironmentValues
+        in environment: borrowing EnvironmentValues
     ) -> [SerializedDirectoryContent] {
         __serialize(environment)
     }

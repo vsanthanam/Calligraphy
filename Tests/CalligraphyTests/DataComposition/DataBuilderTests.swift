@@ -41,7 +41,7 @@ struct DataBuilderTests {
 
         let components = builder()
         #expect(components is RawDataComponent)
-        #expect(components.render(in: EnvironmentValues()) == Data([0x46, 0x6F, 0x6F]))
+        #expect(components._render(in: EnvironmentValues()) == Data([0x46, 0x6F, 0x6F]))
     }
 
     @Test("[UInt8] Expression")
@@ -54,7 +54,7 @@ struct DataBuilderTests {
 
         let components = builder()
         #expect(components is RawDataComponent)
-        #expect(components.render(in: EnvironmentValues()) == Data([0x46, 0x6F, 0x6F]))
+        #expect(components._render(in: EnvironmentValues()) == Data([0x46, 0x6F, 0x6F]))
     }
 
     @Test("some Collection<UInt8> Expression")
@@ -67,7 +67,7 @@ struct DataBuilderTests {
 
         let components = builder()
         #expect(components is RawDataComponent)
-        #expect(components.render(in: EnvironmentValues()) == Data([0x46, 0x6F]))
+        #expect(components._render(in: EnvironmentValues()) == Data([0x46, 0x6F]))
     }
 
     @Test("No Components")
@@ -78,7 +78,7 @@ struct DataBuilderTests {
 
         let components = builder()
         #expect(components is EmptyDataComponent)
-        #expect(components.render(in: EnvironmentValues()) == nil)
+        #expect(components._render(in: EnvironmentValues()) == nil)
     }
 
     @Test("One Component")
@@ -99,7 +99,7 @@ struct DataBuilderTests {
 
         let components = builder()
         #expect(components is Foo)
-        #expect(components.render(in: EnvironmentValues()) == Data([0x46, 0x6F, 0x6F]))
+        #expect(components._render(in: EnvironmentValues()) == Data([0x46, 0x6F, 0x6F]))
     }
 
     @Test("Multiple Components")
@@ -139,7 +139,7 @@ struct DataBuilderTests {
         #expect(components is DataBuilder._Assembled<Foo, Bar, Baz>)
 
         let expected = Data([0x46, 0x6F, 0x6F, 0x42, 0x61, 0x72, 0x42, 0x61, 0x7A])
-        #expect(components.render(in: EnvironmentValues()) == expected)
+        #expect(components._render(in: EnvironmentValues()) == expected)
     }
 
     @Test(
@@ -175,7 +175,7 @@ struct DataBuilderTests {
 
         let components = builder()
         #expect(components is DataBuilder._Either<Foo, Bar>)
-        #expect(components.render(in: EnvironmentValues()) == result)
+        #expect(components._render(in: EnvironmentValues()) == result)
     }
 
     @Test(
@@ -210,7 +210,7 @@ struct DataBuilderTests {
 
         let components = builder()
         #expect(components is DataBuilder._Assembled<DataBuilder._Either<Foo, EmptyDataComponent>, Bar>)
-        #expect(components.render(in: EnvironmentValues()) == result)
+        #expect(components._render(in: EnvironmentValues()) == result)
     }
 //
 //    @Test("Availablility Check Support")

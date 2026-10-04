@@ -10,7 +10,7 @@ A type that contributes to the construction of a string.
 
 A `StringComponent` is a declarative representation of a piece of text. By composing components together inside a ``StringBuilder``, you build up a final `String` value the same way you would build a view hierarchy in SwiftUI.
 
-Typically, you will not implement ``render(in:)`` directly. Instead, implement ``body`` using an opaque type, and allow the compiler to expand the result builder and choose the correct type to satisfy the protocol.
+Implement ``body`` using an opaque type, and allow the compiler to expand the result builder and choose the correct type to satisfy the protocol.
 
 @Snippet(path: "Calligraphy/Snippets/StringComponent/ImplementingBody", slice: "greeting")
 

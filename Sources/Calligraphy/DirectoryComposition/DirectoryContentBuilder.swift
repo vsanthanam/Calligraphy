@@ -29,20 +29,20 @@
 public enum DirectoryContentBuilder {
 
     public static func buildExpression<T>(
-        _ expression: T
+        _ expression: consuming T
     ) -> T where T: DirectoryContent {
         expression
     }
 
     public static func buildExpression(
-        _ expression: [SerializedDirectoryContent]
+        _ expression: consuming [SerializedDirectoryContent]
     ) -> _AlreadySerialized {
         .init(expression)
     }
 
     @DirectoryContentBuilder
     public static func buildExpression(
-        _ expression: SerializedDirectoryContent
+        _ expression: consuming SerializedDirectoryContent
     ) -> _AlreadySerialized {
         [expression]
     }
@@ -52,7 +52,7 @@ public enum DirectoryContentBuilder {
     }
 
     public static func buildBlock<T>(
-        _ component: T
+        _ component: consuming T
     ) -> T where T: DirectoryContent {
         component
     }
@@ -64,20 +64,20 @@ public enum DirectoryContentBuilder {
     }
 
     public static func buildEither<First, Second>(
-        first component: First
+        first component: consuming First
     ) -> _Either<First, Second> where First: DirectoryContent, Second: DirectoryContent {
         .first(component)
     }
 
     public static func buildEither<First, Second>(
-        second component: Second
+        second component: consuming Second
     ) -> _Either<First, Second> where First: DirectoryContent, Second: DirectoryContent {
         .second(component)
     }
 
     @DirectoryContentBuilder
     public static func buildOptional<T>(
-        _ component: T?
+        _ component: consuming T?
     ) -> _Either<T, EmptyDirectoryContent> where T: DirectoryContent {
         if let component {
             component
@@ -87,7 +87,7 @@ public enum DirectoryContentBuilder {
     }
 
     public static func buildLimitedAvailability(
-        _ component: some DirectoryContent
+        _ component: consuming some DirectoryContent
     ) -> AnyDirectoryContent {
         AnyDirectoryContent(erasing: component)
     }
@@ -97,7 +97,7 @@ public enum DirectoryContentBuilder {
         // MARK: - DirectoryContent
 
         public func _serialize(
-            in environment: EnvironmentValues
+            in environment: borrowing EnvironmentValues
         ) -> [SerializedDirectoryContent] {
             content
         }
@@ -119,7 +119,7 @@ public enum DirectoryContentBuilder {
         // MARK: - DirectoryContent
 
         public func _serialize(
-            in environment: EnvironmentValues
+            in environment: borrowing EnvironmentValues
         ) -> [SerializedDirectoryContent] {
             var result = [SerializedDirectoryContent]()
             for component in repeat each components {
@@ -151,7 +151,7 @@ public enum DirectoryContentBuilder {
         // MARK: - DirectoryContent
 
         public func _serialize(
-            in environment: EnvironmentValues
+            in environment: borrowing EnvironmentValues
         ) -> [SerializedDirectoryContent] {
             switch self {
             case let .first(component):

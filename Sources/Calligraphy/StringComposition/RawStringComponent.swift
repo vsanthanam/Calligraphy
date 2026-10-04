@@ -45,8 +45,8 @@ public struct RawStringComponent: StringComponent {
         fatalErrorImperativeStringComponent()
     }
 
-    public func render(
-        in environment: EnvironmentValues
+    public func _render(
+        in environment: borrowing EnvironmentValues
     ) -> String? {
         backing
     }

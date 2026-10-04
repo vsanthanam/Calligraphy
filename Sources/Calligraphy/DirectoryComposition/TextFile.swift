@@ -67,14 +67,14 @@ extension TextFile {
     }
 
     public func _serialize(
-        in environment: EnvironmentValues
+        in environment: borrowing EnvironmentValues
     ) -> [SerializedDirectoryContent] {
         environment.inject(into: self)
         return [
             .text(
                 name,
                 permissions: permissions,
-                text: body.fileName(name).render(in: environment) ?? "",
+                text: body.fileName(name)._render(in: environment) ?? "",
                 encoding: encoding
             )
         ]

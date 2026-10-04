@@ -193,7 +193,7 @@ public struct File: DirectoryContent {
     // MARK: - DirectoryContent
 
     public func _serialize(
-        in environment: EnvironmentValues
+        in environment: borrowing EnvironmentValues
     ) -> [SerializedDirectoryContent] {
         switch backing {
         case let .text(component, encoding):
@@ -201,7 +201,7 @@ public struct File: DirectoryContent {
                 .text(
                     name,
                     permissions: permissions,
-                    text: component.fileName(name).render(in: environment) ?? "",
+                    text: component.fileName(name)._render(in: environment) ?? "",
                     encoding: encoding
                 )
             ]
@@ -210,7 +210,7 @@ public struct File: DirectoryContent {
                 .data(
                     name,
                     permissions: permissions,
-                    data: component.fileName(name).render(in: environment) ?? Data()
+                    data: component.fileName(name)._render(in: environment) ?? Data()
                 )
             ]
         }

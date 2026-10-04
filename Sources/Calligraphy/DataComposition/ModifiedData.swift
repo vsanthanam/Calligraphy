@@ -37,7 +37,7 @@ extension DataComponent {
     /// - Parameter modifier: The modifier to apply.
     /// - Returns: This component with the modifier applied.
     public func modifier<Modifier>(
-        _ modifier: Modifier
+        _ modifier: consuming Modifier
     ) -> ModifiedData<Self, Modifier> where Modifier: DataModifier {
         ModifiedData(
             content: self,
@@ -78,8 +78,8 @@ public struct ModifiedData<Content, Modifier>: DataComponent where Content: Data
         fatalErrorImperativeDataComponent()
     }
 
-    public func render(
-        in environment: EnvironmentValues
+    public func _render(
+        in environment: borrowing EnvironmentValues
     ) -> Data? {
         environment.inject(into: modifier)
         return modifier
