@@ -12,17 +12,7 @@ A `StringComponent` is a declarative representation of a piece of text. By compo
 
 Typically, you will not implement ``render(in:)`` directly. Instead, implement ``body`` using an opaque type, and allow the compiler to expand the result builder and choose the correct type to satisfy the protocol.
 
-```swift
-struct Greeting: StringComponent {
-
-    let name: String
-
-    var body: some StringComponent {
-        "Hello, " + name + "!"
-    }
-
-}
-```
+@Snippet(path: "Calligraphy/Snippets/StringComponent/ImplementingBody", slice: "greeting")
 
 ## Topics
 

@@ -15,42 +15,13 @@ Calligraphy provides a powerful and type-safe API for composing directories and 
 
 The ``File`` type allows you to create both text and data files:
 
-```swift
-// Create a text file
-let textFile = File("README.md") {
-    "# My Project"
-    ""
-    "This is a sample project."
-}
-
-// Create a data file
-let dataFile = File("config.json") {
-    Data("{\"key\": \"value\"}".utf8)
-}
-```
+@Snippet(path: "Calligraphy/Snippets/ComposingDirectories/TextAndDataFiles", slice: "files")
 
 ### Folders
 
 The ``Folder`` type enables you to create nested directory structures:
 
-```swift
-let project = Folder("MyProject") {
-    File("README.md") {
-        "# My Project"
-    }
-    Folder("Sources") {
-        File("main.swift") {
-            Line {
-                "print("
-                Quote {
-                    "Hello, World!"
-                }
-                ")"
-            }
-        }
-    }
-}
-```
+@Snippet(path: "Calligraphy/Snippets/ComposingDirectories/NestedFolders", slice: "folders")
 
 ### Custom Directory Content Types
 
@@ -60,52 +31,19 @@ You can create reusable file and folder types that represent higher level concep
 
 For text files, conform to the ``TextFile`` protocol:
 
-```swift
-struct ReadmeFile: TextFile {
-
-    let name = "README.md"
-    
-    var body: some StringComponent {
-        "# My Project"
-    }
-
-}
-```
+@Snippet(path: "Calligraphy/Snippets/ComposingDirectories/CustomDirectoryContent", slice: "text-file")
 
 #### Custom Data Files
 
 For binary data files, conform to the ``DataFile`` protocol:
 
-```swift
-struct ConfigFile: DataFile {
-
-    let name = "config.bin"
-    
-    var body: some DataComponent {
-        0x01  // Version
-        0x02  // Flags
-        0x03  // Data
-    }
-
-}
-```
+@Snippet(path: "Calligraphy/Snippets/ComposingDirectories/CustomDirectoryContent", slice: "data-file")
 
 #### Custom Directories
 
 You can create custom directory types by conforming to the ``Directory`` protocol:
 
-```swift
-struct MyProject: Directory {
-
-    let name = "MyProject"
-    
-    var body: some DirectoryContent {
-        ReadmeFile()
-        ConfigFile()
-    }
-
-}
-```
+@Snippet(path: "Calligraphy/Snippets/ComposingDirectories/CustomDirectoryContent", slice: "directory")
 
 ### Combining with @StringBuilder and @DataBuilder
 
@@ -117,43 +55,13 @@ The directory composition API works seamlessly with other Calligraphy builders:
 
 This allows you to compose complex directory structures with rich content:
 
-```swift
-struct Documentation: Directory {
-    let name = "Documentation"
-    
-    var body: some DirectoryContent {
-        File("README.md") {
-            "# Documentation"
-            ""
-            "This is the documentation for our project."
-        }
-        Folder("API") {
-            File("API.md") {
-                "# API Reference"
-                ""
-                "Detailed API documentation..."
-            }
-        }
-    }
-}
-```
+@Snippet(path: "Calligraphy/Snippets/ComposingDirectories/CustomDirectoryContent", slice: "combining-builders")
 
 ### Writing to Disk
 
 All directory content types can be written to disk using the ``DirectoryContent/write(to:shouldOverwrite:)`` method:
 
-```swift
-let project = Files {
-    Folder("Project") {
-        Documentation()
-        MyProject()
-    }
-    File("License", fileExtension: "txt") {
-        "License Here"
-    }
-}
-try await project.write(to: URL(fileURLWithPath: "/path/to/project"))
-```
+@Snippet(path: "Calligraphy/Snippets/ComposingDirectories/CustomDirectoryContent", slice: "writing-to-disk")
 
 #### Platform Considerations
 
