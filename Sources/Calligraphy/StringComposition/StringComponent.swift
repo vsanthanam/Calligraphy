@@ -29,17 +29,7 @@
 ///
 /// Typically, you will not implement ``render(in:)`` directly. Instead, implement ``body`` using an opaque type, and allow the compiler to expand the result builder and choose the correct type to satisfy the protocol.
 ///
-/// ```swift
-/// struct Greeting: StringComponent {
-///
-///     let name: String
-///
-///     var body: some StringComponent {
-///         "Hello, " + name + "!"
-///     }
-///
-/// }
-/// ```
+/// @Snippet(path: "Calligraphy/Snippets/StringComponent/ImplementingBody", slice: "greeting")
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @_typeEraser(AnyStringComponent)
 public protocol StringComponent {

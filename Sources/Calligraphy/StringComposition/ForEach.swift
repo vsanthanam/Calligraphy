@@ -27,18 +27,7 @@
 ///
 /// Use `ForEach` to repeat a piece of a string for each element in a collection, the way you would use `ForEach` in SwiftUI. The `content` closure is a `@StringBuilder`, so the full DSL is available when describing each element's contribution, including conditionals and modifiers:
 ///
-/// ```swift
-/// Lines {
-///     "Features:"
-///     ForEach(features) { feature in
-///         Line {
-///             "- "
-///             feature.name
-///         }
-///         .tabbed()
-///     }
-/// }
-/// ```
+/// @Snippet(path: "Calligraphy/Snippets/ForEach/RepeatingContent", slice: "for-each")
 ///
 /// `ForEach` is transparent to layout, like ``StringGroup``: the results are joined using the surrounding ``StringEnvironmentValues/separator``, so inside ``Lines`` each element starts on a new line and inside ``Line`` the elements are concatenated. Elements whose content renders nothing are skipped.
 ///

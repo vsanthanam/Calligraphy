@@ -31,12 +31,7 @@ import Foundation
 ///
 /// To define a new environment value, extend `StringEnvironmentValues` and apply the ``StringEntry()`` macro to a stored property:
 ///
-/// ```swift
-/// extension StringEnvironmentValues {
-///     @StringEntry
-///     public var separator: String = "\n"
-/// }
-/// ```
+/// @Snippet(path: "Calligraphy/Snippets/EnvironmentValues/CustomEnvironmentValues", slice: "entry")
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct StringEnvironmentValues: Sendable {
 

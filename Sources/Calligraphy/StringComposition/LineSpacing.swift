@@ -30,17 +30,7 @@ extension StringComponent {
     ///
     /// Line spacing is an environment value, so it is inherited the way SwiftUI's environment-backed modifiers are: it applies to every ``Lines`` beneath this component, however deeply nested. Apply the modifier again to a nested ``Lines`` to give it a different spacing.
     ///
-    /// ```swift
-    /// Lines {
-    ///     "foo"
-    ///     Lines {
-    ///         "bar"
-    ///         "baz"
-    ///     }
-    ///     .lineSpacing(1)
-    /// }
-    /// .lineSpacing(2)
-    /// ```
+    /// @Snippet(path: "Calligraphy/Snippets/LineSpacing/NestedLineSpacing", slice: "nested")
     ///
     /// The example above renders `foo`, a blank line, and then `bar` and `baz` on adjacent lines. Without the inner modifier, `bar` and `baz` would also be separated by a blank line.
     ///

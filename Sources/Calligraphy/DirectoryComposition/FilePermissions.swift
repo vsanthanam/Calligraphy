@@ -192,16 +192,7 @@ public struct FilePermissions: OptionSet, Equatable, Hashable, Identifiable, Cod
 ///
 /// ## Examples
 ///
-/// ```swift
-/// // Read/write for user, read-only for group and others: rw-r--r--
-/// let permsissions = #filePermissions(0o644)
-///
-/// // Common executable: rwxr-xr-x
-/// let exec = #filePermissions(0o755)
-///
-/// // setuid + 755
-/// let setuidExec = #filePermissions(0o4755)
-/// ```
+/// @Snippet(path: "Calligraphy/Snippets/FilePermissions/OctalLiterals", slice: "octal")
 ///
 /// ## Validation
 ///
@@ -265,22 +256,7 @@ public macro filePermissions(
 ///
 /// ## Examples
 ///
-/// ```swift
-/// // Read/write for user, read-only for group and others: rw-r--r--
-/// let perms = #filePermissions("rw-r--r--")
-///
-/// // Common executable: rwxr-xr-x
-/// let exec = #filePermissions("rwxr-xr-x")
-///
-/// // With leading file-type character (ignored): -rwxr-xr-x
-/// let typed = #filePermissions("-rwxr-xr-x")
-///
-/// // setuid executable for user: rwSr-xr-x (uppercase S = setuid without x)
-/// let setuidNoExecUser = #filePermissions("rwSr-xr-x")
-///
-/// // Whitespace tolerated:
-/// let spaced = #filePermissions("rwx r-x r-x")
-/// ```
+/// @Snippet(path: "Calligraphy/Snippets/FilePermissions/SymbolicLiterals", slice: "symbolic")
 ///
 /// ## Validation
 ///

@@ -31,12 +31,7 @@
 /// Like every environment-backed modifier, line spacing is inherited: it applies to this `Lines` and to every `Lines` nested anywhere beneath it.
 /// Apply ``StringComponent/lineSpacing(_:)`` to a nested `Lines` to give it a different spacing.
 ///
-/// ```swift
-/// Lines {
-///     "Hello,"
-///     "world!"
-/// }
-/// ```
+/// @Snippet(path: "Calligraphy/Snippets/Lines/JoiningLines", slice: "lines")
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct Lines<Components>: StringComponent where Components: StringComponent {
 

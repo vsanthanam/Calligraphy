@@ -27,25 +27,11 @@
 ///
 /// Apply `@StringEntry` to a stored property declared inside an extension on ``StringEnvironmentValues``. The macro synthesizes a private ``StringEnvironmentKey`` type and the getter/setter accessors that read from and write to the environment storage.
 ///
-/// ```swift
-/// extension StringEnvironmentValues {
-///
-///     @StringEntry
-///     public var separator: String = "\n"
-///
-/// }
-/// ```
+/// @Snippet(path: "Calligraphy/Snippets/EnvironmentValues/CustomEnvironmentValues", slice: "entry")
 ///
 /// Non-optional properties must provide an initial value. Optional properties may omit the initial value, in which case the default is `nil`:
 ///
-/// ```swift
-/// extension StringEnvironmentValues {
-///
-///     @StringEntry
-///     public var prefix: String? // Default is `nil`, since `String?` is an optional and no default was provided.
-///
-/// }
-/// ```
+/// @Snippet(path: "Calligraphy/Snippets/EnvironmentValues/CustomEnvironmentValues", slice: "optional-entry")
 ///
 /// The expanded property can be set on any component using ``StringComponent/environment(_:_:)-(_,Value)`` or read using ``StringEnvironment``.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)

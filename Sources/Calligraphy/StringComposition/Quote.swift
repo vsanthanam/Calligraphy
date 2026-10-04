@@ -46,22 +46,7 @@ extension StringEnvironmentValues {
     ///
     /// ``Quote`` sets this value to `true` on its wrapped content before rendering, allowing a descendant component to branch on whether it is being quoted — for example, to escape a nested quotation mark or to omit one entirely.
     ///
-    /// ```swift
-    /// struct Greeting: StringComponent {
-    ///
-    ///     @StringEnvironment(\.isInQuote)
-    ///     private var isInQuote: Bool
-    ///
-    ///     var body: some StringComponent {
-    ///         if isInQuote {
-    ///             "hello"
-    ///         } else {
-    ///             "Hello!"
-    ///         }
-    ///     }
-    ///
-    /// }
-    /// ```
+    /// @Snippet(path: "Calligraphy/Snippets/Quote/DetectingQuotes", slice: "is-in-quote")
     ///
     /// The value is read-only from outside this module — its lifecycle is managed by ``Quote``. Defaults to `false`.
     @StringEntry

@@ -30,15 +30,7 @@ extension StringComponent {
     ///
     /// Use this method to apply a custom modifier, or wrap it in an extension on ``StringComponent`` so the modifier reads like a built-in one:
     ///
-    /// ```swift
-    /// extension StringComponent {
-    ///
-    ///     func commented() -> some StringComponent {
-    ///         modifier(Commented())
-    ///     }
-    ///
-    /// }
-    /// ```
+    /// @Snippet(path: "Calligraphy/Snippets/StringModifier/CustomModifier", slice: "extension")
     ///
     /// - Parameter modifier: The modifier to apply.
     /// - Returns: This component with the modifier applied.

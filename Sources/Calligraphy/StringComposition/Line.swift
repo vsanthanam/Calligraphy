@@ -27,13 +27,7 @@
 ///
 /// `Line` is the dual of ``Lines``: where `Lines` separates its children with newlines, `Line` concatenates them edge-to-edge. Use it to group inline pieces that should render on a single line, even when used inside a newline-separated context.
 ///
-/// ```swift
-/// Line {
-///     "Hello, "
-///     name
-///     "!"
-/// }
-/// ```
+/// @Snippet(path: "Calligraphy/Snippets/Line/JoiningInline", slice: "line")
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public struct Line<Components>: StringComponent where Components: StringComponent {
 

@@ -27,28 +27,11 @@
 ///
 /// Adopt `StringModifier` to package a reusable transformation, the same way you adopt `ViewModifier` in SwiftUI. Implement ``body(content:)`` to describe the result, using `content` as a placeholder for whichever component the modifier is eventually applied to:
 ///
-/// ```swift
-/// struct Commented: StringModifier {
-///
-///     func body(content: Content) -> some StringComponent {
-///         content
-///             .prefixLines(with: "// ")
-///     }
-///
-/// }
-/// ```
+/// @Snippet(path: "Calligraphy/Snippets/StringModifier/CustomModifier", slice: "modifier")
 ///
 /// Apply a modifier with ``StringComponent/modifier(_:)``. To make a modifier read like the built-in ones, wrap that call in an extension on ``StringComponent``:
 ///
-/// ```swift
-/// extension StringComponent {
-///
-///     func commented() -> some StringComponent {
-///         modifier(Commented())
-///     }
-///
-/// }
-/// ```
+/// @Snippet(path: "Calligraphy/Snippets/StringModifier/CustomModifier", slice: "extension")
 ///
 /// A modifier can read the surrounding environment with the ``StringEnvironment`` property wrapper, just like a component can.
 ///
