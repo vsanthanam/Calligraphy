@@ -51,7 +51,7 @@ public struct RawDataComponent: DataComponent {
     }
 
     public func _render(
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> Data? {
         value
     }

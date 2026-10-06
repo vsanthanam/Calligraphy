@@ -70,7 +70,7 @@ public struct FileName: EnvironmentPropertyWrapper {
 extension StringComponent {
 
     func fileName(
-        _ fileName: consuming String
+        _ fileName: String
     ) -> some StringComponent {
         environment(
             \.fileName,
@@ -84,7 +84,7 @@ extension StringComponent {
 extension DataComponent {
 
     func fileName(
-        _ fileName: consuming String
+        _ fileName: String
     ) -> some DataComponent {
         environment(
             \.fileName,

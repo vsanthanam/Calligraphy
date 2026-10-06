@@ -66,7 +66,7 @@ public protocol DirectoryContentModifier {
     /// - Returns: The serialized files and directories represented by the modified content.
     func serialize(
         content: Self.Content,
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> [SerializedDirectoryContent]
 
 }
@@ -76,7 +76,7 @@ extension DirectoryContentModifier {
 
     public func serialize(
         content: Self.Content,
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> [SerializedDirectoryContent] {
         body(content: content)
             ._serialize(in: environment)
@@ -114,7 +114,7 @@ public struct _DirectoryContentModifier_Content<Modifier>: DirectoryContent wher
     // MARK: - DirectoryContent
 
     public func _serialize(
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> [SerializedDirectoryContent] {
         content._serialize(in: environment)
     }

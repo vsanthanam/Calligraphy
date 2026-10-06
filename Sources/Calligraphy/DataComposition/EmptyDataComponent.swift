@@ -40,7 +40,7 @@ public struct EmptyDataComponent: DataComponent {
     }
 
     public func _render(
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> Data? {
         nil
     }

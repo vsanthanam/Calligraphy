@@ -230,7 +230,7 @@ private struct Uppercased: StringModifier {
 
     func render(
         content: Content,
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> String? {
         content._render(in: environment)?.uppercased()
     }
@@ -250,7 +250,7 @@ private struct SpacingSuffix: StringModifier {
 
     func render(
         content: Content,
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> String? {
         (content._render(in: environment) ?? "") + " (spacing \(lineSpacing))"
     }

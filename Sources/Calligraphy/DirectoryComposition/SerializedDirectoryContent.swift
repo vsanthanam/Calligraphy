@@ -38,9 +38,9 @@ public struct SerializedDirectoryContent: Equatable, Hashable, Codable, Sendable
     ///   - content: The directory's children
     /// - Returns: The serialized content
     public static func directory(
-        _ name: consuming String,
+        _ name: String,
         permissions: FilePermissions,
-        content: consuming [SerializedDirectoryContent]
+        content: [SerializedDirectoryContent]
     ) -> SerializedDirectoryContent {
         .init(
             name: name,
@@ -56,9 +56,9 @@ public struct SerializedDirectoryContent: Equatable, Hashable, Codable, Sendable
     ///   - data: The file's contents
     /// - Returns: The serialized content
     public static func data(
-        _ name: consuming String,
+        _ name: String,
         permissions: FilePermissions,
-        data: consuming Data
+        data: Data
     ) -> SerializedDirectoryContent {
         .init(
             name: name,
@@ -75,10 +75,10 @@ public struct SerializedDirectoryContent: Equatable, Hashable, Codable, Sendable
     ///   - data: The file's content
     /// - Returns: The serialized content
     public static func data(
-        _ name: consuming String,
+        _ name: String,
         fileExtension: String,
         permissions: FilePermissions,
-        data: consuming Data
+        data: Data
     ) -> SerializedDirectoryContent {
         .data(
             name + "." + fileExtension,
@@ -95,9 +95,9 @@ public struct SerializedDirectoryContent: Equatable, Hashable, Codable, Sendable
     ///   - encoding: The string encoding to use when writing the file to disk
     /// - Returns: The serialized content
     public static func text(
-        _ name: consuming String,
+        _ name: String,
         permissions: FilePermissions,
-        text: consuming String,
+        text: String,
         encoding: String.Encoding
     ) -> SerializedDirectoryContent {
         .init(
@@ -116,10 +116,10 @@ public struct SerializedDirectoryContent: Equatable, Hashable, Codable, Sendable
     ///   - encoding: The string encoding to use when writing the file to disk
     /// - Returns: The serialized content
     public static func text(
-        _ name: consuming String,
+        _ name: String,
         fileExtension: String,
         permissions: FilePermissions,
-        text: consuming String,
+        text: String,
         encoding: String.Encoding
     ) -> SerializedDirectoryContent {
         .text(
@@ -156,7 +156,7 @@ public struct SerializedDirectoryContent: Equatable, Hashable, Codable, Sendable
         ///   - encoding: The encoding of the file
         /// - Returns: The content
         public static func text(
-            _ content: consuming String,
+            _ content: String,
             encoding: String.Encoding
         ) -> Content {
             .file(
@@ -171,7 +171,7 @@ public struct SerializedDirectoryContent: Equatable, Hashable, Codable, Sendable
         /// - Parameter data: The data content of the file
         /// - Returns: The content
         public static func data(
-            _ data: consuming Data
+            _ data: Data
         ) -> Content {
             .file(
                 .data(

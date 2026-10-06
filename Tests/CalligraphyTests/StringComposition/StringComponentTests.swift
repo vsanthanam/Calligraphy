@@ -51,7 +51,7 @@ struct StringComponentTests {
             }
 
             func _render(
-                in environment: borrowing EnvironmentValues
+                in environment: EnvironmentValues
             ) -> String? {
                 "rendered"
             }
@@ -71,7 +71,7 @@ struct StringComponentTests {
             }
 
             func _render(
-                in environment: borrowing EnvironmentValues
+                in environment: EnvironmentValues
             ) -> String? {
                 nil
             }

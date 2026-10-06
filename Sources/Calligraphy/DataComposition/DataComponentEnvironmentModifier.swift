@@ -38,7 +38,7 @@ extension DataComponent {
     /// - Returns: A component that injects the new value into the environment of its descendants.
     public func environment<Key>(
         _ key: Key.Type,
-        _ value: consuming Key.Value
+        _ value: Key.Value
     ) -> some DataComponent where Key: EnvironmentKey {
         transformEnvironment { environment in
             environment[key] = copy value
@@ -55,7 +55,7 @@ extension DataComponent {
     /// - Returns: A component that injects the new value into the environment of its descendants.
     public func environment<Value>(
         _ keyPath: WritableKeyPath<EnvironmentValues, Value>,
-        _ value: consuming Value
+        _ value: Value
     ) -> some DataComponent {
         transformEnvironment { environment in
             environment[keyPath: keyPath] = copy value
@@ -69,7 +69,7 @@ extension DataComponent {
     /// - Parameter transform: A closure that mutates the environment in place.
     /// - Returns: A component whose descendants render with the transformed environment.
     public func transformEnvironment(
-        _ transform: consuming @escaping (inout EnvironmentValues) -> Void
+        _ transform: @escaping (inout EnvironmentValues) -> Void
     ) -> some DataComponent {
         modifier(
             DataEnvironmentModifier(
@@ -93,7 +93,7 @@ private struct DataEnvironmentModifier: DataModifier {
 
     func render(
         content: Content,
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> Data? {
         var copy = copy environment
         transform(&copy)

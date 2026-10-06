@@ -31,13 +31,13 @@ import Foundation
 public enum DataBuilder {
 
     public static func buildExpression<T>(
-        _ expression: consuming T
+        _ expression: T
     ) -> T where T: DataComponent {
         expression
     }
 
     public static func buildExpression(
-        _ expression: consuming Data
+        _ expression: Data
     ) -> RawDataComponent {
         .init(expression)
     }
@@ -61,7 +61,7 @@ public enum DataBuilder {
     }
 
     public static func buildBlock<T>(
-        _ component: consuming T
+        _ component: T
     ) -> T where T: DataComponent {
         component
     }
@@ -73,20 +73,20 @@ public enum DataBuilder {
     }
 
     public static func buildEither<First, Second>(
-        first component: consuming First
+        first component: First
     ) -> _Either<First, Second> where First: DataComponent, Second: DataComponent {
         .first(component)
     }
 
     public static func buildEither<First, Second>(
-        second component: consuming Second
+        second component: Second
     ) -> _Either<First, Second> where First: DataComponent, Second: DataComponent {
         .second(component)
     }
 
     @DataBuilder
     public static func buildOptional<T>(
-        _ component: consuming T?
+        _ component: T?
     ) -> _Either<T, EmptyDataComponent> where T: DataComponent {
         if let component {
             component
@@ -96,7 +96,7 @@ public enum DataBuilder {
     }
 
     public static func buildLimitedAvailability(
-        _ component: consuming some DataComponent
+        _ component: some DataComponent
     ) -> AnyDataComponent {
         AnyDataComponent(erasing: component)
     }
@@ -106,7 +106,7 @@ public enum DataBuilder {
         // MARK: - DataComponent
 
         public func _render(
-            in environment: borrowing EnvironmentValues
+            in environment: EnvironmentValues
         ) -> Data? {
             var result: Data? = nil
             func append(_ component: some DataComponent) {
@@ -149,7 +149,7 @@ public enum DataBuilder {
         // MARK: - DataComponent
 
         public func _render(
-            in environment: borrowing EnvironmentValues
+            in environment: EnvironmentValues
         ) -> Data? {
             switch self {
             case let .first(component):

@@ -41,7 +41,7 @@ public protocol DirectoryContent {
     /// - Parameter environment: The environment values to read during serialization.
     /// - Returns: The serialized files and directories represented by this content.
     func _serialize(
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> [SerializedDirectoryContent]
 
 }

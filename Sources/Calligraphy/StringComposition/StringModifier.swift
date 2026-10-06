@@ -66,7 +66,7 @@ public protocol StringModifier {
     /// - Returns: The rendered string, or `nil` if the modified component contributes nothing.
     func render(
         content: Self.Content,
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> String?
 
 }
@@ -76,7 +76,7 @@ extension StringModifier {
 
     public func render(
         content: Content,
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> String? {
         body(content: content)
             ._render(in: environment)
@@ -118,7 +118,7 @@ public struct _StringModifier_Content<Modifier>: StringComponent where Modifier:
     }
 
     public func _render(
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> String? {
         component._render(in: environment)
     }

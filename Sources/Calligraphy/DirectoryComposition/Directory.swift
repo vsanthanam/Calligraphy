@@ -48,7 +48,7 @@ public protocol Directory: DirectoryContent {
 extension Never: DirectoryContent {
 
     public func _serialize(
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> [SerializedDirectoryContent] {
         fatalError()
     }
@@ -63,7 +63,7 @@ extension Directory {
     }
 
     public func _serialize(
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> [SerializedDirectoryContent] {
         environment.inject(into: self)
         return [

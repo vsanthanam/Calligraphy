@@ -53,7 +53,7 @@ public protocol DataComponent {
     /// - Parameter environment: The environment values to read during rendering.
     /// - Returns: The rendered data, or `nil` if the component contributes nothing.
     func _render(
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> Data?
 
 }
@@ -62,7 +62,7 @@ public protocol DataComponent {
 extension Never: DataComponent {
 
     public func _render(
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> Data? {
         fatalError()
     }
@@ -73,7 +73,7 @@ extension Never: DataComponent {
 extension DataComponent {
 
     public func _render(
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> Data? {
         environment.inject(into: self)
         return body._render(in: environment)
@@ -102,8 +102,8 @@ extension DataComponent {
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @DataBuilder
 public func + (
-    _ lhs: consuming some DataComponent,
-    _ rhs: consuming some DataComponent
+    _ lhs: some DataComponent,
+    _ rhs: some DataComponent
 ) -> some DataComponent {
     lhs
     rhs
@@ -112,8 +112,8 @@ public func + (
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @DataBuilder
 public func + (
-    _ lhs: consuming some DataComponent,
-    _ rhs: consuming Data
+    _ lhs: some DataComponent,
+    _ rhs: Data
 ) -> some DataComponent {
     lhs
     rhs
@@ -122,8 +122,8 @@ public func + (
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @DataBuilder
 public func + (
-    _ lhs: consuming Data,
-    _ rhs: consuming some DataComponent
+    _ lhs: Data,
+    _ rhs: some DataComponent
 ) -> some DataComponent {
     lhs
     rhs

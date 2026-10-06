@@ -38,7 +38,7 @@ public struct Files<T>: DirectoryContent where T: DirectoryContent {
     // MARK: - DirectoryContent
 
     public func _serialize(
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> [SerializedDirectoryContent] {
         files._serialize(in: environment)
     }

@@ -69,7 +69,7 @@ public protocol DataModifier {
     /// - Returns: The rendered data, or `nil` if the modified component contributes nothing.
     func render(
         content: Self.Content,
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> Data?
 
 }
@@ -79,7 +79,7 @@ extension DataModifier {
 
     public func render(
         content: Self.Content,
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> Data? {
         body(content: content)
             ._render(in: environment)
@@ -121,7 +121,7 @@ public struct _DataModifier_Content<Modifier>: DataComponent where Modifier: Dat
     }
 
     public func _render(
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> Data? {
         component._render(in: environment)
     }

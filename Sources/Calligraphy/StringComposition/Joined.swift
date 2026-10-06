@@ -34,7 +34,7 @@ extension StringComponent {
     /// - Parameter separator: The string to insert between each child.
     /// - Returns: A component that renders its children separated by `separator`.
     public func joined(
-        separator: consuming some StringProtocol
+        separator: some StringProtocol
     ) -> some StringComponent {
         modifier(
             JoinedModifier(

@@ -191,7 +191,7 @@ private struct Reversed: DataModifier {
         fatalError()
     }
 
-    func render(content: Content, in environment: borrowing EnvironmentValues) -> Data? {
+    func render(content: Content, in environment: EnvironmentValues) -> Data? {
         content._render(in: environment).map { Data($0.reversed()) }
     }
 
@@ -206,7 +206,7 @@ private struct ByteSuffix: DataModifier {
         fatalError()
     }
 
-    func render(content: Content, in environment: borrowing EnvironmentValues) -> Data? {
+    func render(content: Content, in environment: EnvironmentValues) -> Data? {
         (content._render(in: environment) ?? Data()) + Data([byte])
     }
 

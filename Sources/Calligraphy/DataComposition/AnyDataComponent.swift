@@ -46,7 +46,7 @@ public struct AnyDataComponent: DataComponent {
     }
 
     public func _render(
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> Data? {
         _render(environment)
     }

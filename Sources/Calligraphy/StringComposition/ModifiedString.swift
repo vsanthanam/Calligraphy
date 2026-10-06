@@ -35,7 +35,7 @@ extension StringComponent {
     /// - Parameter modifier: The modifier to apply.
     /// - Returns: This component with the modifier applied.
     public func modifier<Modifier>(
-        _ modifier: consuming Modifier
+        _ modifier: Modifier
     ) -> ModifiedString<Self, Modifier> where Modifier: StringModifier {
         ModifiedString(
             content: self,
@@ -75,7 +75,7 @@ public struct ModifiedString<Content, Modifier>: StringComponent where Content: 
     }
 
     public func _render(
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> String? {
         environment.inject(into: modifier)
         return modifier

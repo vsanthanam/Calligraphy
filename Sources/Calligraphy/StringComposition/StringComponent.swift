@@ -51,7 +51,7 @@ public protocol StringComponent {
     /// - Parameter environment: The environment values to read during rendering.
     /// - Returns: The rendered string, or `nil` if the component contributes nothing.
     func _render(
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> String?
 
 }
@@ -60,7 +60,7 @@ public protocol StringComponent {
 extension StringComponent {
 
     public func _render(
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> String? {
         environment.inject(into: self)
         return body._render(in: environment)
@@ -84,7 +84,7 @@ extension StringComponent {
 extension Never: StringComponent {
 
     public func _render(
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> String? {
         fatalError()
     }

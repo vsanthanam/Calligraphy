@@ -114,7 +114,7 @@ struct SharedEnvironmentTests {
             fatalError()
         }
 
-        func _render(in environment: borrowing EnvironmentValues) -> String? {
+        func _render(in environment: EnvironmentValues) -> String? {
             counter.count += 1
             return "rendered"
         }

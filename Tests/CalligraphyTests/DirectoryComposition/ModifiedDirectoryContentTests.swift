@@ -233,7 +233,7 @@ private struct Reversed: DirectoryContentModifier {
         fatalError()
     }
 
-    func serialize(content: Content, in environment: borrowing EnvironmentValues) -> [SerializedDirectoryContent] {
+    func serialize(content: Content, in environment: EnvironmentValues) -> [SerializedDirectoryContent] {
         content._serialize(in: environment).reversed()
     }
 
@@ -248,7 +248,7 @@ private struct NamedSuffix: DirectoryContentModifier {
         fatalError()
     }
 
-    func serialize(content: Content, in environment: borrowing EnvironmentValues) -> [SerializedDirectoryContent] {
+    func serialize(content: Content, in environment: EnvironmentValues) -> [SerializedDirectoryContent] {
         content._serialize(in: environment) + [
             .text(name, permissions: .defaultFile, text: "suffix", encoding: .utf8)
         ]

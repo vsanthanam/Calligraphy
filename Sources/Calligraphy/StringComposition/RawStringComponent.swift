@@ -46,7 +46,7 @@ public struct RawStringComponent: StringComponent {
     }
 
     public func _render(
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> String? {
         backing
     }

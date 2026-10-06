@@ -37,7 +37,7 @@ extension StringComponent {
     ///   - prefix: A `@StringBuilder` closure producing the component to insert at the start of each matching line.
     /// - Returns: A component whose lines are each prefixed.
     public func prefixLines(
-        when predicate: consuming @escaping (String) -> Bool = { _ in true },
+        when predicate: @escaping (String) -> Bool = { _ in true },
         @StringBuilder with prefix: () -> some StringComponent
     ) -> some StringComponent {
         modifier(
@@ -55,7 +55,7 @@ extension StringComponent {
     ///   - prefix: The string to insert at the start of each matching line.
     /// - Returns: A component whose lines are each prefixed.
     public func prefixLines(
-        when predicate: consuming @escaping (String) -> Bool = { _ in true },
+        when predicate: @escaping (String) -> Bool = { _ in true },
         with prefix: some StringProtocol
     ) -> some StringComponent {
         prefixLines(when: predicate) {
@@ -80,7 +80,7 @@ private struct PrefixLinesModifier<Prefix>: StringModifier where Prefix: StringC
 
     func render(
         content: Content,
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> String? {
         guard let rendered = content._render(in: environment) else {
             return nil

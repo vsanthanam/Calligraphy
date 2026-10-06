@@ -44,13 +44,13 @@ public struct AnyStringComponent: StringComponent {
     }
 
     public func _render(
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> String? {
         __render(environment)
     }
 
     // MARK: - Private
 
-    private let __render: (borrowing EnvironmentValues) -> String?
+    private let __render: (EnvironmentValues) -> String?
 
 }

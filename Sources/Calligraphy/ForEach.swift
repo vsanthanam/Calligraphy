@@ -83,7 +83,7 @@ extension ForEach: StringComponent where Content: StringComponent {
     }
 
     public func _render(
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> String? {
         let pieces = data
             .map { element in
@@ -110,7 +110,7 @@ extension ForEach: DataComponent where Content: DataComponent {
     }
 
     public func _render(
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> Foundation.Data? {
         data
             .reduce(nil) { result, element in
@@ -143,7 +143,7 @@ extension ForEach: DirectoryContent where Content: DirectoryContent {
     }
 
     public func _serialize(
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> [SerializedDirectoryContent] {
         data
             .flatMap { element in

@@ -193,7 +193,7 @@ public struct File: DirectoryContent {
     // MARK: - DirectoryContent
 
     public func _serialize(
-        in environment: borrowing EnvironmentValues
+        in environment: EnvironmentValues
     ) -> [SerializedDirectoryContent] {
         switch backing {
         case let .text(component, encoding):
