@@ -31,11 +31,11 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/apple/swift-collections.git",
-            exact: "1.4.1"
+            from: "1.4.1"
         ),
         .package(
             url: "https://github.com/swiftlang/swift-syntax",
-            exact: "603.0.2"
+            from: "603.0.2"
         )
     ],
     targets: [

@@ -35,11 +35,11 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/apple/swift-collections.git",
-            exact: "1.4.1"
+            from: "1.4.1"
         ),
         .package(
             url: "https://github.com/swiftlang/swift-syntax",
-            exact: "604.0.0"
+            from: "604.0.0"
         )
     ],
     targets: [
