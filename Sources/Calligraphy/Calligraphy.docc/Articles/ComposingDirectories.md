@@ -5,7 +5,7 @@
     @PageKind(article)
 }
 
-Use `@DirectoryContentBuilder` to compose complex, nested directory structures and write them to disk.
+Use `@DirectoryBuilder` to compose complex, nested directory structures and write them to disk.
 
 ## Overview
 
@@ -51,7 +51,7 @@ The directory composition API works seamlessly with other Calligraphy builders:
 
 - `@StringBuilder` for text content
 - `@DataBuilder` for binary data
-- `@DirectoryContentBuilder` for directory structure
+- `@DirectoryBuilder` for directory structure
 
 This allows you to compose complex directory structures with rich content:
 

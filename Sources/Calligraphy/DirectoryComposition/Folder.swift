@@ -37,7 +37,7 @@ public struct Folder<T>: Directory where T: DirectoryContent {
     public init(
         _ name: String,
         permissions: FilePermissions = .defaultDirectory,
-        @DirectoryContentBuilder contents: () -> T
+        @DirectoryBuilder contents: () -> T
     ) {
         self.name = name
         self.permissions = permissions

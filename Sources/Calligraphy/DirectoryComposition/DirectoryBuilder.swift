@@ -1,5 +1,5 @@
 // Calligraphy
-// DirectoryContentBuilder.swift
+// DirectoryBuilder.swift
 //
 // MIT License
 //
@@ -26,7 +26,7 @@
 /// A result builder for directory content
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @resultBuilder
-public enum DirectoryContentBuilder {
+public enum DirectoryBuilder {
 
     public static func buildExpression<T>(
         _ expression: T
@@ -40,7 +40,7 @@ public enum DirectoryContentBuilder {
         .init(expression)
     }
 
-    @DirectoryContentBuilder
+    @DirectoryBuilder
     public static func buildExpression(
         _ expression: SerializedDirectoryContent
     ) -> _AlreadySerialized {
@@ -75,7 +75,7 @@ public enum DirectoryContentBuilder {
         .second(component)
     }
 
-    @DirectoryContentBuilder
+    @DirectoryBuilder
     public static func buildOptional<T>(
         _ component: T?
     ) -> _Either<T, EmptyDirectoryContent> where T: DirectoryContent {

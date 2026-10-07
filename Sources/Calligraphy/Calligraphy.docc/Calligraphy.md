@@ -10,7 +10,7 @@ The library is organized into three main areas, which share a single environment
 
 - **String Composition**: Create and manipulate strings with components like `StringGroup`, `Line`, and `Lines`, and modifiers like `tabbed(_:)` and `quotationMarkStyle(_:)`. Build and compose your own `StringComponent` types and compose them into complex string structures using `@StringBuilder` with advanced delimiter and formatting options.
 
-- **Directory Composition**: Generate entire directory structures programmatically using `Directory`, `Folder`, and `File`. Build and compose your own `TextFile` and `DataFile` types,and compose them into complex, nested directory structures using `@DirectoryContentBuilder`
+- **Directory Composition**: Generate entire directory structures programmatically using `Directory`, `Folder`, and `File`. Build and compose your own `TextFile` and `DataFile` types,and compose them into complex, nested directory structures using `@DirectoryBuilder`
 
 - **Data Composition**: Work with raw data using `DataComponent` and `DataBuilder`, allowing you to compose binary data structures in a declarative way.
 
@@ -57,7 +57,7 @@ Calligraphy's type-safe API and builder patterns make it ideal for code generati
 
 - <doc:ComposingDirectories>
 - ``DirectoryContent``
-- ``DirectoryContentBuilder``
+- ``DirectoryBuilder``
 - ``Directory``
 - ``TextFile``
 - ``DataFile``

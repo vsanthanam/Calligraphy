@@ -39,7 +39,7 @@ public protocol Directory: DirectoryContent {
 
     associatedtype Body: DirectoryContent
 
-    @DirectoryContentBuilder
+    @DirectoryBuilder
     var body: Body { get }
 
 }
