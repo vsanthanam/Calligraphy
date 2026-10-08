@@ -11,7 +11,7 @@ A declarative library for composing strings, text, files, and folders in Swift
 
 ## Overview
 
-Calligraphy is SwiftUI for strings, files, and folders. Components conform to `StringComponent` the way views conform to `View`, `@StringBuilder` composes them like `@ViewBuilder`, and modifiers chain the same way. The same pattern extends to directory trees via `DirectoryContent` and `@DirectoryContentBuilder`.
+Calligraphy is SwiftUI for strings, files, and folders. Components conform to `StringComponent` the way views conform to `View`, `@StringBuilder` composes them like `@ViewBuilder`, and modifiers chain the same way. The same pattern extends to directory trees via `DirectoryContent` and `@DirectoryBuilder`.
 
 Compose a multi-line string from components:
 

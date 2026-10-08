@@ -27,7 +27,7 @@ import Foundation
 
 /// A component that produces content for every element of a collection.
 ///
-/// Use `ForEach` to repeat content for each element in a collection, the way you would use `ForEach` in SwiftUI. The same type works inside every Calligraphy builder: in a `@StringBuilder` the `content` closure is itself a `@StringBuilder`, in a `@DataBuilder` it is a `@DataBuilder`, and in a `@DirectoryContentBuilder` it is a `@DirectoryContentBuilder`, so the full DSL is available when describing each element's contribution, including conditionals and modifiers:
+/// Use `ForEach` to repeat content for each element in a collection, the way you would use `ForEach` in SwiftUI. The same type works inside every Calligraphy builder: in a `@StringBuilder` the `content` closure is itself a `@StringBuilder`, in a `@DataBuilder` it is a `@DataBuilder`, and in a `@DirectoryBuilder` it is a `@DirectoryBuilder`, so the full DSL is available when describing each element's contribution, including conditionals and modifiers:
 ///
 /// @Snippet(path: "Calligraphy/Snippets/ForEach/RepeatingContent", slice: "for-each")
 ///
@@ -134,10 +134,10 @@ extension ForEach: DirectoryContent where Content: DirectoryContent {
     ///
     /// - Parameters:
     ///   - data: The collection to iterate over.
-    ///   - content: A `@DirectoryContentBuilder` closure that produces the content for a single element.
+    ///   - content: A `@DirectoryBuilder` closure that produces the content for a single element.
     public init(
         _ data: Data,
-        @DirectoryContentBuilder content: @escaping (Data.Element) -> Content
+        @DirectoryBuilder content: @escaping (Data.Element) -> Content
     ) {
         self.init(data: data, content: content)
     }

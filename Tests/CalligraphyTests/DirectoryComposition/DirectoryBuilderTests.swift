@@ -1,5 +1,5 @@
 // Calligraphy
-// DirectoryContentBuilderTests.swift
+// DirectoryBuilderTests.swift
 //
 // MIT License
 //
@@ -27,39 +27,39 @@
 import Foundation
 import Testing
 
-@Suite("@DirectoryContentBuilder Tests", .tags(.directoryComposition))
-struct DirectoryContentBuilderTests {
+@Suite("@DirectoryBuilder Tests", .tags(.directoryComposition))
+struct DirectoryBuilderTests {
 
     @Test("Serialized Content (Array) Expression")
     func arrayExpression() {
 
-        @DirectoryContentBuilder
+        @DirectoryBuilder
         func builder() -> some DirectoryContent {
             [.text("foo", permissions: .defaultFile, text: "bar", encoding: .utf8)]
         }
 
         let components = builder()
-        #expect(components is DirectoryContentBuilder._AlreadySerialized)
+        #expect(components is DirectoryBuilder._AlreadySerialized)
         #expect(components._serialize() == [.text("foo", permissions: .defaultFile, text: "bar", encoding: .utf8)])
     }
 
     @Test("Serialized Content Expression")
     func contentExpression() {
 
-        @DirectoryContentBuilder
+        @DirectoryBuilder
         func builder() -> some DirectoryContent {
             .text("foo", permissions: .defaultFile, text: "bar", encoding: .utf8)
         }
 
         let components = builder()
-        #expect(components is DirectoryContentBuilder._AlreadySerialized)
+        #expect(components is DirectoryBuilder._AlreadySerialized)
         #expect(components._serialize() == [.text("foo", permissions: .defaultFile, text: "bar", encoding: .utf8)])
     }
 
     @Test("No Components")
     func noComponents() {
 
-        @DirectoryContentBuilder
+        @DirectoryBuilder
         func builder() -> some DirectoryContent {}
 
         let components = builder()
@@ -77,7 +77,7 @@ struct DirectoryContentBuilderTests {
 
         }
 
-        @DirectoryContentBuilder
+        @DirectoryBuilder
         func builder() -> some DirectoryContent {
             Foo()
         }
@@ -113,7 +113,7 @@ struct DirectoryContentBuilderTests {
             var body: some DataComponent {}
         }
 
-        @DirectoryContentBuilder
+        @DirectoryBuilder
         func builder() -> some DirectoryContent {
             Foo()
             Bar()
@@ -121,7 +121,7 @@ struct DirectoryContentBuilderTests {
         }
 
         let components = builder()
-        #expect(components is DirectoryContentBuilder._Block<Foo, Bar, Baz>)
+        #expect(components is DirectoryBuilder._Block<Foo, Bar, Baz>)
 
         let expected = [
             SerializedDirectoryContent.directory("Foo", permissions: .defaultDirectory, content: []),
@@ -157,7 +157,7 @@ struct DirectoryContentBuilderTests {
             }
         }
 
-        @DirectoryContentBuilder
+        @DirectoryBuilder
         func builder() -> some DirectoryContent {
             if flow {
                 Foo()
@@ -167,7 +167,7 @@ struct DirectoryContentBuilderTests {
         }
 
         let components = builder()
-        #expect(components is DirectoryContentBuilder._Either<Foo, Bar>)
+        #expect(components is DirectoryBuilder._Either<Foo, Bar>)
         #expect(components._serialize() == result)
     }
 
@@ -197,7 +197,7 @@ struct DirectoryContentBuilderTests {
             }
         }
 
-        @DirectoryContentBuilder
+        @DirectoryBuilder
         func builder() -> some DirectoryContent {
             if flow {
                 Foo()
@@ -206,13 +206,13 @@ struct DirectoryContentBuilderTests {
         }
 
         let components = builder()
-        #expect(components is DirectoryContentBuilder._Block<DirectoryContentBuilder._Either<Foo, EmptyDirectoryContent>, Bar>)
+        #expect(components is DirectoryBuilder._Block<DirectoryBuilder._Either<Foo, EmptyDirectoryContent>, Bar>)
         #expect(components._serialize() == result)
     }
 
     @Test("ForEach Support")
     func forEach() {
-        @DirectoryContentBuilder
+        @DirectoryBuilder
         func builder() -> some DirectoryContent {
             ForEach(0 ..< 8) { i in
                 if i % 2 == 0 {
@@ -222,7 +222,7 @@ struct DirectoryContentBuilderTests {
         }
 
         let components = builder()
-        #expect(components is ForEach<Range<Int>, DirectoryContentBuilder._Either<File, EmptyDirectoryContent>>)
+        #expect(components is ForEach<Range<Int>, DirectoryBuilder._Either<File, EmptyDirectoryContent>>)
 
         let expected = [
             SerializedDirectoryContent.text("1.txt", permissions: .defaultFile, text: "0-bar", encoding: .utf8),
@@ -237,7 +237,7 @@ struct DirectoryContentBuilderTests {
     ///
     @Test("Availablility Check Support")
     func availabilityCheck() {
-        @DirectoryContentBuilder
+        @DirectoryBuilder
         func builder() -> some DirectoryContent {
             if #available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *) {
                 Folder("Foo") {}
@@ -245,7 +245,7 @@ struct DirectoryContentBuilderTests {
         }
 
         let components = builder()
-        #expect(components is DirectoryContentBuilder._Either<AnyDirectoryContent, EmptyDirectoryContent>)
+        #expect(components is DirectoryBuilder._Either<AnyDirectoryContent, EmptyDirectoryContent>)
         #expect(components._serialize() == [.directory("Foo", permissions: .defaultDirectory, content: [])])
     }
 

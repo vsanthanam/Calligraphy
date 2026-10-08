@@ -53,7 +53,7 @@ public protocol DirectoryContentModifier {
     ///
     /// - Parameter content: A placeholder for the content the modifier is applied to.
     /// - Returns: The modified content.
-    @DirectoryContentBuilder
+    @DirectoryBuilder
     func body(content: Self.Content) -> Body
 
     /// Serialize the modified content using the supplied environment.
