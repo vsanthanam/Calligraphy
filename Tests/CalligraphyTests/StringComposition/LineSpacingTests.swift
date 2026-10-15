@@ -31,7 +31,7 @@ struct LineSpacingTests {
 
     @Test("Modifier")
     func modifier() {
-        let str = String.build {
+        let str = String {
             Lines {
                 Lines {
                     "foo"

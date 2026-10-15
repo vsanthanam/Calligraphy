@@ -31,7 +31,7 @@
 ///
 /// @Snippet(path: "Calligraphy/Snippets/String/CreatingStrings", slice: "component")
 ///
-/// You can also pass in multiple combined components using ``Swift/String/build(_:)``:
+/// You can also pass in multiple combined components using ``Swift/String/init(builder:)``:
 ///
 /// @Snippet(path: "Calligraphy/Snippets/String/CreatingStrings", slice: "build")
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
@@ -50,10 +50,19 @@ extension String {
     /// Build a string with a `@StringBuilder`
     /// - Parameter components: The components to assemble into a string
     /// - Returns: The string
+    @available(*, deprecated, message: "Use .init(builder:) instead")
     public static func build(
         @StringBuilder _ components: () -> some StringComponent
     ) -> String {
         .init(components())
+    }
+
+    /// Build a string with a `@StringBuilder`
+    /// - Parameter builder: The components to assemble into a string
+    public init(
+        @StringBuilder builder: () -> String
+    ) {
+        self = builder()
     }
 
 }

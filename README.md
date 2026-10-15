@@ -16,7 +16,7 @@ Calligraphy is SwiftUI for strings, files, and folders. Components conform to `S
 Compose a multi-line string from components:
 
 ```swift
-let message = String.build {
+let message = String {
     Line {
         "Hello,"
         Space()

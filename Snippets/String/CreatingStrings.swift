@@ -1,5 +1,5 @@
 // Create a Swift `String` from a single string component, or from several
-// combined components with `String.build(_:)`.
+// combined components with `String.init(builder:)`.
 
 // snippet.hide
 import Calligraphy
@@ -19,7 +19,7 @@ let string = String(component)
 // snippet.end
 
 // snippet.build
-let built = String.build {
+let built = String {
     "Hello, World!"
     "This is a declarative, multi-line string"
     "Created with Calligraphy!"

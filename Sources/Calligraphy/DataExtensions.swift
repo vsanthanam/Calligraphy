@@ -33,7 +33,7 @@ import Foundation
 ///
 /// @Snippet(path: "Calligraphy/Snippets/Data/CreatingData", slice: "component")
 ///
-/// You can also pass in multiple combined components using ``Foundation/Data/build(_:)``:
+/// You can also pass in multiple combined components using ``Foundation/Data/init(builder:)``:
 ///
 /// @Snippet(path: "Calligraphy/Snippets/Data/CreatingData", slice: "build")
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
@@ -52,10 +52,19 @@ extension Data {
     /// Create data from multiple data components
     /// - Parameter components: The data components
     /// - Returns: The rendered data
+    @available(*, deprecated, message: "Use .init(builder:) instead")
     public static func build(
         @DataBuilder _ components: () -> some DataComponent
     ) -> Data {
         self.init(components())
+    }
+
+    /// Build data with a `@DataBuilder`
+    /// - Parameter builder: The components to assemble into data
+    public init(
+        @DataBuilder builder: () -> Data
+    ) {
+        self = builder()
     }
 
 }

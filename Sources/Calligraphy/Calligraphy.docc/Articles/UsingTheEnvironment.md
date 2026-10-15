@@ -24,7 +24,7 @@ Inside a component, use the ``Environment`` property wrapper to read a value fro
 
 The property wrapper works the same way in a ``DataComponent``, and in types that conform to ``TextFile``, ``DataFile``, or ``Directory``.
 
-The property wrapper is populated by reflection on the enclosing type, so it only works as a stored property of a component. When you need an environment value somewhere else, such as a free `@StringBuilder` function or a `String.build { ... }` closure, move that piece of content into a small component type and read the value there, the same way you would introduce a `View` in SwiftUI.
+The property wrapper is populated by reflection on the enclosing type, so it only works as a stored property of a component. When you need an environment value somewhere else, such as a free `@StringBuilder` function or the ``Swift/String/init(builder:)`` initializer, move that piece of content into a small component type and read the value there, the same way you would introduce a `View` in SwiftUI.
 
 ## Reading the File Name
 

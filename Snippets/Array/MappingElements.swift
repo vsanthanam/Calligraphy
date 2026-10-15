@@ -7,7 +7,7 @@ import Calligraphy
 // snippet.map
 let items = ["apple", "banana", "cherry"]
 
-let list = String.build {
+let list = String {
     items.map { item in
         "- \(item)"
     }

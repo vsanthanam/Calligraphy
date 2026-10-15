@@ -42,9 +42,9 @@ struct StringExtensionsTests {
         #expect(str == "")
     }
 
-    @Test("Build type method")
-    func build() {
-        let str = String.build {
+    @Test("Builder Initializer")
+    func builder() {
+        let str = String {
             RawStringComponent("Foo")
             RawStringComponent("Bar")
         }
