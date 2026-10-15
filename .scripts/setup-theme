@@ -1,3 +1,5 @@
+#!/bin/sh
+
 cat > _config.yml <<EOF
 remote_theme: vsanthanam/fountainpen@v0.1.0
 plugins:
@@ -9,7 +11,7 @@ hero_accents:
   - "declarative"
   - "Swift"
 metadata:
-  - "V2.1.0"
+  - "V3.1.0"
   - "MIT"
   - "Swift 6.4"
 EOF
