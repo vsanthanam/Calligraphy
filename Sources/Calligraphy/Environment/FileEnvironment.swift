@@ -39,7 +39,7 @@ extension EnvironmentValues {
 /// The value is `nil` when a component is rendered outside of any file. It is also `nil` when read on a file type itself, which already knows its own ``TextFile/name``; the file name is visible to the file's ``TextFile/body``, not to the file's own properties.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @propertyWrapper
-public struct FileName: EnvironmentPropertyWrapper {
+public struct FileName: DynamicProperty {
 
     // MARK: - Initializers
 
@@ -57,12 +57,6 @@ public struct FileName: EnvironmentPropertyWrapper {
 
     @Environment(\.fileName)
     private var fileName
-
-    func inject(
-        _ values: EnvironmentValues
-    ) {
-        _fileName.inject(values)
-    }
 
 }
 

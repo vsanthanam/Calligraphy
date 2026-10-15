@@ -32,7 +32,7 @@
 /// - Note: SwiftUI declares a property wrapper with the same name. In a file that imports both modules, write `@Calligraphy.Environment` to disambiguate.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @propertyWrapper
-public struct Environment<Value>: EnvironmentPropertyWrapper {
+public struct Environment<Value>: DynamicProperty {
 
     // MARK: - Initializers
 
@@ -59,13 +59,15 @@ public struct Environment<Value>: EnvironmentPropertyWrapper {
         read(box.values)
     }
 
-    // MARK: - Private
+    // MARK: - DynamicProperty
 
-    func inject(
+    public func _inject(
         _ values: EnvironmentValues
     ) {
         box.values = values
     }
+
+    // MARK: - Private
 
     private let read: (EnvironmentValues) -> Value
     private let box = Box()
@@ -76,21 +78,50 @@ public struct Environment<Value>: EnvironmentPropertyWrapper {
 
 }
 
+/// A property wrapper that derives its value from the surrounding ``EnvironmentValues``.
+///
+/// ``Environment`` and ``FileName`` are dynamic properties. Conform your own property wrappers to `DynamicProperty` to have Calligraphy resolve them against the environment whenever the component, modifier, file, or directory that declares them is rendered.
+///
+/// A dynamic property reads the environment through other dynamic properties stored inside it, typically ``Environment``, and computes its `wrappedValue` from them. Because the environment is injected after the enclosing component is initialized, `wrappedValue` must be a computed property:
+///
+/// @Snippet(path: "Calligraphy/Snippets/EnvironmentValues/CustomDynamicProperty", slice: "wrapper")
+///
+/// The default implementation of `_inject(_:)` finds every dynamic property stored in the conforming type and injects it, so a conforming type rarely needs to do anything beyond declaring the conformance.
+///
+/// - Note: SwiftUI declares a protocol with the same name. In a file that imports both modules, write `Calligraphy.DynamicProperty` to disambiguate.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-protocol EnvironmentPropertyWrapper {
-    func inject(
+public protocol DynamicProperty {
+
+    /// Resolve this property against the environment it is being rendered in.
+    ///
+    /// You rarely need to implement this method. The default implementation injects every dynamic property stored in `self`. Implement it only when your property reads the environment some other way.
+    ///
+    /// - Parameter values: The environment values to read during rendering.
+    func _inject(
         _ values: EnvironmentValues
     )
+
+}
+
+@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
+extension DynamicProperty {
+
+    public func _inject(
+        _ values: EnvironmentValues
+    ) {
+        values.inject(into: self)
+    }
+
 }
 
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 extension EnvironmentValues {
 
-    /// Resolve every ``Environment`` property declared by `subject` against this environment.
-    /// - Parameter subject: The component, modifier, file, or directory whose wrappers should be injected.
+    /// Resolve every ``DynamicProperty`` declared by `subject` against this environment.
+    /// - Parameter subject: The component, modifier, file, directory, or dynamic property whose stored dynamic properties should be injected.
     func inject(into subject: Any) {
         for child in Mirror(reflecting: subject).children {
-            (child.value as? (any EnvironmentPropertyWrapper))?.inject(self)
+            (child.value as? (any DynamicProperty))?._inject(self)
         }
     }
 

@@ -68,3 +68,13 @@ Optional types do not need an initial value — when omitted, the default is `ni
 
 @Snippet(path: "Calligraphy/Snippets/EnvironmentValues/CustomEnvironmentValues", slice: "optional-entry")
 
+## Defining Custom Dynamic Properties
+
+``Environment`` and ``FileName`` are property wrappers that derive their value from the environment at render time. Calligraphy calls these dynamic properties, and you can define your own by conforming a property wrapper to ``DynamicProperty``. Store the environment values you need as ``Environment`` or ``FileName`` properties, and compute `wrappedValue` from them:
+
+@Snippet(path: "Calligraphy/Snippets/EnvironmentValues/CustomDynamicProperty", slice: "wrapper")
+
+Because the environment is injected after the enclosing component is initialized, `wrappedValue` must be computed rather than stored. Beyond that, the conformance is all that is needed; Calligraphy finds the dynamic properties stored inside your wrapper and resolves them for you. Use the wrapper from any component, modifier, file, or directory, the same way you would use ``Environment``:
+
+@Snippet(path: "Calligraphy/Snippets/EnvironmentValues/CustomDynamicProperty", slice: "usage")
+
