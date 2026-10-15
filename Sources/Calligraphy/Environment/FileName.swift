@@ -1,5 +1,5 @@
 // Calligraphy
-// FileEnvironment.swift
+// FileName.swift
 //
 // MIT License
 //
@@ -23,12 +23,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-extension EnvironmentValues {
-
-    @Entry
-    var fileName: String?
-
-}
+import Foundation
 
 /// A property wrapper that reads the name of the file currently being rendered.
 ///
@@ -37,6 +32,8 @@ extension EnvironmentValues {
 /// @Snippet(path: "Calligraphy/Snippets/EnvironmentValues/ReadingFileName", slice: "header")
 ///
 /// The value is `nil` when a component is rendered outside of any file. It is also `nil` when read on a file type itself, which already knows its own ``TextFile/name``; the file name is visible to the file's ``TextFile/body``, not to the file's own properties.
+///
+/// To learn where the file sits in the directory tree, or where it is being written on disk, use ``FilePath``, ``FileURL``, ``EnclosingPath``, or ``EnclosingURL``.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @propertyWrapper
 public struct FileName: DynamicProperty {

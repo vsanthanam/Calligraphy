@@ -75,6 +75,26 @@ struct DirectoryContentTests {
         """)
     }
 
+    @Test("Writes into a destination whose path contains spaces and percent signs")
+    func destinationWithSpecialCharacters() async throws {
+        let directory = FileManager.default.temporaryDirectory
+            .appending(path: "calligraphy 100% \(UUID().uuidString)", directoryHint: .isDirectory)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let content = Folder("my folder") {
+            File("my file.txt", permissions: .executableFile, text: "ok")
+        }
+        try await content.write(to: directory)
+        let fileURL = directory
+            .appending(path: "my folder", directoryHint: .isDirectory)
+            .appending(path: "my file.txt", directoryHint: .notDirectory)
+        #expect(try String(contentsOf: fileURL, encoding: .utf8) == "ok")
+        #if !os(Windows)
+            let mode = try #require(FileManager.default.attributesOfItem(atPath: fileURL.path(percentEncoded: false))[.posixPermissions] as? Int)
+            #expect(mode == 0o755)
+        #endif
+    }
+
     @Test("Sibling names that differ only by case are rejected")
     func caseInsensitiveDuplicateNames() async throws {
         let directory = try makeTemporaryDirectory()
