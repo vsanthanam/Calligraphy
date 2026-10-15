@@ -29,6 +29,7 @@ import Testing
 @Suite("String Group Tests", .tags(.stringComposition))
 struct StringGroupTests {
 
+    @available(*, deprecated)
     @Test("Single Component")
     func single() {
         let components = StringGroup {
@@ -37,6 +38,7 @@ struct StringGroupTests {
         #expect(String(components) == "foo")
     }
 
+    @available(*, deprecated)
     @Test("Multiple Components")
     func multiple() {
         let components = StringGroup {
@@ -51,12 +53,14 @@ struct StringGroupTests {
         """)
     }
 
+    @available(*, deprecated)
     @Test("Empty")
     func empty() {
         let components = StringGroup {}
         #expect(String(components) == "")
     }
 
+    @available(*, deprecated)
     @Test("Composable with Modifiers")
     func composable() {
         let components = StringGroup {

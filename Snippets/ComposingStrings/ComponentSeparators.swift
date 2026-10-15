@@ -22,7 +22,7 @@ let lines = Lines {
 // snippet.end
 
 // snippet.joined
-let joined = StringGroup {
+let joined = Group {
     "Apple"
     "Banana"
     "Pear"

@@ -142,7 +142,7 @@ struct ForEachTests {
         }
         #expect(String(line) == "foobarbaz")
 
-        let joined = StringGroup {
+        let joined = Group {
             "foo"
             ForEach(["bar", "baz"]) { item in
                 item

@@ -104,7 +104,7 @@ struct LineSpacingTests {
 
     @Test("Spacing Passes Through Transparent Components")
     func passesThroughGroups() {
-        let direct = StringGroup {
+        let direct = Group {
             Lines {
                 "foo"
                 "bar"
@@ -119,7 +119,7 @@ struct LineSpacingTests {
 
         let nested = Lines {
             "foo"
-            StringGroup {
+            Group {
                 Lines {
                     "bar"
                     "baz"

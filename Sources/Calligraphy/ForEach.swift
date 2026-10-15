@@ -35,7 +35,7 @@ import Foundation
 ///
 /// @Snippet(path: "Calligraphy/Snippets/ForEach/RepeatingFiles", slice: "files")
 ///
-/// Inside a string, `ForEach` is transparent to layout, like ``StringGroup``: the results are joined using the surrounding ``EnvironmentValues/separator``, so inside ``Lines`` each element starts on a new line and inside ``Line`` the elements are concatenated. Inside data, the elements' bytes are concatenated. Inside a directory, the elements' files and folders are listed in order. Elements whose content renders nothing are skipped.
+/// Inside a string, `ForEach` is transparent to layout, like ``Group``: the results are joined using the surrounding ``EnvironmentValues/separator``, so inside ``Lines`` each element starts on a new line and inside ``Line`` the elements are concatenated. Inside data, the elements' bytes are concatenated. Inside a directory, the elements' files and folders are listed in order. Elements whose content renders nothing are skipped.
 ///
 /// Calligraphy's builders do not accept `for`-`in` loops; `ForEach` fills that role, and unlike a loop it can contain expressions whose type is opaque, such as the result of a modifier.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
