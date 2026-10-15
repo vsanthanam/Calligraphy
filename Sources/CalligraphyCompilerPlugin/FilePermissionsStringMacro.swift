@@ -35,8 +35,6 @@ public struct FilePermissionsStringMacro: ExpressionMacro {
         of node: some FreestandingMacroExpansionSyntax,
         in context: some MacroExpansionContext
     ) throws -> ExprSyntax {
-        // Expect exactly one string literal argument like "rwxr-xr-x".
-        // Also accept optional whitespace separators (e.g. "rwx r-x r-x") and an optional leading file type char (e.g. "-rwxr-xr-x").
         guard node.arguments.count == 1 else {
             throw MacroExpansionErrorMessage("filePermissions requires a single string literal argument, e.g. \"rwxr-xr-x\"")
         }
@@ -47,29 +45,26 @@ public struct FilePermissionsStringMacro: ExpressionMacro {
             .as(StringLiteralExprSyntax.self)
             .mustExist()
 
-        // Ensure no interpolation and capture the raw content
         guard stringLiteral.segments.count == 1,
               let first = stringLiteral.segments.first,
               let segment = first.as(StringSegmentSyntax.self) else {
             throw MacroExpansionErrorMessage("filePermissions string must be a simple, static string literal without interpolation")
         }
 
-        // Normalize by removing all whitespace
         let raw = segment.content.text
         var normalized = String(raw.filter { !$0.isWhitespace })
 
-        // If there's a leading file type character, strip it (e.g., '-', 'd', 'l', 'c', 'b', 's', 'p')
         let fileTypeChars: Set<Character> = ["-", "d", "l", "c", "b", "s", "p"]
-        if normalized.count == 10, let firstChar = normalized.first, fileTypeChars.contains(firstChar) {
+        if normalized.count == 10,
+           let firstChar = normalized.first,
+           fileTypeChars.contains(firstChar) {
             normalized.removeFirst()
         }
 
-        // Validate the symbolic permission string (9 characters: u=rwx, g=rwx, o=rwx)
         guard normalized.count == 9 else {
             throw MacroExpansionErrorMessage("filePermissions string must describe exactly 9 permission characters (optionally preceded by a file type), e.g. \"rwxr-xr-x\" or \"-rwxr-xr-x\"")
         }
 
-        /// Helper to index into the string safely
         func char(at i: Int) -> Character {
             normalized[normalized.index(normalized.startIndex, offsetBy: i)]
         }
@@ -93,10 +88,8 @@ public struct FilePermissionsStringMacro: ExpressionMacro {
             }
         }
 
-        // Build the list of FilePermissions option names based on the string
         var parts: [String] = []
 
-        // Special bits first for readability
         let ux = char(at: 2)
         if ux == "s" || ux == "S" {
             parts.append(".setUserID")
@@ -112,7 +105,6 @@ public struct FilePermissionsStringMacro: ExpressionMacro {
             parts.append(".sticky")
         }
 
-        // User bits
         if char(at: 0) == "r" {
             parts.append(".readUser")
         }
@@ -123,7 +115,6 @@ public struct FilePermissionsStringMacro: ExpressionMacro {
             parts.append(".executeUser")
         }
 
-        // Group bits
         if char(at: 3) == "r" {
             parts.append(".readGroup")
         }
@@ -134,7 +125,6 @@ public struct FilePermissionsStringMacro: ExpressionMacro {
             parts.append(".executeGroup")
         }
 
-        // Other bits
         if char(at: 6) == "r" {
             parts.append(".readOther")
         }
@@ -145,13 +135,14 @@ public struct FilePermissionsStringMacro: ExpressionMacro {
             parts.append(".executeOther")
         }
 
-        let arrayLiteral = if parts.isEmpty {
-            "[] as FilePermissions"
-        } else {
-            "[" + parts.joined(separator: ", ") + "]"
-        }
+        let arrayLiteral = "[" + parts.joined(separator: ", ") + "]"
+        #if compiler(>=6.3) && canImport(SwiftSyntax603)
+            let fullyFormed = "Calligraphy::FilePermissions(arrayLiteral: \(arrayLiteral))"
+        #else
+            let fullyFormed = "Calligraphy.FilePermissions(arrayLiteral: \(arrayLiteral))"
+        #endif
 
-        return ExprSyntax(stringLiteral: arrayLiteral)
+        return ExprSyntax(stringLiteral: fullyFormed)
     }
 
 }

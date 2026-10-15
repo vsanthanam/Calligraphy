@@ -30,7 +30,10 @@ import SwiftSyntaxMacros
 import SwiftSyntaxMacrosGenericTestSupport
 import Testing
 
-// Macro implementations build for the host, so the corresponding module is not available when cross-compiling. Cross-compiled tests may still make use of the macro itself in end-to-end tests.
+#if canImport(SwiftSyntax604)
+    import SwiftSyntaxMacrosTestSupport
+#endif
+
 #if canImport(CalligraphyCompilerPlugin)
     import CalligraphyCompilerPlugin
 
@@ -42,285 +45,719 @@ import Testing
 @Suite("@Entry Macro Tests")
 struct EntryMacroTests {
 
-    @Test("String type entry expands")
-    func stringEntry() {
-        #if canImport(CalligraphyCompilerPlugin)
-            assertMacroExpansion(
-                #"""
-                extension EnvironmentValues {
-                    @Entry
-                    var separator: String = "\n"
-                }
-                """#,
-                expandedSource: #"""
-                extension EnvironmentValues {
-                    var separator: String {
-                        get {
-                            self[__Key_separator.self]
-                        }
-                        set {
-                            self[__Key_separator.self] = newValue
-                        }
+    #if compiler(>=6.3) && canImport(SwiftSyntax603)
+        @Test("String type entry expands")
+        func stringEntry() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    #"""
+                    extension EnvironmentValues {
+                        @Entry
+                        var separator: String = "\n"
                     }
+                    """#,
+                    expandedSource: #"""
+                    extension EnvironmentValues {
+                        var separator: String {
+                            get {
+                                self[__Key_separator.self]
+                            }
+                            set {
+                                self[__Key_separator.self] = newValue
+                            }
+                        }
 
-                    private struct __Key_separator: EnvironmentKey {
-                        static let defaultValue: String = "\n"
+                        private struct __Key_separator: Calligraphy::EnvironmentKey {
+                            static let defaultValue: String = "\n"
+                        }
                     }
-                }
-                """#,
-                macroSpecs: macroSpecs
-            ) { failure in
-                Issue.record("\(failure.message)")
+                    """#,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #else
+        @Test("String type entry expands")
+        func stringEntry() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    #"""
+                    extension EnvironmentValues {
+                        @Entry
+                        var separator: String = "\n"
+                    }
+                    """#,
+                    expandedSource: #"""
+                    extension EnvironmentValues {
+                        var separator: String {
+                            get {
+                                self[__Key_separator.self]
+                            }
+                            set {
+                                self[__Key_separator.self] = newValue
+                            }
+                        }
+
+                        private struct __Key_separator: Calligraphy.EnvironmentKey {
+                            static let defaultValue: String = "\n"
+                        }
+                    }
+                    """#,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #endif
+
+    #if compiler(>=6.3) && canImport(SwiftSyntax603)
+        @Test("Int type entry expands")
+        func intEntry() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    extension EnvironmentValues {
+                        @Entry
+                        var lineSpacing: Int = 1
+                    }
+                    """,
+                    expandedSource: """
+                    extension EnvironmentValues {
+                        var lineSpacing: Int {
+                            get {
+                                self[__Key_lineSpacing.self]
+                            }
+                            set {
+                                self[__Key_lineSpacing.self] = newValue
+                            }
+                        }
+
+                        private struct __Key_lineSpacing: Calligraphy::EnvironmentKey {
+                            static let defaultValue: Int = 1
+                        }
+                    }
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #else
+        @Test("Int type entry expands")
+        func intEntry() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    extension EnvironmentValues {
+                        @Entry
+                        var lineSpacing: Int = 1
+                    }
+                    """,
+                    expandedSource: """
+                    extension EnvironmentValues {
+                        var lineSpacing: Int {
+                            get {
+                                self[__Key_lineSpacing.self]
+                            }
+                            set {
+                                self[__Key_lineSpacing.self] = newValue
+                            }
+                        }
+
+                        private struct __Key_lineSpacing: Calligraphy.EnvironmentKey {
+                            static let defaultValue: Int = 1
+                        }
+                    }
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #endif
+
+    #if compiler(>=6.3) && canImport(SwiftSyntax603)
+        @Test("Access level is preserved")
+        func preservesAccessLevel() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    #"""
+                    extension EnvironmentValues {
+                        @Entry
+                        public var separator: String = "\n"
+                    }
+                    """#,
+                    expandedSource: #"""
+                    extension EnvironmentValues {
+                        public var separator: String {
+                            get {
+                                self[__Key_separator.self]
+                            }
+                            set {
+                                self[__Key_separator.self] = newValue
+                            }
+                        }
+
+                        private struct __Key_separator: Calligraphy::EnvironmentKey {
+                            static let defaultValue: String = "\n"
+                        }
+                    }
+                    """#,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #else
+        @Test("Access level is preserved")
+        func preservesAccessLevel() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    #"""
+                    extension EnvironmentValues {
+                        @Entry
+                        public var separator: String = "\n"
+                    }
+                    """#,
+                    expandedSource: #"""
+                    extension EnvironmentValues {
+                        public var separator: String {
+                            get {
+                                self[__Key_separator.self]
+                            }
+                            set {
+                                self[__Key_separator.self] = newValue
+                            }
+                        }
+
+                        private struct __Key_separator: Calligraphy.EnvironmentKey {
+                            static let defaultValue: String = "\n"
+                        }
+                    }
+                    """#,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #endif
+
+    #if compiler(>=6.3) && canImport(SwiftSyntax603)
+        @Test("Custom type entry expands")
+        func customTypeEntry() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    extension EnvironmentValues {
+                        @Entry
+                        var style: QuotationMarkStyle = .default
+                    }
+                    """,
+                    expandedSource: """
+                    extension EnvironmentValues {
+                        var style: QuotationMarkStyle {
+                            get {
+                                self[__Key_style.self]
+                            }
+                            set {
+                                self[__Key_style.self] = newValue
+                            }
+                        }
+
+                        private struct __Key_style: Calligraphy::EnvironmentKey {
+                            static let defaultValue: QuotationMarkStyle = .default
+                        }
+                    }
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #else
+        @Test("Custom type entry expands")
+        func customTypeEntry() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    extension EnvironmentValues {
+                        @Entry
+                        var style: QuotationMarkStyle = .default
+                    }
+                    """,
+                    expandedSource: """
+                    extension EnvironmentValues {
+                        var style: QuotationMarkStyle {
+                            get {
+                                self[__Key_style.self]
+                            }
+                            set {
+                                self[__Key_style.self] = newValue
+                            }
+                        }
+
+                        private struct __Key_style: Calligraphy.EnvironmentKey {
+                            static let defaultValue: QuotationMarkStyle = .default
+                        }
+                    }
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #endif
+
+    #if compiler(>=6.3) && canImport(SwiftSyntax603)
+        @Test("Optional type without initial value defaults to nil")
+        func optionalTypeDefaultsToNil() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    extension EnvironmentValues {
+                        @Entry
+                        var prefix: String?
+                    }
+                    """,
+                    expandedSource: """
+                    extension EnvironmentValues {
+                        var prefix: String? {
+                            get {
+                                self[__Key_prefix.self]
+                            }
+                            set {
+                                self[__Key_prefix.self] = newValue
+                            }
+                        }
+
+                        private struct __Key_prefix: Calligraphy::EnvironmentKey {
+                            static let defaultValue: String? = nil
+                        }
+                    }
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #else
+        @Test("Optional type without initial value defaults to nil")
+        func optionalTypeDefaultsToNil() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    extension EnvironmentValues {
+                        @Entry
+                        var prefix: String?
+                    }
+                    """,
+                    expandedSource: """
+                    extension EnvironmentValues {
+                        var prefix: String? {
+                            get {
+                                self[__Key_prefix.self]
+                            }
+                            set {
+                                self[__Key_prefix.self] = newValue
+                            }
+                        }
+
+                        private struct __Key_prefix: Calligraphy.EnvironmentKey {
+                            static let defaultValue: String? = nil
+                        }
+                    }
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #endif
+
+    #if compiler(>=6.3) && canImport(SwiftSyntax603)
+        @Test("Optional<T> long form without initial value defaults to nil")
+        func optionalLongFormDefaultsToNil() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    extension EnvironmentValues {
+                        @Entry
+                        var prefix: Optional<String>
+                    }
+                    """,
+                    expandedSource: """
+                    extension EnvironmentValues {
+                        var prefix: Optional<String> {
+                            get {
+                                self[__Key_prefix.self]
+                            }
+                            set {
+                                self[__Key_prefix.self] = newValue
+                            }
+                        }
+
+                        private struct __Key_prefix: Calligraphy::EnvironmentKey {
+                            static let defaultValue: Optional<String> = nil
+                        }
+                    }
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #else
+        @Test("Optional<T> long form without initial value defaults to nil")
+        func optionalLongFormDefaultsToNil() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    extension EnvironmentValues {
+                        @Entry
+                        var prefix: Optional<String>
+                    }
+                    """,
+                    expandedSource: """
+                    extension EnvironmentValues {
+                        var prefix: Optional<String> {
+                            get {
+                                self[__Key_prefix.self]
+                            }
+                            set {
+                                self[__Key_prefix.self] = newValue
+                            }
+                        }
+
+                        private struct __Key_prefix: Calligraphy.EnvironmentKey {
+                            static let defaultValue: Optional<String> = nil
+                        }
+                    }
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #endif
+
+    #if compiler(>=6.3) && canImport(SwiftSyntax603)
+        @Test("Swift.Optional<T> without initial value defaults to nil")
+        func memberQualifiedOptionalDefaultsToNil() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    extension EnvironmentValues {
+                        @Entry
+                        var prefix: Swift.Optional<String>
+                    }
+                    """,
+                    expandedSource: """
+                    extension EnvironmentValues {
+                        var prefix: Swift.Optional<String> {
+                            get {
+                                self[__Key_prefix.self]
+                            }
+                            set {
+                                self[__Key_prefix.self] = newValue
+                            }
+                        }
+
+                        private struct __Key_prefix: Calligraphy::EnvironmentKey {
+                            static let defaultValue: Swift.Optional<String> = nil
+                        }
+                    }
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #else
+        @Test("Swift.Optional<T> without initial value defaults to nil")
+        func memberQualifiedOptionalDefaultsToNil() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    extension EnvironmentValues {
+                        @Entry
+                        var prefix: Swift.Optional<String>
+                    }
+                    """,
+                    expandedSource: """
+                    extension EnvironmentValues {
+                        var prefix: Swift.Optional<String> {
+                            get {
+                                self[__Key_prefix.self]
+                            }
+                            set {
+                                self[__Key_prefix.self] = newValue
+                            }
+                        }
+
+                        private struct __Key_prefix: Calligraphy.EnvironmentKey {
+                            static let defaultValue: Swift.Optional<String> = nil
+                        }
+                    }
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #endif
+
+    #if canImport(SwiftSyntax603)
+        #if compiler(>=6.3) && canImport(SwiftSyntax603)
+            @Test("Swift::Optional<T> without initial value defaults to nil")
+            func moduleSelectorOptionalDefaultsToNil() {
+                #if canImport(CalligraphyCompilerPlugin)
+                    assertMacroExpansion(
+                        """
+                        extension EnvironmentValues {
+                            @Entry
+                            var prefix: Swift::Optional<String>
+                        }
+                        """,
+                        expandedSource: """
+                        extension EnvironmentValues {
+                            var prefix: Swift::Optional<String> {
+                                get {
+                                    self[__Key_prefix.self]
+                                }
+                                set {
+                                    self[__Key_prefix.self] = newValue
+                                }
+                            }
+
+                            private struct __Key_prefix: Calligraphy::EnvironmentKey {
+                                static let defaultValue: Swift::Optional<String> = nil
+                            }
+                        }
+                        """,
+                        macroSpecs: macroSpecs
+                    )
+                #else
+                    Issue.record("macros are only supported when running tests for the host platform")
+                #endif
             }
         #else
-            Issue.record("macros are only supported when running tests for the host platform")
-        #endif
-    }
-
-    @Test("Int type entry expands")
-    func intEntry() {
-        #if canImport(CalligraphyCompilerPlugin)
-            assertMacroExpansion(
-                """
-                extension EnvironmentValues {
-                    @Entry
-                    var lineSpacing: Int = 1
-                }
-                """,
-                expandedSource: """
-                extension EnvironmentValues {
-                    var lineSpacing: Int {
-                        get {
-                            self[__Key_lineSpacing.self]
+            @Test("Swift::Optional<T> without initial value defaults to nil")
+            func moduleSelectorOptionalDefaultsToNil() {
+                #if canImport(CalligraphyCompilerPlugin)
+                    assertMacroExpansion(
+                        """
+                        extension EnvironmentValues {
+                            @Entry
+                            var prefix: Swift::Optional<String>
                         }
-                        set {
-                            self[__Key_lineSpacing.self] = newValue
-                        }
-                    }
+                        """,
+                        expandedSource: """
+                        extension EnvironmentValues {
+                            var prefix: Swift::Optional<String> {
+                                get {
+                                    self[__Key_prefix.self]
+                                }
+                                set {
+                                    self[__Key_prefix.self] = newValue
+                                }
+                            }
 
-                    private struct __Key_lineSpacing: EnvironmentKey {
-                        static let defaultValue: Int = 1
-                    }
-                }
-                """,
-                macroSpecs: macroSpecs
-            ) { failure in
-                Issue.record("\(failure.message)")
+                            private struct __Key_prefix: Calligraphy.EnvironmentKey {
+                                static let defaultValue: Swift::Optional<String> = nil
+                            }
+                        }
+                        """,
+                        macroSpecs: macroSpecs
+                    )
+                #else
+                    Issue.record("macros are only supported when running tests for the host platform")
+                #endif
             }
-        #else
-            Issue.record("macros are only supported when running tests for the host platform")
         #endif
-    }
 
-    @Test("Access level is preserved")
-    func preservesAccessLevel() {
-        #if canImport(CalligraphyCompilerPlugin)
-            assertMacroExpansion(
-                #"""
-                extension EnvironmentValues {
-                    @Entry
-                    public var separator: String = "\n"
-                }
-                """#,
-                expandedSource: #"""
-                extension EnvironmentValues {
-                    public var separator: String {
-                        get {
-                            self[__Key_separator.self]
-                        }
-                        set {
-                            self[__Key_separator.self] = newValue
-                        }
+        @Test("Optional from another module requires an initial value")
+        func foreignOptionalRequiresInitialValue() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    extension EnvironmentValues {
+                        @Entry
+                        var prefix: Foo::Optional<String>
                     }
-
-                    private struct __Key_separator: EnvironmentKey {
-                        static let defaultValue: String = "\n"
-                    }
-                }
-                """#,
-                macroSpecs: macroSpecs
-            ) { failure in
-                Issue.record("\(failure.message)")
-            }
-        #else
-            Issue.record("macros are only supported when running tests for the host platform")
-        #endif
-    }
-
-    @Test("Custom type entry expands")
-    func customTypeEntry() {
-        #if canImport(CalligraphyCompilerPlugin)
-            assertMacroExpansion(
-                """
-                extension EnvironmentValues {
-                    @Entry
-                    var style: QuotationMarkStyle = .default
-                }
-                """,
-                expandedSource: """
-                extension EnvironmentValues {
-                    var style: QuotationMarkStyle {
-                        get {
-                            self[__Key_style.self]
-                        }
-                        set {
-                            self[__Key_style.self] = newValue
+                    """,
+                    expandedSource: """
+                    extension EnvironmentValues {
+                        var prefix: Foo::Optional<String> {
+                            get {
+                                self[__Key_prefix.self]
+                            }
+                            set {
+                                self[__Key_prefix.self] = newValue
+                            }
                         }
                     }
+                    """,
+                    diagnostics: [
+                        DiagnosticSpec(message: "@Entry requires an initial value for non-optional types", line: 2, column: 5)
+                    ],
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #endif
 
-                    private struct __Key_style: EnvironmentKey {
-                        static let defaultValue: QuotationMarkStyle = .default
+    #if compiler(>=6.3) && canImport(SwiftSyntax603)
+        @Test("Implicitly unwrapped optional without initial value defaults to nil")
+        func implicitlyUnwrappedOptionalDefaultsToNil() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    extension EnvironmentValues {
+                        @Entry
+                        var prefix: String!
                     }
-                }
-                """,
-                macroSpecs: macroSpecs
-            ) { failure in
-                Issue.record("\(failure.message)")
-            }
-        #else
-            Issue.record("macros are only supported when running tests for the host platform")
-        #endif
-    }
-
-    @Test("Optional type without initial value defaults to nil")
-    func optionalTypeDefaultsToNil() {
-        #if canImport(CalligraphyCompilerPlugin)
-            assertMacroExpansion(
-                """
-                extension EnvironmentValues {
-                    @Entry
-                    var prefix: String?
-                }
-                """,
-                expandedSource: """
-                extension EnvironmentValues {
-                    var prefix: String? {
-                        get {
-                            self[__Key_prefix.self]
+                    """,
+                    expandedSource: """
+                    extension EnvironmentValues {
+                        var prefix: String! {
+                            get {
+                                self[__Key_prefix.self]
+                            }
+                            set {
+                                self[__Key_prefix.self] = newValue
+                            }
                         }
-                        set {
-                            self[__Key_prefix.self] = newValue
-                        }
-                    }
 
-                    private struct __Key_prefix: EnvironmentKey {
-                        static let defaultValue: String? = nil
-                    }
-                }
-                """,
-                macroSpecs: macroSpecs
-            ) { failure in
-                Issue.record("\(failure.message)")
-            }
-        #else
-            Issue.record("macros are only supported when running tests for the host platform")
-        #endif
-    }
-
-    @Test("Optional<T> long form without initial value defaults to nil")
-    func optionalLongFormDefaultsToNil() {
-        #if canImport(CalligraphyCompilerPlugin)
-            assertMacroExpansion(
-                """
-                extension EnvironmentValues {
-                    @Entry
-                    var prefix: Optional<String>
-                }
-                """,
-                expandedSource: """
-                extension EnvironmentValues {
-                    var prefix: Optional<String> {
-                        get {
-                            self[__Key_prefix.self]
-                        }
-                        set {
-                            self[__Key_prefix.self] = newValue
+                        private struct __Key_prefix: Calligraphy::EnvironmentKey {
+                            static let defaultValue: String! = nil
                         }
                     }
-
-                    private struct __Key_prefix: EnvironmentKey {
-                        static let defaultValue: Optional<String> = nil
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #else
+        @Test("Implicitly unwrapped optional without initial value defaults to nil")
+        func implicitlyUnwrappedOptionalDefaultsToNil() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    extension EnvironmentValues {
+                        @Entry
+                        var prefix: String!
                     }
-                }
-                """,
-                macroSpecs: macroSpecs
-            ) { failure in
-                Issue.record("\(failure.message)")
-            }
-        #else
-            Issue.record("macros are only supported when running tests for the host platform")
-        #endif
-    }
-
-    @Test("Implicitly unwrapped optional without initial value defaults to nil")
-    func implicitlyUnwrappedOptionalDefaultsToNil() {
-        #if canImport(CalligraphyCompilerPlugin)
-            assertMacroExpansion(
-                """
-                extension EnvironmentValues {
-                    @Entry
-                    var prefix: String!
-                }
-                """,
-                expandedSource: """
-                extension EnvironmentValues {
-                    var prefix: String! {
-                        get {
-                            self[__Key_prefix.self]
+                    """,
+                    expandedSource: """
+                    extension EnvironmentValues {
+                        var prefix: String! {
+                            get {
+                                self[__Key_prefix.self]
+                            }
+                            set {
+                                self[__Key_prefix.self] = newValue
+                            }
                         }
-                        set {
-                            self[__Key_prefix.self] = newValue
+
+                        private struct __Key_prefix: Calligraphy.EnvironmentKey {
+                            static let defaultValue: String! = nil
                         }
                     }
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #endif
 
-                    private struct __Key_prefix: EnvironmentKey {
-                        static let defaultValue: String! = nil
+    #if compiler(>=6.3) && canImport(SwiftSyntax603)
+        @Test("Optional type with explicit initial value is preserved")
+        func optionalTypeWithExplicitValue() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    #"""
+                    extension EnvironmentValues {
+                        @Entry
+                        var prefix: String? = "default"
                     }
-                }
-                """,
-                macroSpecs: macroSpecs
-            ) { failure in
-                Issue.record("\(failure.message)")
-            }
-        #else
-            Issue.record("macros are only supported when running tests for the host platform")
-        #endif
-    }
-
-    @Test("Optional type with explicit initial value is preserved")
-    func optionalTypeWithExplicitValue() {
-        #if canImport(CalligraphyCompilerPlugin)
-            assertMacroExpansion(
-                #"""
-                extension EnvironmentValues {
-                    @Entry
-                    var prefix: String? = "default"
-                }
-                """#,
-                expandedSource: #"""
-                extension EnvironmentValues {
-                    var prefix: String? {
-                        get {
-                            self[__Key_prefix.self]
+                    """#,
+                    expandedSource: #"""
+                    extension EnvironmentValues {
+                        var prefix: String? {
+                            get {
+                                self[__Key_prefix.self]
+                            }
+                            set {
+                                self[__Key_prefix.self] = newValue
+                            }
                         }
-                        set {
-                            self[__Key_prefix.self] = newValue
+
+                        private struct __Key_prefix: Calligraphy::EnvironmentKey {
+                            static let defaultValue: String? = "default"
                         }
                     }
-
-                    private struct __Key_prefix: EnvironmentKey {
-                        static let defaultValue: String? = "default"
+                    """#,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #else
+        @Test("Optional type with explicit initial value is preserved")
+        func optionalTypeWithExplicitValue() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    #"""
+                    extension EnvironmentValues {
+                        @Entry
+                        var prefix: String? = "default"
                     }
-                }
-                """#,
-                macroSpecs: macroSpecs
-            ) { failure in
-                Issue.record("\(failure.message)")
-            }
-        #else
-            Issue.record("macros are only supported when running tests for the host platform")
-        #endif
-    }
+                    """#,
+                    expandedSource: #"""
+                    extension EnvironmentValues {
+                        var prefix: String? {
+                            get {
+                                self[__Key_prefix.self]
+                            }
+                            set {
+                                self[__Key_prefix.self] = newValue
+                            }
+                        }
+
+                        private struct __Key_prefix: Calligraphy.EnvironmentKey {
+                            static let defaultValue: String? = "default"
+                        }
+                    }
+                    """#,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #endif
 
     @Test("Missing type annotation emits diagnostic")
     func requiresTypeAnnotation() {
@@ -348,9 +785,7 @@ struct EntryMacroTests {
                     DiagnosticSpec(message: "@Entry requires an explicit type annotation", line: 2, column: 5)
                 ],
                 macroSpecs: macroSpecs
-            ) { failure in
-                Issue.record("\(failure.message)")
-            }
+            )
         #else
             Issue.record("macros are only supported when running tests for the host platform")
         #endif
@@ -382,9 +817,7 @@ struct EntryMacroTests {
                     DiagnosticSpec(message: "@Entry requires an initial value for non-optional types", line: 2, column: 5)
                 ],
                 macroSpecs: macroSpecs
-            ) { failure in
-                Issue.record("\(failure.message)")
-            }
+            )
         #else
             Issue.record("macros are only supported when running tests for the host platform")
         #endif

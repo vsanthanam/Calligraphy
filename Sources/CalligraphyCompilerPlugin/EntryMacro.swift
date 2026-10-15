@@ -35,8 +35,14 @@ public struct EntryMacro: AccessorMacro, PeerMacro {
         in context: some MacroExpansionContext
     ) throws -> [AccessorDeclSyntax] {
         let attribute = attributeName(of: node)
-        let binding = try binding(from: declaration, attribute: attribute)
-        let name = try identifier(from: binding, attribute: attribute).text
+        let binding = try binding(
+            from: declaration,
+            attribute: attribute
+        )
+        let name = try identifier(
+            from: binding,
+            attribute: attribute
+        ).text
         let keyName = "__Key_\(name)"
         return [
             """
@@ -54,8 +60,14 @@ public struct EntryMacro: AccessorMacro, PeerMacro {
         in context: some MacroExpansionContext
     ) throws -> [DeclSyntax] {
         let attribute = attributeName(of: node)
-        let binding = try binding(from: declaration, attribute: attribute)
-        let name = try identifier(from: binding, attribute: attribute).text
+        let binding = try binding(
+            from: declaration,
+            attribute: attribute
+        )
+        let name = try identifier(
+            from: binding,
+            attribute: attribute
+        ).text
         let typeAnnotation = try binding.typeAnnotation
             .mustExist("\(attribute) requires an explicit type annotation")
             .type
@@ -65,17 +77,29 @@ public struct EntryMacro: AccessorMacro, PeerMacro {
         } else if isOptional(typeAnnotation) {
             defaultValue = "nil"
         } else {
-            throw MacroError("\(attribute) requires an initial value for non-optional types")
+            throw MacroExpansionErrorMessage("\(attribute) requires an initial value for non-optional types")
         }
         let keyName = "__Key_\(name)"
-        return [
-            """
-            private struct \(raw: keyName): EnvironmentKey {
-                static let defaultValue: \(typeAnnotation.trimmed) = \(defaultValue.trimmed)
-            }
-            """
-        ]
+        #if compiler(>=6.3) && canImport(SwiftSyntax603)
+            return [
+                """
+                private struct \(raw: keyName): Calligraphy::EnvironmentKey {
+                    static let defaultValue: \(typeAnnotation.trimmed) = \(defaultValue.trimmed)
+                }
+                """
+            ]
+        #else
+            return [
+                """
+                private struct \(raw: keyName): Calligraphy.EnvironmentKey {
+                    static let defaultValue: \(typeAnnotation.trimmed) = \(defaultValue.trimmed)
+                }
+                """
+            ]
+        #endif
     }
+
+    // MARK: - Private
 
     private static func attributeName(
         of node: AttributeSyntax
@@ -102,17 +126,64 @@ public struct EntryMacro: AccessorMacro, PeerMacro {
             .identifier
     }
 
-    private static func isOptional(_ type: TypeSyntax) -> Bool {
-        if type.is(OptionalTypeSyntax.self) {
-            return true
+    private static func isOptional(
+        _ type: TypeSyntax
+    ) -> Bool {
+        if type.is(OptionalTypeSyntax.self) || type.is(ImplicitlyUnwrappedOptionalTypeSyntax.self) {
+            true
+        } else if let identifier = type.as(IdentifierTypeSyntax.self) {
+            identifier.name.text == "Optional" && isSwiftQualified(identifier)
+        } else if let member = type.as(MemberTypeSyntax.self),
+                  let base = member.baseType.as(IdentifierTypeSyntax.self) {
+            member.name.text == "Optional"
+                && isUnqualified(member)
+                && base.name.text == "Swift"
+                && isUnqualified(base)
+                && base.genericArgumentClause == nil
+        } else {
+            false
         }
-        if type.is(ImplicitlyUnwrappedOptionalTypeSyntax.self) {
-            return true
-        }
-        if let identifier = type.as(IdentifierTypeSyntax.self), identifier.name.text == "Optional" {
-            return true
-        }
-        return false
     }
+
+    #if canImport(SwiftSyntax603)
+        private static func isSwiftQualified(
+            _ identifier: IdentifierTypeSyntax
+        ) -> Bool {
+            guard let selector = identifier.moduleSelector else {
+                return true
+            }
+            return selector.moduleName.text == "Swift"
+        }
+
+        private static func isUnqualified(
+            _ identifier: IdentifierTypeSyntax
+        ) -> Bool {
+            identifier.moduleSelector == nil
+        }
+
+        private static func isUnqualified(
+            _ member: MemberTypeSyntax
+        ) -> Bool {
+            member.moduleSelector == nil
+        }
+    #else
+        private static func isSwiftQualified(
+            _ identifier: IdentifierTypeSyntax
+        ) -> Bool {
+            true
+        }
+
+        private static func isUnqualified(
+            _ identifier: IdentifierTypeSyntax
+        ) -> Bool {
+            true
+        }
+
+        private static func isUnqualified(
+            _ member: MemberTypeSyntax
+        ) -> Bool {
+            true
+        }
+    #endif
 
 }

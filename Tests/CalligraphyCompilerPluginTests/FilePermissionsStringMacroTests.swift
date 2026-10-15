@@ -30,7 +30,10 @@ import SwiftSyntaxMacros
 import SwiftSyntaxMacrosGenericTestSupport
 import Testing
 
-// Macro implementations build for the host, so the corresponding module is not available when cross-compiling. Cross-compiled tests may still make use of the macro itself in end-to-end tests.
+#if canImport(SwiftSyntax604)
+    import SwiftSyntaxMacrosTestSupport
+#endif
+
 #if canImport(CalligraphyCompilerPlugin)
     import CalligraphyCompilerPlugin
 
@@ -42,119 +45,221 @@ import Testing
 @Suite("#filePermissions(string) Macro Tests")
 struct FilePermissionsStringMacroTests {
 
-    @Test("Expands rwxr-xr-x")
-    func expandsRwxrxrx() {
-        #if canImport(CalligraphyCompilerPlugin)
-            assertMacroExpansion(
-                """
-                let perms: FilePermissions = #filePermissions("rwxr-xr-x")
-                """,
-                expandedSource: """
-                let perms: FilePermissions = [.readUser, .writeUser, .executeUser, .readGroup, .executeGroup, .readOther, .executeOther]
-                """,
-                macroSpecs: macroSpecs
-            ) { failure in
-                Issue.record("\(failure.message)")
-            }
-        #else
-            Issue.record("macros are only supported when running tests for the host platform")
-        #endif
-    }
+    #if compiler(>=6.3) && canImport(SwiftSyntax603)
+        @Test("Expands rwxr-xr-x")
+        func expandsRwxrxrx() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    let perms: FilePermissions = #filePermissions("rwxr-xr-x")
+                    """,
+                    expandedSource: """
+                    let perms: FilePermissions = Calligraphy::FilePermissions(arrayLiteral: [.readUser, .writeUser, .executeUser, .readGroup, .executeGroup, .readOther, .executeOther])
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #else
+        @Test("Expands rwxr-xr-x")
+        func expandsRwxrxrx() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    let perms: FilePermissions = #filePermissions("rwxr-xr-x")
+                    """,
+                    expandedSource: """
+                    let perms: FilePermissions = Calligraphy.FilePermissions(arrayLiteral: [.readUser, .writeUser, .executeUser, .readGroup, .executeGroup, .readOther, .executeOther])
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #endif
 
-    @Test("Strips leading file type and whitespace")
-    func leadingTypeAndWhitespace() {
-        #if canImport(CalligraphyCompilerPlugin)
-            assertMacroExpansion(
-                """
-                let perms: FilePermissions = #filePermissions("-rwx r-x r-x")
-                """,
-                expandedSource: """
-                let perms: FilePermissions = [.readUser, .writeUser, .executeUser, .readGroup, .executeGroup, .readOther, .executeOther]
-                """,
-                macroSpecs: macroSpecs
-            ) { failure in
-                Issue.record("\(failure.message)")
-            }
-        #else
-            Issue.record("macros are only supported when running tests for the host platform")
-        #endif
-    }
+    #if compiler(>=6.3) && canImport(SwiftSyntax603)
+        @Test("Strips leading file type and whitespace")
+        func leadingTypeAndWhitespace() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    let perms: FilePermissions = #filePermissions("-rwx r-x r-x")
+                    """,
+                    expandedSource: """
+                    let perms: FilePermissions = Calligraphy::FilePermissions(arrayLiteral: [.readUser, .writeUser, .executeUser, .readGroup, .executeGroup, .readOther, .executeOther])
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #else
+        @Test("Strips leading file type and whitespace")
+        func leadingTypeAndWhitespace() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    let perms: FilePermissions = #filePermissions("-rwx r-x r-x")
+                    """,
+                    expandedSource: """
+                    let perms: FilePermissions = Calligraphy.FilePermissions(arrayLiteral: [.readUser, .writeUser, .executeUser, .readGroup, .executeGroup, .readOther, .executeOther])
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #endif
 
-    @Test("Uppercase S without execute encodes setuid only")
-    func setuidUppercaseSNoExec() {
-        #if canImport(CalligraphyCompilerPlugin)
-            assertMacroExpansion(
-                """
-                let perms: FilePermissions = #filePermissions("rwSr-xr-x")
-                """,
-                expandedSource: """
-                let perms: FilePermissions = [.setUserID, .readUser, .writeUser, .readGroup, .executeGroup, .readOther, .executeOther]
-                """,
-                macroSpecs: macroSpecs
-            ) { failure in
-                Issue.record("\(failure.message)")
-            }
-        #else
-            Issue.record("macros are only supported when running tests for the host platform")
-        #endif
-    }
+    #if compiler(>=6.3) && canImport(SwiftSyntax603)
+        @Test("Uppercase S without execute encodes setuid only")
+        func setuidUppercaseSNoExec() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    let perms: FilePermissions = #filePermissions("rwSr-xr-x")
+                    """,
+                    expandedSource: """
+                    let perms: FilePermissions = Calligraphy::FilePermissions(arrayLiteral: [.setUserID, .readUser, .writeUser, .readGroup, .executeGroup, .readOther, .executeOther])
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #else
+        @Test("Uppercase S without execute encodes setuid only")
+        func setuidUppercaseSNoExec() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    let perms: FilePermissions = #filePermissions("rwSr-xr-x")
+                    """,
+                    expandedSource: """
+                    let perms: FilePermissions = Calligraphy.FilePermissions(arrayLiteral: [.setUserID, .readUser, .writeUser, .readGroup, .executeGroup, .readOther, .executeOther])
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #endif
 
-    @Test("Uppercase T without execute encodes sticky only")
-    func stickyUppercaseTNoExec() {
-        #if canImport(CalligraphyCompilerPlugin)
-            assertMacroExpansion(
-                """
-                let perms: FilePermissions = #filePermissions("rwxr-xr-T")
-                """,
-                expandedSource: """
-                let perms: FilePermissions = [.sticky, .readUser, .writeUser, .executeUser, .readGroup, .executeGroup, .readOther]
-                """,
-                macroSpecs: macroSpecs
-            ) { failure in
-                Issue.record("\(failure.message)")
-            }
-        #else
-            Issue.record("macros are only supported when running tests for the host platform")
-        #endif
-    }
+    #if compiler(>=6.3) && canImport(SwiftSyntax603)
+        @Test("Uppercase T without execute encodes sticky only")
+        func stickyUppercaseTNoExec() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    let perms: FilePermissions = #filePermissions("rwxr-xr-T")
+                    """,
+                    expandedSource: """
+                    let perms: FilePermissions = Calligraphy::FilePermissions(arrayLiteral: [.sticky, .readUser, .writeUser, .executeUser, .readGroup, .executeGroup, .readOther])
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #else
+        @Test("Uppercase T without execute encodes sticky only")
+        func stickyUppercaseTNoExec() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    let perms: FilePermissions = #filePermissions("rwxr-xr-T")
+                    """,
+                    expandedSource: """
+                    let perms: FilePermissions = Calligraphy.FilePermissions(arrayLiteral: [.sticky, .readUser, .writeUser, .executeUser, .readGroup, .executeGroup, .readOther])
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #endif
 
-    @Test("All dashes encode empty permissions")
-    func allDashesEmpty() {
-        #if canImport(CalligraphyCompilerPlugin)
-            assertMacroExpansion(
-                """
-                let perms: FilePermissions = #filePermissions("---------")
-                """,
-                expandedSource: """
-                let perms: FilePermissions = [] as FilePermissions
-                """,
-                macroSpecs: macroSpecs
-            ) { failure in
-                Issue.record("\(failure.message)")
-            }
-        #else
-            Issue.record("macros are only supported when running tests for the host platform")
-        #endif
-    }
+    #if compiler(>=6.3) && canImport(SwiftSyntax603)
+        @Test("All dashes encode empty permissions")
+        func allDashesEmpty() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    let perms: FilePermissions = #filePermissions("---------")
+                    """,
+                    expandedSource: """
+                    let perms: FilePermissions = Calligraphy::FilePermissions(arrayLiteral: [])
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #else
+        @Test("All dashes encode empty permissions")
+        func allDashesEmpty() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    let perms: FilePermissions = #filePermissions("---------")
+                    """,
+                    expandedSource: """
+                    let perms: FilePermissions = Calligraphy.FilePermissions(arrayLiteral: [])
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #endif
 
-    @Test("All bits encode every permission")
-    func allBitsRwsrwsrwt() {
-        #if canImport(CalligraphyCompilerPlugin)
-            assertMacroExpansion(
-                """
-                let perms: FilePermissions = #filePermissions("rwsrwsrwt")
-                """,
-                expandedSource: """
-                let perms: FilePermissions = [.setUserID, .setGroupID, .sticky, .readUser, .writeUser, .executeUser, .readGroup, .writeGroup, .executeGroup, .readOther, .writeOther, .executeOther]
-                """,
-                macroSpecs: macroSpecs
-            ) { failure in
-                Issue.record("\(failure.message)")
-            }
-        #else
-            Issue.record("macros are only supported when running tests for the host platform")
-        #endif
-    }
+    #if compiler(>=6.3) && canImport(SwiftSyntax603)
+        @Test("All bits encode every permission")
+        func allBitsRwsrwsrwt() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    let perms: FilePermissions = #filePermissions("rwsrwsrwt")
+                    """,
+                    expandedSource: """
+                    let perms: FilePermissions = Calligraphy::FilePermissions(arrayLiteral: [.setUserID, .setGroupID, .sticky, .readUser, .writeUser, .executeUser, .readGroup, .writeGroup, .executeGroup, .readOther, .writeOther, .executeOther])
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #else
+        @Test("All bits encode every permission")
+        func allBitsRwsrwsrwt() {
+            #if canImport(CalligraphyCompilerPlugin)
+                assertMacroExpansion(
+                    """
+                    let perms: FilePermissions = #filePermissions("rwsrwsrwt")
+                    """,
+                    expandedSource: """
+                    let perms: FilePermissions = Calligraphy.FilePermissions(arrayLiteral: [.setUserID, .setGroupID, .sticky, .readUser, .writeUser, .executeUser, .readGroup, .writeGroup, .executeGroup, .readOther, .writeOther, .executeOther])
+                    """,
+                    macroSpecs: macroSpecs
+                )
+            #else
+                Issue.record("macros are only supported when running tests for the host platform")
+            #endif
+        }
+    #endif
 
     @Test("Wrong length emits diagnostic")
     func invalidWrongLength() {
@@ -167,12 +272,14 @@ struct FilePermissionsStringMacroTests {
                 let perms: FilePermissions = #filePermissions("rwx")
                 """,
                 diagnostics: [
-                    DiagnosticSpec(message: "filePermissions string must describe exactly 9 permission characters (optionally preceded by a file type), e.g. \"rwxr-xr-x\" or \"-rwxr-xr-x\"", line: 1, column: 30)
+                    DiagnosticSpec(
+                        message: "filePermissions string must describe exactly 9 permission characters (optionally preceded by a file type), e.g. \"rwxr-xr-x\" or \"-rwxr-xr-x\"",
+                        line: 1,
+                        column: 30
+                    )
                 ],
                 macroSpecs: macroSpecs
-            ) { failure in
-                Issue.record("\(failure.message)")
-            }
+            )
         #else
             Issue.record("macros are only supported when running tests for the host platform")
         #endif
@@ -189,12 +296,14 @@ struct FilePermissionsStringMacroTests {
                 let perms: FilePermissions = #filePermissions("rwxr-\(1)r-x")
                 """#,
                 diagnostics: [
-                    DiagnosticSpec(message: "filePermissions string must be a simple, static string literal without interpolation", line: 1, column: 30)
+                    DiagnosticSpec(
+                        message: "filePermissions string must be a simple, static string literal without interpolation",
+                        line: 1,
+                        column: 30
+                    )
                 ],
                 macroSpecs: macroSpecs
-            ) { failure in
-                Issue.record("\(failure.message)")
-            }
+            )
         #else
             Issue.record("macros are only supported when running tests for the host platform")
         #endif
@@ -211,12 +320,14 @@ struct FilePermissionsStringMacroTests {
                 let perms: FilePermissions = #filePermissions("rwxrqxr-x")
                 """,
                 diagnostics: [
-                    DiagnosticSpec(message: "invalid character at position 4 in permission string: rwxrqxr-x", line: 1, column: 30)
+                    DiagnosticSpec(
+                        message: "invalid character at position 4 in permission string: rwxrqxr-x",
+                        line: 1,
+                        column: 30
+                    )
                 ],
                 macroSpecs: macroSpecs
-            ) { failure in
-                Issue.record("\(failure.message)")
-            }
+            )
         #else
             Issue.record("macros are only supported when running tests for the host platform")
         #endif
@@ -233,12 +344,14 @@ struct FilePermissionsStringMacroTests {
                 let perms: FilePermissions = #filePermissions("rwxr-xr-s")
                 """,
                 diagnostics: [
-                    DiagnosticSpec(message: "invalid character at position 8 in permission string: rwxr-xr-s", line: 1, column: 30)
+                    DiagnosticSpec(
+                        message: "invalid character at position 8 in permission string: rwxr-xr-s",
+                        line: 1,
+                        column: 30
+                    )
                 ],
                 macroSpecs: macroSpecs
-            ) { failure in
-                Issue.record("\(failure.message)")
-            }
+            )
         #else
             Issue.record("macros are only supported when running tests for the host platform")
         #endif
@@ -255,12 +368,14 @@ struct FilePermissionsStringMacroTests {
                 let perms: FilePermissions = #filePermissions()
                 """,
                 diagnostics: [
-                    DiagnosticSpec(message: "filePermissions requires a single string literal argument, e.g. \"rwxr-xr-x\"", line: 1, column: 30)
+                    DiagnosticSpec(
+                        message: "filePermissions requires a single string literal argument, e.g. \"rwxr-xr-x\"",
+                        line: 1,
+                        column: 30
+                    )
                 ],
                 macroSpecs: macroSpecs
-            ) { failure in
-                Issue.record("\(failure.message)")
-            }
+            )
         #else
             Issue.record("macros are only supported when running tests for the host platform")
         #endif

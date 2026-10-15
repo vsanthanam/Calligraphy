@@ -93,13 +93,14 @@ public struct FilePermissionsOctalMacro: ExpressionMacro {
             }
         }
 
-        let arrayLiteral = if parts.isEmpty {
-            "[] as FilePermissions" // make the type clear when empty
-        } else {
-            "[" + parts.joined(separator: ", ") + "]"
-        }
+        let arrayLiteral = "[" + parts.joined(separator: ", ") + "]"
+        #if compiler(>=6.3) && canImport(SwiftSyntax603)
+            let fullyFormed = "Calligraphy::FilePermissions(arrayLiteral: \(arrayLiteral))"
+        #else
+            let fullyFormed = "Calligraphy.FilePermissions(arrayLiteral: \(arrayLiteral))"
+        #endif
 
-        return ExprSyntax(stringLiteral: arrayLiteral)
+        return ExprSyntax(stringLiteral: fullyFormed)
     }
 
 }
