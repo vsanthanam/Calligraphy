@@ -67,6 +67,7 @@ extension DirectoryContent {
         ///   - shouldOverwrite: Whether or not existing content with the same name or structure should be overwritten with new content.
         /// - Returns: A list of every file URL that was created during the process.
         /// - Important: Sibling names are validated case-insensitively before anything is written. A tree containing both `README.md` and `readme.md` is rejected on every platform, because case-insensitive file systems such as APFS would treat them as the same file.
+        /// - Note: The destination is made available to the content while it renders, so ``FilePath``, ``FileURL``, ``EnclosingPath``, and ``EnclosingURL`` can resolve absolute locations.
         @discardableResult
         public func write(
             to directoryURL: URL,
@@ -80,7 +81,9 @@ extension DirectoryContent {
                   isDirectory.boolValue else {
                 throw DiskOperationError("Provided URL does not point to a directory")
             }
-            let contents = _serialize(in: EnvironmentValues())
+            var environment = EnvironmentValues()
+            environment.destinationDirectoryURL = directoryURL.standardizedFileURL
+            let contents = _serialize(in: environment)
             try contents.validate(in: directoryURL)
             return try await DiskOperation.start(with: directoryURL) {
                 try await contents.performWriteOperations(shouldOverwrite: shouldOverwrite)
@@ -93,6 +96,7 @@ extension DirectoryContent {
         ///   - shouldOverwrite: Whether or not existing content with the same name or structure should be overwritten with new content.
         /// - Returns: A list of every file URL that was created during the process.
         /// - Important: Sibling names are validated case-insensitively before anything is written. A tree containing both `README.md` and `readme.md` is rejected on every platform, because case-insensitive file systems such as APFS would treat them as the same file.
+        /// - Note: The destination is made available to the content while it renders, so ``FilePath``, ``FileURL``, ``EnclosingPath``, and ``EnclosingURL`` can resolve absolute locations.
         @discardableResult
         public nonisolated(nonsending) func write(
             to directoryURL: URL,
@@ -106,7 +110,9 @@ extension DirectoryContent {
                   isDirectory.boolValue else {
                 throw DiskOperationError("Provided URL does not point to a directory")
             }
-            let contents = _serialize(in: EnvironmentValues())
+            var environment = EnvironmentValues()
+            environment.destinationDirectoryURL = directoryURL.standardizedFileURL
+            let contents = _serialize(in: environment)
             try contents.validate(in: directoryURL)
             return try await DiskOperation.start(with: directoryURL) {
                 try await contents.performWriteOperations(shouldOverwrite: shouldOverwrite)
@@ -231,12 +237,12 @@ extension [SerializedDirectoryContent] {
             let name = content.name
 
             guard !name.isEmpty else {
-                throw DiskOperationError("Invalid directory content - empty name found in parent '\(parent.path())'")
+                throw DiskOperationError("Invalid directory content - empty name found in parent '\(parent.path(percentEncoded: false))'")
             }
 
             let illegalCharacters = CharacterSet(charactersIn: "/\\:?*\"<>|")
             guard name.rangeOfCharacter(from: illegalCharacters) == nil else {
-                throw DiskOperationError("Invalid directory content - file or directory name '\(name)' contains illegal characters in parent '\(parent.path())'")
+                throw DiskOperationError("Invalid directory content - file or directory name '\(name)' contains illegal characters in parent '\(parent.path(percentEncoded: false))'")
             }
 
             #if os(Windows)
@@ -253,7 +259,7 @@ extension [SerializedDirectoryContent] {
                 guard !reservedNames.contains(stem.uppercased()) else {
                     throw DiskOperationError(
                         """
-                        Invalid directory content - file or directory name '\(name)' is a reserved name in parent '\(parent.path())'
+                        Invalid directory content - file or directory name '\(name)' is a reserved name in parent '\(parent.path(percentEncoded: false))'
                         """
                     )
                 }
@@ -261,14 +267,14 @@ extension [SerializedDirectoryContent] {
                       !name.hasSuffix(" ") else {
                     throw DiskOperationError(
                         """
-                        Invalid directory content - file or directory name '\(name)' ends with a period or space in parent '\(parent.path())'
+                        Invalid directory content - file or directory name '\(name)' ends with a period or space in parent '\(parent.path(percentEncoded: false))'
                         """
                     )
                 }
                 guard name.unicodeScalars.allSatisfy({ $0.value >= 32 }) else {
                     throw DiskOperationError(
                         """
-                        Invalid directory content - file or directory name '\(name)' contains control characters in parent '\(parent.path())'
+                        Invalid directory content - file or directory name '\(name)' contains control characters in parent '\(parent.path(percentEncoded: false))'
                         """
                     )
                 }
@@ -276,7 +282,7 @@ extension [SerializedDirectoryContent] {
 
             let caseFoldedName = name.lowercased()
             guard !uniqueNames.contains(caseFoldedName) else {
-                throw DiskOperationError("Invalid directory content - duplicate file or directory name '\(name)' found in parent '\(parent.path())'. Names are compared case-insensitively because some file systems, such as APFS, do not distinguish between names that differ only by case.")
+                throw DiskOperationError("Invalid directory content - duplicate file or directory name '\(name)' found in parent '\(parent.path(percentEncoded: false))'. Names are compared case-insensitively because some file systems, such as APFS, do not distinguish between names that differ only by case.")
             }
             uniqueNames.insert(caseFoldedName)
             try content.validate(in: parent)
@@ -474,7 +480,7 @@ extension FileManager {
             if shouldOverwrite {
                 try FileManager.default.removeItem(at: url)
             } else {
-                throw DiskOperationError("File or directory already exists at proposed path '\(url.path())'")
+                throw DiskOperationError("File or directory already exists at proposed path '\(url.path(percentEncoded: false))'")
             }
         }
     }
@@ -486,7 +492,7 @@ extension FileManager {
         #if !os(Windows)
             try setAttributes(
                 [.posixPermissions: permissions.rawValue],
-                ofItemAtPath: url.path()
+                ofItemAtPath: url.path(percentEncoded: false)
             )
         #endif
     }

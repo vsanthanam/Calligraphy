@@ -62,3 +62,16 @@ public struct EnvironmentValues: Sendable {
     private var storage = [ObjectIdentifier: any Sendable]()
 
 }
+
+extension EnvironmentValues {
+
+    @Entry
+    var fileName: String?
+
+    @Entry
+    var enclosingDirectoryComponents: [String] = []
+
+    @Entry
+    var destinationDirectoryURL: URL?
+
+}

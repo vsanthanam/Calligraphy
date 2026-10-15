@@ -66,11 +66,13 @@ extension Directory {
         in environment: EnvironmentValues
     ) -> [SerializedDirectoryContent] {
         environment.inject(into: self)
+        var childEnvironment = environment
+        childEnvironment.enclosingDirectoryComponents.append(name)
         return [
             .directory(
                 name,
                 permissions: permissions,
-                content: body._serialize(in: environment)
+                content: body._serialize(in: childEnvironment)
             )
         ]
     }

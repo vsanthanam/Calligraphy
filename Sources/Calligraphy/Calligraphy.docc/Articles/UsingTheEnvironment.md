@@ -26,13 +26,25 @@ The property wrapper works the same way in a ``DataComponent``, and in types tha
 
 The property wrapper is populated by reflection on the enclosing type, so it only works as a stored property of a component. When you need an environment value somewhere else, such as a free `@StringBuilder` function or the ``Swift/String/init(builder:)`` initializer, move that piece of content into a small component type and read the value there, the same way you would introduce a `View` in SwiftUI.
 
-## Reading the File Name
+## Reading the File Location
 
 ``File``, ``TextFile``, and ``DataFile`` set the name of the file, including its extension, before rendering their contents. Read it with the ``FileName`` property wrapper from any string or data component inside a file, and adapt the output to where it is being written:
 
 @Snippet(path: "Calligraphy/Snippets/EnvironmentValues/ReadingFileName", slice: "header")
 
 The value is `nil` outside of any file, and on a file type itself, which already knows its own name.
+
+To learn where a file sits in the tree, read ``FilePath``, which includes the names of every enclosing folder, or ``EnclosingPath``, which stops at the directory containing the file. Both are relative to the directory the content is written to:
+
+@Snippet(path: "Calligraphy/Snippets/EnvironmentValues/ReadingFileLocation", slice: "path")
+
+Pass ``PathResolution/absolute`` to either wrapper, or use ``FileURL`` and ``EnclosingURL``, to learn where the file lands on disk. Absolute locations are only known while content is being written with ``DirectoryContent/write(to:shouldOverwrite:)``, so they are `nil` when content is serialized without a destination:
+
+@Snippet(path: "Calligraphy/Snippets/EnvironmentValues/ReadingFileLocation", slice: "url")
+
+Inside the body of a ``Directory``, ``EnclosingPath`` and ``EnclosingURL`` describe that directory, so content can also adapt to the folder it is placed in:
+
+@Snippet(path: "Calligraphy/Snippets/EnvironmentValues/ReadingFileLocation", slice: "enclosing")
 
 ## Writing Values
 
