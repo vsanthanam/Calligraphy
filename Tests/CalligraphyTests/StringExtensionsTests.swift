@@ -37,7 +37,7 @@ struct StringExtensionsTests {
 
     @Test("Initializer with Empty Component")
     func initializerEmpty() {
-        let component = StringGroup {}
+        let component = Group {}
         let str = String(component)
         #expect(str == "")
     }

@@ -29,7 +29,7 @@ extension StringComponent {
     /// Join the children of this component using the given separator.
     ///
     /// The supplied separator becomes the ``EnvironmentValues/separator`` for this component and its descendants.
-    /// Components that are transparent to layout, such as ``StringGroup``, ``ForEach``, and the children of a builder block, read this value to decide how to combine their children. ``Lines`` and ``Line`` set their own separators and are unaffected.
+    /// Components that are transparent to layout, such as ``Group``, ``ForEach``, and the children of a builder block, read this value to decide how to combine their children. ``Lines`` and ``Line`` set their own separators and are unaffected.
     ///
     /// - Parameter separator: The string to insert between each child.
     /// - Returns: A component that renders its children separated by `separator`.
@@ -50,7 +50,7 @@ extension EnvironmentValues {
 
     /// The separator inserted between adjacent children of a composing component.
     ///
-    /// Defaults to `"\n"`. Layout-transparent components such as ``StringGroup`` and ``ForEach`` read this value to decide how to join their children, while ``Lines`` and ``Line`` set their own.
+    /// Defaults to `"\n"`. Layout-transparent components such as ``Group`` and ``ForEach`` read this value to decide how to join their children, while ``Lines`` and ``Line`` set their own.
     /// Set it on an ancestor component using ``StringComponent/joined(separator:)``.
     @Entry
     public internal(set) var separator: String = "\n"

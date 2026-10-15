@@ -1,5 +1,5 @@
 // Calligraphy
-// StringGroup.swift
+// DataGroupTests.swift
 //
 // MIT License
 //
@@ -23,22 +23,49 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-/// An entry point to the ``StringBuilder`` result builder.
-@available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
-public struct StringGroup<Body>: StringComponent where Body: StringComponent {
+@testable import Calligraphy
+import Foundation
+import Testing
 
-    // MARK: - Initializers
+@Suite("Group Data Tests", .tags(.dataComposition))
+struct DataGroupTests {
 
-    /// Assemble string components together, declaratively
-    /// - Parameter body: The components to assemble
-    public init(
-        @StringBuilder body: () -> Body
-    ) {
-        self.body = body()
+    @Test("Bytes are concatenated in order")
+    func concatenates() {
+        let component = Group {
+            0x01 as UInt8
+            0x02 as UInt8
+            0x03 as UInt8
+        }
+        #expect(Data(component) == Data([0x01, 0x02, 0x03]))
     }
 
-    // MARK: - StringComponent
+    @Test("Empty group renders nothing")
+    func empty() {
+        let component = Group {} as Group<EmptyDataComponent>
+        #expect(component._render(in: EnvironmentValues()) == nil)
+    }
 
-    public let body: Body
+    @Test("Composable with Modifiers")
+    func composable() {
+        struct ByteReader: DataComponent {
+            @Environment(\.byte) var byte
+            var body: some DataComponent {
+                byte
+            }
+        }
+        let component = Group {
+            ByteReader()
+            ByteReader()
+        }
+        .environment(\.byte, 0xAB)
+        #expect(Data(component) == Data([0xAB, 0xAB]))
+    }
+
+}
+
+extension EnvironmentValues {
+
+    @Entry fileprivate var byte: UInt8 = 0x00
 
 }

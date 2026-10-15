@@ -45,13 +45,42 @@ public struct Quote<Quote>: StringComponent where Quote: StringComponent {
 
     /// Create a quoted component.
     ///
-    /// The style of the quotation marks is read from the surrounding ``EnvironmentValues/quotationMarkStyle`` environment value. Use ``StringComponent/quotationMarkStyle(_:)`` on this component or an ancestor to change it.
+    /// The style of the quotation marks is read from the surrounding ``EnvironmentValues/quotationMarkStyle`` environment value.
+    /// Use ``StringComponent/quotationMarkStyle(_:)`` on this component or an ancestor to change it.
     ///
     /// - Parameter quote: The content to wrap in quotation marks.
     public init(
         @StringBuilder quote: () -> Quote
     ) {
         self.quote = quote()
+    }
+
+    /// Create a quoted component.
+    ///
+    /// The style of the quotation marks is read from the surrounding ``EnvironmentValues/quotationMarkStyle`` environment value.
+    /// Use ``StringComponent/quotationMarkStyle(_:)`` on this component or an ancestor to change it.
+    ///
+    /// - Parameter content: The content to wrap in quotation marks.
+    public init(
+        _ content: some StringProtocol
+    ) where Quote == RawStringComponent {
+        self.init {
+            content
+        }
+    }
+
+    /// Create a quoted component.
+    ///
+    /// The style of the quotation marks is read from the surrounding ``EnvironmentValues/quotationMarkStyle`` environment value.
+    /// Use ``StringComponent/quotationMarkStyle(_:)`` on this component or an ancestor to change it.
+    ///
+    /// - Parameter content: The content to wrap in quotation marks.
+    public init(
+        _ content: some RawRepresentable<some StringProtocol>
+    ) where Quote == RawStringComponent {
+        self.init {
+            content
+        }
     }
 
     // MARK: - StringComponent
@@ -65,14 +94,7 @@ public struct Quote<Quote>: StringComponent where Quote: StringComponent {
     private let quote: Quote
 
     private var content: some StringComponent {
-        Line {
-            QuotationMark()
-            quote.environment(
-                \.isInQuote,
-                true
-            )
-            QuotationMark()
-        }
+        QuotationMark() + quote.environment(\.isInQuote, true) + QuotationMark()
     }
 
 }

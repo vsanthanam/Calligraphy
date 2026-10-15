@@ -31,7 +31,7 @@ struct JoinedTests {
 
     @Test("Modifier with String Separator")
     func stringModifier() {
-        let joined = StringGroup {
+        let joined = Group {
             "foo"
             "bar"
             "baz"
