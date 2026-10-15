@@ -1,5 +1,5 @@
 // Create Foundation `Data` from a single data component, or from several
-// combined components with `Data.build(_:)`.
+// combined components with `Data.init(builder:)`.
 
 // snippet.hide
 import Calligraphy
@@ -21,7 +21,7 @@ let data = Data(component)
 // snippet.end
 
 // snippet.build
-let built = Data.build {
+let built = Data {
     Header()
     Data("payload".utf8)
 }

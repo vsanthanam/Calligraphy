@@ -101,6 +101,19 @@ public enum DataBuilder {
         AnyDataComponent(erasing: component)
     }
 
+    public static func buildFinalResult<Component>(
+        _ component: Component
+    ) -> Component where Component: DataComponent {
+        component
+    }
+
+    @_disfavoredOverload
+    public static func buildFinalResult(
+        _ component: some DataComponent
+    ) -> Data {
+        Data(component)
+    }
+
     public struct _Assembled<each Component>: DataComponent where repeat each Component: DataComponent {
 
         // MARK: - DataComponent
