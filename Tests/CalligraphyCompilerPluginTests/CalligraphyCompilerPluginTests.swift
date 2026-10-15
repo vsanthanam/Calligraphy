@@ -25,9 +25,46 @@
 
 import Testing
 
-// Macro implementations build for the host, so the corresponding module is not available when cross-compiling. Cross-compiled tests may still make use of the macro itself in end-to-end tests.
 #if canImport(CalligraphyCompilerPlugin)
     @testable import CalligraphyCompilerPlugin
+#endif
+
+#if !canImport(SwiftSyntax604)
+    import SwiftSyntaxMacroExpansion
+    import SwiftSyntaxMacrosGenericTestSupport
+
+    func assertMacroExpansion(
+        _ originalSource: String,
+        expandedSource: String,
+        diagnostics: [DiagnosticSpec] = [],
+        macroSpecs: [String: MacroSpec],
+        fileID: StaticString = #fileID,
+        filePath: StaticString = #filePath,
+        line: UInt = #line,
+        column: UInt = #column
+    ) {
+        SwiftSyntaxMacrosGenericTestSupport.assertMacroExpansion(
+            originalSource,
+            expandedSource: expandedSource,
+            diagnostics: diagnostics,
+            macroSpecs: macroSpecs,
+            failureHandler: { failure in
+                Issue.record(
+                    Comment(rawValue: failure.message),
+                    sourceLocation: SourceLocation(
+                        fileID: failure.location.fileID,
+                        filePath: failure.location.filePath,
+                        line: failure.location.line,
+                        column: failure.location.column
+                    )
+                )
+            },
+            fileID: fileID,
+            filePath: filePath,
+            line: line,
+            column: column
+        )
+    }
 #endif
 
 @Test("Compiler plugin tests")
