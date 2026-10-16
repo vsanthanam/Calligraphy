@@ -1,0 +1,17 @@
+{
+  "name": "Petstore",
+  "types": [
+    { "name": "Status", "cases": ["available", "sold"] },
+    { "name": "Pet", "documentation": "A pet in the store.", "fields": [
+      { "name": "id", "type": "integer" },
+      { "name": "name", "type": "string" },
+      { "name": "status", "type": "Status", "optional": true },
+      { "name": "tags", "type": { "array": "string" } }
+    ]}
+  ],
+  "endpoints": [
+    { "name": "listPets", "method": "get", "path": "/pets", "response": "Pet" },
+    { "name": "getPet", "method": "get", "path": "/pets/{id}", "response": "Pet" },
+    { "name": "createPet", "method": "post", "path": "/pets", "request": "Pet", "response": "Pet" }
+  ]
+}

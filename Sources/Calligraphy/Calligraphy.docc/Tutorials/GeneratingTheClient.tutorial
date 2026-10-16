@@ -1,0 +1,149 @@
+@Tutorial(time: 20, projectFiles: "Quill-Start-GeneratingTheClient.zip") {
+    @XcodeRequirement(title: "Xcode 27 / Swift 6.4", destination: "https://developer.apple.com/xcode/")
+
+    @Intro(title: "Composition and Modifiers") {
+        Generate a client type with one method per endpoint. You assemble a method signature from pieces, choose a request strategy with a `switch`, and control the blank lines between methods.
+
+        @Image(source: "quill-3-intro.png", alt: "A rubber stamp with a wooden handle beside an open brass ink pad.")
+    }
+
+    @Section(title: "Compose an endpoint method") {
+        @ContentAndMedia {
+            A method signature is one line built from several pieces, some of them optional. `Line`, `Group`, and the `joined(separator:)` modifier handle the punctuation so that your code does not have to.
+        }
+
+        @Steps {
+            @Step {
+                Create `EndpointMethod` with a signature and a closing brace. The return type is only emitted when the endpoint declares a response.
+
+                @Code(name: "EndpointMethod.swift", file: "03-01-01-EndpointMethod.swift", reset: true)
+            }
+
+            @Step {
+                Insert the path parameters between the parentheses with a `ForEach`, and apply `joined(separator:)` so they are separated by commas.
+
+                Inside a `Line` the default separator is empty. The modifier changes it for the `ForEach` and everything inside it, so the parameters come out comma separated while the rest of the line stays glued together.
+
+                @Code(name: "EndpointMethod.swift", file: "03-01-02-EndpointMethod.swift")
+            }
+
+            @Step {
+                Wrap the parameters in a `Group` together with a `body` parameter that appears only when the endpoint has a request type, and move the modifier onto the group.
+
+                `Group` adds no text of its own. It exists so that you can apply a modifier to several children at once. When the group is empty, it emits nothing, and the parentheses close with nothing between them.
+
+                @Code(name: "EndpointMethod.swift", file: "03-01-03-EndpointMethod.swift")
+            }
+
+            @Step {
+                Add the method body: build the URL, fetch the data, and decode the response. Indent the body with `tabbed()`.
+
+                The `interpolatedPath` property turns the spec's `{id}` placeholders into Swift string interpolation, so the generated method reads its parameters.
+
+                @Code(name: "EndpointMethod.swift", file: "03-01-04-EndpointMethod.swift")
+            }
+
+            @Step {
+                Switch on the HTTP method. A `GET` fetches the URL directly, and anything else builds a `URLRequest`, encoding the body when there is one.
+
+                The `+` operator concatenates a string and a component on one line, which is a compact way to put a `Quote` at the end of a statement.
+
+                @Code(name: "EndpointMethod.swift", file: "03-01-05-EndpointMethod.swift")
+            }
+        }
+    }
+
+    @Section(title: "Assemble the client") {
+        @ContentAndMedia {
+            The client is a struct that stores a base URL and a session, followed by one method per endpoint. Spacing between the members is a property of the environment, which makes it easy to set in one place and easy to forget that it is inherited.
+        }
+
+        @Steps {
+            @Step {
+                Create `ClientDeclaration`. It emits an import, the struct's opening line, the stored properties, a method for every endpoint, and the closing brace.
+
+                @Code(name: "ClientDeclaration.swift", file: "03-02-01-ClientDeclaration.swift", reset: true)
+            }
+
+            @Step {
+                Put the stored properties in their own `Lines` block, and apply `lineSpacing(2)` to the outer block so that a blank line separates the members.
+
+                `lineSpacing(_:)` sets a value in the environment that every nested `Lines` reads, which is why the inner block resets it to `1`. Run `swift run Quill petstore.json` after the next step to see the effect.
+
+                @Code(name: "ClientDeclaration.swift", file: "03-02-02-ClientDeclaration.swift")
+            }
+
+            @Step {
+                Wrap the body of `EndpointMethod` in a `Lines` block with `lineSpacing(1)`.
+
+                Without it, the method inherits the spacing of the client and puts a blank line between every statement. A component that lays out its own lines should say so.
+
+                @Code(name: "EndpointMethod.swift", file: "03-02-03-EndpointMethod.swift", previousFile: "03-01-05-EndpointMethod.swift")
+            }
+
+            @Step {
+                Print the client from `run()` and run `swift run Quill petstore.json` to inspect the generated code.
+
+                @Code(name: "Quill.swift", file: "03-02-04-Quill.swift", previousFile: "01-03-04-Quill.swift")
+            }
+        }
+    }
+
+    @Assessments {
+        @MultipleChoice {
+            What does `joined(separator: ", ")` do when applied to a `ForEach`?
+
+            @Choice(isCorrect: true) {
+                It separates the elements the `ForEach` produces with a comma and a space.
+
+                @Justification(reaction: "Correct.") {
+                    The modifier sets the separator in the environment, and `ForEach` reads it when it joins its elements.
+                }
+            }
+
+            @Choice(isCorrect: false) {
+                It appends a comma after the last element.
+
+                @Justification(reaction: "Not quite.") {
+                    Separators go between elements, never after the last one.
+                }
+            }
+
+            @Choice(isCorrect: false) {
+                It joins every line in the file with commas.
+
+                @Justification(reaction: "Not quite.") {
+                    Modifiers only affect the component they are applied to and its descendants.
+                }
+            }
+        }
+
+        @MultipleChoice {
+            Why did the method signature need a `Group`?
+
+            @Choice(isCorrect: false) {
+                Builders cannot hold a `ForEach` and an `if` side by side.
+
+                @Justification(reaction: "Not quite.") {
+                    They can. The group is about where the modifier applies.
+                }
+            }
+
+            @Choice(isCorrect: true) {
+                To apply `joined(separator:)` to the path parameters and the body parameter together.
+
+                @Justification(reaction: "Correct.") {
+                    A modifier attaches to one component. Grouping the pieces gives it one component to attach to.
+                }
+            }
+
+            @Choice(isCorrect: false) {
+                `Group` is required whenever a `Line` has more than three children.
+
+                @Justification(reaction: "Not quite.") {
+                    There is no such limit.
+                }
+            }
+        }
+    }
+}

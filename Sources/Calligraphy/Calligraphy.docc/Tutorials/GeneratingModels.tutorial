@@ -1,0 +1,175 @@
+@Tutorial(time: 25, projectFiles: "Quill-Start-GeneratingModels.zip") {
+    @XcodeRequirement(title: "Xcode 27 / Swift 6.4", destination: "https://developer.apple.com/xcode/")
+
+    @Intro(title: "Components and Control Flow") {
+        Turn each type in the spec into a Swift declaration. You compose nested components, indent them, branch on the shape of each type, and write a test that checks the output.
+
+        @Image(source: "quill-2-intro.png", alt: "A letterpress type tray holding wooden blocks that read if, switch, and a brace.")
+    }
+
+    @Section(title: "Declare a struct") {
+        @ContentAndMedia {
+            A structure in the spec becomes a `struct` with one stored property per field. Build the declaration out of lines, then pull the property into a component of its own.
+        }
+
+        @Steps {
+            @Step {
+                Give `FieldType` a Swift spelling with an ordinary extension. This is plain Swift, not builder code, and the two sit side by side comfortably.
+
+                @Code(name: "FieldType.swift", file: "02-01-01-FieldType.swift", reset: true)
+            }
+
+            @Step {
+                Create `StructDeclaration` with the opening and closing lines of a `struct`.
+
+                @Code(name: "StructDeclaration.swift", file: "02-01-02-StructDeclaration.swift", reset: true)
+            }
+
+            @Step {
+                Add a `Lines` block between them, with a `ForEach` that produces one property per field.
+
+                `Lines` joins its children with newlines, which is also the builder's default. Being explicit matters in the next step, because modifiers attach to a component.
+
+                @Code(name: "StructDeclaration.swift", file: "02-01-03-StructDeclaration.swift")
+            }
+
+            @Step {
+                Apply the `tabbed()` modifier to the `Lines` block to indent every property.
+
+                A tab is two spaces by default. The last tutorial shows how to change that from the command line.
+
+                @Code(name: "StructDeclaration.swift", file: "02-01-04-StructDeclaration.swift")
+            }
+
+            @Step {
+                Wrap each property in a `Line` and append a question mark when the field is optional.
+
+                `Line` joins its children with no separator at all. An `if` without an `else` is allowed in a builder, and contributes nothing when its condition is false.
+
+                @Code(name: "StructDeclaration.swift", file: "02-01-05-StructDeclaration.swift")
+            }
+
+            @Step {
+                Extract the property into its own component, `Property`.
+
+                @Code(name: "Property.swift", file: "02-01-06-Property.swift", reset: true)
+            }
+
+            @Step {
+                Use `Property` inside `StructDeclaration`. Components nest without ceremony, and each one renders in the environment of its parent.
+
+                @Code(name: "StructDeclaration.swift", file: "02-01-07-StructDeclaration.swift", previousFile: "02-01-05-StructDeclaration.swift")
+            }
+        }
+    }
+
+    @Section(title: "Add control flow") {
+        @ContentAndMedia {
+            Builders accept the control flow you already know. Use optional binding for documentation comments, and a `switch` to choose between a struct and an enum.
+        }
+
+        @Steps {
+            @Step {
+                Emit a documentation comment above the struct when the type has one. Optional binding works directly in the builder.
+
+                @Code(name: "StructDeclaration.swift", file: "02-02-01-StructDeclaration.swift")
+            }
+
+            @Step {
+                Replace the interpolation with the `prefixLines(with:)` modifier, so documentation that spans several lines gets a `///` on each of them.
+
+                @Code(name: "StructDeclaration.swift", file: "02-02-02-StructDeclaration.swift")
+            }
+
+            @Step {
+                Create `EnumDeclaration` for enumerations. Each case gets a raw value wrapped in `Quote`, which emits the quotation marks for you.
+
+                Quotation marks are read from the environment. The `quotationMarkStyle(_:)` modifier switches a whole subtree to single or triple quotes.
+
+                @Code(name: "EnumDeclaration.swift", file: "02-02-03-EnumDeclaration.swift", reset: true)
+            }
+
+            @Step {
+                Create `TypeDeclaration`, which switches on the type's shape and delegates to the right component.
+
+                Each `case` can produce a different component type. The builder handles the difference for you.
+
+                @Code(name: "TypeDeclaration.swift", file: "02-02-04-TypeDeclaration.swift", reset: true)
+            }
+        }
+    }
+
+    @Section(title: "Test a component") {
+        @ContentAndMedia {
+            Components are plain values, so they are easy to test. Render one with `String(_:)` and compare the result to the text you expect.
+        }
+
+        @Steps {
+            @Step {
+                Replace the template's `QuillTests.swift` with a test that renders a `StructDeclaration` for a sample type.
+
+                The expected text uses two spaces of indentation, the default tab. Run `swift test` to see it pass.
+
+                @Code(name: "StructDeclarationTests.swift", file: "02-03-01-StructDeclarationTests.swift", reset: true)
+            }
+        }
+    }
+
+    @Assessments {
+        @MultipleChoice {
+            What is the difference between `Line` and `Lines`?
+
+            @Choice(isCorrect: true) {
+                `Line` joins its children with nothing between them, and `Lines` joins them with newlines.
+
+                @Justification(reaction: "Correct.") {
+                    Use `Line` to assemble one line from pieces, and `Lines` to stack lines.
+                }
+            }
+
+            @Choice(isCorrect: false) {
+                `Lines` can hold several children, and `Line` can hold only one.
+
+                @Justification(reaction: "Not quite.") {
+                    Both accept any number of children. They differ in the separator they use.
+                }
+            }
+
+            @Choice(isCorrect: false) {
+                `Line` indents its content, and `Lines` does not.
+
+                @Justification(reaction: "Not quite.") {
+                    Indentation comes from the `tabbed()` modifier, which works on any component.
+                }
+            }
+        }
+
+        @MultipleChoice {
+            Which statements can appear inside a builder closure?
+
+            @Choice(isCorrect: false) {
+                Only expressions that produce components.
+
+                @Justification(reaction: "Not quite.") {
+                    Builders also accept `if`, `if let`, and `switch`.
+                }
+            }
+
+            @Choice(isCorrect: true) {
+                Expressions, `if`, `if let`, and `switch`, but not `for`.
+
+                @Justification(reaction: "Correct.") {
+                    Repeat content with `ForEach` instead of a loop.
+                }
+            }
+
+            @Choice(isCorrect: false) {
+                Anything that is valid in a function body.
+
+                @Justification(reaction: "Not quite.") {
+                    Loops are not supported, and every expression must produce something the builder understands.
+                }
+            }
+        }
+    }
+}

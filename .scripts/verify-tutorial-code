@@ -1,0 +1,191 @@
+#!/bin/bash
+#
+# Assemble the tutorial code listings from the DocC catalog into a real
+# package and make sure they compile, test, run, and emit a package that
+# itself compiles. Calligraphy is resolved from the working tree; Manuscript
+# is resolved from GitHub exactly as the listings declare it.
+#
+# Usage:
+#   verify-tutorial-code              Verify the final state of every listing.
+#   verify-tutorial-code --step 03-01-04
+#                                     Build the project as it stands at that listing.
+#   verify-tutorial-code --all-steps  Build the project at every listing in order.
+#   verify-tutorial-code --sync       Regenerate Samples/Quill and the downloadable
+#                                     project archives from the listings.
+#   verify-tutorial-code --check      Fail if --sync would change anything.
+
+set -euo pipefail
+
+root="$(cd "$(dirname "$0")/.." && pwd)"
+listings="$root/Sources/Calligraphy/Calligraphy.docc/Resources/Code/Quill"
+downloads="$root/Sources/Calligraphy/Calligraphy.docc/Resources/Downloads"
+samples="$root/Samples/Quill"
+# Tutorials in order. Each one after the first starts from the previous one's final state.
+tutorials=(SettingUpQuill GeneratingModels GeneratingTheClient AssemblingThePackage ConfiguringGeneration)
+
+work="$(mktemp -d)"
+trap 'rm -rf "$work"' EXIT
+
+assemble() {
+    local limit="$1"
+    local project="$2"
+    local keep_urls="${3:-}"
+    # Keep .build between assemblies so repeated builds stay incremental.
+    rm -rf "$project/Sources" "$project/Tests" "$project/Package.swift" "$project"/*.json "$project/out"
+    mkdir -p "$project/Sources/Quill" "$project/Tests/QuillTests"
+    # Listings sort by step, so copying them in order leaves each real file at its latest state.
+    for path in "$listings"/*; do
+        local file
+        file="$(basename "$path")"
+        local step="${file:0:8}"
+        if [[ -n "$limit" && "$step" > "$limit" ]]; then
+            continue
+        fi
+        local real="${file:9}"
+        case "$real" in
+            Package.swift) cp "$path" "$project/Package.swift" ;;
+            *.json) cp "$path" "$project/$real" ;;
+            *Tests.swift) cp "$path" "$project/Tests/QuillTests/$real" ;;
+            *) cp "$path" "$project/Sources/Quill/$real" ;;
+        esac
+    done
+    if ! ls "$project/Tests/QuillTests/"*.swift >/dev/null 2>&1; then
+        printf 'import Testing\n' > "$project/Tests/QuillTests/QuillTests.swift"
+    fi
+    if [[ -z "$keep_urls" ]]; then
+        sed -i '' \
+            -e "s#.package(url: \"https://github.com/vsanthanam/Calligraphy\", from: \"[^\"]*\")#.package(path: \"$root\")#" \
+            "$project/Package.swift"
+    fi
+}
+
+build_quietly() {
+    local project="$1"
+    shift
+    if ! output="$(cd "$project" && swift "$@" 2>&1)"; then
+        echo "$output" | grep -E "error:|warning:" | grep -v "^error: SwiftCompile" | sort -u | head -20
+        return 1
+    fi
+}
+
+# Write a reproducible zip of a project directory: fixed timestamps, sorted
+# entries, and fixed permissions, so regenerating it never changes the bytes.
+make_zip() {
+    local project="$1"
+    local archive="$2"
+    python3 -I - "$project" "$archive" <<'PY'
+import os
+import sys
+import zipfile
+
+project, archive = sys.argv[1], sys.argv[2]
+name = os.path.basename(project)
+with zipfile.ZipFile(archive, "w", zipfile.ZIP_DEFLATED) as zip:
+    for directory, subdirectories, files in os.walk(project):
+        subdirectories.sort()
+        for file in sorted(files):
+            path = os.path.join(directory, file)
+            info = zipfile.ZipInfo(
+                os.path.join(name, os.path.relpath(path, project)),
+                date_time=(1980, 1, 1, 0, 0, 0),
+            )
+            info.compress_type = zipfile.ZIP_DEFLATED
+            info.external_attr = 0o644 << 16
+            with open(path, "rb") as source:
+                zip.writestr(info, source.read())
+PY
+}
+
+last_listing_of() {
+    local tutorial="$1"
+    basename "$(ls "$listings"/"$(printf '%02d' "$tutorial")"-* | tail -1)" | cut -c1-8
+}
+
+sync() {
+    rm -rf "$downloads" "$samples"
+    mkdir -p "$downloads" "$(dirname "$samples")"
+    local index
+    for index in "${!tutorials[@]}"; do
+        if [[ $index -eq 0 ]]; then
+            continue
+        fi
+        local name="${tutorials[$index]}"
+        local project="$work/start-$name/Quill"
+        mkdir -p "$project"
+        assemble "$(last_listing_of "$index")" "$project" keep-urls
+        make_zip "$project" "$downloads/Quill-Start-$name.zip"
+    done
+    local finished="$work/finished/Quill"
+    mkdir -p "$finished"
+    assemble "" "$finished" keep-urls
+    make_zip "$finished" "$downloads/Quill-Finished.zip"
+    cp -R "$finished" "$samples"
+    cat > "$samples/.gitignore" <<'EOF'
+.build/
+out/
+EOF
+    cat > "$samples/.swiftformat" <<'EOF'
+# This sample is generated from the tutorial code listings by
+# .scripts/verify-tutorial-code --sync. Edit the listings, not these files.
+# The listings carry no license header, so this sample does not either.
+--header ignore
+--disable docComments, blankLinesBetweenScopes
+EOF
+}
+
+mode="${1:-}"
+case "$mode" in
+    --step)
+        step="${2:?a listing prefix such as 03-01-04 is required}"
+        assemble "$step" "$work/Quill"
+        build_quietly "$work/Quill" build --build-tests
+        echo "✅ Listings compile as of $step."
+        ;;
+    --all-steps)
+        failures=0
+        for path in "$listings"/*; do
+            step="$(basename "$path" | cut -c1-8)"
+            assemble "$step" "$work/Quill"
+            if build_quietly "$work/Quill" build --build-tests; then
+                echo "✅ $step"
+            else
+                echo "❌ $step"
+                failures=$((failures + 1))
+            fi
+        done
+        if [[ $failures -ne 0 ]]; then
+            echo "❌ $failures step(s) failed to compile."
+            exit 1
+        fi
+        echo "✅ Every step compiles."
+        ;;
+    "")
+        assemble "" "$work/Quill"
+        build_quietly "$work/Quill" build --build-tests
+        build_quietly "$work/Quill" test
+        build_quietly "$work/Quill" run Quill petstore.json --output out --access-level public --indent 4 --copyright Acme --force
+        build_quietly "$work/Quill/out/Petstore" build
+        if (cd "$work/Quill" && swift run Quill petstore.json --output out >/dev/null 2>&1); then
+            echo "❌ A second run without --force should have failed."
+            exit 1
+        fi
+        echo "✅ Tutorial listings build, pass their tests, and generate a package that compiles."
+        ;;
+    --sync)
+        sync
+        echo "✅ Regenerated $samples and $downloads."
+        ;;
+    --check)
+        sync
+        if [[ -n "$(cd "$root" && git status --porcelain -- Samples Sources/Calligraphy/Calligraphy.docc/Resources/Downloads)" ]]; then
+            (cd "$root" && git status --short -- Samples Sources/Calligraphy/Calligraphy.docc/Resources/Downloads)
+            echo "❌ Samples or downloads are out of date. Run 'mise sync-tutorials' and commit the result."
+            exit 1
+        fi
+        echo "✅ Samples and downloads match the listings."
+        ;;
+    *)
+        echo "Unknown option: $mode" >&2
+        exit 2
+        ;;
+esac

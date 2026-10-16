@@ -18,11 +18,14 @@ All three areas share one ``EnvironmentValues`` instance that flows from ancesto
 
 Calligraphy's type-safe API and builder patterns make it ideal for code generation, configuration file creation, and any scenario where you need to programmatically generate complex text or file structures.
 
+New to the library? The tutorials build a small code generator from scratch and introduce every core concept along the way, and the finished generator is available as a downloadable sample.
+
 @Links(visualStyle: detailedGrid) {
     - <doc:Setup>
     - <doc:ComposingStrings>
     - <doc:ComposingDirectories>
     - <doc:UsingTheEnvironment>
+    - <doc:Building-Quill>
 }
 
 ## Topics
@@ -30,6 +33,7 @@ Calligraphy's type-safe API and builder patterns make it ideal for code generati
 ### Getting Started
 
 - <doc:Setup>
+- <doc:Building-Quill>
 
 ### String Composition
 
@@ -101,3 +105,9 @@ Calligraphy's type-safe API and builder patterns make it ideal for code generati
 - ``PathResolution``
 - ``DynamicProperty``
 
+### Articles
+
+- <doc:ComposingStrings>
+- <doc:ComposingDirectories>
+- <doc:UsingTheEnvironment>
+- <doc:Quill>

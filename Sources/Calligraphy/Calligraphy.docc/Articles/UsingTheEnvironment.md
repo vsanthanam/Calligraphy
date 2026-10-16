@@ -1,6 +1,7 @@
 # Using the Environment
 
 @Metadata {
+    @PageImage(purpose: card, source: "using-the-environment.png", alt: "Three nesting dolls, each painted with a pair of braces.")
     @PageKind(article)
 }
 
@@ -14,7 +15,7 @@ The environment is shared across all three builders. A ``Directory`` passes its 
 
 Calligraphy itself uses the environment to configure built-in components — for example, ``Lines`` reads ``EnvironmentValues/lineSpacing`` to decide how many newlines to put between its children, and ``QuotationMark`` reads ``EnvironmentValues/quotationMarkStyle`` to choose its character. The same machinery is available to your own components.
 
-> Note: SwiftUI declares types named `Environment`, `EnvironmentValues`, `EnvironmentKey`, and `Entry`. In a file that imports both modules, qualify Calligraphy's with the module name, for example `@Calligraphy.Environment`.
+> Note: SwiftUI declares types named `Environment`, `EnvironmentValues`, `EnvironmentKey`, and `Entry`. In a file that imports both modules, qualify Calligraphy's with a module selector, for example `@Calligraphy::Environment`.
 
 ## Reading Values
 

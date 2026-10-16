@@ -1,0 +1,167 @@
+@Tutorial(time: 15) {
+    @XcodeRequirement(title: "Xcode 27 / Swift 6.4", destination: "https://developer.apple.com/xcode/")
+
+    @Intro(title: "Project Setup") {
+        Quill is a command-line tool that turns a description of a web service into a Swift package. In this tutorial you create Quill's package from the Swift Package Manager template, load a service description, and print your first string with the string builder.
+
+        @Image(source: "quill-1-intro.png", alt: "A rolled parchment sealed with red wax, with a quill laid across it.")
+    }
+
+    @Section(title: "Create the tool package") {
+        @ContentAndMedia {
+            Swift Package Manager ships a template for command-line tools built on Swift Argument Parser. Start from it, then add Calligraphy and Manuscript as dependencies.
+        }
+
+        @Steps {
+            @Step {
+                In Terminal, create a directory named `Quill`, change into it, and run `swift package init --type tool --name Quill`.
+
+                The template declares an executable target, a test target, and a dependency on Swift Argument Parser.
+
+                @Code(name: "Package.swift", file: "01-01-01-Package.swift", reset: true)
+            }
+
+            @Step {
+                Add a `platforms` entry for macOS 14, then add Calligraphy and Manuscript to the package's dependencies and to the executable target.
+
+                Calligraphy requires macOS 14 or later. Without the `platforms` entry, every use of the library fails with an error saying it is only available in macOS 14 or newer.
+
+                @Code(name: "Package.swift", file: "01-01-02-Package.swift")
+            }
+
+            @Step {
+                Open the template's entry point, `Sources/Quill/Quill.swift`. It declares a `ParsableCommand` that prints a greeting.
+
+                @Code(name: "Quill.swift", file: "01-01-03-Quill.swift", reset: true)
+            }
+
+            @Step {
+                Import `Calligraphy`, `Foundation`, and `Manuscript`, make the command an `AsyncParsableCommand`, and declare an argument for the spec path and an `--output` option.
+
+                Writing files to disk is asynchronous in Calligraphy, so the command's `run()` method is `async` from the start.
+
+                @Code(name: "Quill.swift", file: "01-01-04-Quill.swift")
+            }
+        }
+    }
+
+    @Section(title: "Load a Manuscript spec") {
+        @ContentAndMedia {
+            Manuscript is a small JSON format for describing a service: the types it exchanges and the endpoints it exposes. The [Manuscript](https://github.com/vsanthanam/Manuscript) package parses that format into Swift values, so Quill never deals with JSON directly.
+        }
+
+        @Steps {
+            @Step {
+                Save this description of a pet store as `petstore.json` next to `Package.swift`.
+
+                It declares two types, an enumeration named `Status` and a structure named `Pet`, and three endpoints. A field's `type` is a primitive name, the name of another type, or an array of either.
+
+                @Code(name: "petstore.json", file: "01-02-01-petstore.json", reset: true)
+            }
+
+            @Step {
+                Load the file with `Service(contentsOf:)` and print the service's name.
+
+                Run `swift run Quill petstore.json` to confirm that it prints `Petstore`.
+
+                @Code(name: "Quill.swift", file: "01-02-02-Quill.swift", previousFile: "01-01-04-Quill.swift")
+            }
+        }
+    }
+
+    @Section(title: "Compose your first string") {
+        @ContentAndMedia {
+            Calligraphy builds strings the way SwiftUI builds views. You list the pieces inside a closure, and a result builder assembles them. The `String` initializer that takes a `@StringBuilder` closure is the simplest way in.
+        }
+
+        @Steps {
+            @Step {
+                Build a README with `String { }`. Each expression in the closure becomes a line, and `Blank()` contributes an empty one.
+
+                By default the builder joins its pieces with newlines. Later tutorials show how to change that.
+
+                @Code(name: "Quill.swift", file: "01-03-01-Quill.swift")
+            }
+
+            @Step {
+                List the service's types with `ForEach`. Its closure is a builder too, so it can hold anything the outer closure can.
+
+                Builders accept `if`, `switch`, and `ForEach`, but not `for` loops. Writing `for type in service.types` here produces a compiler error. Arrays also have a `map` overload that takes a builder closure and does the same job as `ForEach`.
+
+                @Code(name: "Quill.swift", file: "01-03-02-Quill.swift")
+            }
+
+            @Step {
+                Move the README into its own type that conforms to `StringComponent`.
+
+                A component declares a `body` built with the same builder, just like a SwiftUI view. Extracting one is the same refactor as extracting a view, and the result can be stored, passed around, and reused.
+
+                @Code(name: "Readme.swift", file: "01-03-03-Readme.swift", reset: true)
+            }
+
+            @Step {
+                Render the component with `String(_:)` and print it. Run `swift run Quill petstore.json` again to see the Markdown.
+
+                @Code(name: "Quill.swift", file: "01-03-04-Quill.swift", previousFile: "01-03-02-Quill.swift")
+            }
+        }
+    }
+
+    @Assessments {
+        @MultipleChoice {
+            What happens if you write a `for` loop inside a `@StringBuilder` closure?
+
+            @Choice(isCorrect: false) {
+                Each iteration becomes one line of the result.
+
+                @Justification(reaction: "Not quite.") {
+                    Builders in Calligraphy do not support loops, so the code does not compile.
+                }
+            }
+
+            @Choice(isCorrect: true) {
+                The compiler reports an error.
+
+                @Justification(reaction: "Correct.") {
+                    Use `ForEach`, or an array's `map` overload that takes a builder closure, to repeat content.
+                }
+            }
+
+            @Choice(isCorrect: false) {
+                Only the last iteration is kept.
+
+                @Justification(reaction: "Not quite.") {
+                    The loop never compiles, so nothing is kept.
+                }
+            }
+        }
+
+        @MultipleChoice {
+            Why does Quill's `Package.swift` declare `platforms: [.macOS(.v14)]`?
+
+            @Choice(isCorrect: true) {
+                Calligraphy's API is only available on macOS 14 and later, and the package must say so to use it.
+
+                @Justification(reaction: "Correct.") {
+                    Without the entry, the package targets an older macOS and every use of Calligraphy is an availability error.
+                }
+            }
+
+            @Choice(isCorrect: false) {
+                Swift Argument Parser requires it.
+
+                @Justification(reaction: "Not quite.") {
+                    Swift Argument Parser supports much older systems. The requirement comes from Calligraphy.
+                }
+            }
+
+            @Choice(isCorrect: false) {
+                It is needed to run `swift package init`.
+
+                @Justification(reaction: "Not quite.") {
+                    The template omits it. You added it for Calligraphy.
+                }
+            }
+        }
+    }
+}

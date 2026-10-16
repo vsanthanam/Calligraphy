@@ -1,0 +1,48 @@
+@Article(time: 5) {
+    @Intro(title: "Next Steps") {
+        You built Quill from an empty package into a generator that writes a complete, compiling Swift package, and every piece of it was a Calligraphy component. This article collects the places to go from here.
+
+        @Image(source: "quill-next-intro.png", alt: "A brass compass lying open on a leather notebook.")
+    }
+
+    ## Keep the finished project
+
+    The <doc:Quill> page offers the finished generator as a download, and the same source is checked in at [Samples/Quill](https://github.com/vsanthanam/Calligraphy/tree/main/Samples/Quill). Each tutorial also offers the project as it stood at its start, so you can revisit any chapter without redoing the earlier ones.
+
+    ## Go deeper on each concept
+
+    @Stack {
+        @ContentAndMedia {
+            ### Strings
+
+            <doc:ComposingStrings> covers the rest of the string API: `Group` versus `Lines`, every built-in component and modifier, and how to write modifiers of your own.
+        }
+
+        @ContentAndMedia {
+            ### Files and folders
+
+            <doc:ComposingDirectories> explains how `Directory`, `TextFile`, and `DataFile` serialize, what `write(to:shouldOverwrite:)` validates, and how to compose binary content.
+        }
+
+        @ContentAndMedia {
+            ### The environment
+
+            <doc:UsingTheEnvironment> details how values flow through folders, files, and components, how `transformEnvironment` works, and when to reach for a `DynamicProperty`.
+        }
+    }
+
+    ## Extend Quill
+
+    Quill deliberately stops short of a complete generator. Each of these is a good exercise, and the component structure means none of them touches more than a file or two:
+
+    - Emit a `DELETE` method that decodes nothing, by making the response type optional in `EndpointMethod`.
+    - Generate a test target for the emitted package, reusing `PackageManifest` and the `File` content you already have.
+    - Add a `--base-url` option that flows through the environment into `ClientDeclaration` as a default value.
+    - Write a binary asset such as an icon into the package with `DataFile` and the data builder.
+
+    The [Manuscript](https://github.com/vsanthanam/Manuscript) specification describes the full input format, including the parts Quill ignores.
+
+    ## Get involved
+
+    Questions, ideas, and problems are welcome as [issues on GitHub](https://github.com/vsanthanam/Calligraphy/issues). If you build something with Calligraphy, the maintainers would like to hear about it.
+}
