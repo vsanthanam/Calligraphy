@@ -1,0 +1,178 @@
+@Tutorial(time: 20, projectFiles: "Quill-Start-AssemblingThePackage.zip") {
+    @XcodeRequirement(title: "Xcode 27 / Swift 6.4", destination: "https://developer.apple.com/xcode/")
+    @Intro(title: "Files and Folders") {
+        Describe the output as a tree of folders and files, then write it to disk. The same builders and components you used for strings describe the package's layout.
+
+        @Image(source: "quill-4-intro.png", alt: "A wooden card catalog drawer holding manila folders.")
+    }
+
+    @Section(title: "Describe the package as a directory") {
+        @ContentAndMedia {
+            A `Directory` has a name and a `body` built with `@DirectoryBuilder`. Its children are files and folders, and a file's content is a string builder, so everything you wrote so far slots straight in. Read <doc:ComposingDirectories> for the full picture.
+        }
+
+        @Steps {
+            @Step {
+                Create `GeneratedPackage`, a `Directory` named after the service that contains a single `README.md` file.
+
+                `File` takes a name and a `@StringBuilder` closure for its text. The `Readme` component from the first tutorial is all the closure needs.
+
+                @Code(name: "GeneratedPackage.swift", file: "04-01-01-GeneratedPackage.swift", reset: true)
+            }
+
+            @Step {
+                Create `PackageManifest`, a component that emits the generated package's own `Package.swift`.
+
+                @Code(name: "PackageManifest.swift", file: "04-01-02-PackageManifest.swift", reset: true)
+            }
+
+            @Step {
+                Add a `Package.swift` file to the directory.
+
+                @Code(name: "GeneratedPackage.swift", file: "04-01-03-GeneratedPackage.swift", previousFile: "04-01-01-GeneratedPackage.swift")
+            }
+
+            @Step {
+                Add a `Sources` folder with a `Models` folder inside it, and generate one Swift file per type with `ForEach`.
+
+                `ForEach` works in every builder. The `fileExtension:` parameter keeps the extension out of the file name you compute.
+
+                @Code(name: "GeneratedPackage.swift", file: "04-01-04-GeneratedPackage.swift")
+            }
+
+            @Step {
+                Create `ClientFile`, a `TextFile` whose body is the client declaration.
+
+                `TextFile` is to a file what `StringComponent` is to a string: a protocol for reusable, named files. Conform to it when a file deserves a type of its own.
+
+                @Code(name: "ClientFile.swift", file: "04-01-05-ClientFile.swift", reset: true)
+            }
+
+            @Step {
+                Add the client file next to the `Models` folder.
+
+                @Code(name: "GeneratedPackage.swift", file: "04-01-06-GeneratedPackage.swift", previousFile: "04-01-04-GeneratedPackage.swift")
+            }
+        }
+    }
+
+    @Section(title: "Add an executable script") {
+        @ContentAndMedia {
+            Files carry permissions. Add a shell script that regenerates the package, and make it executable.
+        }
+
+        @Steps {
+            @Step {
+                Store the spec's file name, and add a `regenerate.sh` file with the `.executableFile` permissions.
+
+                `FilePermissions` is an option set with presets for the common cases. `.defaultFile` is `rw-r--r--`, and `.executableFile` is `rwxr-xr-x`.
+
+                @Code(name: "GeneratedPackage.swift", file: "04-02-01-GeneratedPackage.swift")
+            }
+
+            @Step {
+                Spell the permissions out with the `#filePermissions` macro instead.
+
+                The macro accepts the symbolic form or an octal literal such as `#filePermissions(0o755)`, and checks it at compile time.
+
+                @Code(name: "GeneratedPackage.swift", file: "04-02-02-GeneratedPackage.swift")
+            }
+        }
+    }
+
+    @Section(title: "Write to disk") {
+        @ContentAndMedia {
+            Writing is one call. Calligraphy validates every name in the tree first, so nothing is written if any part of it would fail.
+        }
+
+        @Steps {
+            @Step {
+                Add a `--force` flag to the command.
+
+                @Code(name: "Quill.swift", file: "04-03-01-Quill.swift", previousFile: "03-02-04-Quill.swift")
+            }
+
+            @Step {
+                Create the output directory, then write the package into it with `write(to:shouldOverwrite:)`.
+
+                The destination must already exist. Before anything is written, every name in the tree is checked: names cannot be empty or contain path separators, siblings cannot differ only by case, and reserved names are rejected on Windows. If the package already exists at the destination and `shouldOverwrite` is false, the call throws.
+
+                @Code(name: "Quill.swift", file: "04-03-02-Quill.swift")
+            }
+
+            @Step {
+                Print the URL of every file that was written.
+
+                This `for` loop is ordinary Swift in an ordinary method. Only builder closures reject loops.
+
+                @Code(name: "Quill.swift", file: "04-03-03-Quill.swift")
+            }
+
+            @Step {
+                Run `swift run Quill petstore.json --output out`, then open `out/Petstore/Sources/Petstore/Models/Pet.swift`.
+
+                Run `cd out/Petstore && swift build` to confirm that the generated package compiles. Run Quill a second time without `--force` to see it refuse to overwrite the package.
+
+                @Code(name: "Pet.swift", file: "04-03-04-Pet.swift", reset: true)
+            }
+        }
+    }
+
+    @Assessments {
+        @MultipleChoice {
+            When does `write(to:shouldOverwrite:)` validate the names in the tree?
+
+            @Choice(isCorrect: true) {
+                Before writing anything, so an invalid name leaves the destination untouched.
+
+                @Justification(reaction: "Correct.") {
+                    The whole tree is serialized and checked first.
+                }
+            }
+
+            @Choice(isCorrect: false) {
+                As each file is written, stopping at the first invalid one.
+
+                @Justification(reaction: "Not quite.") {
+                    Validation happens up front so that a failure does not leave a half-written package.
+                }
+            }
+
+            @Choice(isCorrect: false) {
+                Never. The file system reports errors instead.
+
+                @Justification(reaction: "Not quite.") {
+                    Calligraphy checks names itself, including rules that only apply on other platforms.
+                }
+            }
+        }
+
+        @MultipleChoice {
+            What happens when the package already exists and `shouldOverwrite` is `false`?
+
+            @Choice(isCorrect: false) {
+                The existing files are updated in place.
+
+                @Justification(reaction: "Not quite.") {
+                    Nothing is written. Pass `shouldOverwrite: true` to replace the existing package.
+                }
+            }
+
+            @Choice(isCorrect: true) {
+                The call throws an error and nothing is written.
+
+                @Justification(reaction: "Correct.") {
+                    That is what Quill's `--force` flag controls.
+                }
+            }
+
+            @Choice(isCorrect: false) {
+                A numbered copy is created next to the existing one.
+
+                @Justification(reaction: "Not quite.") {
+                    Calligraphy never invents names. It throws.
+                }
+            }
+        }
+    }
+}

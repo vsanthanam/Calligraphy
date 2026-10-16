@@ -1,0 +1,48 @@
+@Tutorials(name: "Calligraphy") {
+
+    @Intro(title: "Build a Code Generator") {
+        Learn Calligraphy by building a Swift code generator.
+
+        @Image(source: "quill-intro.png", alt: "A quill standing in a glass inkwell beside a sheet of paper embossed with braces.")
+    }
+
+    @Chapter(name: "Compose Strings") {
+        @Image(source: "quill-chapter-strings.png", alt: "A wooden pen resting on a stack of paper.")
+
+        Start with the string builder. Turn a service description into Markdown, then into Swift declarations, one component at a time.
+
+        @TutorialReference(tutorial: "doc:SettingUpQuill")
+        @TutorialReference(tutorial: "doc:GeneratingModels")
+        @TutorialReference(tutorial: "doc:GeneratingTheClient")
+    }
+
+    @Chapter(name: "Compose Files and Configure Output") {
+        @Image(source: "quill-chapter-files.png", alt: "A leather folder with a brass clasp, slightly open.")
+
+        Describe the generated package as a tree of folders and files, write it to disk, and let command-line options flow through the environment to every file.
+
+        @TutorialReference(tutorial: "doc:AssemblingThePackage")
+        @TutorialReference(tutorial: "doc:ConfiguringGeneration")
+        @TutorialReference(tutorial: "doc:WhereToGoNext")
+    }
+
+    @Resources {
+        Explore more resources for learning about Calligraphy.
+
+        @Documentation(destination: "https://usecalligraphy.com/docs/documentation/calligraphy") {
+            Browse the API reference and the articles on each part of the library.
+
+            - <doc:ComposingStrings>
+            - <doc:ComposingDirectories>
+            - <doc:UsingTheEnvironment>
+        }
+
+        @SampleCode(destination: "https://github.com/vsanthanam/Calligraphy/tree/main/Samples/Quill") {
+            Download the finished Quill generator, or read it alongside the library's snippets and tests on GitHub.
+
+            - <doc:Quill>
+            - [Snippets](https://github.com/vsanthanam/Calligraphy/tree/main/Snippets)
+            - [Tests](https://github.com/vsanthanam/Calligraphy/tree/main/Tests)
+        }
+    }
+}

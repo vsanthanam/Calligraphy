@@ -1,0 +1,5 @@
+# This sample is generated from the tutorial code listings by
+# .scripts/verify-tutorial-code --sync. Edit the listings, not these files.
+# The listings carry no license header, so this sample does not either.
+--header ignore
+--disable docComments, blankLinesBetweenScopes

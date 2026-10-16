@@ -1,0 +1,265 @@
+@Tutorial(time: 25, projectFiles: "Quill-Start-ConfiguringGeneration.zip") {
+    @XcodeRequirement(title: "Xcode 27 / Swift 6.4", destination: "https://developer.apple.com/xcode/")
+
+    @Intro(title: "The Environment") {
+        Let command-line options shape the output. Values set once on the generated directory reach every file and component inside it through the environment, the same way they do in SwiftUI.
+
+        @Image(source: "quill-5-intro.png", alt: "A brass desk barometer whose dial reads indent, access, and copyright.")
+    }
+
+    @Section(title: "Add an access level option") {
+        @ContentAndMedia {
+            A generated package is more useful when its declarations can be `public`. Define an environment value for the access level, read it where declarations are emitted, and set it from an option. Read <doc:UsingTheEnvironment> for the full picture.
+        }
+
+        @Steps {
+            @Step {
+                Create `AccessLevel`, an enum that Swift Argument Parser can parse from the command line.
+
+                @Code(name: "AccessLevel.swift", file: "05-01-01-AccessLevel.swift", reset: true)
+            }
+
+            @Step {
+                Add an `accessLevel` entry to `EnvironmentValues` with the `@Entry` macro.
+
+                The macro synthesizes the key and the accessors. The initial value is the default that applies when no ancestor has set one.
+
+                @Code(name: "Environment.swift", file: "05-01-02-Environment.swift", reset: true)
+            }
+
+            @Step {
+                Read the value in `StructDeclaration` with `@Environment`, and prefix the declaration with `public` when it is set.
+
+                `@Environment` only works as a stored property of a component, a modifier, a file, or a directory. It is resolved when the component renders, so the value reflects whatever the ancestors set.
+
+                @Code(name: "StructDeclaration.swift", file: "05-01-03-StructDeclaration.swift", previousFile: "02-02-02-StructDeclaration.swift")
+            }
+
+            @Step {
+                Add an `--access-level` option, and set the value on the directory with the `environment(_:_:)` modifier.
+
+                One modifier on the root reaches every file and every component inside it. Run `swift run Quill petstore.json --output out --access-level public --force` and look at `Pet.swift`.
+
+                @Code(name: "Quill.swift", file: "05-01-04-Quill.swift", previousFile: "04-03-03-Quill.swift")
+            }
+        }
+    }
+
+    @Section(title: "Make a dynamic property") {
+        @ContentAndMedia {
+            Every declaration needs the same prefix, and repeating the `if` in each component is tedious. A property wrapper that conforms to `DynamicProperty` can read the environment and compute the prefix once.
+        }
+
+        @Steps {
+            @Step {
+                Create `AccessModifier`, a property wrapper that stores an `@Environment` property and computes its `wrappedValue` from it.
+
+                Conforming to `DynamicProperty` is all it takes. Calligraphy finds the `@Environment` property inside the wrapper and resolves it. The wrapped value must be computed, because the environment is injected after the component is initialized.
+
+                @Code(name: "AccessModifier.swift", file: "05-02-01-AccessModifier.swift", reset: true)
+            }
+
+            @Step {
+                Use the wrapper in `StructDeclaration` in place of the `if`.
+
+                @Code(name: "StructDeclaration.swift", file: "05-02-02-StructDeclaration.swift", previousFile: "05-01-03-StructDeclaration.swift")
+            }
+
+            @Step {
+                Use it in `Property`, so stored properties get the same access level as their struct.
+
+                @Code(name: "Property.swift", file: "05-02-03-Property.swift", previousFile: "02-01-06-Property.swift")
+            }
+
+            @Step {
+                Use it in `EnumDeclaration`.
+
+                @Code(name: "EnumDeclaration.swift", file: "05-02-04-EnumDeclaration.swift", previousFile: "02-02-03-EnumDeclaration.swift")
+            }
+
+            @Step {
+                Use it in `ClientDeclaration` for the struct and its stored properties.
+
+                @Code(name: "ClientDeclaration.swift", file: "05-02-05-ClientDeclaration.swift", previousFile: "03-02-02-ClientDeclaration.swift")
+            }
+
+            @Step {
+                Use it in `EndpointMethod`. Every declaration in a `public` package now carries the modifier, so the package compiles for its clients.
+
+                @Code(name: "EndpointMethod.swift", file: "05-02-06-EndpointMethod.swift", previousFile: "03-02-03-EndpointMethod.swift")
+            }
+        }
+    }
+
+    @Section(title: "Control formatting from the command line") {
+        @ContentAndMedia {
+            Indentation, line spacing, and quotation marks are built-in environment values. Each has a dedicated modifier, so an option can set them on the whole directory.
+        }
+
+        @Steps {
+            @Step {
+                Create `Indentation`, which parses either a number of spaces or the word `tab` into a `TabDefinition`.
+
+                @Code(name: "Indentation.swift", file: "05-03-01-Indentation.swift", reset: true)
+            }
+
+            @Step {
+                Add an `--indent` option that defaults to four spaces, and apply `tabDefinition(_:)` to the directory.
+
+                The built-in values are read-only from outside Calligraphy, which is why they are set with `tabDefinition(_:)`, `lineSpacing(_:)`, and `quotationMarkStyle(_:)` rather than with `environment(_:_:)`. Every `tabbed()` modifier in Quill now honors the option.
+
+                @Code(name: "Quill.swift", file: "05-03-02-Quill.swift")
+            }
+        }
+    }
+
+    @Section(title: "Stamp every file") {
+        @ContentAndMedia {
+            Generated files should say where they came from. A component can read its own location from the environment, and a modifier can wrap any content with a header.
+        }
+
+        @Steps {
+            @Step {
+                Create `GeneratedNotice`, a component that reads its file's path with `@FilePath` and emits a comment.
+
+                `@FilePath` gives the path relative to the directory being written, including the file name. `@FileName`, `@EnclosingPath`, and the URL variants are also available. Absolute paths and URLs are only known while `write(to:shouldOverwrite:)` runs, and are `nil` otherwise.
+
+                @Code(name: "GeneratedNotice.swift", file: "05-04-01-GeneratedNotice.swift", reset: true)
+            }
+
+            @Step {
+                Add an optional `copyrightHolder` entry. Optional entries need no initial value, and default to `nil`.
+
+                @Code(name: "Environment.swift", file: "05-04-02-Environment.swift", previousFile: "05-01-02-Environment.swift")
+            }
+
+            @Step {
+                Create `LicenseHeader`, a `StringModifier` that emits a copyright block when a holder is set, then the generated notice, then the content it wraps. Add a `licensed()` method so it reads like the built-in modifiers.
+
+                A modifier reads the environment the same way a component does. `content` is a placeholder for whatever the modifier is applied to.
+
+                @Code(name: "LicenseHeader.swift", file: "05-04-03-LicenseHeader.swift", reset: true)
+            }
+
+            @Step {
+                Apply `licensed()` to each model file's content.
+
+                @Code(name: "GeneratedPackage.swift", file: "05-04-04-GeneratedPackage.swift", previousFile: "04-02-02-GeneratedPackage.swift")
+            }
+
+            @Step {
+                Apply it to the client file as well.
+
+                @Code(name: "ClientFile.swift", file: "05-04-05-ClientFile.swift", previousFile: "04-01-05-ClientFile.swift")
+            }
+
+            @Step {
+                Add a `--copyright` option and set the value on the directory.
+
+                Run `swift run Quill petstore.json --output out --access-level public --indent 4 --copyright "Acme" --force` and open any generated file to see the header and its path.
+
+                @Code(name: "Quill.swift", file: "05-04-06-Quill.swift", previousFile: "05-03-02-Quill.swift")
+            }
+        }
+    }
+
+    @Section(title: "Test configured output") {
+        @ContentAndMedia {
+            Tests set environment values with the same modifiers the command uses, so configured output is as easy to check as plain output.
+        }
+
+        @Steps {
+            @Step {
+                Add tests that render a `StructDeclaration` with a public access level and with a license header. Run `swift test`.
+
+                @Code(name: "StructDeclarationTests.swift", file: "05-05-01-StructDeclarationTests.swift", previousFile: "02-03-01-StructDeclarationTests.swift")
+            }
+        }
+    }
+
+    @Assessments {
+        @MultipleChoice {
+            Where should a value be set so that every generated file sees it?
+
+            @Choice(isCorrect: true) {
+                On the root directory, with a modifier.
+
+                @Justification(reaction: "Correct.") {
+                    Environment values flow from ancestors to descendants, so the root reaches everything.
+                }
+            }
+
+            @Choice(isCorrect: false) {
+                On each `File` individually.
+
+                @Justification(reaction: "Not quite.") {
+                    That works, but setting it once on the root is enough.
+                }
+            }
+
+            @Choice(isCorrect: false) {
+                In a global variable that components read.
+
+                @Justification(reaction: "Not quite.") {
+                    The environment exists so that configuration travels with the tree instead of through globals.
+                }
+            }
+        }
+
+        @MultipleChoice {
+            Why must a dynamic property's `wrappedValue` be computed rather than stored?
+
+            @Choice(isCorrect: false) {
+                Property wrappers cannot have stored wrapped values.
+
+                @Justification(reaction: "Not quite.") {
+                    They can. The reason is specific to how the environment is injected.
+                }
+            }
+
+            @Choice(isCorrect: true) {
+                The environment is injected after the component is initialized, so the value must be read at access time.
+
+                @Justification(reaction: "Correct.") {
+                    A stored value would be computed before any ancestor had a chance to set anything.
+                }
+            }
+
+            @Choice(isCorrect: false) {
+                Computed properties are faster.
+
+                @Justification(reaction: "Not quite.") {
+                    Performance is not the reason. Timing is.
+                }
+            }
+        }
+
+        @MultipleChoice {
+            Why is indentation set with `tabDefinition(_:)` instead of `environment(_:_:)`?
+
+            @Choice(isCorrect: true) {
+                The built-in environment values are read-only outside Calligraphy, and each has a dedicated modifier.
+
+                @Justification(reaction: "Correct.") {
+                    Values you define with `@Entry` are writable with `environment(_:_:)`. The built-in ones are not.
+                }
+            }
+
+            @Choice(isCorrect: false) {
+                `environment(_:_:)` does not work on directories.
+
+                @Justification(reaction: "Not quite.") {
+                    It does. Quill uses it on the directory for the access level.
+                }
+            }
+
+            @Choice(isCorrect: false) {
+                `TabDefinition` is not `Sendable`.
+
+                @Justification(reaction: "Not quite.") {
+                    It is. The restriction is about which values are writable.
+                }
+            }
+        }
+    }
+}

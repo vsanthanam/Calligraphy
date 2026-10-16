@@ -224,6 +224,18 @@ jobs:
       run: ./.scripts/xcode-select
     - name: Validate Documentation
       run: ./.scripts/lint-docc    
+  verify-tutorials:
+    name: Verify Tutorial Code
+    runs-on: xcode-27
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+    - name: Select Xcode Version
+      run: ./.scripts/xcode-select
+    - name: Verify Tutorial Code
+      run: ./.scripts/verify-tutorial-code
+    - name: Check Sample Project and Downloads
+      run: ./.scripts/verify-tutorial-code --check
   validate-pr:
     name: Validate Pull Request
     if: ${{ always() && github.event_name == 'pull_request' }}
@@ -236,6 +248,7 @@ jobs:
       - test-windows-spm
       - lint
       - lint-docc
+      - verify-tutorials
     runs-on: ubuntu-latest
     steps:
       - name: Check upstream jobs
@@ -248,7 +261,8 @@ jobs:
              [[ "${{ needs.build-windows-spm.result }}" == "failure" ]] || \
              [[ "${{ needs.test-windows-spm.result }}" == "failure" ]] || \
              [[ "${{ needs.lint.result }}" == "failure" ]] || \
-             [[ "${{ needs.lint-docc.result }}" == "failure" ]]; then
+             [[ "${{ needs.lint-docc.result }}" == "failure" ]] || \
+             [[ "${{ needs.verify-tutorials.result }}" == "failure" ]]; then
             echo "❌ Upstream job failed."
             exit 1
           else

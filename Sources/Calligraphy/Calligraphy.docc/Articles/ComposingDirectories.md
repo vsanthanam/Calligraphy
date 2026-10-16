@@ -1,7 +1,7 @@
 # Composing Directories
 
 @Metadata {
-    @PageImage(purpose: card, source: "composing-directories.png", alt: "Declarative file with folder illustration")
+    @PageImage(purpose: card, source: "composing-directories.png", alt: "A blue leather portfolio holding white paper.")
     @PageKind(article)
 }
 

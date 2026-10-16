@@ -20,3 +20,11 @@ run = "swift test"
 [tasks.preview-docs]
 description = "Preview Documentation"
 run = "swift package --disable-sandbox preview-documentation --product Calligraphy"
+
+[tasks.verify-tutorials]
+description = "Compile and run the tutorial code listings"
+run = "./.scripts/verify-tutorial-code"
+
+[tasks.sync-tutorials]
+description = "Regenerate the tutorial sample project and downloads from the listings"
+run = "./.scripts/verify-tutorial-code --sync"
