@@ -4,7 +4,7 @@
     @Intro(title: "Composition and Modifiers") {
         Generate a client type with one method per endpoint. You assemble a method signature from pieces, choose a request strategy with a `switch`, and control the blank lines between methods.
 
-        @Image(source: "quill-3-intro.png", alt: "A rubber stamp with a wooden handle beside an open brass ink pad.")
+        @Image(source: "quill-3-intro.png", alt: "A rubber stamp with a steel handle beside an open ink pad and a card stamped with a pair of braces.")
     }
 
     @Section(title: "Compose an endpoint method") {

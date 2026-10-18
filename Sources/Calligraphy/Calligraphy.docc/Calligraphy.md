@@ -25,7 +25,6 @@ New to the library? The tutorials build a small code generator from scratch and 
     - <doc:ComposingStrings>
     - <doc:ComposingDirectories>
     - <doc:UsingTheEnvironment>
-    - <doc:Building-Quill>
 }
 
 ## Topics

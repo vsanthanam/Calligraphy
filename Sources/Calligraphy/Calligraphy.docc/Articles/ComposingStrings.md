@@ -1,7 +1,7 @@
 # Composing Strings
 
 @Metadata {
-    @PageImage(purpose: card, source: "composing-strings.png", alt: "Code book with fountain pen")
+    @PageImage(purpose: card, source: "composing-strings.png", alt: "A blue cloth notebook debossed with a pair of braces, with a fountain pen resting across it.")
     @PageKind(article)
 }
 

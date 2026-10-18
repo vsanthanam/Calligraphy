@@ -2,7 +2,7 @@
     @Intro(title: "Next Steps") {
         You built Quill from an empty package into a generator that writes a complete, compiling Swift package, and every piece of it was a Calligraphy component. This article collects the places to go from here.
 
-        @Image(source: "quill-next-intro.png", alt: "A brass compass lying open on a leather notebook.")
+        @Image(source: "quill-next-intro.png", alt: "A steel compass lying open on a blue cloth notebook.")
     }
 
     ## Keep the finished project

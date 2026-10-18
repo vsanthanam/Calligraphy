@@ -4,7 +4,7 @@
     @Intro(title: "Project Setup") {
         Quill is a command-line tool that turns a description of a web service into a Swift package. In this tutorial you create Quill's package from the Swift Package Manager template, load a service description, and print your first string with the string builder.
 
-        @Image(source: "quill-1-intro.png", alt: "A rolled parchment sealed with red wax, with a quill laid across it.")
+        @Image(source: "quill-1-intro.png", alt: "A rolled sheet of paper tied with a blue ribbon and sealed with red wax, with a quill laid across it.")
     }
 
     @Section(title: "Create the tool package") {

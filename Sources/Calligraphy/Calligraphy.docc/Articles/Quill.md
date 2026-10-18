@@ -1,7 +1,7 @@
 # Quill
 
 @Metadata {
-    @PageImage(purpose: card, source: "quill-sample.png", alt: "A quill standing in a glass inkwell on a wooden base embossed with the Swift bird.")
+    @PageImage(purpose: card, source: "quill-sample.png", alt: "A quill standing in a glass inkwell on a brushed aluminium base engraved with a pair of braces.")
     @PageKind(sampleCode)
     @CallToAction(file: "Quill-Finished.zip", purpose: download)
 }

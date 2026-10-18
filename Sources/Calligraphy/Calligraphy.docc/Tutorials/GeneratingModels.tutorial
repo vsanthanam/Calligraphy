@@ -4,7 +4,7 @@
     @Intro(title: "Components and Control Flow") {
         Turn each type in the spec into a Swift declaration. You compose nested components, indent them, branch on the shape of each type, and write a test that checks the output.
 
-        @Image(source: "quill-2-intro.png", alt: "A letterpress type tray holding wooden blocks that read if, switch, and a brace.")
+        @Image(source: "quill-2-intro.png", alt: "A wooden type tray holding blue blocks that read if, switch, and a brace.")
     }
 
     @Section(title: "Declare a struct") {
