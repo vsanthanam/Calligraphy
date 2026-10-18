@@ -3,7 +3,7 @@
     @Intro(title: "Files and Folders") {
         Describe the output as a tree of folders and files, then write it to disk. The same builders and components you used for strings describe the package's layout.
 
-        @Image(source: "quill-4-intro.png", alt: "A wooden card catalog drawer holding manila folders.")
+        @Image(source: "quill-4-intro.png", alt: "A wooden card catalog drawer holding blue folders.")
     }
 
     @Section(title: "Describe the package as a directory") {

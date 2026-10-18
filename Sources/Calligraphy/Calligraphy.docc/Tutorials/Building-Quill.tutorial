@@ -3,11 +3,11 @@
     @Intro(title: "Build a Code Generator") {
         Learn Calligraphy by building a Swift code generator.
 
-        @Image(source: "quill-intro.png", alt: "A quill standing in a glass inkwell beside a sheet of paper embossed with braces.")
+        @Image(source: "quill-intro.png", alt: "A quill standing in a glass inkwell beside a sheet of paper printed with a pair of braces.")
     }
 
     @Chapter(name: "Compose Strings") {
-        @Image(source: "quill-chapter-strings.png", alt: "A wooden pen resting on a stack of paper.")
+        @Image(source: "quill-chapter-strings.png", alt: "A blue and steel fountain pen resting on a stack of paper.")
 
         Start with the string builder. Turn a service description into Markdown, then into Swift declarations, one component at a time.
 
@@ -17,7 +17,7 @@
     }
 
     @Chapter(name: "Compose Files and Configure Output") {
-        @Image(source: "quill-chapter-files.png", alt: "A leather folder with a brass clasp, slightly open.")
+        @Image(source: "quill-chapter-files.png", alt: "A blue folder with a steel clasp, slightly open.")
 
         Describe the generated package as a tree of folders and files, write it to disk, and let command-line options flow through the environment to every file.
 

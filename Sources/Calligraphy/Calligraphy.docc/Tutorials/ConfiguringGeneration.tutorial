@@ -4,7 +4,7 @@
     @Intro(title: "The Environment") {
         Let command-line options shape the output. Values set once on the generated directory reach every file and component inside it through the environment, the same way they do in SwiftUI.
 
-        @Image(source: "quill-5-intro.png", alt: "A brass desk barometer whose dial reads indent, access, and copyright.")
+        @Image(source: "quill-5-intro.png", alt: "A steel desk gauge whose dial reads indent, access, and copyright.")
     }
 
     @Section(title: "Add an access level option") {

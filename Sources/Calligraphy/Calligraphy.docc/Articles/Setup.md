@@ -1,7 +1,7 @@
 # Project Setup
 
 @Metadata {
-    @PageImage(purpose: card, source: "getting-started.png", alt: "Setup Icon")
+    @PageImage(purpose: card, source: "getting-started.png", alt: "An open cardboard box holding a blue cube.")
     @PageKind(article)
     @CallToAction(url: "https://www.github.com/vsanthanam/Calligraphy", purpose: link, label: "View on GitHub")
 }
