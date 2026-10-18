@@ -43,7 +43,7 @@ jobs:
             xcode: '26.5'
           - swift: '6.4'
             runner: 'xcode-27'
-            xcode: '27.0'
+            xcode: '27.1'
     runs-on: ${{ matrix.runner }}
     outputs:
       artifact-name: macos-build
@@ -75,7 +75,7 @@ jobs:
             xcode: '26.5'
           - swift: '6.4'
             runner: 'xcode-27'
-            xcode: '27.0'
+            xcode: '27.1'
     needs: build-macos-spm
     runs-on: ${{ matrix.runner }}
     steps:
@@ -97,11 +97,18 @@ jobs:
     strategy:
       matrix:
         swift: ['6.2', '6.3', '6.4']
+        include:
+          - swift: "6.2"
+            toolchain: "6.2.4"
+          - swift: "6.3"
+            toolchain: "6.3.3"
+          - swift: "6.4"
+            toolchain: "6.4.1"
     runs-on: ubuntu-latest
     outputs:
       artifact-name: ubuntu-build
     container:
-      image: swift:${{ matrix.swift }}
+      image: swift:${{ matrix.toolchain }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -121,10 +128,17 @@ jobs:
     strategy:
       matrix:
         swift: ['6.2', '6.3', '6.4']
+        include:
+          - swift: "6.2"
+            toolchain: "6.2.4"
+          - swift: "6.3"
+            toolchain: "6.3.3"
+          - swift: "6.4"
+            toolchain: "6.4.1"
     needs: build-ubuntu-spm
     runs-on: ubuntu-latest
     container:
-      image: swift:${{ matrix.swift }}
+      image: swift:${{ matrix.toolchain }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -155,7 +169,7 @@ jobs:
           - swift: '6.3'
             toolchain: '6.3.3'
           - swift: '6.4'
-            toolchain: '6.4.0'
+            toolchain: '6.4.1'
             # The 6.4 build engine touches resource bundles while their contents are still being
             # written. Compiling swift-syntax from source instead of using the prebuilt keeps the
             # two tasks apart. See https://github.com/vsanthanam/JBird/issues/436.
@@ -192,7 +206,7 @@ jobs:
           - swift: '6.3'
             toolchain: '6.3.3'
           - swift: '6.4'
-            toolchain: '6.4.0'
+            toolchain: '6.4.1'
     needs: build-windows-spm
     runs-on: windows-latest
     steps:
