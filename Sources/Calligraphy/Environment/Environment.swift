@@ -29,7 +29,7 @@
 ///
 /// @Snippet(path: "Calligraphy/Snippets/EnvironmentValues/ReadingEnvironmentValues", slice: "property-wrapper")
 ///
-/// - Note: SwiftUI declares a property wrapper with the same name. In a file that imports both modules, write `@Calligraphy.Environment` to disambiguate.
+/// - Note: SwiftUI declares a property wrapper with the same name. In a file that imports both modules, write `@Calligraphy::Environment` to disambiguate.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @propertyWrapper
 public struct Environment<Value>: DynamicProperty {
@@ -88,7 +88,7 @@ public struct Environment<Value>: DynamicProperty {
 ///
 /// The default implementation of `_inject(_:)` finds every dynamic property stored in the conforming type and injects it, so a conforming type rarely needs to do anything beyond declaring the conformance.
 ///
-/// - Note: SwiftUI declares a protocol with the same name. In a file that imports both modules, write `Calligraphy.DynamicProperty` to disambiguate.
+/// - Note: SwiftUI declares a protocol with the same name. In a file that imports both modules, write `Calligraphy::DynamicProperty` to disambiguate.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 public protocol DynamicProperty {
 

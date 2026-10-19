@@ -35,7 +35,7 @@
 ///
 /// The expanded property can be set on any component using ``StringComponent/environment(_:_:)-(_,Value)``, ``DataComponent/environment(_:_:)-(_,Value)``, or ``DirectoryContent/environment(_:_:)-(_,Value)``, and read using ``Environment``.
 ///
-/// - Note: SwiftUI declares a macro with the same name. In a file that imports both modules, write `@Calligraphy.Entry` to disambiguate.
+/// - Note: SwiftUI declares a macro with the same name. In a file that imports both modules, write `@Calligraphy::Entry` to disambiguate.
 @available(macOS 14.0, macCatalyst 17.0, iOS 17.0, watchOS 10.0, tvOS 17.0, visionOS 1.0, *)
 @attached(accessor)
 @attached(peer, names: prefixed(__Key_))
