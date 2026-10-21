@@ -50,8 +50,10 @@ public struct FilePermissionsOctalMacro: ExpressionMacro {
         let str = literal.trimmedDescription
 
         func isValidOctalLiteral(_ octal: String) -> Bool {
-            guard octal.count >= 3 else { return false }
-            guard octal.hasPrefix("0o") || octal.hasPrefix("0O") else { return false }
+            guard octal.count >= 3,
+                  octal.hasPrefix("0o") || octal.hasPrefix("0O") else {
+                return false
+            }
             let digits = octal.dropFirst(2)
             guard !digits.isEmpty else { return false }
             return digits.allSatisfy { ch in
