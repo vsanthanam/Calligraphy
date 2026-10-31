@@ -43,7 +43,7 @@ jobs:
             xcode: '26.5'
           - swift: '6.4'
             runner: 'xcode-27'
-            xcode: '27.1'
+            xcode: '27.2'
     runs-on: ${{ matrix.runner }}
     outputs:
       artifact-name: macos-build
@@ -75,7 +75,7 @@ jobs:
             xcode: '26.5'
           - swift: '6.4'
             runner: 'xcode-27'
-            xcode: '27.1'
+            xcode: '27.2'
     needs: build-macos-spm
     runs-on: ${{ matrix.runner }}
     steps:
@@ -103,7 +103,7 @@ jobs:
           - swift: "6.3"
             toolchain: "6.3.3"
           - swift: "6.4"
-            toolchain: "6.4.1"
+            toolchain: "6.4.2"
     runs-on: ubuntu-latest
     outputs:
       artifact-name: ubuntu-build
@@ -134,7 +134,7 @@ jobs:
           - swift: "6.3"
             toolchain: "6.3.3"
           - swift: "6.4"
-            toolchain: "6.4.1"
+            toolchain: "6.4.2"
     needs: build-ubuntu-spm
     runs-on: ubuntu-latest
     container:
@@ -169,11 +169,7 @@ jobs:
           - swift: '6.3'
             toolchain: '6.3.3'
           - swift: '6.4'
-            toolchain: '6.4.1'
-            # The 6.4 build engine touches resource bundles while their contents are still being
-            # written. Compiling swift-syntax from source instead of using the prebuilt keeps the
-            # two tasks apart. See https://github.com/vsanthanam/JBird/issues/436.
-            extra-flags: '--disable-experimental-prebuilts'
+            toolchain: '6.4.2'
     runs-on: windows-latest
     steps:
       - name: Checkout
@@ -206,7 +202,7 @@ jobs:
           - swift: '6.3'
             toolchain: '6.3.3'
           - swift: '6.4'
-            toolchain: '6.4.1'
+            toolchain: '6.4.2'
     needs: build-windows-spm
     runs-on: windows-latest
     steps:
