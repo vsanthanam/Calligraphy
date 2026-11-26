@@ -7,7 +7,7 @@
 
     ## Keep the finished project
 
-    The <doc:Quill> page offers the finished generator as a download, and the same source is checked in at [Samples/Quill](https://github.com/vsanthanam/Calligraphy/tree/main/Samples/Quill). Each tutorial also offers the project as it stood at its start, so you can revisit any chapter without redoing the earlier ones.
+    The <doc:Quill> page offers the finished generator as a download, and the same source is checked in at [Samples/Quill](https://github.com/usecalligraphy/Calligraphy/tree/main/Samples/Quill). Each tutorial also offers the project as it stood at its start, so you can revisit any chapter without redoing the earlier ones.
 
     ## Go deeper on each concept
 
@@ -40,9 +40,9 @@
     - Add a `--base-url` option that flows through the environment into `ClientDeclaration` as a default value.
     - Write a binary asset such as an icon into the package with `DataFile` and the data builder.
 
-    The [Manuscript](https://github.com/vsanthanam/Manuscript) specification describes the full input format, including the parts Quill ignores.
+    The [Manuscript](https://github.com/usecalligraphy/Manuscript) specification describes the full input format, including the parts Quill ignores.
 
     ## Get involved
 
-    Questions, ideas, and problems are welcome as [issues on GitHub](https://github.com/vsanthanam/Calligraphy/issues). If you build something with Calligraphy, the maintainers would like to hear about it.
+    Questions, ideas, and problems are welcome as [issues on GitHub](https://github.com/usecalligraphy/Calligraphy/issues). If you build something with Calligraphy, the maintainers would like to hear about it.
 }
