@@ -54,7 +54,7 @@ assemble() {
     fi
     if [[ -z "$keep_urls" ]]; then
         sed -i '' \
-            -e "s#.package(url: \"https://github.com/vsanthanam/Calligraphy\", from: \"[^\"]*\")#.package(path: \"$root\")#" \
+            -e "s#.package(url: \"https://github.com/usecalligraphy/Calligraphy\", from: \"[^\"]*\")#.package(path: \"$root\")#" \
             "$project/Package.swift"
     fi
 }

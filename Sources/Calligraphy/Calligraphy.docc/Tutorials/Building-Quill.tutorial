@@ -37,12 +37,12 @@
             - <doc:UsingTheEnvironment>
         }
 
-        @SampleCode(destination: "https://github.com/vsanthanam/Calligraphy/tree/main/Samples/Quill") {
+        @SampleCode(destination: "https://github.com/usecalligraphy/Calligraphy/tree/main/Samples/Quill") {
             Download the finished Quill generator, or read it alongside the library's snippets and tests on GitHub.
 
             - <doc:Quill>
-            - [Snippets](https://github.com/vsanthanam/Calligraphy/tree/main/Snippets)
-            - [Tests](https://github.com/vsanthanam/Calligraphy/tree/main/Tests)
+            - [Snippets](https://github.com/usecalligraphy/Calligraphy/tree/main/Snippets)
+            - [Tests](https://github.com/usecalligraphy/Calligraphy/tree/main/Tests)
         }
     }
 }

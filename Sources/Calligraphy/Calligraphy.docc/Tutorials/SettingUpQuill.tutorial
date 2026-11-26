@@ -47,7 +47,7 @@
 
     @Section(title: "Load a Manuscript spec") {
         @ContentAndMedia {
-            Manuscript is a small JSON format for describing a service: the types it exchanges and the endpoints it exposes. The [Manuscript](https://github.com/vsanthanam/Manuscript) package parses that format into Swift values, so Quill never deals with JSON directly.
+            Manuscript is a small JSON format for describing a service: the types it exchanges and the endpoints it exposes. The [Manuscript](https://github.com/usecalligraphy/Manuscript) package parses that format into Swift values, so Quill never deals with JSON directly.
         }
 
         @Steps {

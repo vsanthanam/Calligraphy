@@ -10,9 +10,9 @@ Generate a Swift package from a description of a web service.
 
 ## Overview
 
-Quill is the command-line tool built step by step in the <doc:Building-Quill> tutorials. It reads a service description written in [Manuscript](https://github.com/vsanthanam/Manuscript), a small JSON format, and writes a complete Swift package: a model type for every type in the service, an API client with a method for every endpoint, a package manifest, a README, and a script that regenerates the package.
+Quill is the command-line tool built step by step in the <doc:Building-Quill> tutorials. It reads a service description written in [Manuscript](https://github.com/usecalligraphy/Manuscript), a small JSON format, and writes a complete Swift package: a model type for every type in the service, an API client with a method for every endpoint, a package manifest, a README, and a script that regenerates the package.
 
-This page holds the finished project. Download it to read the complete source, or follow the tutorials to build it yourself. Each tutorial after the first also offers the project as it stands at that point, so you can start anywhere. The same source is checked in at [Samples/Quill](https://github.com/vsanthanam/Calligraphy/tree/main/Samples/Quill) in the Calligraphy repository, and it is regenerated from the tutorial listings whenever they change.
+This page holds the finished project. Download it to read the complete source, or follow the tutorials to build it yourself. Each tutorial after the first also offers the project as it stands at that point, so you can start anywhere. The same source is checked in at [Samples/Quill](https://github.com/usecalligraphy/Calligraphy/tree/main/Samples/Quill) in the Calligraphy repository, and it is regenerated from the tutorial listings whenever they change.
 
 ### Running the generator
 
