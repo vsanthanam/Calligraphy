@@ -10,7 +10,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.2.0"),
-        .package(url: "https://github.com/usecalligraphy/Calligraphy", from: "3.1.2"),
+        .package(url: "https://github.com/usecalligraphy/Calligraphy", from: "3.1.3"),
         .package(url: "https://github.com/usecalligraphy/Manuscript", from: "1.0.0"),
     ],
     targets: [
