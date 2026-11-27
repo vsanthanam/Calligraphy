@@ -179,7 +179,7 @@ To add Calligraphy as a dependency to an existing Swift package, add the followi
 dependencies: [
     .package(
         url: "https://github.com/usecalligraphy/Calligraphy.git",
-        from: "3.1.2"
+        from: "3.1.3"
     )
 ]
 ```
