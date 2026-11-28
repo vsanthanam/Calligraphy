@@ -300,6 +300,7 @@ struct StringBuilderTests {
         """)
     }
 
+    @available(*, deprecated)
     @Test("Array.map Support")
     func arrayMap() {
 
@@ -325,6 +326,7 @@ struct StringBuilderTests {
         let flags = [true, false, true]
 
         @StringBuilder
+        @available(*, deprecated)
         func builder() -> some StringComponent {
             flags.map { flag in
                 if flag {
