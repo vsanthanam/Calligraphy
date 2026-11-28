@@ -123,7 +123,7 @@
                 The compiler reports an error.
 
                 @Justification(reaction: "Correct.") {
-                    Use `ForEach`, or an array's `map` overload that takes a builder closure, to repeat content.
+                    Use `ForEach` instead.
                 }
             }
 
