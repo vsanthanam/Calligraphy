@@ -1,0 +1,102 @@
+#!/bin/bash
+
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+semver='[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*'
+readme="README.md"
+setup="Sources/Calligraphy/Calligraphy.docc/Articles/Setup.md"
+theme=".scripts/setup-theme"
+listings="Sources/Calligraphy/Calligraphy.docc/Resources/Code/Quill"
+sample="Samples/Quill/Package.swift"
+dependency='usecalligraphy/Calligraphy", from: "'
+
+snippet_version() {
+    sed -n 's/^ *from: "\('"$semver"'\)"$/\1/p' "$1"
+}
+
+theme_version() {
+    sed -n 's/^  - "V\('"$semver"'\)"$/\1/p' "$theme"
+}
+
+package_version() {
+    sed -n 's#.*'"$dependency"'\('"$semver"'\)".*#\1#p' "$1"
+}
+
+replace() {
+    local file="$1"
+    local expression="$2"
+    sed -i.bak "$expression" "$file"
+    rm "$file.bak"
+}
+
+current() {
+    local version
+    version="$(snippet_version "$readme")"
+    if [[ "$(wc -l <<< "$version" | tr -d ' ')" != "1" || -z "$version" ]]; then
+        echo "$readme does not declare exactly one version" >&2
+        exit 1
+    fi
+    echo "$version"
+}
+
+check() {
+    local expected
+    expected="$(current)"
+    local failed=0
+    report() {
+        if [[ "$2" != "$expected" ]]; then
+            echo "$1 is ${2:-missing} but $readme is $expected" >&2
+            failed=1
+        fi
+    }
+    report "$setup" "$(snippet_version "$setup")"
+    report "$theme" "$(theme_version)"
+    report "$sample" "$(package_version "$sample")"
+    local found=0
+    local listing
+    for listing in "$listings"/*-Package.swift; do
+        if grep -q "$dependency" "$listing"; then
+            found=1
+            report "$listing" "$(package_version "$listing")"
+        fi
+    done
+    if [[ $found -eq 0 ]]; then
+        echo "no listing in $listings depends on Calligraphy" >&2
+        failed=1
+    fi
+    if [[ $failed -eq 0 ]]; then
+        echo "every version is $expected"
+    fi
+    return "$failed"
+}
+
+set_version() {
+    local version="$1"
+    if ! [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        echo "$version is not MAJOR.MINOR.PATCH" >&2
+        exit 1
+    fi
+    replace "$readme" 's/^\( *from: "\)'"$semver"'"$/\1'"$version"'"/'
+    replace "$setup" 's/^\( *from: "\)'"$semver"'"$/\1'"$version"'"/'
+    replace "$theme" 's/^\(  - "V\)'"$semver"'"$/\1'"$version"'"/'
+    local listing
+    for listing in "$listings"/*-Package.swift; do
+        if grep -q "$dependency" "$listing"; then
+            replace "$listing" 's#\('"$dependency"'\)'"$semver"'"#\1'"$version"'"#'
+        fi
+    done
+    ./.scripts/verify-tutorial-code --sync > /dev/null
+    check
+}
+
+case "${1:-}" in
+    current) current ;;
+    check) check ;;
+    set) set_version "${2:?usage: version set MAJOR.MINOR.PATCH}" ;;
+    *)
+        echo "usage: version current | check | set MAJOR.MINOR.PATCH" >&2
+        exit 2
+        ;;
+esac

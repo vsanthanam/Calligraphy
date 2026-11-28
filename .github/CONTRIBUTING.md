@@ -25,6 +25,19 @@ All code should be written with cross-platform compatibility in mind, but does n
 
 Avoid non-Apple third-party dependencies unless they are absolutely necessary. Most PRs that add additional dependencies are likely to not be approved without clear justification for why the dependency is necessary.
 
+## Releasing
+
+Releases are made by four workflows, each run by hand from `main` in the Actions tab. They act as the project's release app, which may push to `main` and to release branches.
+
+- **Release** cuts a new version from `main`. It sets the version with `mise run set-version`, pushes that commit to `main`, creates the branch `release/X.Y.Z`, and publishes the tag and GitHub release `X.Y.Z`. Publishing the release deploys the website and attaches the documentation archive.
+- **Hotfix** patches an existing release. Give it the release to patch and the commits or pull requests from `main` to cherry-pick. It applies them to that release's branch, builds and tests the result, and publishes the next patch version from the same branch. A hotfix to `3.2.0` is released as `3.2.1` on `release/3.2.0`, so the next release cut from `main` must use a higher number.
+- **Set Version** changes the version on `main` or a release branch without releasing anything.
+- **Kill Release** deletes a GitHub release and its tag, and optionally its release branch. It does not change the version on `main` or redeploy the website.
+
+Release and Hotfix accept a dry run, which prepares everything and reports what would happen without pushing or publishing.
+
+The version appears in the README, the setup article, the website configuration, and the tutorial project. `mise run version` prints it, `mise run set-version X.Y.Z` changes every copy, and `mise lint` fails if they disagree.
+
 ## Questions?
 
 Feel free to open an issue for any questions about contributing or the project's direction. 

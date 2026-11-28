@@ -21,6 +21,10 @@ run = "swiftformat . --lint"
 description = "Lint Mise Configuration"
 run = "mise fmt --check"
 
+[tasks."lint:version"]
+description = "Validate version integrity"
+run = "./.scripts/version check"
+
 [tasks.lint]
 description = "Lint Sources"
 depends = ["lint:*"]
@@ -44,3 +48,12 @@ run = "./.scripts/verify-tutorial-code"
 [tasks.sync-tutorials]
 description = "Regenerate the tutorial sample project and downloads from the listings"
 run = "./.scripts/verify-tutorial-code --sync"
+
+[tasks.version]
+description = "Print the current version"
+run = "./.scripts/version current"
+
+[tasks.set-version]
+description = "Set the version in the README, documentation, website, and tutorial project"
+usage = 'arg "<version>" help="The new version, as MAJOR.MINOR.PATCH"'
+run = './.scripts/version set "$usage_version"'

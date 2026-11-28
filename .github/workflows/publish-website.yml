@@ -11,8 +11,29 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 jobs:
+  check-latest:
+    name: Check Latest Release
+    runs-on: ubuntu-latest
+    outputs:
+      deploy: ${{ steps.check.outputs.deploy }}
+    steps:
+      - name: Compare with Latest Release
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" != "release" ] || [ "$(gh release view --json tagName --jq .tagName)" = "$TAG" ]; then
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "$TAG is not the latest release, so the website is left alone"
+            echo "deploy=false" >> "$GITHUB_OUTPUT"
+          fi
   build-docc:
     name: Build Documentation
+    needs: check-latest
+    if: needs.check-latest.outputs.deploy == 'true'
     runs-on: xcode-27
     outputs:
       artifact-name: docs
