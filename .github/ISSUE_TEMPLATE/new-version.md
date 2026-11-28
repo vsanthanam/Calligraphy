@@ -9,6 +9,8 @@ assignees: vsanthanam
 
 **Complete the following checklist**
 
-- [ ] Update README badges
-- [ ] Update README installation instructions
-- [ ] Update DocC installation instructions
+- [ ] Confirm the checks on the latest commit on `main` are green
+- [ ] Run the Release workflow from `main` with the new version
+- [ ] Confirm the `release/` branch, tag, and GitHub release exist
+- [ ] Confirm the DocC archive and sample project are attached to the release
+- [ ] Confirm the website shows the new version

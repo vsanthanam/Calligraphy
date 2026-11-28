@@ -1,0 +1,209 @@
+name: Hotfix
+on:
+  workflow_dispatch:
+    inputs:
+      release:
+        description: The release whose branch receives the hotfix, as MAJOR.MINOR.PATCH
+        required: true
+        type: string
+      commits:
+        description: Commits on main to cherry-pick, in order, as SHAs or pull requests written as #123
+        required: true
+        type: string
+      version:
+        description: The version to release, as MAJOR.MINOR.PATCH; the next patch version when empty
+        required: false
+        type: string
+      dry-run:
+        description: Prepare the hotfix without pushing or publishing anything
+        required: false
+        type: boolean
+        default: false
+permissions: {}
+concurrency:
+  group: release
+  cancel-in-progress: false
+jobs:
+  hotfix:
+    name: Hotfix Release
+    runs-on: xcode-27
+    steps:
+      - name: Require Main
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "hotfixes are started from main, not ${GITHUB_REF_NAME}" >&2
+          exit 1
+      - name: Validate Release
+        env:
+          RELEASE: ${{ inputs.release }}
+        run: |
+          if ! [[ "$RELEASE" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "$RELEASE is not MAJOR.MINOR.PATCH" >&2
+            exit 1
+          fi
+      - name: Create App Token
+        id: app
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          token: ${{ steps.app.outputs.token }}
+          ref: release/${{ inputs.release }}
+          fetch-depth: 0
+      - name: Install Toolchain
+        uses: jdx/mise-action@v4
+        with:
+          version: 2026.8.15
+      - name: Select Xcode Version
+        run: ./.scripts/xcode-select
+      - name: Configure Git Identity
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          APP_SLUG: ${{ steps.app.outputs.app-slug }}
+        run: |
+          id="$(gh api "users/${APP_SLUG}[bot]" --jq .id)"
+          git config user.name "${APP_SLUG}[bot]"
+          git config user.email "${id}+${APP_SLUG}[bot]@users.noreply.github.com"
+      - name: Validate Request
+        env:
+          REQUESTED: ${{ inputs.version }}
+        run: |
+          previous="$(./.scripts/version current)"
+          if [ -n "$REQUESTED" ]; then
+            version="$REQUESTED"
+          else
+            IFS=. read -r major minor patch <<< "$previous"
+            version="$major.$minor.$((patch + 1))"
+          fi
+          if ! [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "$version is not MAJOR.MINOR.PATCH" >&2
+            exit 1
+          fi
+          if [ "$version" = "$previous" ] || [ "$(printf '%s\n' "$version" "$previous" | sort -V | tail -1)" != "$version" ]; then
+            echo "$version is not greater than $previous, the version on the release branch" >&2
+            exit 1
+          fi
+          if git ls-remote --exit-code --tags origin "refs/tags/$version" >/dev/null; then
+            echo "$version is already released; pass a different version" >&2
+            exit 1
+          fi
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+          echo "PREVIOUS=$previous" >> "$GITHUB_ENV"
+      - name: Cherry-Pick Commits
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          COMMITS: ${{ inputs.commits }}
+          RELEASE: ${{ inputs.release }}
+        run: |
+          generated="Samples/Quill Sources/Calligraphy/Calligraphy.docc/Resources/Downloads"
+          picked=0
+          for entry in ${COMMITS//,/ }; do
+            if [[ "$entry" =~ ^#[0-9]+$ ]]; then
+              state="$(gh pr view "${entry#\#}" --json state --jq .state)"
+              if [ "$state" != "MERGED" ]; then
+                echo "$entry is $state, not merged" >&2
+                exit 1
+              fi
+              commit="$(gh pr view "${entry#\#}" --json mergeCommit --jq .mergeCommit.oid)"
+            elif ! commit="$(git rev-parse --verify --quiet "$entry^{commit}")"; then
+              echo "$entry is not a commit or a pull request" >&2
+              exit 1
+            fi
+            if ! git merge-base --is-ancestor "$commit" origin/main; then
+              echo "$entry ($commit) is not on main" >&2
+              exit 1
+            fi
+            if git merge-base --is-ancestor "$commit" HEAD; then
+              echo "$entry ($commit) is already on release/$RELEASE" >&2
+              exit 1
+            fi
+            if ! git cherry-pick -x "$commit"; then
+              conflicts="$(git diff --name-only --diff-filter=U)"
+              other="$(echo "$conflicts" | grep -vE '^(Samples/Quill|Sources/Calligraphy/Calligraphy\.docc/Resources/Downloads)/' || true)"
+              if [ -z "$conflicts" ] || [ -n "$other" ]; then
+                echo "$entry ($commit) does not apply cleanly:" >&2
+                git status --short >&2
+                git cherry-pick --abort
+                exit 1
+              fi
+              ./.scripts/verify-tutorial-code --sync
+              git add -A -- $generated
+              git -c core.editor=true cherry-pick --continue
+            fi
+            picked=$((picked + 1))
+          done
+          if [ "$picked" -eq 0 ]; then
+            echo "no commits were given" >&2
+            exit 1
+          fi
+          git log --oneline "origin/release/$RELEASE..HEAD"
+      - name: Set Version
+        run: |
+          mise run set-version "$VERSION"
+          git add -A
+          git commit -m "Update to version $VERSION"
+      - name: Lint Sources
+        run: mise lint
+      - name: Build Calligraphy
+        run: swift build
+      - name: Test Calligraphy
+        run: swift test
+      - name: Check Sample Project and Downloads
+        run: ./.scripts/verify-tutorial-code --check
+      - name: Describe Dry Run
+        if: inputs.dry-run
+        env:
+          RELEASE: ${{ inputs.release }}
+        run: |
+          {
+            echo "Dry run for \`$VERSION\`: nothing was pushed or published."
+            echo
+            echo "Commits that would be added to \`release/$RELEASE\`:"
+            echo
+            echo '```'
+            git log --oneline "origin/release/$RELEASE..HEAD"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Push Release Branch
+        if: ${{ !inputs.dry-run }}
+        env:
+          RELEASE: ${{ inputs.release }}
+        run: git push origin "HEAD:refs/heads/release/$RELEASE"
+      - name: Publish Release
+        if: ${{ !inputs.dry-run }}
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          RELEASE: ${{ inputs.release }}
+        run: |
+          highest="$(git tag --list --sort=version:refname | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | tail -1 || true)"
+          if [ "$(printf '%s\n' "$VERSION" "$highest" | sort -V | tail -1)" = "$VERSION" ]; then
+            latest=true
+          else
+            latest=false
+          fi
+          notes=()
+          if git rev-parse --verify --quiet "refs/tags/$PREVIOUS" >/dev/null; then
+            notes=(--notes-start-tag "$PREVIOUS")
+          fi
+          gh release create "$VERSION" --target "$(git rev-parse HEAD)" --title "$VERSION" --generate-notes --latest="$latest" "${notes[@]}"
+          echo "LATEST=$latest" >> "$GITHUB_ENV"
+          echo "Released \`$VERSION\` from \`release/$RELEASE\` at \`$(git rev-parse HEAD)\`." >> "$GITHUB_STEP_SUMMARY"
+      - name: Update Version on Main
+        if: ${{ !inputs.dry-run && env.LATEST == 'true' }}
+        run: |
+          git fetch origin main
+          git checkout --detach origin/main
+          current="$(./.scripts/version current)"
+          if [ "$current" = "$VERSION" ] || [ "$(printf '%s\n' "$current" "$VERSION" | sort -V | tail -1)" != "$VERSION" ]; then
+            echo "main is already at $current"
+            exit 0
+          fi
+          mise run set-version "$VERSION"
+          mise lint
+          git add -A
+          git commit -m "Update to version $VERSION"
+          git push origin HEAD:main
+          echo "Updated \`main\` to \`$VERSION\`." >> "$GITHUB_STEP_SUMMARY"

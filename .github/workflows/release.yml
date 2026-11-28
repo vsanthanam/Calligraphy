@@ -1,0 +1,130 @@
+name: Release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: The version to release, as MAJOR.MINOR.PATCH; the version on main when empty
+        required: false
+        type: string
+      skip-checks:
+        description: Release even if the checks on the latest commit aren't all green
+        required: false
+        type: boolean
+        default: false
+      dry-run:
+        description: Prepare the release without pushing or publishing anything
+        required: false
+        type: boolean
+        default: false
+permissions: {}
+concurrency:
+  group: release
+  cancel-in-progress: false
+jobs:
+  release:
+    name: Cut Release
+    runs-on: xcode-27
+    steps:
+      - name: Require Main
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "releases are cut from main, not ${GITHUB_REF_NAME}" >&2
+          exit 1
+      - name: Create App Token
+        id: app
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          token: ${{ steps.app.outputs.token }}
+          fetch-depth: 0
+      - name: Install Toolchain
+        uses: jdx/mise-action@v4
+        with:
+          version: 2026.8.15
+      - name: Select Xcode Version
+        run: ./.scripts/xcode-select
+      - name: Validate Request
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          REQUESTED: ${{ inputs.version }}
+          SKIP_CHECKS: ${{ inputs.skip-checks }}
+        run: |
+          current="$(./.scripts/version current)"
+          version="${REQUESTED:-$current}"
+          if ! [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "$version is not MAJOR.MINOR.PATCH" >&2
+            exit 1
+          fi
+          if git ls-remote --exit-code --tags origin "refs/tags/$version" >/dev/null; then
+            echo "$version is already released" >&2
+            exit 1
+          fi
+          latest="$(git tag --list --sort=version:refname | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | tail -1 || true)"
+          if [ -n "$latest" ] && [ "$(printf '%s\n' "$version" "$latest" | sort -V | tail -1)" != "$version" ]; then
+            echo "$version is not greater than the latest release $latest" >&2
+            exit 1
+          fi
+          branch="$(git ls-remote origin "refs/heads/release/$version" | cut -f1)"
+          if [ -n "$branch" ] && { [ "$version" != "$current" ] || [ "$branch" != "$GITHUB_SHA" ]; }; then
+            echo "release/$version already exists at $branch; remove it with Kill Release and delete-branch" >&2
+            exit 1
+          fi
+          runs="$(gh api "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/check-runs" --paginate --jq '.check_runs[] | select(.name | IN("Cut Release", "Set Version", "Hotfix Release", "Kill Release") | not) | "\(.name): \(.status) \(.conclusion)"')"
+          echo "$runs"
+          problem=""
+          if [ -z "$runs" ]; then
+            problem="no checks have run on $GITHUB_SHA"
+          elif echo "$runs" | grep -vE ': completed (success|skipped|neutral)$'; then
+            problem="checks on $GITHUB_SHA are not all green"
+          fi
+          if [ -n "$problem" ]; then
+            if [ "$SKIP_CHECKS" = "true" ]; then
+              echo "::warning::$problem, but skip-checks is on"
+            else
+              echo "$problem" >&2
+              exit 1
+            fi
+          fi
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+          echo "CURRENT=$current" >> "$GITHUB_ENV"
+      - name: Set Version
+        if: env.VERSION != env.CURRENT
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          APP_SLUG: ${{ steps.app.outputs.app-slug }}
+        run: |
+          mise run set-version "$VERSION"
+          mise lint
+          id="$(gh api "users/${APP_SLUG}[bot]" --jq .id)"
+          git config user.name "${APP_SLUG}[bot]"
+          git config user.email "${id}+${APP_SLUG}[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Update to version $VERSION"
+          git show --stat HEAD
+      - name: Describe Dry Run
+        if: inputs.dry-run
+        run: |
+          {
+            echo "Dry run for \`$VERSION\`: nothing was pushed or published."
+            echo
+            echo "- Commit: \`$(git rev-parse HEAD)\` ($(git log -1 --format=%s))"
+            echo "- Branch: \`release/$VERSION\`"
+            echo "- Tag and release: \`$VERSION\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Push Version to Main
+        if: ${{ !inputs.dry-run && env.VERSION != env.CURRENT }}
+        run: git push origin HEAD:main
+      - name: Create Release Branch
+        if: ${{ !inputs.dry-run }}
+        run: git push origin "HEAD:refs/heads/release/$VERSION"
+      - name: Publish Release
+        if: ${{ !inputs.dry-run }}
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+        run: |
+          gh release create "$VERSION" --target "$(git rev-parse HEAD)" --title "$VERSION" --generate-notes
+          echo "Released \`$VERSION\` from \`release/$VERSION\` at \`$(git rev-parse HEAD)\`." >> "$GITHUB_STEP_SUMMARY"
